@@ -1,6 +1,7 @@
 # Copyright 2026 Valencia Makers, SL
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
+from odoo.addons.jfe_language_sequence.hooks import seed_language_sequence
 from odoo.tests.common import TransactionCase, tagged
 
 
@@ -18,10 +19,18 @@ class TestLanguageSequence(TransactionCase):
     def _installed_codes(self):
         return [code for code, _name in self.ResLang.get_installed()]
 
-    def test_seeded_order_matches_stock_odoo(self):
-        """Until something is dragged, ordering matches stock Odoo."""
-        codes = self._installed_codes()
-        self.assertLess(codes.index("en_US"), codes.index("es_ES"))
+    def test_seeding_reproduces_stock_alphabetical_order(self):
+        """As installed, before anything is dragged, ordering matches stock Odoo.
+
+        Seeding is re-run here rather than relying on the ambient state: the
+        sequences on a database that has been in use are whatever its users
+        dragged them to, which is the whole point of the module.
+        """
+        seed_language_sequence(self.env)
+        enabled = self.ResLang.search([("active", "=", True)], order="sequence")
+        self.assertEqual(
+            enabled.mapped("code"), enabled.sorted("name").mapped("code")
+        )
 
     def test_enabled_languages_are_seeded_ahead_of_disabled_ones(self):
         """The Languages list is ordered `sequence, id`, so the values must group."""
@@ -97,6 +106,44 @@ class TestLanguageSequence(TransactionCase):
             [("id", "in", (disabled | self.lang_en).ids)]
         )
         self.assertEqual(langs.ids, (self.lang_en | disabled).ids)
+
+    def _create_lang(self, **vals):
+        """A language Odoo does not ship, added by hand."""
+        return self.ResLang.create(
+            {
+                "name": "Klingon / tlhIngan Hol",
+                "code": "tlh_KL",
+                "iso_code": "tlh",
+                "url_code": "tlh",
+                **vals,
+            }
+        )
+
+    def test_a_hand_created_language_lands_in_the_disabled_block(self):
+        all_langs = self.ResLang.with_context(active_test=False)
+        newcomer = self._create_lang()
+        self.assertFalse(newcomer.active, "res.lang has no default for `active`")
+        enabled = all_langs.search([("active", "=", True)])
+        self.assertGreater(newcomer.sequence, max(enabled.mapped("sequence")))
+
+    def test_a_hand_created_enabled_language_joins_the_enabled_block(self):
+        all_langs = self.ResLang.with_context(active_test=False)
+        newcomer = self._create_lang(active=True)
+        others = all_langs.search([("active", "=", True), ("id", "!=", newcomer.id)])
+        disabled = all_langs.search([("active", "=", False)])
+        self.assertGreater(newcomer.sequence, max(others.mapped("sequence")))
+        self.assertLess(newcomer.sequence, min(disabled.mapped("sequence")))
+
+    def test_creating_a_language_keeps_sequences_distinct(self):
+        """Ties would cost the localised drag the seeding exists to protect."""
+        self._create_lang()
+        sequences = self.ResLang.with_context(active_test=False).search([]).mapped(
+            "sequence"
+        )
+        self.assertEqual(len(sequences), len(set(sequences)))
+
+    def test_an_explicit_sequence_on_create_is_respected(self):
+        self.assertEqual(self._create_lang(sequence=7).sequence, 7)
 
     def test_sequence_is_cached_alongside_the_other_language_data(self):
         """Both ordering overrides read ``sequence`` off the cache, not the DB."""

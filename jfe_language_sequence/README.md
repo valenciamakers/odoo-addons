@@ -76,9 +76,16 @@ positions of a drag when the sequences it sees are strictly increasing; on tied 
 the entire list instead (`reorderAll` in `utils.js`). Seeded, a drag among the enabled languages
 leaves the disabled block untouched.
 
-`write()` keeps this true over time: enabling a language moves it to the end of the enabled block
-rather than leaving it stranded at its seeded value among the disabled ones, and disabling one moves
-it the other way.
+`create()` and `write()` keep this true over time. Enabling a language moves it to the end of the
+enabled block rather than leaving it stranded at its seeded value among the disabled ones, and
+disabling one moves it the other way.
+
+A language added by hand — one Odoo does not ship, created through the New button on the Languages
+list — is parked the same way, into whichever block matches the `active` value it was created with.
+Without that it would keep the field default of `10` and wedge itself among the enabled languages
+even though `res.lang` declares `active = fields.Boolean()` with no default, so a new language is
+disabled. It would also tie with whatever already sits on `10`, costing the strictly increasing
+sequences that keep a drag local. An explicit `sequence` in the create values is left alone.
 
 ## Known limitations
 

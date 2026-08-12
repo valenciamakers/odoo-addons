@@ -1,7 +1,7 @@
 # Copyright 2026 Valencia Makers, SL
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
-from odoo import fields, models, tools
+from odoo import api, fields, models, tools
 from odoo.addons.base.models.res_lang import LangDataDict
 from odoo.tools import OrderedSet
 
@@ -84,6 +84,21 @@ class ResLang(models.Model):
             start = max([*peers.mapped("sequence"), floor])
             for index, lang in enumerate(langs, start=1):
                 lang.sequence = start + index * 10
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        langs = super().create(vals_list)
+        # A language added by hand -- one Odoo does not ship -- would otherwise
+        # keep the field default and land in the middle of the seeded blocks,
+        # tying with whatever sits on 10 and costing the strictly increasing
+        # sequences that keep a drag local.
+        unplaced = self.browse()
+        for lang, vals in zip(langs, vals_list):
+            if "sequence" not in vals:
+                unplaced |= lang
+        if unplaced:
+            unplaced._park_in_active_block()
+        return langs
 
     def write(self, vals):
         changing_state = (
