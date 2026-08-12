@@ -145,6 +145,12 @@ class TestLanguageSequence(TransactionCase):
     def test_an_explicit_sequence_on_create_is_respected(self):
         self.assertEqual(self._create_lang(sequence=7).sequence, 7)
 
+    def test_the_field_default_sits_in_the_disabled_block(self):
+        """The default is the fallback if parking on create ever fails."""
+        default = self.ResLang.default_get(["sequence"])["sequence"]
+        enabled = self.ResLang.search([("active", "=", True)])
+        self.assertGreater(default, max(enabled.mapped("sequence")))
+
     def test_sequence_is_cached_alongside_the_other_language_data(self):
         """Both ordering overrides read ``sequence`` off the cache, not the DB."""
         self.assertIn("sequence", self.ResLang.CACHED_FIELDS)

@@ -22,7 +22,12 @@ class ResLang(models.Model):
     _order = "active desc, sequence, name"
 
     sequence = fields.Integer(
-        default=10,
+        # `res.lang` declares `active` with no default, so a language created
+        # without one is disabled and belongs in the disabled block. `create()`
+        # re-parks it at the end of that block straight away, making this default
+        # visible only if that ever fails -- in which case landing at the head of
+        # the disabled languages beats wedging in among the enabled ones.
+        default=DISABLED_SEQUENCE_BASE,
         help="Order in which enabled languages are offered, lowest first: in the "
         "website language selector, and in the language dropdowns of users "
         "and contacts.",

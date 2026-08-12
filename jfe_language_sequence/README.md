@@ -87,6 +87,11 @@ even though `res.lang` declares `active = fields.Boolean()` with no default, so 
 disabled. It would also tie with whatever already sits on `10`, costing the strictly increasing
 sequences that keep a drag local. An explicit `sequence` in the create values is left alone.
 
+The field's own default is `DISABLED_SEQUENCE_BASE` rather than Odoo's customary `10`, for the same
+reason: a language created without an explicit `active` is disabled, so that is the block it belongs
+in. `create()` re-parks it immediately, so the default is visible only if that ever fails — and
+failing to the head of the disabled languages is much better than wedging in among the enabled ones.
+
 ## Known limitations
 
 - **The Languages list is developer-mode only.** Both Settings → Translations → Languages and the
