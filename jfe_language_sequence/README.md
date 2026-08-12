@@ -51,16 +51,34 @@ if (!treeAttr.defaultOrder.length && handleField) {
 }
 ```
 
-So the Languages list is fetched `sequence, id`, ignoring `_order` entirely. Two consequences: drag
-and drop is fully WYSIWYG there, with no snap-back; and since the action opens with
-`active_test: False`, a language enabled after the first reorder keeps the default sequence and sits
-at its `id` position among the disabled ones rather than floating to the top. Drag it where you want
-it.
+So the Languages list is fetched `sequence, id`, ignoring `_order` entirely — and that is not
+avoidable by naming an order of our own. Setting `default_order` does override the client's choice,
+but `canResequenceRows` only allows dragging when `orderBy[0].name` _is_ the handle field:
 
-No install hook seeds the sequence values. Every language starts at the default `10`, so ordering is
-identical to stock Odoo until you drag something — and because Odoo's resequencing rewrites the whole
-list as soon as it finds tied values, the first drag assigns distinct sequences to every language in
-its current order.
+```js
+return !orderBy.length || (orderBy.length && orderBy[0].name === handleField);
+```
+
+Any order that groups enabled languages first has to start with `active desc`, which would silently
+disable drag and drop. The grouping therefore has to live in the sequence **values** rather than in
+the sort order.
+
+## Why sequences are seeded on install
+
+`post_init_hook` (`hooks.py`) gives enabled languages a low block — 10, 20, 30… by name — and parks
+the ~80 disabled ones above `DISABLED_SEQUENCE_BASE` (10000). Without it every language shares the
+default `10`, `id` becomes the only tiebreak, and the enabled languages scatter through the disabled
+ones — a regression against stock Odoo, where this list is ordered `active desc, name`. Seeding
+reproduces the stock grouping.
+
+Distinct values matter for a second reason. Odoo rewrites only the records _between_ the two
+positions of a drag when the sequences it sees are strictly increasing; on tied values it resequences
+the entire list instead (`reorderAll` in `utils.js`). Seeded, a drag among the enabled languages
+leaves the disabled block untouched.
+
+`write()` keeps this true over time: enabling a language moves it to the end of the enabled block
+rather than leaving it stranded at its seeded value among the disabled ones, and disabling one moves
+it the other way.
 
 ## Known limitations
 

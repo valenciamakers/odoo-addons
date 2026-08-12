@@ -18,11 +18,35 @@ class TestLanguageSequence(TransactionCase):
     def _installed_codes(self):
         return [code for code, _name in self.ResLang.get_installed()]
 
-    def test_default_sequence_preserves_alphabetical_order(self):
+    def test_seeded_order_matches_stock_odoo(self):
         """Until something is dragged, ordering matches stock Odoo."""
-        self.assertEqual(self.lang_en.sequence, self.lang_es.sequence)
         codes = self._installed_codes()
         self.assertLess(codes.index("en_US"), codes.index("es_ES"))
+
+    def test_enabled_languages_are_seeded_ahead_of_disabled_ones(self):
+        """The Languages list is ordered `sequence, id`, so the values must group."""
+        all_langs = self.ResLang.with_context(active_test=False)
+        enabled = all_langs.search([("active", "=", True)])
+        disabled = all_langs.search([("active", "=", False)])
+        self.assertLess(
+            max(enabled.mapped("sequence")), min(disabled.mapped("sequence"))
+        )
+
+    def test_seeded_sequences_are_distinct(self):
+        """Tied values make Odoo resequence the whole list on the first drag."""
+        sequences = self.ResLang.with_context(active_test=False).search([]).mapped(
+            "sequence"
+        )
+        self.assertEqual(len(sequences), len(set(sequences)))
+
+    def test_enabling_a_language_joins_the_enabled_block(self):
+        all_langs = self.ResLang.with_context(active_test=False)
+        newcomer = all_langs.search([("active", "=", False)], limit=1)
+        newcomer.active = True
+        others = all_langs.search([("active", "=", True), ("id", "!=", newcomer.id)])
+        still_disabled = all_langs.search([("active", "=", False)])
+        self.assertGreater(newcomer.sequence, max(others.mapped("sequence")))
+        self.assertLess(newcomer.sequence, min(still_disabled.mapped("sequence")))
 
     def test_search_order_follows_sequence(self):
         self.lang_en.sequence = 20

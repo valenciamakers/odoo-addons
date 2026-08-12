@@ -5,6 +5,10 @@ from odoo import fields, models, tools
 from odoo.addons.base.models.res_lang import LangDataDict
 from odoo.tools import OrderedSet
 
+# Disabled languages are parked above this, keeping the enabled ones -- the only
+# ones this module exists to order -- together at the top of the Languages list.
+DISABLED_SEQUENCE_BASE = 10000
+
 
 class ResLang(models.Model):
     _inherit = "res.lang"
@@ -60,8 +64,36 @@ class ResLang(models.Model):
         # render over a handful of entries.
         return self._sorted_by_sequence(super()._get_frontend())
 
+    def _park_in_active_block(self):
+        """Move these languages to the end of the block matching their state.
+
+        Enabling a language would otherwise leave it on whatever sequence it was
+        seeded with, stranding it among the disabled ones instead of joining the
+        enabled group it now belongs to. Disabling one strands it the other way
+        around.
+        """
+        Lang = self.env["res.lang"].with_context(active_test=False)
+        enabled = self.filtered("active")
+        for is_active, langs in ((True, enabled), (False, self - enabled)):
+            if not langs:
+                continue
+            peers = Lang.search(
+                [("active", "=", is_active), ("id", "not in", langs.ids)]
+            )
+            floor = 0 if is_active else DISABLED_SEQUENCE_BASE
+            start = max([*peers.mapped("sequence"), floor])
+            for index, lang in enumerate(langs, start=1):
+                lang.sequence = start + index * 10
+
     def write(self, vals):
+        changing_state = (
+            self.filtered(lambda lang: lang.active != vals["active"])
+            if "active" in vals
+            else self.browse()
+        )
         res = super().write(vals)
+        if changing_state:
+            changing_state._park_in_active_block()
         if "sequence" in vals:
             # ``super().write()`` clears only the 'stable' cache, while
             # ``website._get_frontend`` is cached on the default one -- without
