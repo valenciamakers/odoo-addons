@@ -21,7 +21,7 @@ nothing else. Three separate code paths produce language lists, and none of them
 | Portal selector (no website)   | `http_routing`'s `_get_frontend()`         | same, via `_get_active_by()`            |
 | Website language selector      | `website`'s `_get_frontend()`              | `language_ids.sorted('name')`           |
 
-So `models/res_lang.py` does four things beyond declaring the field:
+So `models/res_lang.py` does three things beyond declaring the field:
 
 1. **`CACHED_FIELDS`** gains `sequence`, so the cached language data carries it and the two sorting
    overrides below never need a query of their own.
@@ -30,10 +30,24 @@ So `models/res_lang.py` does four things beyond declaring the field:
    `ormcache` because `_get_data()` reaches it on every date and number format.
 3. **`_get_frontend()`** re-sorts, undoing `website`'s `.sorted('name')`. No cache of its own —
    `super()` is already cached, and this runs once per page render over a handful of entries.
-4. **`write()`** calls `registry.clear_cache()` when `sequence` changes. Odoo's own
-   `res.lang.write()` clears only the `'stable'` cache, while `website._get_frontend` is cached on
-   the default one; without this the site selector keeps serving the previous order.
-   `website/models/website.py` does the same thing for the same reason.
+
+### Why no cache invalidation of our own
+
+`_get_frontend()` reads its sequence values from `_get_active_by()` rather than from the data
+`super()` hands back, and that is the whole reason `write()` needs no `registry.clear_cache()`.
+
+`website._get_frontend` is cached on the `'default'` cache, which nothing invalidates when a sequence
+changes. Sorting on the values baked into _that_ cache would mean clearing all of it on every
+reorder — every compiled QWeb template and view lookup on the site — to shift four languages.
+`_get_active_by` is on `'stable'`, which core's own `res.lang.write()` already clears, so reading the
+sequences from there makes a drag invalidate only the language data. Odoo 19 offers no narrower
+option: `Registry.clear_cache()` takes cache *names*, and the old per-method `ormcache.clear_cache()`
+is gone.
+
+One trap worth knowing if you touch this. `_live_sequences()` deliberately builds a plain `dict`,
+because `LangDataDict.__getitem__` returns a dummy entry for unknown keys rather than raising —
+and `Mapping.__contains__` is implemented on top of `__getitem__`, so `code in some_lang_data_dict`
+is **always true** and cannot detect a missing language.
 
 ## `_order`, and what actually orders the Languages list
 

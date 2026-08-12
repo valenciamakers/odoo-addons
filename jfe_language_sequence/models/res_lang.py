@@ -39,16 +39,33 @@ class ResLang(models.Model):
         # overrides below sort without a query of their own.
         return OrderedSet([*super().CACHED_FIELDS, "sequence"])
 
-    def _sorted_by_sequence(self, langs: LangDataDict) -> LangDataDict:
-        """Re-order a LangDataDict by ``sequence``, falling back to name."""
-        return LangDataDict(
-            dict(
-                sorted(
-                    langs.items(),
-                    key=lambda item: (item[1].sequence, item[1].name),
-                )
-            )
-        )
+    def _sorted_by_sequence(
+        self, langs: LangDataDict, sequences: dict | None = None
+    ) -> LangDataDict:
+        """Re-order a LangDataDict by ``sequence``, falling back to name.
+
+        ``sequences`` supplies values read from somewhere fresher than ``langs``,
+        for callers whose data comes from a cache this module does not invalidate.
+        """
+
+        def sort_key(item):
+            code, data = item
+            sequence = data.sequence if sequences is None else sequences.get(code, data.sequence)
+            return (sequence, data.name)
+
+        return LangDataDict(dict(sorted(langs.items(), key=sort_key)))
+
+    def _live_sequences(self) -> dict:
+        """Map language code to its current sequence.
+
+        Built as a plain dict on purpose: ``LangDataDict`` returns a dummy entry
+        for unknown keys instead of raising, so ``in`` and ``.get()`` on it are
+        always truthy and cannot be used to tell a missing language apart.
+        """
+        return {
+            code: data.sequence
+            for code, data in self._get_active_by("code").items()
+        }
 
     @tools.ormcache("field", cache="stable")
     def _get_active_by(self, field: str) -> LangDataDict:
@@ -67,7 +84,14 @@ class ResLang(models.Model):
         # ``language_ids.sorted('name')``, bypassing ``_order`` again. No cache of
         # our own here: ``super()`` is already cached, and this runs once per page
         # render over a handful of entries.
-        return self._sorted_by_sequence(super()._get_frontend())
+        #
+        # The sequences are read from ``_get_active_by`` rather than from the data
+        # ``super()`` returns. That cache lives on 'default', which nothing
+        # invalidates when a sequence changes, so trusting its values would mean
+        # clearing the whole default cache -- every compiled template and view
+        # lookup on the site -- on each reorder. ``_get_active_by`` is on 'stable',
+        # which core's own ``res.lang.write()`` already clears.
+        return self._sorted_by_sequence(super()._get_frontend(), self._live_sequences())
 
     def _park_in_active_block(self):
         """Move these languages to the end of the block matching their state.
@@ -114,9 +138,6 @@ class ResLang(models.Model):
         res = super().write(vals)
         if changing_state:
             changing_state._park_in_active_block()
-        if "sequence" in vals:
-            # ``super().write()`` clears only the 'stable' cache, while
-            # ``website._get_frontend`` is cached on the default one -- without
-            # this the site selector keeps serving the previous order.
-            self.env.registry.clear_cache()
+        # No cache clearing of our own: ``super().write()`` clears 'stable', and
+        # ``_get_frontend`` deliberately reads its sequences from there.
         return res
