@@ -133,6 +133,15 @@ Manifest: `"version": "19.0.1.0.0"` (Odoo series first), `"license": "LGPL-3"`,
 `"author": "Valencia Makers, SL"`. Keep `depends` minimal and honest — depend on `website` only if
 you override something it defines.
 
+**Prettier config lives per module, never at the repo root.** Each `jfe_*` module carries its own
+`.prettierrc` (`proseWrap: always`, `printWidth: 100`), as does `dev/`. Give every new `jfe_*` module
+one. This is deliberate rather than fussy: the global formatting hook finds a config by walking up
+from the file being edited, which is independent of where a session happens to be rooted, but
+Prettier resolves `.prettierignore` against the session's working directory. A root config plus an
+ignore file would therefore silently reformat the vendored modules whenever a session runs from
+outside this repo — the one case the ignore file exists to prevent. Nothing at the root is opted in,
+which is why this file is hand-wrapped to 100 columns.
+
 Write tests that assert **behaviour, not ambient state**. A test asserting freshly-installed ordering
 fails on any database whose users have used the feature; re-run the seeding hook inside the test
 instead.

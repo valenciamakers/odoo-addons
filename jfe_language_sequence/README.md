@@ -1,8 +1,8 @@
 # Language Sequence (`jfe_language_sequence`)
 
 Odoo orders languages alphabetically by name, everywhere, with no way to change it. This module adds
-a `sequence` field to `res.lang` and a drag handle to **Settings → Translations → Languages**, so the
-enabled languages appear in the order you choose.
+a `sequence` field to `res.lang` and a drag handle to **Settings → Translations → Languages**, so
+the enabled languages appear in the order you choose.
 
 The chosen order drives:
 
@@ -15,18 +15,18 @@ The chosen order drives:
 The obvious implementation — add `sequence`, override `_order` — reorders the Languages list and
 nothing else. Three separate code paths produce language lists, and none of them consults `_order`:
 
-| Consumer                       | Path                                       | Stock ordering                          |
-| ------------------------------ | ------------------------------------------ | --------------------------------------- |
-| Language dropdowns (users, contacts) | `get_installed()` → `_get_active_by()` | `search_fetch(..., order='name')`       |
-| Portal selector (no website)   | `http_routing`'s `_get_frontend()`         | same, via `_get_active_by()`            |
-| Website language selector      | `website`'s `_get_frontend()`              | `language_ids.sorted('name')`           |
+| Consumer                             | Path                                   | Stock ordering                    |
+| ------------------------------------ | -------------------------------------- | --------------------------------- |
+| Language dropdowns (users, contacts) | `get_installed()` → `_get_active_by()` | `search_fetch(..., order='name')` |
+| Portal selector (no website)         | `http_routing`'s `_get_frontend()`     | same, via `_get_active_by()`      |
+| Website language selector            | `website`'s `_get_frontend()`          | `language_ids.sorted('name')`     |
 
 So `models/res_lang.py` does three things beyond declaring the field:
 
 1. **`CACHED_FIELDS`** gains `sequence`, so the cached language data carries it and the two sorting
    overrides below never need a query of their own.
-2. **`_get_active_by()`** re-sorts by `(sequence, name)`. It is the single chokepoint behind both the
-   backend dropdowns and the portal selector, so one override covers both. It keeps its own
+2. **`_get_active_by()`** re-sorts by `(sequence, name)`. It is the single chokepoint behind both
+   the backend dropdowns and the portal selector, so one override covers both. It keeps its own
    `ormcache` because `_get_data()` reaches it on every date and number format.
 3. **`_get_frontend()`** re-sorts, undoing `website`'s `.sorted('name')`. No cache of its own —
    `super()` is already cached, and this runs once per page render over a handful of entries.
@@ -36,18 +36,18 @@ So `models/res_lang.py` does three things beyond declaring the field:
 `_get_frontend()` reads its sequence values from `_get_active_by()` rather than from the data
 `super()` hands back, and that is the whole reason `write()` needs no `registry.clear_cache()`.
 
-`website._get_frontend` is cached on the `'default'` cache, which nothing invalidates when a sequence
-changes. Sorting on the values baked into _that_ cache would mean clearing all of it on every
-reorder — every compiled QWeb template and view lookup on the site — to shift four languages.
-`_get_active_by` is on `'stable'`, which core's own `res.lang.write()` already clears, so reading the
-sequences from there makes a drag invalidate only the language data. Odoo 19 offers no narrower
-option: `Registry.clear_cache()` takes cache *names*, and the old per-method `ormcache.clear_cache()`
-is gone.
+`website._get_frontend` is cached on the `'default'` cache, which nothing invalidates when a
+sequence changes. Sorting on the values baked into _that_ cache would mean clearing all of it on
+every reorder — every compiled QWeb template and view lookup on the site — to shift four languages.
+`_get_active_by` is on `'stable'`, which core's own `res.lang.write()` already clears, so reading
+the sequences from there makes a drag invalidate only the language data. Odoo 19 offers no narrower
+option: `Registry.clear_cache()` takes cache _names_, and the old per-method
+`ormcache.clear_cache()` is gone.
 
 One trap worth knowing if you touch this. `_live_sequences()` deliberately builds a plain `dict`,
-because `LangDataDict.__getitem__` returns a dummy entry for unknown keys rather than raising —
-and `Mapping.__contains__` is implemented on top of `__getitem__`, so `code in some_lang_data_dict`
-is **always true** and cannot detect a missing language.
+because `LangDataDict.__getitem__` returns a dummy entry for unknown keys rather than raising — and
+`Mapping.__contains__` is implemented on top of `__getitem__`, so `code in some_lang_data_dict` is
+**always true** and cannot detect a missing language.
 
 ## `_order`, and what actually orders the Languages list
 
@@ -55,13 +55,13 @@ is **always true** and cannot detect a missing language.
 `res.lang.search()` anywhere in Odoo keeps returning enabled languages first, as it does in stock
 (`active desc, name`); `sequence` merely replaces `name` as the tiebreak.
 
-It does **not** order the Languages list, though. When a list view carries a handle field and sets no
-`default_order`, the web client substitutes its own — `list_arch_parser.js` does:
+It does **not** order the Languages list, though. When a list view carries a handle field and sets
+no `default_order`, the web client substitutes its own — `list_arch_parser.js` does:
 
 ```js
 if (!treeAttr.defaultOrder.length && handleField) {
-    const handleFieldSort = `${handleField}, id`;
-    treeAttr.defaultOrder = stringToOrderBy(handleFieldSort);
+  const handleFieldSort = `${handleField}, id`;
+  treeAttr.defaultOrder = stringToOrderBy(handleFieldSort);
 }
 ```
 
@@ -86,9 +86,9 @@ ones — a regression against stock Odoo, where this list is ordered `active des
 reproduces the stock grouping.
 
 Distinct values matter for a second reason. Odoo rewrites only the records _between_ the two
-positions of a drag when the sequences it sees are strictly increasing; on tied values it resequences
-the entire list instead (`reorderAll` in `utils.js`). Seeded, a drag among the enabled languages
-leaves the disabled block untouched.
+positions of a drag when the sequences it sees are strictly increasing; on tied values it
+resequences the entire list instead (`reorderAll` in `utils.js`). Seeded, a drag among the enabled
+languages leaves the disabled block untouched.
 
 `create()` and `write()` keep this true over time. Enabling a language moves it to the end of the
 enabled block rather than leaving it stranded at its seeded value among the disabled ones, and
@@ -112,17 +112,18 @@ failing to the head of the disabled languages is much better than wedging in amo
   Manage Languages button in General Settings carry `groups="base.group_no_one"` in stock Odoo, so a
   non-developer admin cannot reach the drag handles. Enable developer mode, or go straight to
   `/odoo/action-base.res_lang_act_window`. This module adds no menu of its own.
-- **hreflang short codes still follow name order.** When two variants of one base language are active
-  (`es_ES` and `es_419`, say), Odoo gives the generic `hreflang="es"` to whichever it meets first and
-  region-qualifies the rest. That decision happens inside `website`'s `_get_frontend()` before this
-  module re-sorts, so the manual order does not influence it. Only relevant with two variants of the
-  same base language; unrelated base languages each get their own short code regardless.
+- **hreflang short codes still follow name order.** When two variants of one base language are
+  active (`es_ES` and `es_419`, say), Odoo gives the generic `hreflang="es"` to whichever it meets
+  first and region-qualifies the rest. That decision happens inside `website`'s `_get_frontend()`
+  before this module re-sorts, so the manual order does not influence it. Only relevant with two
+  variants of the same base language; unrelated base languages each get their own short code
+  regardless.
 
 ## Requirements
 
-Odoo 19. Depends on `website`, which supplies the `_get_frontend()` override point that makes the site
-selector follow the order. On a database without `website`, split this into a `base`-only module plus
-an `auto_install` bridge carrying override 3.
+Odoo 19. Depends on `website`, which supplies the `_get_frontend()` override point that makes the
+site selector follow the order. On a database without `website`, split this into a `base`-only
+module plus an `auto_install` bridge carrying override 3.
 
 ## Testing
 
