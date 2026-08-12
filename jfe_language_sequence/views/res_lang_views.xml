@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_lang_view_list" model="ir.ui.view">
+        <field name="name">res.lang.list.inherit.jfe_language_sequence</field>
+        <field name="model">res.lang</field>
+        <field name="inherit_id" ref="base.res_lang_tree"/>
+        <field name="arch" type="xml">
+            <!-- Anchored on a field rather than the root tag, which is <list> in
+                 19 but still carries the legacy `res_lang_tree` record id. -->
+            <field name="name" position="before">
+                <field name="sequence" widget="handle"/>
+            </field>
+        </field>
+    </record>
+</odoo>
