@@ -35,13 +35,27 @@ So `models/res_lang.py` does four things beyond declaring the field:
    the default one; without this the site selector keeps serving the previous order.
    `website/models/website.py` does the same thing for the same reason.
 
-## `_order` keeps `active desc` first
+## `_order`, and what actually orders the Languages list
 
-`_order` is `active desc, sequence, name`, not `sequence, ...`. The Languages action opens with
-`active_test: False`, so the list shows all ~80 languages Odoo ships, not just the enabled ones.
-Keeping the enabled ones grouped on top preserves the stock list, and means a newly activated
-language surfaces into that group instead of staying buried among the disabled ones. Everything that
-consumes the order sees only active languages, so the prefix is inert for them.
+`_order` is `active desc, sequence, name`. The `active desc` prefix is kept so that a plain
+`res.lang.search()` anywhere in Odoo keeps returning enabled languages first, as it does in stock
+(`active desc, name`); `sequence` merely replaces `name` as the tiebreak.
+
+It does **not** order the Languages list, though. When a list view carries a handle field and sets no
+`default_order`, the web client substitutes its own — `list_arch_parser.js` does:
+
+```js
+if (!treeAttr.defaultOrder.length && handleField) {
+    const handleFieldSort = `${handleField}, id`;
+    treeAttr.defaultOrder = stringToOrderBy(handleFieldSort);
+}
+```
+
+So the Languages list is fetched `sequence, id`, ignoring `_order` entirely. Two consequences: drag
+and drop is fully WYSIWYG there, with no snap-back; and since the action opens with
+`active_test: False`, a language enabled after the first reorder keeps the default sequence and sits
+at its `id` position among the disabled ones rather than floating to the top. Drag it where you want
+it.
 
 No install hook seeds the sequence values. Every language starts at the default `10`, so ordering is
 identical to stock Odoo until you drag something — and because Odoo's resequencing rewrites the whole
@@ -50,9 +64,10 @@ its current order.
 
 ## Known limitations
 
-- **Disabled languages cannot be ranked above enabled ones.** Dragging one there appears to work, then
-  snaps back on reload, because `active desc` sorts first. Reordering disabled languages is
-  meaningless for this feature anyway.
+- **The Languages list is developer-mode only.** Both Settings → Translations → Languages and the
+  Manage Languages button in General Settings carry `groups="base.group_no_one"` in stock Odoo, so a
+  non-developer admin cannot reach the drag handles. Enable developer mode, or go straight to
+  `/odoo/action-base.res_lang_act_window`. This module adds no menu of its own.
 - **hreflang short codes still follow name order.** When two variants of one base language are active
   (`es_ES` and `es_419`, say), Odoo gives the generic `hreflang="es"` to whichever it meets first and
   region-qualifies the rest. That decision happens inside `website`'s `_get_frontend()` before this

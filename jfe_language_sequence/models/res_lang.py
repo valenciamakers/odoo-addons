@@ -8,13 +8,13 @@ from odoo.tools import OrderedSet
 
 class ResLang(models.Model):
     _inherit = "res.lang"
-    # ``active desc`` is deliberately kept ahead of ``sequence``. The Languages
-    # action opens with ``active_test: False``, so the list shows every language
-    # Odoo ships, not just the enabled ones; keeping the enabled ones grouped on
-    # top preserves the stock list and means a newly activated language surfaces
-    # into that group rather than staying buried among the disabled ones. Every
-    # consumer of the ordering below sees only active languages, so the prefix is
-    # inert for them.
+    # ``active desc`` is kept ahead of ``sequence`` so a plain ``search()``
+    # anywhere in Odoo still returns enabled languages first as it does in stock
+    # (``active desc, name``); ``sequence`` only replaces ``name`` as the tiebreak.
+    # Note this does not order the Languages list itself: a list view carrying a
+    # handle field and no ``default_order`` gets ``<handle field>, id`` imposed by
+    # the web client (see ``list_arch_parser.js``), which is what keeps dragging
+    # WYSIWYG there.
     _order = "active desc, sequence, name"
 
     sequence = fields.Integer(
