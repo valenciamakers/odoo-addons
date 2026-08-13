@@ -148,7 +148,20 @@ in `web/static/src/**`, not in Python. Half the surprises below live there.
   The orphan keeps its last-known `application` flag and so still appears as a card on the Apps
   page, offering an Install button that errors. Renaming one of our modules is the usual way to land
   here: uninstall the old name, then `unlink()` the record, which is unrestricted and takes its
-  `ir.model.data` row with it.
+  `ir.model.data` row with it. Audit a database against disk from `odoo shell`, keeping each
+  statement unindented since the REPL needs a blank line to close a block:
+
+  ```python
+  from odoo.modules.module import Manifest
+  on_disk = {m.name for m in Manifest.all_addon_manifests()}
+  orphans = env["ir.module.module"].search([]).filtered(lambda m: m.name not in on_disk)
+  print(len(orphans), "orphans:", [(o.name, o.state) for o in orphans])
+  ```
+
+  Sanity-check before deleting: core modules in that list mean the shell has a narrower addons path
+  than the server, not that the database is broken. Never `unlink()` a row still reading `installed`
+  — its tables and columns are live with no code behind them.
+
 - Check a field's declared default before relying on it. `res.lang.active` is `fields.Boolean()`
   with **no default**, so a hand-created language is disabled.
 
