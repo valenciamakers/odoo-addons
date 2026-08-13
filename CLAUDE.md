@@ -245,6 +245,39 @@ in `web/static/src/**`, not in Python. Half the surprises below live there.
   `res.config.settings` — after `super()`, where the arch is fully combined and no third-party xpath
   can still be broken — and remember `<form>` holds non-`<app>` children that must not move.
 
+**Contacts, email, and matching**
+
+- **`res.partner.mobile` no longer exists in 19.** Only `email` and `phone` remain, and
+  `_phone_get_number_fields` filters candidates with `if number_fname in self`. Any module written
+  for 17/18 that redefines `mobile` — most Apps Store contact modules do — is dead code at best.
+- **Matching searches `email_normalized`**, a stored compute from the `mail.thread.blacklist` mixin
+  using `email_normalize(record[self._primary_email], strict=False)`. `strict=False` keeps **only
+  the first address** of a comma-separated list. So the multi-email field Odoo appears to tolerate
+  makes none of the later addresses matchable, while `_compute_email_formatted` renders the whole
+  list as `"Name" <a@x.com,b@y.com>` — a form its own docstring calls invalid.
+- **Widening that search is not enough.** `res.partner._find_or_create_from_emails` searches
+  `[('email_normalized', 'in', [...])]`, then resolves each input back to a partner by comparing
+  `partner.email_normalized == email_normalized`. Satisfy the domain through a related table and the
+  resolution step still returns an empty recordset — override **both** halves.
+  `mail.thread._mail_find_partner_from_emails` repeats the same filter independently, and the legacy
+  `find_or_create` searches separately again. Bounce handling and loop detection bypass all three
+  with raw domains on `email_normalized`.
+- **The merge wizard re-points foreign keys in raw SQL, and deletes on conflict.**
+  `_update_foreign_keys` (`base/wizard/base_partner_merge.py`) finds every FK to `res_partner` from
+  the schema, so a child table's rows follow the surviving contact for free. But where the table
+  carries a unique or check constraint, the `UPDATE` runs in a savepoint and any `psycopg2.Error`
+  falls back to `DELETE FROM <table> WHERE <column> IN <all source ids>` — **one collision destroys
+  every source row in that table**, not just the conflicting one. Keep uniqueness in Python with
+  `@api.constrains`, which the raw SQL bypasses anyway.
+- `_update_values` in the same wizard skips o2m/m2m and computed fields, and for plain fields takes
+  the last truthy value with the destination last — so the destination wins and the merged-away
+  values are simply dropped. It also refuses outright when contacts differ by email, except for
+  admins, who are exempted two lines earlier.
+- **The blacklist is narrower than it looks.** `mail.blacklist` keys on a normalized address string
+  globally, and only mass mailing and SMS consult it — `mail/models/mail_mail.py` never does, so
+  transactional mail goes out regardless. Addresses land there by unsubscribe or by auto-blacklist
+  after repeated hard bounces.
+
 ## Authoring conventions
 
 **Name every module `vmk_<what it does>`** — Valencia Makers, not anyone's initials. Apps Store
