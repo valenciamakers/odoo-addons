@@ -68,11 +68,21 @@ docker compose exec -T odoo odoo shell -d test \
     --db_host=db --db_user=odoo --db_password=odoo --no-http
 
 docker compose up -d odoo          # serve on localhost:8069
-docker compose down                # stop everything, keeping the filestore volume
-docker compose down -v             # drop the filestore too
+docker compose down                # stop everything — DROPS EVERY DATABASE, see below
+docker compose down -v             # the above, and drop the filestore volume too
 ```
 
-Five things that will otherwise cost you an hour each:
+Seven things that will otherwise cost you an hour each:
+
+- **`docker compose down` destroys your databases.** Only the Odoo _filestore_ is a named volume;
+  PostgreSQL's data directory is not, so it lives on the `db` container's writable layer and dies
+  with it. `down` therefore discards every database while faithfully preserving the filestore of the
+  databases it just deleted. Use `docker compose stop` to pause without losing them.
+- **Both repos' harnesses are the same Compose project.** The project name comes from the directory,
+  and this repo's harness and `../Odoo Addons - External/dev` are both called `dev` — so they share
+  the container names `dev-db-1` / `dev-odoo-1` and the `dev_` volume namespace. Only one can run at
+  a time, and bringing one down to start the other takes the first one's databases with it (see
+  above). Expect to recreate the database whenever you switch repos.
 
 - **Keep exactly one database.** With two, Odoo can no longer auto-select and serves the database
   selector instead — anonymous frontend requests then 404 and the website looks broken. Drop the
