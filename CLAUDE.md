@@ -66,7 +66,8 @@ docker compose exec -T odoo odoo shell -d test \
     --db_host=db --db_user=odoo --db_password=odoo --no-http
 
 docker compose up -d odoo          # serve on localhost:8069
-docker compose down                # tear everything down
+docker compose down                # stop everything, keeping the filestore volume
+docker compose down -v             # drop the filestore too
 ```
 
 Five things that will otherwise cost you an hour each:
