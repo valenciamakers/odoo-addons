@@ -76,12 +76,12 @@ class ResLang(models.Model):
         # form does not. Without the marker, the first update after install would
         # look like a customisation and freeze every language it touched.
         return super(
-            ResLang, self.with_context(jfe_loading_module_data=True)
+            ResLang, self.with_context(vmk_loading_module_data=True)
         )._load_records_write(values)
 
     def write(self, vals):
         res = super().write(vals)
-        if not self.env.context.get("jfe_loading_module_data") and (
+        if not self.env.context.get("vmk_loading_module_data") and (
             PROTECTED_FIELDS & vals.keys()
         ):
             self._set_update_protection(True)

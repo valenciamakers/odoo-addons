@@ -8,10 +8,10 @@ They depend only on Odoo Community modules, so they work on Community and Enterp
 
 ## Modules
 
-- **[`jfe_language_sequence`](jfe_language_sequence)** — order the enabled languages by hand, by
+- **[`vmk_language_sequence`](vmk_language_sequence)** — order the enabled languages by hand, by
   dragging, instead of alphabetically: in the website language selector, the language dropdowns on
   users and contacts, and the Languages list itself.
-- **[`jfe_language_freeze_meta`](jfe_language_freeze_meta)** — stop Odoo module updates reverting
+- **[`vmk_language_freeze_meta`](vmk_language_freeze_meta)** — stop Odoo module updates reverting
   your edits to language records, such as a renamed language or a broadened ISO code.
 
 Each module's own `README.md` explains why it is built the way it is — which core method fights you,
@@ -23,7 +23,7 @@ Clone onto your Odoo addons path, update the apps list, and install by name:
 
 ```bash
 git clone https://github.com/valenciamakers/odoo-addons.git
-odoo --addons-path=/path/to/odoo-addons,... -d <db> -i jfe_language_sequence
+odoo --addons-path=/path/to/odoo-addons,... -d <db> -i vmk_language_sequence
 ```
 
 ## Developing
@@ -33,9 +33,9 @@ odoo --addons-path=/path/to/odoo-addons,... -d <db> -i jfe_language_sequence
 ```bash
 cd dev
 docker compose up -d db
-docker compose run --rm odoo odoo -d test --init jfe_language_sequence --stop-after-init
-docker compose run --rm odoo odoo -d test -u jfe_language_sequence \
-    --test-enable --test-tags /jfe_language_sequence --stop-after-init
+docker compose run --rm odoo odoo -d test --init vmk_language_sequence --stop-after-init
+docker compose run --rm odoo odoo -d test -u vmk_language_sequence \
+    --test-enable --test-tags /vmk_language_sequence --stop-after-init
 docker compose down
 ```
 

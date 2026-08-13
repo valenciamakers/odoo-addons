@@ -10,8 +10,8 @@ not own. Mind the one-word difference between the two repo names.
 
 ## Layout
 
-- **`jfe_language_sequence`** — manual ordering of the enabled languages.
-- **`jfe_language_freeze_meta`** — stops Odoo updates reverting edits to language metadata.
+- **`vmk_language_sequence`** — manual ordering of the enabled languages.
+- **`vmk_language_freeze_meta`** — stops Odoo updates reverting edits to language metadata.
 - **`dev/`** — the local Odoo 19 test harness.
 
 Read both modules' `README.md` files before writing a third; between them they document most of the
@@ -53,12 +53,12 @@ cd dev
 docker compose up -d db
 
 # create a database and install a module (post_init_hook runs on install only)
-docker compose run --rm odoo odoo -d test --init jfe_language_sequence \
+docker compose run --rm odoo odoo -d test --init vmk_language_sequence \
     --without-demo=all --stop-after-init
 
 # run that module's tests
-docker compose run --rm odoo odoo -d test -u jfe_language_sequence \
-    --test-enable --test-tags /jfe_language_sequence --stop-after-init
+docker compose run --rm odoo odoo -d test -u vmk_language_sequence \
+    --test-enable --test-tags /vmk_language_sequence --stop-after-init
 
 # interactive shell
 docker compose exec -T odoo odoo shell -d test \

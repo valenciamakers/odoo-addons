@@ -1,4 +1,4 @@
-# Language Sequence (`jfe_language_sequence`)
+# Language Sequence (`vmk_language_sequence`)
 
 Odoo orders languages alphabetically by name, everywhere, with no way to change it. This module adds
 a `sequence` field to `res.lang` and a drag handle to **Settings → Translations → Languages**, so
@@ -129,7 +129,7 @@ module plus an `auto_install` bridge carrying override 3.
 
 ```bash
 # unit tests
-odoo -d <db> -u jfe_language_sequence --test-enable --test-tags /jfe_language_sequence \
+odoo -d <db> -u vmk_language_sequence --test-enable --test-tags /vmk_language_sequence \
      --stop-after-init
 ```
 

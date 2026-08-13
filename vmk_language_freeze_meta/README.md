@@ -1,4 +1,4 @@
-# Language Metadata Protection (`jfe_language_freeze_meta`)
+# Language Metadata Protection (`vmk_language_freeze_meta`)
 
 Odoo ships its languages as module data and re-applies them on every module update, so any edit you
 make to a language is reverted. Rename `English (US)` to `English`, broaden Catalan's ISO code from
@@ -47,7 +47,7 @@ the trade, and it is why disabled languages are left alone.
   track Odoo.
 - **On edit**, a language is protected as soon as you change one of the fields listed in
   `PROTECTED_FIELDS`. Enabling or disabling a language does **not** protect it, and neither does
-  reordering it with [`jfe_language_sequence`](../jfe_language_sequence) — neither is a
+  reordering it with [`vmk_language_sequence`](../vmk_language_sequence) — neither is a
   customisation worth freezing a record for.
 - **Never for the data loader.** `_load_records_write` marks the loader's writes so Odoo re-applying
   its own data is not mistaken for a user edit; without that, the first update after install would
@@ -74,8 +74,8 @@ Odoo 19. Depends only on `base`.
 ## Testing
 
 ```bash
-odoo -d <db> -u jfe_language_freeze_meta --test-enable \
-     --test-tags /jfe_language_freeze_meta --stop-after-init
+odoo -d <db> -u vmk_language_freeze_meta --test-enable \
+     --test-tags /vmk_language_freeze_meta --stop-after-init
 ```
 
 Verified end to end against `odoo:19`: with Catalan renamed to `Catalan / Català / Valencià` and its

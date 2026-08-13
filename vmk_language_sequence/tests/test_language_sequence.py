@@ -1,7 +1,7 @@
 # Copyright 2026 Valencia Makers, SL
 # License MIT (https://opensource.org/licenses/MIT).
 
-from odoo.addons.jfe_language_sequence.hooks import seed_language_sequence
+from odoo.addons.vmk_language_sequence.hooks import seed_language_sequence
 from odoo.tests.common import TransactionCase, tagged
 
 
