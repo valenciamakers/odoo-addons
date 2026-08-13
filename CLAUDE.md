@@ -12,10 +12,11 @@ remotes differ by one word, so check which one you are pushing to.
 
 - **`vmk_language_sequence`** — manual ordering of the enabled languages.
 - **`vmk_language_freeze_meta`** — stops Odoo updates reverting edits to language metadata.
+- **`vmk_app_menu_sort`** — alphabetical ordering of the apps on the main menu.
 - **`dev/`** — the local Odoo 19 test harness.
 
-Read both modules' `README.md` files before writing a third; between them they document most of the
-traps below in context.
+Read the existing modules' `README.md` files before writing another; between them they document most
+of the traps below in context.
 
 ## Commits — this repo departs from the machine-wide rule
 
@@ -116,6 +117,9 @@ in `web/static/src/**`, not in Python. Half the surprises below live there.
   and renders the Apps description badly.
 - `groups="base.group_no_one"` means developer mode. Several core screens are gated this way,
   including Settings → Translations → Languages.
+- **A `--` inside an XML comment is a parse error** —
+  `XMLSyntaxError: Double hyphen within comment`, which fails the install outright. Our prose style
+  uses `--` as a dash, so this catches you in data files specifically; use a comma or rephrase.
 
 **Models**
 
@@ -172,6 +176,29 @@ in `web/static/src/**`, not in Python. Half the surprises below live there.
 - A custom `__getitem__` can break `in`. `LangDataDict` returns a dummy for unknown keys instead of
   raising, and `Mapping.__contains__` is built on `__getitem__` — so `key in it` is **always true**.
   Build a plain `dict` when you need real membership.
+
+**Menus, and the order of the apps**
+
+- Root menu order is `ORDER BY sequence, id`, decided once server-side. `load_menus` calls
+  `search_fetch` with no `order`, so the model's `_order` settles it, and the client preserves that
+  verbatim — `menu_service.js`'s `getApps()` is a bare `.map()` over `root.children`.
+- **Apps and Settings are pinned by nothing.** They carry `sequence` 500 and 550 in
+  `base/views/base_menus.xml` by convention alone, and `base.menu_tests` sits above both on 1000, so
+  there is no ceiling to inherit.
+- **There are two app-list payloads**, cached separately. `load_menus` feeds the whole web client;
+  `load_menus_root` feeds `website`'s "Go to your Odoo Apps" dropdown, rendered server-side through
+  a `t-foreach` that applies no sort. Only `load_menus` entries carry an `xmlid` — `load_menus_root`
+  builds its children with `read()`.
+- Menu `create`/`write`/`unlink` each call a bare `registry.clear_cache()`, which covers `'default'`
+  where all three menu caches live. Anything reordering menus needs no invalidation of its own.
+- A bare `/odoo` lands on `res.users.action_id` if the user has one, else on `root.children[0]` —
+  literally the first app (`webclient.js` `_loadDefaultApp`). Reordering root menus therefore moves
+  the post-login screen on Community. Enterprise overrides that method to open the app grid instead,
+  so it is unaffected.
+- **Enterprise re-sorts the grid client-side** once a user drags an icon: `reorderApps` applies
+  `homemenu_config`, a per-user `fields.Json` on `res.users.settings` that only Enterprise defines.
+  Server-side ordering is the baseline, not the last word — and apps missing from a stored order
+  sort ahead of the ones named in it, so new apps land at the front for those users.
 
 ## Authoring conventions
 
