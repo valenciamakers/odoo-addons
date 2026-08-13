@@ -142,6 +142,13 @@ in `web/static/src/**`, not in Python. Half the surprises below live there.
 - `post_init_hook(env)` takes the environment, and runs on **install only** — never on upgrade. If a
   hook seeds data, an upgrade will not re-seed it; apply it by hand when testing on an existing
   database.
+- **Deleting a module from disk leaves its `ir.module.module` row behind forever.** `update_list`
+  iterates only the manifests it finds (`for manifest in modules.Manifest.all_addon_manifests()`)
+  and has no branch reconciling rows whose module has gone, so "Update Apps List" never clears it.
+  The orphan keeps its last-known `application` flag and so still appears as a card on the Apps
+  page, offering an Install button that errors. Renaming one of our modules is the usual way to land
+  here: uninstall the old name, then `unlink()` the record, which is unrestricted and takes its
+  `ir.model.data` row with it.
 - Check a field's declared default before relying on it. `res.lang.active` is `fields.Boolean()`
   with **no default**, so a hand-created language is disabled.
 
