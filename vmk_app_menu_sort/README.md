@@ -109,8 +109,18 @@ this module's order immediately. A user who has dragged one keeps their own orde
 cleared — including, per `reorderApps`, having newly installed apps appear at the _front_ of their
 grid, since apps missing from the stored list sort ahead of the ones named in it.
 
-To hand everyone the module's order back, run the **Reset per-user app grid order** server action
-(Settings → Technical → Actions → Server Actions, developer mode). From a shell:
+To hand everyone the module's order back, run the **Reset per-user app grid order** server action:
+
+1. Activate developer mode, under Settings → General Settings → Developer Tools. The Technical menu
+   carries `groups="base.group_no_one"`, so it does not exist until you do.
+2. Go to Settings → Technical → Actions → Server Actions, or straight to
+   `/odoo/action-base.action_server_action`.
+3. Open **Reset per-user app grid order** and click **Run** in the form header.
+
+A notification reports how many users were reset. Anyone already logged in needs to reload the page,
+their settings having come down with it.
+
+The same thing from a shell, skipping developer mode entirely:
 
 ```python
 env["res.users.settings"].reset_app_grid_order()
