@@ -12,10 +12,16 @@
         The logic lives in `res.users.settings.reset_app_grid_order()` so that it
         is ordinary Python, covered by the tests, rather than a string in a data
         file that nothing can lint.
+
+        `model_id` is `ir.actions.server` rather than the model the code touches.
+        That field decides where an action can be triggered from, not what it
+        operates on, and the Run button on the form carries
+        `invisible="model_name != 'ir.actions.server' or state != 'code'"`, so
+        binding it to a real model hides the only way to run it by hand.
     -->
     <record id="action_reset_app_grid_order" model="ir.actions.server">
         <field name="name">Reset per-user app grid order</field>
-        <field name="model_id" ref="base.model_res_users_settings" />
+        <field name="model_id" ref="base.model_ir_actions_server" />
         <field name="state">code</field>
         <field name="code">action = env["res.users.settings"].reset_app_grid_order()</field>
     </record>

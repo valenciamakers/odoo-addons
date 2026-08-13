@@ -137,6 +137,18 @@ class TestAppMenuSort(TransactionCase):
         action = self.env.ref("vmk_app_menu_sort.action_reset_app_grid_order")
         self.assertEqual(action.run()["tag"], "display_notification")
 
+    def test_the_server_action_offers_a_run_button(self):
+        """Calling `run()` proves nothing about reaching it from the interface.
+
+        The Run button in `view_server_action_form` carries
+        `invisible="model_name != 'ir.actions.server' or state != 'code'"`, so an
+        action bound to the model its code happens to touch has no way of being
+        run by hand at all.
+        """
+        action = self.env.ref("vmk_app_menu_sort.action_reset_app_grid_order")
+        self.assertEqual(action.state, "code")
+        self.assertEqual(action.model_name, "ir.actions.server")
+
     def test_the_cached_payload_is_never_mutated(self):
         """`super()` is ormcached, so its return value is shared across requests."""
         first = self.Menu.load_menus(False)

@@ -121,6 +121,12 @@ in `web/static/src/**`, not in Python. Half the surprises below live there.
 - **A `--` inside an XML comment is a parse error** —
   `XMLSyntaxError: Double hyphen within comment`, which fails the install outright. Our prose style
   uses `--` as a dash, so this catches you in data files specifically; use a comma or rephrase.
+- **A `state="code"` server action only shows its Run button when `model_id` is `ir.actions.server`
+  itself.** `view_server_action_form` carries
+  `invisible="model_name != 'ir.actions.server' or state != 'code'"`, and `model_name` is
+  `related='model_id.model'`. Bind a standalone action to the model its code happens to touch and it
+  stays callable from `run()` — so a test calling `run()` still passes — while being unreachable
+  from the interface entirely. Assert `model_name` in the test, not just that it runs.
 
 **Models**
 
