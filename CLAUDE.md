@@ -146,9 +146,23 @@ starting point, never as authority.
 
 ## Authoring conventions
 
-Manifest: `"version": "19.0.1.0.0"` (Odoo series first), `"license": "LGPL-3"`,
-`"author": "Valencia Makers, SL"`. Keep `depends` minimal and honest — depend on `website` only if
-you override something it defines.
+Manifest: `"version": "19.0.1.0.0"` (Odoo series first), `"author": "Valencia Makers, SL"`. Keep
+`depends` minimal and honest — depend on `website` only if you override something it defines.
+
+**We license our modules MIT**, declared as `"license": "Other OSI approved licence"` (British
+spelling, exactly that string) with the MIT text in a `LICENSE` file beside the manifest. Odoo
+validates `license` against a fixed `Selection` on `ir.module.module` that has **no MIT entry**, and
+the failure is silent: module loading bypasses the ORM, so `"license": "MIT"` installs cleanly and
+leaves an invalid value in the database that renders blank in the Apps list and raises
+`ValueError: Wrong value for ir.module.module.license` the moment anything writes that field.
+
+Nothing obliges us to copyleft. Odoo Community is LGPL-3, which exists to let works that merely
+_use_ the library carry any license, and Odoo SA's own position permits proprietary modules. Two
+conditions to keep true: do not copy Odoo source into a module (override by calling `super()`,
+rather than copy-pasting a core method to tweak it — the copied block would stay LGPL), and do not
+depend on an Enterprise module, which would put distribution under OEEL whatever the manifest says.
+Contributing to the OCA would need LGPL-3/AGPL-3, but that is their repository policy, not a legal
+consequence, and we hold the copyright either way.
 
 **Prettier config lives per module, never at the repo root.** Each `jfe_*` module carries its own
 `.prettierrc` (`proseWrap: always`, `printWidth: 100`), as does `dev/`. Give every new `jfe_*`

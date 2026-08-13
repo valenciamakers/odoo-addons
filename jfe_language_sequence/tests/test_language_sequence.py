@@ -1,5 +1,5 @@
 # Copyright 2026 Valencia Makers, SL
-# License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
+# License MIT (https://opensource.org/licenses/MIT).
 
 from odoo.addons.jfe_language_sequence.hooks import seed_language_sequence
 from odoo.tests.common import TransactionCase, tagged
