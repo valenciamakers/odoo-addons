@@ -135,12 +135,18 @@ you override something it defines.
 
 **Prettier config lives per module, never at the repo root.** Each `jfe_*` module carries its own
 `.prettierrc` (`proseWrap: always`, `printWidth: 100`), as does `dev/`. Give every new `jfe_*` module
-one. This is deliberate rather than fussy: the global formatting hook finds a config by walking up
-from the file being edited, which is independent of where a session happens to be rooted, but
-Prettier resolves `.prettierignore` against the session's working directory. A root config plus an
-ignore file would therefore silently reformat the vendored modules whenever a session runs from
-outside this repo — the one case the ignore file exists to prevent. Nothing at the root is opted in,
-which is why this file is hand-wrapped to 100 columns.
+one.
+
+This is deliberate rather than fussy. A config is what opts a directory into formatting, so placing
+one only in the modules we author means **nothing can opt the vendored ones in** — not the hook, not
+a stray `pnpm dlx prettier --write .` from the wrong directory. The alternative, a root config plus a
+`.prettierignore` listing the vendored modules, would work (the global hook runs Prettier from the
+config's own directory, so ignore files beside it apply), but it stays correct only as long as that
+ignore file does. Given the point is a clean diff against what each vendor shipped, structural
+protection beats a rule that has to keep being right.
+
+The cost is that nothing at the root is opted in, which is why this file is hand-wrapped to 100
+columns.
 
 Write tests that assert **behaviour, not ambient state**. A test asserting freshly-installed ordering
 fails on any database whose users have used the feature; re-run the seeding hook inside the test
