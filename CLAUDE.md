@@ -4,8 +4,9 @@ The Odoo 19 modules Valencia Makers writes and maintains, MIT licensed. They run
 Enterprise, self-hosted** (Hetzner via oec.sh, Docker behind Traefik), but depend only on Community
 modules. See `../.claude/CLAUDE.md` for the business context; this file wins inside this repo.
 
-Third-party modules under evaluation live in the private `Odoo Modules` repo, not here — this one is
-publishable, so nothing enters it that we do not own.
+Third-party modules under evaluation live in the private `valenciamakers/odoo-addons-external`
+(`../Odoo Modules`), not here — this repo is publishable, so nothing enters it that we do not own.
+Mind the one-word difference between the two repo names.
 
 ## Layout
 
