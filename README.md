@@ -1,29 +1,53 @@
-# Odoo Modules
+# Odoo Addons
 
-Odoo modules for Valencia Makers: some third-party and under evaluation, some ours. Everything here
-targets **Odoo 19 Enterprise, self-hosted** (Hetzner via oec.sh, Docker behind Traefik).
+Odoo 19 modules written and maintained by Valencia Makers, SL — a digital-fabrication education,
+makerspace and retail business in Valencia, Spain. Each one is small, solves a problem we hit
+running our own instance, and is MIT licensed.
 
-## Layout
+They depend only on Odoo Community modules, so they work on Community and Enterprise alike.
 
-- **`jfe_*`** — modules we author. `jfe_language_sequence` is the first; see its `README.md` before
-  writing another, as it documents several traps discovered during development.
-- **Everything else** — third-party modules under evaluation, vendored as downloaded. Do not tidy,
-  reformat or "improve" them; a clean diff against what the vendor shipped is what makes the next
-  upgrade reviewable.
-- **`dev/`** — the local Odoo 19 test harness.
+## Modules
 
-## Authoring conventions
+- **[`jfe_language_sequence`](jfe_language_sequence)** — order the enabled languages by hand, by
+  dragging, instead of alphabetically: in the website language selector, the language dropdowns on
+  users and contacts, and the Languages list itself.
+- **[`jfe_language_freeze_meta`](jfe_language_freeze_meta)** — stop Odoo module updates reverting
+  your edits to language records, such as a renamed language or a broadened ISO code.
 
-Manifest: `"version": "19.0.1.0.0"` (Odoo series first), `"license": "LGPL-3"`,
-`"author": "Valencia Makers, SL"`. Keep `depends` minimal and honest; depend on `website` only if
-you override something it defines.
+Each module's own `README.md` explains why it is built the way it is — which core method fights you,
+and where. That is usually the interesting part.
 
-**Prettier config lives per module, never at the repo root.** Each `jfe_*` module carries its own
-`.prettierrc` (`proseWrap: always`, `printWidth: 100`), as does `dev/`. Every new `jfe_*` module
-should get its own file.
+## Installing
 
-## Licensing
+Clone onto your Odoo addons path, update the apps list, and install by name:
 
-This repository contains modules for which we own the copyright, and third-party modules with
-various licensing terms. Therefore if we ever decide to release our own modules publicly, they will
-need to be moved into a "clean" repository.
+```bash
+git clone https://github.com/valenciamakers/odoo-addons.git
+odoo --addons-path=/path/to/odoo-addons,... -d <db> -i jfe_language_sequence
+```
+
+## Developing
+
+`dev/` holds a Docker harness — Odoo 19 and PostgreSQL 17, with this repo mounted as an addons path:
+
+```bash
+cd dev
+docker compose up -d db
+docker compose run --rm odoo odoo -d test --init jfe_language_sequence --stop-after-init
+docker compose run --rm odoo odoo -d test -u jfe_language_sequence \
+    --test-enable --test-tags /jfe_language_sequence --stop-after-init
+docker compose down
+```
+
+`CLAUDE.md` documents the harness's sharp edges, plus a catalogue of Odoo 19 behaviours that cost us
+time — all verified against real Odoo source rather than against documentation.
+
+## Contributing
+
+Issues and pull requests are welcome. These are maintained for our own use first, so a change that
+suits your deployment but not ours may be happier as a fork; MIT makes that easy, and no hard
+feelings.
+
+## License
+
+MIT, © 2026 Valencia Makers, SL. See each module's `LICENSE`.

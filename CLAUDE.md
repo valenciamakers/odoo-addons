@@ -1,19 +1,20 @@
-# CLAUDE.md — Odoo Modules
+# CLAUDE.md — Odoo Addons
 
-Odoo 19 modules for Valencia Makers: some third-party and under evaluation, some ours. Everything
-here targets **Odoo 19 Enterprise, self-hosted** (Hetzner via oec.sh, Docker behind Traefik). See
-`../.claude/CLAUDE.md` for the business context; this file wins inside this repo.
+The Odoo 19 modules Valencia Makers writes and maintains, MIT licensed. They run against **Odoo 19
+Enterprise, self-hosted** (Hetzner via oec.sh, Docker behind Traefik), but depend only on Community
+modules. See `../.claude/CLAUDE.md` for the business context; this file wins inside this repo.
+
+Third-party modules under evaluation live in the private `Odoo Modules` repo, not here — this one is
+publishable, so nothing enters it that we do not own.
 
 ## Layout
 
-- **`jfe_*`** — modules we author. `jfe_language_sequence` (manual ordering of enabled languages)
-  and `jfe_language_freeze_meta` (stopping Odoo updates reverting language edits). Read their
-  `README.md` files before writing another; between them they document most of the traps below in
-  context.
-- **Everything else** — third-party modules under evaluation, vendored as downloaded. Do not tidy,
-  reformat or "improve" them; a clean diff against what the vendor shipped is what makes the next
-  upgrade reviewable.
+- **`jfe_language_sequence`** — manual ordering of the enabled languages.
+- **`jfe_language_freeze_meta`** — stops Odoo updates reverting edits to language metadata.
 - **`dev/`** — the local Odoo 19 test harness.
+
+Read both modules' `README.md` files before writing a third; between them they document most of the
+traps below in context.
 
 ## Testing locally
 
@@ -164,33 +165,14 @@ depend on an Enterprise module, which would put distribution under OEEL whatever
 Contributing to the OCA would need LGPL-3/AGPL-3, but that is their repository policy, not a legal
 consequence, and we hold the copyright either way.
 
-**Prettier config lives per module, never at the repo root.** Each `jfe_*` module carries its own
-`.prettierrc` (`proseWrap: always`, `printWidth: 100`), as does `dev/`. Give every new `jfe_*`
-module one.
+**Prettier**: a `.prettierrc` at the root covers everything, and each module carries its own as well
+(`proseWrap: always`, `printWidth: 100`). Give every new module one — the duplication is deliberate,
+so a module stays formatted correctly if it is ever distributed on its own.
 
-This is deliberate rather than fussy. A config is what opts a directory into formatting, so placing
-one only in the modules we author means **nothing can opt the vendored ones in** — not the hook, not
-a stray `pnpm dlx prettier --write .` from the wrong directory. The alternative, a root config plus
-a `.prettierignore` listing the vendored modules, would work (the global hook runs Prettier from the
-config's own directory, so ignore files beside it apply), but it stays correct only as long as that
-ignore file does. Given the point is a clean diff against what each vendor shipped, structural
-protection beats a rule that has to keep being right.
-
-The decisive reason is editors rather than anything about Claude Code. A format-on-save extension
-resolves config the same way Prettier does — walking up from the file — and knows nothing about our
-conventions or our hooks. A root config would hand every vendored module to it on the first save. A
-missing config is the only protection that holds for tools we do not control.
-
-The cost is that root-level files like this one are not opted in, so the hook leaves them alone.
-Format them explicitly instead, pointing at a config the tree cannot walk up to:
-
-```bash
-pnpm dlx prettier --write CLAUDE.md --config dev/.prettierrc
-```
-
-`--config` overrides resolution, so root files get house style without leaving a config anywhere a
-vendored module — or an editor's format-on-save — could reach by walking up. Do this after editing
-this file; nothing does it automatically.
+A root config is safe _here_ precisely because everything in this repo is ours. In the private
+`Odoo Modules` repo it would be a bug: a config opts every directory below it in, including vendored
+code, and a format-on-save editor extension resolves config the same way Prettier does while knowing
+nothing about our conventions. There, configs go per module and the root stays bare.
 
 Write tests that assert **behaviour, not ambient state**. A test asserting freshly-installed
 ordering fails on any database whose users have used the feature; re-run the seeding hook inside the
@@ -199,14 +181,3 @@ test instead.
 Documentation ships in the same commit as the code, and each module's `README.md` should explain
 _why the non-obvious parts are that way_ — which core method fights you, and where. That is the part
 nobody can reconstruct from the diff.
-
-## Evaluating third-party modules
-
-Plenty of paid modules are a field, a view inherit and fifty lines. Before buying, read `models/`
-and ask what it does that `_inherit` plus a `sequence` field would not — then check whether it
-handles the traps above (the client-imposed handle ordering, `create()` as well as `write()`, cache
-invalidation). Those are what separate a module that works from one that appears to.
-
-Judge the reverse honestly too: anything touching accounting, EDI, payment providers or Spanish tax
-compliance carries regulatory risk and ongoing upgrade maintenance that is worth real money. The
-question is never the line count on its own, it is whether the work is genuinely ours to redo.
