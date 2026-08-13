@@ -1,12 +1,12 @@
 # CLAUDE.md — Odoo Addons
 
-The Odoo 19 modules Valencia Makers writes and maintains, MIT licensed. They run against **Odoo 19
-Enterprise, self-hosted** (Hetzner via oec.sh, Docker behind Traefik), but depend only on Community
-modules. See `../.claude/CLAUDE.md` for the business context; this file wins inside this repo.
+The Odoo 19 modules Valencia Makers writes and maintains, MIT licensed. They run against a
+self-hosted **Odoo 19 Enterprise** instance but depend only on Community modules. See
+`../.claude/CLAUDE.md` for the business context; this file wins inside this repo.
 
-Third-party modules under evaluation live in the private `valenciamakers/odoo-addons-external`
-(`../Odoo Addons - External`), not here — this repo is publishable, so nothing enters it that we do
-not own. Mind the one-word difference between the two repo names.
+Third-party modules under evaluation live in a separate private repo (`../Odoo Addons - External`
+locally), not here — this repo is publishable, so nothing enters it that we do not own. The two
+remotes differ by one word, so check which one you are pushing to.
 
 ## Layout
 
