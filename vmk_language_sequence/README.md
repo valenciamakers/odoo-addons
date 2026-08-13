@@ -133,5 +133,5 @@ odoo -d <db> -u vmk_language_sequence --test-enable --test-tags /vmk_language_se
      --stop-after-init
 ```
 
-Verified against `odoo:19` with English, Spanish, French and Catalan enabled: reordering in the
+Verified against `odoo:19` with English, Spanish, French, and Catalan enabled: reordering in the
 backend reordered the site selector live, without a server restart.

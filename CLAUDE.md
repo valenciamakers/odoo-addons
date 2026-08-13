@@ -100,8 +100,8 @@ docker cp odoo19src:/usr/lib/python3/dist-packages/odoo/addons/base/models/res_l
 throughout, and claim type annotations are mandatory when core does not use them. Treat them as a
 starting point, never as authority.
 
-**Read the JavaScript too.** Ordering, drag behaviour and view composition are frequently decided in
-`web/static/src/**`, not in Python. Half the surprises below live there.
+**Read the JavaScript too.** Ordering, drag behaviour, and view composition are frequently decided
+in `web/static/src/**`, not in Python. Half the surprises below live there.
 
 ## Odoo 19 traps, verified
 

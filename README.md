@@ -1,7 +1,7 @@
 # Odoo Addons
 
 Odoo 19 modules written and maintained by Valencia Makers, SL — a digital-fabrication education,
-makerspace and retail business in Valencia, Spain. Each one is small, solves a problem we hit
+makerspace, and retail business in Valencia, Spain. Each one is small, solves a problem we hit
 running our own instance, and is MIT licensed.
 
 They depend only on Odoo Community modules, so they work on Community and Enterprise alike.
