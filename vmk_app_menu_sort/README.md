@@ -175,3 +175,8 @@ odoo -d <db> -u vmk_app_menu_sort --test-enable --test-tags /vmk_app_menu_sort -
 The tests assert relative order rather than a fixed list of apps, so they hold on any database. The
 reset-action test covers whichever branch the database supports: the Community no-op, or the real
 clearing path on Enterprise, rolled back with the test transaction.
+
+Verified against `odoo:19` Community for the ordering itself, and on an Odoo 19 **Enterprise**
+instance on 2026-08-13 for the two things Community cannot exercise: the app grid on `/odoo` follows
+this module's order, and running the reset returned a grid whose owner had dragged icons around back
+to it.
