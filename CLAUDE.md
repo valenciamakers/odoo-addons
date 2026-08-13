@@ -17,6 +17,33 @@ not own. Mind the one-word difference between the two repo names.
 Read both modules' `README.md` files before writing a third; between them they document most of the
 traps below in context.
 
+## Commits — this repo departs from the machine-wide rule
+
+`~/.claude/rules/git-workflow.md` says to commit as `Claude <claude@pvt.jfe.xyz>` with no
+`Co-Authored-By` trailer. **That does not apply here.** This repo is published, so its history
+should attribute to the maintainer and link on GitHub, with assistance disclosed rather than
+substituted for authorship.
+
+- **Author and commit as Felix.** That is already the global git identity, so a plain `git commit`
+  is correct — no `-c user.name=…` overrides.
+- **Add one trailer to commits Claude wrote**, and nothing else — no "Generated with" line:
+
+  ```
+  Co-Authored-By: Claude <noreply@anthropic.com>
+  ```
+
+  Commits Felix writes get no trailer.
+
+The whole history was rewritten to this convention on 2026-08-13 and is uniform; keep it that way.
+Signing is unaffected — `commit.gpgsign` is on globally and signs with Felix's SSH key through
+1Password whoever the author is, so commits still fail while the vault is locked, which is expected
+and not worth investigating. The rewritten history is itself unsigned, because rewriting invalidates
+signatures.
+
+**Only this repo.** `../Odoo Addons - External` and every other repo keep the machine-wide
+convention. Everything else in `git-workflow.md` still holds here: one topic per commit, imperative
+subject, a `-` bullet body explaining the why, never `git add -A`, and never push — Felix does that.
+
 ## Testing locally
 
 The harness mounts the repo root as an addons path, so any module here installs by name.
