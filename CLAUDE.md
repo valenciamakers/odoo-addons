@@ -145,6 +145,11 @@ config's own directory, so ignore files beside it apply), but it stays correct o
 ignore file does. Given the point is a clean diff against what each vendor shipped, structural
 protection beats a rule that has to keep being right.
 
+The decisive reason is editors rather than anything about Claude Code. A format-on-save extension
+resolves config the same way Prettier does — walking up from the file — and knows nothing about our
+conventions or our hooks. A root config would hand every vendored module to it on the first save.
+A missing config is the only protection that holds for tools we do not control.
+
 The cost is that nothing at the root is opted in, which is why this file is hand-wrapped to 100
 columns.
 
