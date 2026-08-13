@@ -1,7 +1,7 @@
 # Copyright 2026 Valencia Makers, SL
 # License MIT (https://opensource.org/licenses/MIT).
 
-from odoo.addons.vmk_app_menu_sort.models.ir_ui_menu import PINNED_LAST
+from odoo.addons.vmk_apps_menu_sort.models.ir_ui_menu import PINNED_LAST
 from odoo.tests.common import TransactionCase, tagged
 
 
@@ -134,7 +134,7 @@ class TestAppMenuSort(TransactionCase):
 
     def test_the_server_action_runs(self):
         """Exercises the `safe_eval` string in the data file end to end."""
-        action = self.env.ref("vmk_app_menu_sort.action_reset_app_grid_order")
+        action = self.env.ref("vmk_apps_menu_sort.action_reset_app_grid_order")
         self.assertEqual(action.run()["tag"], "display_notification")
 
     def test_the_server_action_offers_a_run_button(self):
@@ -145,7 +145,7 @@ class TestAppMenuSort(TransactionCase):
         action bound to the model its code happens to touch has no way of being
         run by hand at all.
         """
-        action = self.env.ref("vmk_app_menu_sort.action_reset_app_grid_order")
+        action = self.env.ref("vmk_apps_menu_sort.action_reset_app_grid_order")
         self.assertEqual(action.state, "code")
         self.assertEqual(action.model_name, "ir.actions.server")
 

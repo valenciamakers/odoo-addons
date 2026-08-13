@@ -1,4 +1,4 @@
-# App Menu Sort (`vmk_app_menu_sort`)
+# Apps Menu Sort (`vmk_apps_menu_sort`)
 
 Odoo lists the apps on the main menu in whatever order their `sequence` values happen to give, which
 is a number each app's own module picked for itself. This module sorts them alphabetically instead,
@@ -169,7 +169,7 @@ reset action degrades to a no-op on Community rather than needing a dependency.
 ## Testing
 
 ```bash
-odoo -d <db> -u vmk_app_menu_sort --test-enable --test-tags /vmk_app_menu_sort --stop-after-init
+odoo -d <db> -u vmk_apps_menu_sort --test-enable --test-tags /vmk_apps_menu_sort --stop-after-init
 ```
 
 The tests assert relative order rather than a fixed list of apps, so they hold on any database. The

@@ -12,7 +12,7 @@ remotes differ by one word, so check which one you are pushing to.
 
 - **`vmk_language_sequence`** — manual ordering of the enabled languages.
 - **`vmk_language_freeze_meta`** — stops Odoo updates reverting edits to language metadata.
-- **`vmk_app_menu_sort`** — alphabetical ordering of the apps on the main menu.
+- **`vmk_apps_menu_sort`** — alphabetical ordering of the apps on the main menu.
 - **`dev/`** — the local Odoo 19 test harness.
 
 Read the existing modules' `README.md` files before writing another; between them they document most
