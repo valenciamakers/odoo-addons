@@ -5,8 +5,8 @@ Enterprise, self-hosted** (Hetzner via oec.sh, Docker behind Traefik), but depen
 modules. See `../.claude/CLAUDE.md` for the business context; this file wins inside this repo.
 
 Third-party modules under evaluation live in the private `valenciamakers/odoo-addons-external`
-(`../Odoo Modules`), not here — this repo is publishable, so nothing enters it that we do not own.
-Mind the one-word difference between the two repo names.
+(`../Odoo Addons - External`), not here — this repo is publishable, so nothing enters it that we do
+not own. Mind the one-word difference between the two repo names.
 
 ## Layout
 
@@ -171,9 +171,10 @@ consequence, and we hold the copyright either way.
 so a module stays formatted correctly if it is ever distributed on its own.
 
 A root config is safe _here_ precisely because everything in this repo is ours. In the private
-`Odoo Modules` repo it would be a bug: a config opts every directory below it in, including vendored
-code, and a format-on-save editor extension resolves config the same way Prettier does while knowing
-nothing about our conventions. There, configs go per module and the root stays bare.
+`Odoo Addons - External` repo it would be a bug: a config opts every directory below it in,
+including vendored code, and a format-on-save editor extension resolves config the same way Prettier
+does while knowing nothing about our conventions. There, configs go per module and the root stays
+bare.
 
 Write tests that assert **behaviour, not ambient state**. A test asserting freshly-installed
 ordering fails on any database whose users have used the feature; re-run the seeding hook inside the
