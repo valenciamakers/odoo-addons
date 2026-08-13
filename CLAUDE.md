@@ -13,6 +13,7 @@ remotes differ by one word, so check which one you are pushing to.
 - **`vmk_language_sequence`** — manual ordering of the enabled languages.
 - **`vmk_language_freeze_meta`** — stops Odoo updates reverting edits to language metadata.
 - **`vmk_apps_menu_sort`** — alphabetical ordering of the apps on the main menu.
+- **`vmk_apps_page_sort`** — alphabetical ordering of the Apps page, by displayed name.
 - **`dev/`** — the local Odoo 19 test harness.
 
 Read the existing modules' `README.md` files before writing another; between them they document most
@@ -133,6 +134,11 @@ in `web/static/src/**`, not in Python. Half the surprises below live there.
 - An inherit-only module needs **no `security/ir.model.access.csv`** — ACLs are per model, and
   adding a field to an existing model inherits them. Generators emit one anyway; delete it.
 - `models.Constraint()` replaces `_sql_constraints`.
+- **Odoo creates every database with `LC_COLLATE 'C'`** — `service/db.py` passes it whenever the
+  template is `template0`, which is the normal path. So any SQL `ORDER BY` on text is byte order:
+  capitals sort before lowercase (`CRM` before `Calendar`) and accented initials land after `Z`.
+  Neither `_order` nor a view's `default_order` can fix it, both taking bare field names with no
+  room for `lower()`. Sort in Python, or store a normalised key and order on that.
 - `post_init_hook(env)` takes the environment, and runs on **install only** — never on upgrade. If a
   hook seeds data, an upgrade will not re-seed it; apply it by hand when testing on an existing
   database.
