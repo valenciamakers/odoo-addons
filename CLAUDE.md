@@ -6,8 +6,10 @@ here targets **Odoo 19 Enterprise, self-hosted** (Hetzner via oec.sh, Docker beh
 
 ## Layout
 
-- **`jfe_*`** — modules we author. `jfe_language_sequence` is the first; read its `README.md` before
-  writing another, as it documents most of the traps below in context.
+- **`jfe_*`** — modules we author. `jfe_language_sequence` (manual ordering of enabled languages)
+  and `jfe_language_freeze_meta` (stopping Odoo updates reverting language edits). Read their
+  `README.md` files before writing another; between them they document most of the traps below in
+  context.
 - **Everything else** — third-party modules under evaluation, vendored as downloaded. Do not tidy,
   reformat or "improve" them; a clean diff against what the vendor shipped is what makes the next
   upgrade reviewable.
@@ -96,6 +98,21 @@ starting point, never as authority.
   database.
 - Check a field's declared default before relying on it. `res.lang.active` is `fields.Boolean()`
   with **no default**, so a hand-created language is disabled.
+
+**Module data is re-applied on every update**
+
+- Anything Odoo ships as `data` is rewritten by `-u <that module>`, and `-u all` therefore rewrites
+  nearly everything. User edits to shipped records do not survive. `base/data/res.lang.csv`
+  resetting a renamed language is the case we hit.
+- **A CSV data file cannot opt out.** Only XML can carry `<data noupdate="1">`, so every CSV row
+  loads updatable. Freeze an individual record by setting `noupdate` on its `ir.model.data` row:
+  `_load_records` skips it while updating (`if not (update and d_noupdate)`), and the xmlid upsert
+  writes only `(model, res_id, write_date)`, so the flag is never cleared by the file that made it.
+- Protection is per record, not per field — a frozen record stops receiving genuine Odoo corrections
+  too. Freeze deliberately, and give the user a way to unfreeze.
+- When overriding `write()` to react to user edits, exclude the loader: it reaches writes through
+  `_load_records_write`, so mark the context there or Odoo re-applying its own data looks like a
+  customisation.
 
 **Ordering, if you add a `sequence`**
 
