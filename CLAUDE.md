@@ -14,6 +14,7 @@ remotes differ by one word, so check which one you are pushing to.
 - **`vmk_language_freeze_meta`** — stops Odoo updates reverting edits to language metadata.
 - **`vmk_apps_menu_sort`** — alphabetical ordering of the apps on the main menu.
 - **`vmk_apps_page_sort`** — alphabetical ordering of the Apps page, by displayed name.
+- **`vmk_settings_sort`** — alphabetical ordering of the Settings sidebar and Technical groupings.
 - **`dev/`** — the local Odoo 19 test harness.
 
 Read the existing modules' `README.md` files before writing another; between them they document most
@@ -232,6 +233,17 @@ in `web/static/src/**`, not in Python. Half the surprises below live there.
   `homemenu_config`, a per-user `fields.Json` on `res.users.settings` that only Enterprise defines.
   Server-side ordering is the baseline, not the last word — and apps missing from a stored order
   sort ahead of the ones named in it, so new apps land at the front for those users.
+- **`load_menus(debug)` does not use its own `debug` argument for visibility.** That argument only
+  feeds the ormcache key; `_filter_visible_menus` reads `request.session.debug` instead. With no
+  request there is no debug, so a `groups="base.group_no_one"` menu — the whole Technical subtree —
+  is absent from any payload fetched in a `TransactionCase`, however you call it. Test that ordering
+  against a fixture and verify the live path over an authenticated HTTP session.
+- **The Settings sidebar is drawn in arch order.** `settings_form_compiler.js` walks
+  `{selector: "app"}` in document order and `settings_page.js` sorts nothing, so the order is
+  whichever order the inheriting views were applied in. General Settings leads only because
+  `base_setup` sets its view's `priority` to `0`. Sort it by overriding `_get_view` on
+  `res.config.settings` — after `super()`, where the arch is fully combined and no third-party xpath
+  can still be broken — and remember `<form>` holds non-`<app>` children that must not move.
 
 ## Authoring conventions
 
