@@ -175,6 +175,32 @@ starting point, never as authority.
 
 ## Authoring conventions
 
+**Name every module `vmk_<what it does>`** — Valencia Makers, not anyone's initials. Apps Store
+technical names are a single global namespace, so an unprefixed generic name like
+`language_sequence` is exactly the kind most likely to collide, and a collision blocks publishing.
+Other publishers do the same: `kw_` is Kitworks, `muk_` is MuK IT, `ks_` is Ksolves.
+
+**Check the name is free before settling on it.** A prefix is not a reservation — nothing stops two
+publishers using `vmk_`, and only a full technical name actually collides. The Apps Store exposes
+each module at a predictable URL, so a direct request is the test:
+
+```bash
+curl -s -o /dev/null -w '%{http_code}\n' https://apps.odoo.com/apps/modules/19.0/kw_mock_mail_server
+curl -s -o /dev/null -w '%{http_code}\n' https://apps.odoo.com/apps/modules/19.0/vmk_your_new_module
+```
+
+**Probe a name known to exist first**, as the first line does. If the URL pattern ever changes,
+every lookup returns 404 and a taken name is indistinguishable from a free one — the check would
+silently always pass. `200` means taken, `404` means free.
+
+Do not rely on the store's search box: searching `vmk` returns nothing even though prefixes clearly
+exist in the catalogue, because the technical name does not appear to be an indexed field.
+
+Two limits worth stating plainly. This is a point-in-time check, not a reservation — someone could
+publish the same name between our checking it and our publishing, though with a vendor prefix that
+is unlikely. And it only covers the Apps Store; a module distributed purely through GitHub would not
+show up at all.
+
 Manifest: `"version": "19.0.1.0.0"` (Odoo series first), `"author": "Valencia Makers, SL"`. Keep
 `depends` minimal and honest — depend on `website` only if you override something it defines.
 
