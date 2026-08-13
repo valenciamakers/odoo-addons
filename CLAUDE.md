@@ -45,10 +45,10 @@ Five things that will otherwise cost you an hour each:
 - **`docker compose exec` skips the entrypoint**, which is what translates `HOST`/`USER`/`PASSWORD`
   into CLI flags. Pass `--db_host=db --db_user=odoo --db_password=odoo` to anything run that way, or
   it will try a local socket and fail.
-- **`odoo shell` does not signal cache invalidation to the running server.** `service/model.py` calls
-  `registry.signal_changes()` after each RPC; the shell has no such hook, so a write there leaves
-  other workers stale. Call `env.registry.signal_changes()` **before** `env.cr.commit()`, or restart
-  the server. Getting this backwards looks exactly like a caching bug in your module.
+- **`odoo shell` does not signal cache invalidation to the running server.** `service/model.py`
+  calls `registry.signal_changes()` after each RPC; the shell has no such hook, so a write there
+  leaves other workers stale. Call `env.registry.signal_changes()` **before** `env.cr.commit()`, or
+  restart the server. Getting this backwards looks exactly like a caching bug in your module.
 - **The running server holds the Python it started with.** `docker compose restart odoo` after
   editing code, or you are testing the previous version.
 - **There is no `--uninstall` flag.** Use `button_immediate_uninstall()` on the `ir.module.module`
@@ -56,8 +56,8 @@ Five things that will otherwise cost you an hour each:
 
 ## Verify against source, not memory
 
-Read the real 19.0 source before building on any claim about what Odoo does. It is right there in the
-image:
+Read the real 19.0 source before building on any claim about what Odoo does. It is right there in
+the image:
 
 ```bash
 docker run --rm odoo:19 bash -c "grep -rn 'def _get_frontend(' /usr/lib/python3/dist-packages/odoo/"
@@ -81,21 +81,21 @@ starting point, never as authority.
   (`<field name="x" position="before">`), never on the root tag, and it survives the rename.
 - `attrs="{...}"` was removed in 17. Use direct attributes (`invisible="not active"`).
 - Ship `static/description/index.html`. Without it `ir.module.module._get_desc()` falls back to
-  running your `README.md` through **docutils as RST**, which spews parse errors on every install and
-  renders the Apps description badly.
+  running your `README.md` through **docutils as RST**, which spews parse errors on every install
+  and renders the Apps description badly.
 - `groups="base.group_no_one"` means developer mode. Several core screens are gated this way,
   including Settings → Translations → Languages.
 
 **Models**
 
-- An inherit-only module needs **no `security/ir.model.access.csv`** — ACLs are per model, and adding
-  a field to an existing model inherits them. Generators emit one anyway; delete it.
+- An inherit-only module needs **no `security/ir.model.access.csv`** — ACLs are per model, and
+  adding a field to an existing model inherits them. Generators emit one anyway; delete it.
 - `models.Constraint()` replaces `_sql_constraints`.
 - `post_init_hook(env)` takes the environment, and runs on **install only** — never on upgrade. If a
   hook seeds data, an upgrade will not re-seed it; apply it by hand when testing on an existing
   database.
-- Check a field's declared default before relying on it. `res.lang.active` is
-  `fields.Boolean()` with **no default**, so a hand-created language is disabled.
+- Check a field's declared default before relying on it. `res.lang.active` is `fields.Boolean()`
+  with **no default**, so a hand-created language is disabled.
 
 **Ordering, if you add a `sequence`**
 
@@ -103,8 +103,8 @@ starting point, never as authority.
   the **web client** (`web/static/src/views/list/list_arch_parser.js`), overriding the model's
   `_order` entirely. Your `_order` will not order that list.
 - You cannot fix that with `default_order`: `canResequenceRows` only permits dragging when
-  `orderBy[0].name` **is** the handle field. Any order starting with something else silently disables
-  drag and drop. Grouping therefore has to live in the sequence *values*.
+  `orderBy[0].name` **is** the handle field. Any order starting with something else silently
+  disables drag and drop. Grouping therefore has to live in the sequence _values_.
 - **Seed distinct values.** On tied or non-monotonic sequences, `resequence()` in
   `web/static/src/model/relational_model/utils.js` sets `reorderAll` and rewrites the entire list;
   with strictly increasing values it rewrites only the records between the two drag positions.
@@ -113,15 +113,15 @@ starting point, never as authority.
 
 **Caches**
 
-- Odoo caches by **name**: `'default'`, `'stable'`, and others. `Registry.clear_cache(*names)` clears
-  whole groups, and the per-method `ormcache.clear_cache()` of older versions **is gone in 19** —
-  there is no narrow invalidation.
+- Odoo caches by **name**: `'default'`, `'stable'`, and others. `Registry.clear_cache(*names)`
+  clears whole groups, and the per-method `ormcache.clear_cache()` of older versions **is gone in
+  19** — there is no narrow invalidation.
 - So prefer reading values from a cache that core already invalidates over clearing a broad one
   yourself. `res.lang.write()` clears `'stable'`; sorting on values from there avoided clearing
   `'default'` — every compiled QWeb template on the site — on each reorder.
 - **`_order` is not the last word on ordering.** Core routinely sorts explicitly past it:
   `res.lang.get_installed()` goes through `search_fetch(..., order='name')` and
-  `website._get_frontend()` uses `language_ids.sorted('name')`. Grep for the *consumers* of an
+  `website._get_frontend()` uses `language_ids.sorted('name')`. Grep for the _consumers_ of an
   ordering before assuming a model-level change reaches them.
 - A custom `__getitem__` can break `in`. `LangDataDict` returns a dummy for unknown keys instead of
   raising, and `Mapping.__contains__` is built on `__getitem__` — so `key in it` is **always true**.
@@ -134,38 +134,46 @@ Manifest: `"version": "19.0.1.0.0"` (Odoo series first), `"license": "LGPL-3"`,
 you override something it defines.
 
 **Prettier config lives per module, never at the repo root.** Each `jfe_*` module carries its own
-`.prettierrc` (`proseWrap: always`, `printWidth: 100`), as does `dev/`. Give every new `jfe_*` module
-one.
+`.prettierrc` (`proseWrap: always`, `printWidth: 100`), as does `dev/`. Give every new `jfe_*`
+module one.
 
 This is deliberate rather than fussy. A config is what opts a directory into formatting, so placing
 one only in the modules we author means **nothing can opt the vendored ones in** — not the hook, not
-a stray `pnpm dlx prettier --write .` from the wrong directory. The alternative, a root config plus a
-`.prettierignore` listing the vendored modules, would work (the global hook runs Prettier from the
+a stray `pnpm dlx prettier --write .` from the wrong directory. The alternative, a root config plus
+a `.prettierignore` listing the vendored modules, would work (the global hook runs Prettier from the
 config's own directory, so ignore files beside it apply), but it stays correct only as long as that
 ignore file does. Given the point is a clean diff against what each vendor shipped, structural
 protection beats a rule that has to keep being right.
 
 The decisive reason is editors rather than anything about Claude Code. A format-on-save extension
 resolves config the same way Prettier does — walking up from the file — and knows nothing about our
-conventions or our hooks. A root config would hand every vendored module to it on the first save.
-A missing config is the only protection that holds for tools we do not control.
+conventions or our hooks. A root config would hand every vendored module to it on the first save. A
+missing config is the only protection that holds for tools we do not control.
 
-The cost is that nothing at the root is opted in, which is why this file is hand-wrapped to 100
-columns.
+The cost is that root-level files like this one are not opted in, so the hook leaves them alone.
+Format them explicitly instead, pointing at a config the tree cannot walk up to:
 
-Write tests that assert **behaviour, not ambient state**. A test asserting freshly-installed ordering
-fails on any database whose users have used the feature; re-run the seeding hook inside the test
-instead.
+```bash
+pnpm dlx prettier --write CLAUDE.md --config dev/.prettierrc
+```
 
-Documentation ships in the same commit as the code, and each module's `README.md` should explain *why
-the non-obvious parts are that way* — which core method fights you, and where. That is the part
+`--config` overrides resolution, so root files get house style without leaving a config anywhere a
+vendored module — or an editor's format-on-save — could reach by walking up. Do this after editing
+this file; nothing does it automatically.
+
+Write tests that assert **behaviour, not ambient state**. A test asserting freshly-installed
+ordering fails on any database whose users have used the feature; re-run the seeding hook inside the
+test instead.
+
+Documentation ships in the same commit as the code, and each module's `README.md` should explain
+_why the non-obvious parts are that way_ — which core method fights you, and where. That is the part
 nobody can reconstruct from the diff.
 
 ## Evaluating third-party modules
 
-Plenty of paid modules are a field, a view inherit and fifty lines. Before buying, read `models/` and
-ask what it does that `_inherit` plus a `sequence` field would not — then check whether it handles the
-traps above (the client-imposed handle ordering, `create()` as well as `write()`, cache
+Plenty of paid modules are a field, a view inherit and fifty lines. Before buying, read `models/`
+and ask what it does that `_inherit` plus a `sequence` field would not — then check whether it
+handles the traps above (the client-imposed handle ordering, `create()` as well as `write()`, cache
 invalidation). Those are what separate a module that works from one that appears to.
 
 Judge the reverse honestly too: anything touching accounting, EDI, payment providers or Spanish tax
