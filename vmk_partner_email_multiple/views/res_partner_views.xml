@@ -21,10 +21,21 @@
                             <field name="sequence" widget="handle" />
                             <field name="email" widget="vmk_email_link" />
                             <field name="label" placeholder="e.g. billing" />
+                            <!--
+                                `string` is what gives this button an accessible
+                                name, and the stylesheet then hides the label it
+                                renders. `title` alone becomes data-tooltip and
+                                nothing else, which no screen reader announces,
+                                and an aria-label here is dropped outright:
+                                list_renderer.xml instantiates ViewButton with a
+                                fixed prop list that never passes the arch's
+                                remaining attributes through.
+                            -->
                             <button
                                 name="action_promote_to_primary"
                                 type="object"
                                 icon="fa-exchange"
+                                string="Swap with the contact's primary email address"
                                 title="Swap with the contact's primary email address"
                                 invisible="not id"
                             />

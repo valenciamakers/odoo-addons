@@ -69,6 +69,22 @@ The envelope appears on hover, which is what core's field does too — its `mail
 marker. We reveal ours with `visibility` rather than `display`, because `ms-auto` pushes it to the
 right of the cell and reserving its box means revealing it never reflows the address beside it.
 
+### Both controls take work to be reachable without a mouse
+
+The envelope is revealed with `opacity`, not the `display` core uses or the `visibility` this had
+first. Both of those drop the anchor out of the tab order and the accessibility tree, so a keyboard
+or screen reader user could never reach it — the control would effectively not exist for them. At
+`opacity: 0` it stays focusable, and a `:focus-within` rule on the row brings it into view when it
+is tabbed to.
+
+The swap button gets its accessible name from `string`, which the stylesheet then hides visually so
+the control stays icon-only. Neither obvious alternative works: `title` becomes `data-tooltip` and
+nothing else, which carries no accessible name, and an `aria-label` in the arch never reaches the
+DOM at all — `list_renderer.xml:308-318` instantiates `ViewButton` from a fixed prop list
+(`className`, `clickParams`, `icon`, `string`, `title`, `tabindex`…) that never passes the arch's
+remaining attributes through. The arch keeps the attribute all the way to the client, which is what
+makes this one hard to spot: it is dropped at render, not at load.
+
 ### The cursor rules need `!important`, and not for the usual reason
 
 The list renderer stamps a `cursor-pointer` utility class onto every data cell, and that utility is

@@ -5,17 +5,24 @@
 .o_field_widget[name="vmk_email_ids"] {
     // Revealed on hover, which is what core's own email field does: its mailto
     // anchor is display:none until the field is hovered, and a second envelope
-    // sits permanently in front of the input as a marker. `visibility` rather
-    // than `display` because the anchor is pushed right by `ms-auto`, so
-    // reserving its box means revealing it never reflows the address beside it.
+    // sits permanently in front of the input as a marker.
+    //
+    // `opacity` rather than core's `display` or the `visibility` this used
+    // first, because both of those drop the anchor out of the tab order and the
+    // accessibility tree -- so a keyboard or screen reader user could never
+    // reach it, and the control would effectively not exist for them. At
+    // opacity 0 it stays focusable, and :focus-within brings it into view when
+    // it is tabbed to. It occupies its box either way, so revealing it never
+    // reflows the address beside it.
     .vmk_email_send {
-        visibility: hidden;
+        opacity: 0;
     }
 
     .o_data_row:hover,
+    .o_data_row:focus-within,
     .o_data_row.o_selected_row {
         .vmk_email_send {
-            visibility: visible;
+            opacity: 1;
         }
     }
 
@@ -34,6 +41,25 @@
     .o_data_cell[name="email"],
     .o_data_cell[name="label"] {
         cursor: text !important;
+    }
+
+    // The swap button's label, kept for screen readers and hidden from sight so
+    // the control stays icon-only. It has to be a real text node: `title`
+    // becomes data-tooltip, which carries no accessible name, and an aria-label
+    // in the arch never reaches the DOM because list_renderer.xml builds
+    // ViewButton from a fixed prop list. These are Bootstrap's .visually-hidden
+    // declarations, written out rather than depending on the class landing on a
+    // span we do not control.
+    .o_list_button button > span {
+        position: absolute !important;
+        width: 1px !important;
+        height: 1px !important;
+        padding: 0 !important;
+        margin: -1px !important;
+        overflow: hidden !important;
+        clip: rect(0, 0, 0, 0) !important;
+        white-space: nowrap !important;
+        border: 0 !important;
     }
 
     // Only the control itself is a control -- not the cell around it. The
