@@ -353,8 +353,26 @@ _use_ the library carry any license, and Odoo SA's own position permits propriet
 conditions to keep true: do not copy Odoo source into a module (override by calling `super()`,
 rather than copy-pasting a core method to tweak it — the copied block would stay LGPL), and do not
 depend on an Enterprise module, which would put distribution under OEEL whatever the manifest says.
-Contributing to the OCA would need LGPL-3/AGPL-3, but that is their repository policy, not a legal
-consequence, and we hold the copyright either way.
+
+**MIT is the default, not a rule.** An individual module may ship under a GPL variant where that is
+the better trade, and the decision is per module rather than per repo. Weigh it explicitly, the way
+`vmk_partner_email_multiple` weighed wrapping `super()` against copying core, and record the
+reasoning in that module's `README.md` — a licence with no stated reason is one nobody can revisit
+safely. Three cases where copyleft is the honest answer rather than a concession:
+
+- **The module genuinely needs to copy core implementation.** Where an override cannot express the
+  change and a core method has to be lifted and edited, that block stays LGPL-3. Relicensing the
+  module to match is more honest than contorting the design to avoid the copy, or shipping MIT over
+  code that is not ours to relicense.
+- **We want it upstreamed to the OCA**, whose repository policy requires LGPL-3 or AGPL-3. That is
+  policy rather than legal consequence, and we hold the copyright either way — but a module intended
+  for them may as well be born under it.
+- **We want derivatives to stay open**, which is a preference we are entitled to hold per module.
+
+Odoo validates the manifest string against a fixed `Selection`, so use its exact values — `LGPL-3`,
+`AGPL-3`, `GPL-3`, `GPL-3 or any later version` — and put the matching licence text in `LICENSE`.
+Only MIT needs the `Other OSI approved licence` workaround above, because only MIT is missing from
+that list.
 
 **Prettier**: a `.prettierrc` at the root covers everything, and each module carries its own as well
 (`proseWrap: always`, `printWidth: 100`). Give every new module one — the duplication is deliberate,
@@ -365,6 +383,69 @@ A root config is safe _here_ precisely because everything in this repo is ours. 
 including vendored code, and a format-on-save editor extension resolves config the same way Prettier
 does while knowing nothing about our conventions. There, configs go per module and the root stays
 bare.
+
+**Ship translations from the start**, in the module's own first commit — not as a follow-up pass
+once the code settles. Retrofitting them means re-reading every string you already stopped thinking
+about, and a module that reaches anyone untranslated has already shipped the wrong thing.
+
+**Translations** live in `i18n/` and are loaded automatically on install — no manifest entry. We
+ship the `.pot` plus `es.po` and `ca.po`; Odoo 19 has **no Valencian variant**, so `ca_ES` is what a
+Valencian speaker selects. Terms a module shares with core reuse core's own wording, taken out of
+`base`/`mail`/`web`'s catalogues rather than translated afresh, so a module reads as part of the
+backend instead of introducing a second vocabulary for the same word. Match core's register too:
+Catalan and Spanish both take the infinitive for action labels (`Afegir una línia`,
+`Añadir una línea`), while a message reporting what just happened takes the perfect.
+
+**A module whose only extracted terms belong to core needs no catalogue at all.** Extending a core
+model attributes that model's name and its `display_name`/`id` fields to your module in the export,
+so a POT can be entirely `Display Name`, `ID`, `Menu`, `Config Settings` — every one of them a
+record core already translates. `vmk_settings_sort` is exactly this case and `vmk_apps_page_sort`
+exports nothing at all; both deliberately have no `i18n/`. Check the POT for a term you actually
+wrote before adding files.
+
+Exporting needs two workarounds, both harness-specific:
+
+```bash
+cd dev
+docker compose run --rm -e PGHOST=db -e PGUSER=odoo -e PGPASSWORD=odoo \
+    -v "$PWD/../<module>/i18n:/mnt/out" --entrypoint odoo odoo \
+    i18n export -d test -o /mnt/out/<module>.pot <module>
+```
+
+`--entrypoint odoo` because the image's entrypoint turns `HOST`/`USER`/`PASSWORD` into `--db_host`
+and friends, which the `i18n` subcommand rejects outright — hence passing the connection as libpq
+`PG*` variables. And `-o` because the export otherwise writes into each module's own `i18n/`, which
+the harness mounts read-only. The module must be installed for its terms to exist.
+
+**`loadlang` wants the full locale code.** `-l es` works because a language's `url_code` is `es`,
+but `-l ca` silently matches nothing and leaves Catalan inactive — it is `ca_ES`. The `.po` file
+still gets the short name, `ca.po`, which Odoo matches to `ca_ES` on load.
+
+**Build for accessibility, following core's own conventions.** Core is inconsistent — its list
+delete control carries `aria-label="Delete row"` while its email field hides the mailto anchor with
+`display: none` until hover, which no keyboard reaches — so copy what it does well and not what it
+does poorly. What we hit building `vmk_partner_email_multiple`, all verified in the browser:
+
+- **An icon-only control needs a real accessible name.** `title` on a view button becomes
+  `data-tooltip` and nothing else, which no screen reader announces, and **`aria-label` in the arch
+  never reaches the DOM** — `list_renderer.xml` instantiates `ViewButton` from a fixed prop list
+  (`className`, `clickParams`, `icon`, `string`, `title`, `tabindex`…) and drops the rest. The
+  server delivers the attribute faithfully, so it is dropped at render, not at load, which is what
+  makes it hard to spot. Use `string` and hide the label visually.
+- **Never hide a control with `display` or `visibility`.** Both remove it from the tab order and the
+  accessibility tree, so the control does not exist for anyone not using a mouse. Hide with
+  `opacity: 0`, which stays focusable, and reveal on `:focus-within` as well as `:hover`.
+- **Check the rendered DOM, not the arch.** These failures are invisible in the source and in the
+  arch alike.
+
+**Test twice: automated, and in a real browser.** Every module carries tests; that is the floor, not
+the ceiling. Anything touching a view, a widget, or a stylesheet also gets driven in Chrome through
+`claude-in-chrome` before it is called done, because a whole class of failure never reaches a Python
+test. Two from this repo: a `cursor` rule that lost silently to a `cursor-pointer` utility core
+declares `!important`, and a template inheritance whose xpath is resolved **client-side**, so a
+wrong one fails in the console rather than raising on install. Both looked correct in the source,
+both passed every test, and both were wrong on screen. Check computed styles and the rendered DOM
+rather than trusting a screenshot — a screenshot cannot show you a cursor or an accessible name.
 
 Write tests that assert **behaviour, not ambient state**. A test asserting freshly-installed
 ordering fails on any database whose users have used the feature; re-run the seeding hook inside the
