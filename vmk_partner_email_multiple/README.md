@@ -31,9 +31,14 @@ Installing this module never re-routes mail that core already matched correctly.
 
 ## Promoting an address
 
-The arrow beside each additional address swaps it with the contact's main one: the promoted address
-becomes the primary, and the old primary is kept as an additional address so mail from it still
-matches. Its label is cleared, because the label described the address that has just left.
+The swap button beside each additional address exchanges it with the contact's main one: the
+promoted address becomes the primary, and the old primary is kept as an additional address so mail
+from it still matches. Its label is cleared, because the label described the address that has just
+left.
+
+It draws `fa-exchange` rather than an up arrow deliberately. The row already carries a drag handle
+for reordering, so a vertical arrow beside it reads as "move up one position" — the one thing the
+button does not do.
 
 This is the one place the module writes to `res.partner.email`, and it does not contradict the rule
 above. The rule is that the module never writes there on its _own_ initiative, behind your back; a

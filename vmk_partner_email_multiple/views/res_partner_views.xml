@@ -15,7 +15,7 @@
                             <button
                                 name="action_promote_to_primary"
                                 type="object"
-                                icon="fa-arrow-up"
+                                icon="fa-exchange"
                                 title="Swap with the contact's main email address"
                                 invisible="not id"
                             />
