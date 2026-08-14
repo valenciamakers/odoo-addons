@@ -9,6 +9,15 @@
                 <page name="vmk_additional_emails" string="Additional Emails">
                     <field name="vmk_email_ids">
                         <list editable="bottom">
+                            <!--
+                                Declaring any control replaces the default set
+                                entirely: list_renderer.js only falls back to
+                                its hardcoded "Add a line" when archInfo.controls
+                                is empty.
+                            -->
+                            <control>
+                                <create string="Add an email address" />
+                            </control>
                             <field name="sequence" widget="handle" />
                             <field name="email" widget="vmk_email_link" />
                             <field name="label" placeholder="e.g. billing" />
@@ -16,7 +25,7 @@
                                 name="action_promote_to_primary"
                                 type="object"
                                 icon="fa-exchange"
-                                title="Swap with the contact's main email address"
+                                title="Swap with the contact's primary email address"
                                 invisible="not id"
                             />
                         </list>
