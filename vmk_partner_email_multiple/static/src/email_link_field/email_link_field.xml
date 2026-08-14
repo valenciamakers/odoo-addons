@@ -1,46 +1,52 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <templates xml:space="preserve">
     <!--
-        Inherited rather than rewritten, so the value keeps rendering exactly as
-        core renders it and only the envelope is ours. The readonly branch wraps
-        its anchor in a d-grid, which would stack the envelope underneath the
-        address, so that one becomes an inline flex row first.
+        Inherited rather than rewritten, so the edit branch stays core's and only
+        the readonly one is ours.
+
+        Core renders the readonly value as a mailto: anchor carrying
+        t-on-click.stop, which makes the address itself a link and swallows the
+        click that would otherwise open the cell for editing. Both are wrong for
+        a list of addresses you are maintaining, so the anchor becomes plain
+        text and the envelope alone sends mail.
     -->
     <t
         t-name="vmk_partner_email_multiple.EmailLinkField"
         t-inherit="web.EmailField"
         t-inherit-mode="primary"
     >
-        <xpath expr="//t[@t-if='props.readonly']/div" position="attributes">
-            <attribute name="class">d-inline-flex w-100 align-items-center</attribute>
-        </xpath>
-        <xpath expr="//t[@t-if='props.readonly']/div/a" position="after">
-            <a
-                t-if="props.record.data[props.name]"
-                t-att-href="'mailto:' + props.record.data[props.name]"
-                class="ms-2 d-inline-flex align-items-center"
-                target="_blank"
-                t-on-click.stop=""
-            >
-                <i
-                    class="fa fa-envelope"
-                    data-tooltip="Send Email"
-                    aria-label="Send Email"
-                />
-            </a>
+        <xpath expr="//t[@t-if='props.readonly']/div" position="replace">
+            <div class="d-flex w-100 align-items-center">
+                <span class="o_text_overflow" t-esc="props.record.data[props.name] || ''" />
+                <!--
+                    ms-auto right-aligns it; the gap is a margin rather than
+                    padding so the pointer cursor covers the icon itself and not
+                    the space around it.
+                -->
+                <a
+                    t-if="props.record.data[props.name]"
+                    t-att-href="'mailto:' + props.record.data[props.name]"
+                    class="vmk_email_send ms-auto me-2"
+                    target="_blank"
+                    t-on-click.stop=""
+                >
+                    <i
+                        class="fa fa-envelope"
+                        data-tooltip="Send Email"
+                        aria-label="Send Email"
+                    />
+                </a>
+            </div>
         </xpath>
         <xpath expr="//input" position="after">
             <a
                 t-if="props.record.data[props.name]"
                 t-att-href="'mailto:' + props.record.data[props.name]"
-                class="ms-2 d-inline-flex align-items-center"
+                class="vmk_email_send ms-auto me-2 d-inline-flex align-items-center"
                 target="_blank"
+                t-on-click.stop=""
             >
-                <i
-                    class="fa fa-envelope"
-                    data-tooltip="Send Email"
-                    aria-label="Send Email"
-                />
+                <i class="fa fa-envelope" data-tooltip="Send Email" aria-label="Send Email" />
             </a>
         </xpath>
     </t>
