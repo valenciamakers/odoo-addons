@@ -1,7 +1,10 @@
 # Copyright 2026 Valencia Makers, SL
 # License MIT (https://opensource.org/licenses/MIT).
 
+from lxml import etree
+
 from odoo.tests import tagged
+from odoo.tools.safe_eval import safe_eval
 
 from .common import PartnerEmailCase
 
@@ -112,3 +115,33 @@ class TestPartnerEmailMatching(PartnerEmailCase):
     def test_autocomplete_still_finds_the_usual_things(self):
         results = self.Partner.name_search("Alice Example")
         self.assertIn(self.alice.id, [result[0] for result in results])
+
+    def _search_view_domain(self, field_name, term):
+        """Run a search view entry the way the interface does.
+
+        Reads the combined arch rather than our own snippet, so the assertion
+        covers the inheritance actually landing on core's view.
+        """
+        view = self.Partner.get_view(
+            self.env.ref("base.view_res_partner_filter").id, "search"
+        )
+        node = etree.fromstring(view["arch"]).xpath(f"//field[@name='{field_name}']")[0]
+        return safe_eval(node.get("filter_domain"), {"self": term})
+
+    def test_searching_by_email_finds_additional_addresses(self):
+        domain = self._search_view_domain("email", "noreply@alice-shop")
+        self.assertIn(self.alice, self.Partner.search(domain))
+
+    def test_searching_by_email_still_finds_the_primary(self):
+        domain = self._search_view_domain("email", "alice@example.com")
+        self.assertIn(self.alice, self.Partner.search(domain))
+
+    def test_searching_by_email_excludes_non_matches(self):
+        bob = self.Partner.create({"name": "Bob Example", "email": "bob@example.com"})
+        domain = self._search_view_domain("email", "alice")
+        self.assertNotIn(bob, self.Partner.search(domain))
+
+    def test_searching_by_name_covers_additional_addresses(self):
+        """Core routes this one through display_name, which is already widened."""
+        domain = self._search_view_domain("name", "noreply@alice-shop")
+        self.assertIn(self.alice, self.Partner.search(domain))

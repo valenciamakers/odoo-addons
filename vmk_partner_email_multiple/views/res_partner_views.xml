@@ -1,5 +1,28 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
+    <record id="view_res_partner_filter_vmk_email_multiple" model="ir.ui.view">
+        <field name="name">res.partner.select.vmk.email.multiple</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter" />
+        <field name="arch" type="xml">
+            <!--
+                Searching by Email consults only the raw column, so an additional
+                address is invisible to it. The Name entry beside it needs
+                nothing: it filters on display_name, which _search_display_name
+                already widens.
+
+                The Contacts app's own action points at this very view
+                (contacts/views/contacts_views.xml), so widening it here is what
+                fixes the search people actually use.
+            -->
+            <field name="email" position="attributes">
+                <attribute name="filter_domain">
+                    ['|', ('email', 'ilike', self), ('vmk_email_ids.email', 'ilike', self)]
+                </attribute>
+            </field>
+        </field>
+    </record>
+
     <record id="view_partner_form_vmk_email_multiple" model="ir.ui.view">
         <field name="name">res.partner.form.vmk.email.multiple</field>
         <field name="model">res.partner</field>

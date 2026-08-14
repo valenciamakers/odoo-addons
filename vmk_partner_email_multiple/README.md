@@ -176,6 +176,20 @@ attribute means restating core's whole list and silently losing whatever Odoo ad
 `_search_display_name` is overridden and the domains combined instead, with the same aggregator core
 chooses at `:1460`.
 
+That covers the autocomplete and the search panel's **Name** entry, which filters on `display_name`.
+It does not cover its **Email** entry, which is a separate mechanism: `base.view_res_partner_filter`
+gives that field `filter_domain="[('email', 'ilike', self)]"`, consulting the raw column and nothing
+else. The search view is inherited to widen that domain as well, which is why both entries find an
+additional address.
+
+Widening the domain is the right move here rather than touching what `('email', ...)` means. The
+field keeps its core meaning everywhere, and core reads it directly in places that matter — the
+legacy `find_or_create` searches `[('email', '=ilike', ...)]` — so redefining it globally would
+change matching behaviour far outside the search panel.
+
+The Contacts app's own action points at that same search view (`contacts/views/contacts_views.xml`),
+so one inherited view fixes the search people actually use.
+
 ## Known limitation: merging as a non-admin
 
 `_merge` refuses when the contacts differ by email (`base/wizard/base_partner_merge.py:439-440`) —
