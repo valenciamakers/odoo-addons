@@ -100,6 +100,11 @@ Seven things that will otherwise cost you an hour each:
   editing code, or you are testing the previous version.
 - **There is no `--uninstall` flag.** Use `button_immediate_uninstall()` on the `ir.module.module`
   record from a shell, with the server stopped.
+- **A fixture created and then modified inside one flush cycle produces no tracked change.**
+  Tracking compares against the values at the last flush, so a `TransactionCase` that creates a
+  record in `setUpClass` and writes to it in the test sees an empty chatter and looks like a
+  tracking bug in your code. Flush between the two — `self.env.flush_all()` then `self.cr.flush()`,
+  which is all `MailCommon.flush_tracking()` does.
 
 ## Verify against source, not memory
 
@@ -177,6 +182,12 @@ in `web/static/src/**`, not in Python. Half the surprises below live there.
 
 - Check a field's declared default before relying on it. `res.lang.active` is `fields.Boolean()`
   with **no default**, so a hand-created language is disabled.
+- **`_rec_names_search` takes dotted paths**, not just field names on the model —
+  `_search_display_name` walks each entry resolving the last field in the chain, so
+  `child_ids.email` widens an autocomplete with no helper field and no `search=` method. But it is a
+  plain class attribute, so _appending_ to one means restating the whole list and silently losing
+  whatever core adds to it later. Where that matters, override `_search_display_name` and combine
+  the domains, matching its own choice of `AND` for negative operators and `OR` otherwise.
 
 **Module data is re-applied on every update**
 
@@ -274,13 +285,22 @@ in `web/static/src/**`, not in Python. Half the surprises below live there.
   `mail.thread._mail_find_partner_from_emails` repeats the same filter independently, and the legacy
   `find_or_create` searches separately again. Bounce handling and loop detection bypass all three
   with raw domains on `email_normalized`.
+- **Only the resolution half of `_mail_find_partner_from_emails` is its own.** Its search delegates
+  through `_partner_find_from_emails` to `res.partner._find_or_create_from_emails`, so widening that
+  one method covers the mail gateway, author resolution, and recipient resolution together. What it
+  then does alone is re-resolve by `p.email_normalized == email_key or p.email == email_key`, which
+  drops the very partner the delegation just found.
 - **The merge wizard re-points foreign keys in raw SQL, and deletes on conflict.**
   `_update_foreign_keys` (`base/wizard/base_partner_merge.py`) finds every FK to `res_partner` from
   the schema, so a child table's rows follow the surviving contact for free. But where the table
   carries a unique or check constraint, the `UPDATE` runs in a savepoint and any `psycopg2.Error`
   falls back to `DELETE FROM <table> WHERE <column> IN <all source ids>` — **one collision destroys
   every source row in that table**, not just the conflicting one. Keep uniqueness in Python with
-  `@api.constrains`, which the raw SQL bypasses anyway.
+  `@api.constrains`, which the raw SQL bypasses anyway. `_has_check_or_unique_constraint` asks
+  whether a constraint touches **the foreign key column being re-pointed**, so the obvious
+  `unique(partner_id, <something>)` is precisely the one that arms this; a constraint naming neither
+  the FK column nor anything else it updates is invisible to the check and blows the transaction up
+  instead.
 - `_update_values` in the same wizard skips o2m/m2m and computed fields, and for plain fields takes
   the last truthy value with the destination last — so the destination wins and the merged-away
   values are simply dropped. It also refuses outright when contacts differ by email, except for
