@@ -31,7 +31,7 @@ Installing this module never re-routes mail that core already matched correctly.
 
 ## Promoting an address
 
-The swap button beside each additional address exchanges it with the contact's main one: the
+The swap button beside each additional address exchanges it with the contact's primary one: the
 promoted address becomes the primary, and the old primary is kept as an additional address so mail
 from it still matches. Its label is cleared, because the label described the address that has just
 left.
@@ -190,6 +190,31 @@ Each of these keeps reading the primary address only:
 column, in three places — so this module alone will not stop it creating duplicates. A patch routing
 it through the core helper is ready to send upstream; if accepted, this module works with Mailflow
 automatically.
+
+## Translations
+
+`i18n/` carries the template and a Spanish catalogue; Odoo loads `i18n/*.po` on install with no
+manifest entry. Terms this module shares with core — _Contact_, _Created by_, _Send Email_ — reuse
+core's own Spanish wording rather than a second translation of the same word, so the module reads as
+part of the backend.
+
+Regenerating the template after changing any user-facing string:
+
+```bash
+cd dev
+docker compose run --rm -e PGHOST=db -e PGUSER=odoo -e PGPASSWORD=odoo \
+    -v "$PWD/../vmk_partner_email_multiple/i18n:/mnt/out" --entrypoint odoo odoo \
+    i18n export -d test -o /mnt/out/vmk_partner_email_multiple.pot vmk_partner_email_multiple
+```
+
+Two harness details are doing work in that command. `--entrypoint odoo` is required because the
+image's entrypoint translates `HOST`/`USER`/`PASSWORD` into `--db_host` and friends, which the
+`i18n` subcommand rejects outright — hence passing the connection as libpq's `PG*` variables
+instead. And `-o` is required because the export otherwise writes into each module's own `i18n/`
+folder, which the harness mounts read-only.
+
+Upgrade the module with the database's language loaded to see a change take effect; `-u` alone
+reloads the `.po` but the terms only render for a user whose language is set.
 
 ## Testing
 

@@ -1,0 +1,160 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* vmk_partner_email_multiple
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0-20260810\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-08-14 12:51+0000\n"
+"PO-Revision-Date: 2026-08-14 12:51+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: vmk_partner_email_multiple
+#. odoo-python
+#: code:addons/vmk_partner_email_multiple/models/vmk_partner_email.py:0
+msgid "%(email)s is already an additional address of %(contact)s."
+msgstr ""
+
+#. module: vmk_partner_email_multiple
+#. odoo-python
+#: code:addons/vmk_partner_email_multiple/models/vmk_partner_email.py:0
+msgid "%(email)s is already the primary address of %(contact)s."
+msgstr ""
+
+#. module: vmk_partner_email_multiple
+#: model_terms:ir.ui.view,arch_db:vmk_partner_email_multiple.view_partner_form_vmk_email_multiple
+msgid "Add an email address"
+msgstr ""
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model,name:vmk_partner_email_multiple.model_vmk_partner_email
+msgid "Additional Contact Email"
+msgstr ""
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_res_partner__vmk_email_ids
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_res_users__vmk_email_ids
+#: model_terms:ir.ui.view,arch_db:vmk_partner_email_multiple.view_partner_form_vmk_email_multiple
+msgid "Additional Emails"
+msgstr ""
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model,name:vmk_partner_email_multiple.model_res_partner
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_vmk_partner_email__partner_id
+msgid "Contact"
+msgstr ""
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_vmk_partner_email__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_vmk_partner_email__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_base_partner_merge_automatic_wizard__display_name
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_mail_thread__display_name
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_res_partner__display_name
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_vmk_partner_email__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_vmk_partner_email__email
+msgid "Email Address"
+msgstr ""
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model,name:vmk_partner_email_multiple.model_mail_thread
+msgid "Email Thread"
+msgstr ""
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,help:vmk_partner_email_multiple.field_vmk_partner_email__label
+msgid "Free-text note about this address, e.g. billing, personal, noreply."
+msgstr ""
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_base_partner_merge_automatic_wizard__id
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_mail_thread__id
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_res_partner__id
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_vmk_partner_email__id
+msgid "ID"
+msgstr ""
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_vmk_partner_email__label
+msgid "Label"
+msgstr ""
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_vmk_partner_email__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_vmk_partner_email__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,help:vmk_partner_email_multiple.field_vmk_partner_email__email_normalized
+msgid ""
+"Lower-cased address without a display name, used for matching. Mirrors "
+"res.partner.email_normalized."
+msgstr ""
+
+#. module: vmk_partner_email_multiple
+#: model_terms:ir.ui.view,arch_db:vmk_partner_email_multiple.view_partner_form_vmk_email_multiple
+msgid ""
+"Mail arriving from any of these addresses is matched to this contact.\n"
+"                        Nothing is ever sent to them."
+msgstr ""
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model,name:vmk_partner_email_multiple.model_base_partner_merge_automatic_wizard
+msgid "Merge Partner Wizard"
+msgstr ""
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_vmk_partner_email__email_normalized
+msgid "Normalized Email"
+msgstr ""
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,help:vmk_partner_email_multiple.field_res_partner__vmk_email_ids
+#: model:ir.model.fields,help:vmk_partner_email_multiple.field_res_users__vmk_email_ids
+msgid ""
+"Other addresses this contact writes from. Mail arriving from any of them is "
+"matched to this contact. Nothing is ever sent to them."
+msgstr ""
+
+#. module: vmk_partner_email_multiple
+#. odoo-javascript
+#: code:addons/vmk_partner_email_multiple/static/src/email_link_field/email_link_field.xml:0
+msgid "Send Email"
+msgstr ""
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_vmk_partner_email__sequence
+msgid "Sequence"
+msgstr ""
+
+#. module: vmk_partner_email_multiple
+#: model_terms:ir.ui.view,arch_db:vmk_partner_email_multiple.view_partner_form_vmk_email_multiple
+msgid "Swap with the contact's primary email address"
+msgstr ""
+
+#. module: vmk_partner_email_multiple
+#: model_terms:ir.ui.view,arch_db:vmk_partner_email_multiple.view_partner_form_vmk_email_multiple
+msgid "e.g. billing"
+msgstr ""
