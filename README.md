@@ -13,6 +13,12 @@ They depend only on Odoo Community modules, so they work on Community and Enterp
   users and contacts, and the Languages list itself.
 - **[`vmk_language_freeze_meta`](vmk_language_freeze_meta)** — stop Odoo module updates reverting
   your edits to language records, such as a renamed language or a broadened ISO code.
+- **[`vmk_apps_menu_sort`](vmk_apps_menu_sort)** — sort the apps on the main menu alphabetically
+  rather than by the `sequence` each module picked for itself, keeping Apps and Settings at the end.
+- **[`vmk_apps_page_sort`](vmk_apps_page_sort)** — sort the Apps page by the name on the card, since
+  `ir.module.module` orders by the technical name it does not display.
+- **[`vmk_settings_sort`](vmk_settings_sort)** — sort the Settings sidebar and the Technical menu's
+  groupings alphabetically, with General Settings kept at the top.
 - **[`vmk_partner_email_multiple`](vmk_partner_email_multiple)** — several email addresses per
   contact, so mail from any of them is matched to the contact you already have instead of creating a
   duplicate. Merging two contacts keeps both their addresses.
