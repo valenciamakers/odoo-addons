@@ -1,0 +1,66 @@
+<section class="oe_container">
+    <div class="oe_row oe_spaced">
+        <h2 class="oe_slogan">Multiple Contact Emails</h2>
+        <h3 class="oe_slogan">One contact, all the addresses they write from</h3>
+        <div class="oe_span12">
+            <p class="oe_mt32">
+                People write to you from more than one address &mdash; a personal account, a work
+                account, the <b>noreply@</b> their shop sends order confirmations from. Odoo matches
+                incoming mail on one address per contact, so every other one quietly creates a
+                duplicate contact.
+            </p>
+            <p>
+                This module gives each contact a list of additional addresses. Mail arriving from any
+                of them lands on the contact you already have.
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="oe_container oe_dark">
+    <div class="oe_row oe_spaced">
+        <div class="oe_span12">
+            <h3 class="oe_slogan">The comma trick does not work</h3>
+            <p>
+                Odoo's email field accepts <b>a@example.com, b@example.com</b> and appears to
+                tolerate it. It does not: only the first address is ever matched against, and the
+                whole list is then used as the sender header on outgoing mail &mdash; which is not a
+                valid address at all.
+            </p>
+            <p>
+                Additional addresses are kept in their own list instead, so the contact's main
+                address stays exactly what it was.
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="oe_container">
+    <div class="oe_row oe_spaced">
+        <div class="oe_span12">
+            <h3 class="oe_slogan">Merging duplicates keeps their addresses</h3>
+            <p>
+                When you merge two contacts, Odoo keeps one address and discards the other. Here the
+                discarded one is kept as an additional address, so the merged contact still matches
+                mail from either &mdash; which is the whole reason you were merging them.
+            </p>
+            <p>
+                Additional addresses are searchable too: type one into any contact field and the
+                right contact comes up.
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="oe_container oe_dark">
+    <div class="oe_row oe_spaced">
+        <div class="oe_span12">
+            <h3 class="oe_slogan">Nothing is ever sent to them</h3>
+            <p>
+                An additional address means <i>we also know them here</i>, never <i>mail them here</i>.
+                Outgoing mail keeps using the contact's main address, unchanged, so nothing about how
+                your database sends email is altered by installing this.
+            </p>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_partner_form_vmk_email_multiple" model="ir.ui.view">
+        <field name="name">res.partner.form.vmk.email.multiple</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form" />
+        <field name="arch" type="xml">
+            <page name="sales_purchases" position="before">
+                <page name="vmk_additional_emails" string="Additional Emails">
+                    <field name="vmk_email_ids">
+                        <list editable="bottom">
+                            <field name="sequence" widget="handle" />
+                            <field name="email" widget="email" />
+                            <field name="label" placeholder="e.g. billing" />
+                        </list>
+                    </field>
+                    <p class="text-muted">
+                        Mail arriving from any of these addresses is matched to this contact.
+                        Nothing is ever sent to them.
+                    </p>
+                </page>
+            </page>
+        </field>
+    </record>
+</odoo>

@@ -13,6 +13,9 @@ They depend only on Odoo Community modules, so they work on Community and Enterp
   users and contacts, and the Languages list itself.
 - **[`vmk_language_freeze_meta`](vmk_language_freeze_meta)** — stop Odoo module updates reverting
   your edits to language records, such as a renamed language or a broadened ISO code.
+- **[`vmk_partner_email_multiple`](vmk_partner_email_multiple)** — several email addresses per
+  contact, so mail from any of them is matched to the contact you already have instead of creating a
+  duplicate. Merging two contacts keeps both their addresses.
 
 Each module's own `README.md` explains why it is built the way it is — which core method fights you,
 and where. That is usually the interesting part.

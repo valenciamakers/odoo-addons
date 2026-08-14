@@ -15,8 +15,8 @@ remotes differ by one word, so check which one you are pushing to.
 - **`vmk_apps_menu_sort`** — alphabetical ordering of the apps on the main menu.
 - **`vmk_apps_page_sort`** — alphabetical ordering of the Apps page, by displayed name.
 - **`vmk_settings_sort`** — alphabetical ordering of the Settings sidebar and Technical groupings.
-- **`vmk_partner_email_multiple`** — several email addresses per contact. Not built; `PLAN.md` holds
-  the agreed design and is deleted once `README.md` describes the real thing.
+- **`vmk_partner_email_multiple`** — several email addresses per contact, matched by Odoo's own
+  machinery, and kept rather than dropped when contacts are merged.
 - **`dev/`** — the local Odoo 19 test harness.
 
 Read the existing modules' `README.md` files before writing another; between them they document most
