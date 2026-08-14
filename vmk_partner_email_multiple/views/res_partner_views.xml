@@ -12,6 +12,13 @@
                             <field name="sequence" widget="handle" />
                             <field name="email" widget="email" />
                             <field name="label" placeholder="e.g. billing" />
+                            <button
+                                name="action_promote_to_primary"
+                                type="object"
+                                icon="fa-arrow-up"
+                                title="Swap with the contact's main email address"
+                                invisible="not id"
+                            />
                         </list>
                     </field>
                     <p class="text-muted">

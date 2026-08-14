@@ -97,6 +97,40 @@ class VmkPartnerEmail(models.Model):
                 )
 
     # ------------------------------------------------------------
+    # Actions
+    # ------------------------------------------------------------
+
+    def action_promote_to_primary(self):
+        """Swap this address with the contact's primary one.
+
+        This is the one place the module writes to ``res.partner.email``, and it
+        does not contradict the rule that it never does. The rule is that the
+        module never writes there on its *own* initiative, behind the user's back;
+        a button somebody presses is the user editing their own contact, with the
+        bookkeeping done for them. ``email`` carries ``tracking=1``
+        (mail/models/res_partner.py:21), so the swap lands in the chatter by itself.
+        """
+        self.ensure_one()
+        partner = self.partner_id
+        demoted = (partner.email or "").strip()
+        demoted_normalized = email_normalize(demoted, strict=False)
+
+        partner.email = self.email
+
+        already_held = partner.vmk_email_ids.filtered(
+            lambda row: row != self
+            and demoted_normalized
+            and row.email_normalized == demoted_normalized
+        )
+        if not demoted or already_held:
+            # Nothing to demote, or the contact already keeps that address.
+            self.unlink()
+        else:
+            # The label described the address that has just left, not the arriving one.
+            self.write({"email": demoted, "label": False})
+        return True
+
+    # ------------------------------------------------------------
     # Matching
     # ------------------------------------------------------------
 

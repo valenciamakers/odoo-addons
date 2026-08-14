@@ -29,6 +29,18 @@ valid primary address, and no other module's writes are fought.
 Where an address is held as one contact's primary and another's additional, **the primary wins**.
 Installing this module never re-routes mail that core already matched correctly.
 
+## Promoting an address
+
+The arrow beside each additional address swaps it with the contact's main one: the promoted address
+becomes the primary, and the old primary is kept as an additional address so mail from it still
+matches. Its label is cleared, because the label described the address that has just left.
+
+This is the one place the module writes to `res.partner.email`, and it does not contradict the rule
+above. The rule is that the module never writes there on its _own_ initiative, behind your back; a
+button somebody presses is the user editing their own contact, with the bookkeeping done for them.
+`email` carries `tracking=1` (`mail/models/res_partner.py:21`), so the swap appears in the chatter
+by itself.
+
 ## Why the non-obvious parts are that way
 
 ### Widening the search is not enough
