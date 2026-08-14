@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <!--
+        Inherited rather than rewritten, so the value keeps rendering exactly as
+        core renders it and only the envelope is ours. The readonly branch wraps
+        its anchor in a d-grid, which would stack the envelope underneath the
+        address, so that one becomes an inline flex row first.
+    -->
+    <t
+        t-name="vmk_partner_email_multiple.EmailLinkField"
+        t-inherit="web.EmailField"
+        t-inherit-mode="primary"
+    >
+        <xpath expr="//t[@t-if='props.readonly']/div" position="attributes">
+            <attribute name="class">d-inline-flex w-100 align-items-center</attribute>
+        </xpath>
+        <xpath expr="//t[@t-if='props.readonly']/div/a" position="after">
+            <a
+                t-if="props.record.data[props.name]"
+                t-att-href="'mailto:' + props.record.data[props.name]"
+                class="ms-2 d-inline-flex align-items-center"
+                target="_blank"
+                t-on-click.stop=""
+            >
+                <i
+                    class="fa fa-envelope"
+                    data-tooltip="Send Email"
+                    aria-label="Send Email"
+                />
+            </a>
+        </xpath>
+        <xpath expr="//input" position="after">
+            <a
+                t-if="props.record.data[props.name]"
+                t-att-href="'mailto:' + props.record.data[props.name]"
+                class="ms-2 d-inline-flex align-items-center"
+                target="_blank"
+            >
+                <i
+                    class="fa fa-envelope"
+                    data-tooltip="Send Email"
+                    aria-label="Send Email"
+                />
+            </a>
+        </xpath>
+    </t>
+</templates>

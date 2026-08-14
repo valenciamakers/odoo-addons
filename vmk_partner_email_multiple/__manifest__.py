@@ -13,6 +13,11 @@
         "security/ir.model.access.csv",
         "views/res_partner_views.xml",
     ],
+    "assets": {
+        "web.assets_backend": [
+            "vmk_partner_email_multiple/static/src/**/*",
+        ],
+    },
     "installable": True,
     "application": False,
 }

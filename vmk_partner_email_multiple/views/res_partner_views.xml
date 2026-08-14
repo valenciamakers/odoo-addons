@@ -10,7 +10,7 @@
                     <field name="vmk_email_ids">
                         <list editable="bottom">
                             <field name="sequence" widget="handle" />
-                            <field name="email" widget="email" />
+                            <field name="email" widget="vmk_email_link" />
                             <field name="label" placeholder="e.g. billing" />
                             <button
                                 name="action_promote_to_primary"

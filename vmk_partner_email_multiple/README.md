@@ -46,6 +46,26 @@ button somebody presses is the user editing their own contact, with the bookkeep
 `email` carries `tracking=1` (`mail/models/res_partner.py:21`), so the swap appears in the chatter
 by itself.
 
+## The envelope, and why it needs a widget
+
+Each row carries the same envelope the contact form puts beside the main email address, opening a
+`mailto:` link in whatever mail client the browser hands it to. Nothing is sent through Odoo, so the
+non-goal below still holds: the module never mails an additional address itself.
+
+Getting it there is less obvious than naming a widget. Odoo registers two email widgets — `email`
+and `form.email` — and the field registry resolves `widget="email"` to `form.email` in a **form**
+view but to the plain `email` in a **list**. Only the form variant draws the envelope, and it does
+so with an xpath onto `//input`, which exists only in the template's _edit_ branch. A list row that
+nobody is editing renders the readonly branch, so neither widget can put an envelope there.
+
+`vmk_email_link` therefore extends `EmailField` and inherits its template twice, adding the anchor
+to both branches. Core's readonly branch wraps its own anchor in a `d-grid`, which would stack the
+envelope underneath the address, so that container becomes an inline flex row first.
+
+Clicking the address text has always opened the mail client — core's readonly branch is already a
+`mailto:` anchor, with `t-on-click.stop` so it does not open the row for editing. The envelope adds
+discoverability rather than a new capability.
+
 ## Why the non-obvious parts are that way
 
 ### Widening the search is not enough
