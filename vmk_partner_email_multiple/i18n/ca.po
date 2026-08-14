@@ -1,0 +1,175 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* vmk_partner_email_multiple
+#
+# Terms shared with Odoo core reuse core's own Catalan wording, so the module
+# reads as part of the backend rather than beside it. Odoo 19 ships no Valencian
+# variant -- ca_ES is the only Catalan locale -- so this is what a Valencian
+# speaker selects.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-08-14 12:51+0000\n"
+"PO-Revision-Date: 2026-08-14 12:51+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ca\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: vmk_partner_email_multiple
+#. odoo-python
+#: code:addons/vmk_partner_email_multiple/models/vmk_partner_email.py:0
+msgid "%(email)s is already an additional address of %(contact)s."
+msgstr "%(email)s ja és una adreça addicional de %(contact)s."
+
+#. module: vmk_partner_email_multiple
+#. odoo-python
+#: code:addons/vmk_partner_email_multiple/models/vmk_partner_email.py:0
+msgid "%(email)s is already the primary address of %(contact)s."
+msgstr "%(email)s ja és l'adreça principal de %(contact)s."
+
+#. module: vmk_partner_email_multiple
+#: model_terms:ir.ui.view,arch_db:vmk_partner_email_multiple.view_partner_form_vmk_email_multiple
+msgid "Add an email address"
+msgstr "Afegir una adreça de correu electrònic"
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model,name:vmk_partner_email_multiple.model_vmk_partner_email
+msgid "Additional Contact Email"
+msgstr "Correu electrònic addicional del contacte"
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_res_partner__vmk_email_ids
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_res_users__vmk_email_ids
+#: model_terms:ir.ui.view,arch_db:vmk_partner_email_multiple.view_partner_form_vmk_email_multiple
+msgid "Additional Emails"
+msgstr "Correus electrònics addicionals"
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model,name:vmk_partner_email_multiple.model_res_partner
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_vmk_partner_email__partner_id
+msgid "Contact"
+msgstr "Contacte"
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_vmk_partner_email__create_uid
+msgid "Created by"
+msgstr "Creat per"
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_vmk_partner_email__create_date
+msgid "Created on"
+msgstr "Creat el"
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_base_partner_merge_automatic_wizard__display_name
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_mail_thread__display_name
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_res_partner__display_name
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_vmk_partner_email__display_name
+msgid "Display Name"
+msgstr "Nom mostrat"
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_vmk_partner_email__email
+msgid "Email Address"
+msgstr "Adreça de correu electrònic"
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model,name:vmk_partner_email_multiple.model_mail_thread
+msgid "Email Thread"
+msgstr "Fil de correus"
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,help:vmk_partner_email_multiple.field_vmk_partner_email__label
+msgid "Free-text note about this address, e.g. billing, personal, noreply."
+msgstr ""
+"Nota de text lliure sobre aquesta adreça, p. ex. facturació, personal, "
+"noreply."
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_base_partner_merge_automatic_wizard__id
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_mail_thread__id
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_res_partner__id
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_vmk_partner_email__id
+msgid "ID"
+msgstr "ID"
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_vmk_partner_email__label
+msgid "Label"
+msgstr "Etiqueta"
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_vmk_partner_email__write_uid
+msgid "Last Updated by"
+msgstr "Última actualització per"
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_vmk_partner_email__write_date
+msgid "Last Updated on"
+msgstr "Última actualització el"
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,help:vmk_partner_email_multiple.field_vmk_partner_email__email_normalized
+msgid ""
+"Lower-cased address without a display name, used for matching. Mirrors "
+"res.partner.email_normalized."
+msgstr ""
+"Adreça en minúscules i sense nom visible, utilitzada per associar el correu "
+"entrant. Reflecteix res.partner.email_normalized."
+
+#. module: vmk_partner_email_multiple
+#: model_terms:ir.ui.view,arch_db:vmk_partner_email_multiple.view_partner_form_vmk_email_multiple
+msgid ""
+"Mail arriving from any of these addresses is matched to this contact.\n"
+"                        Nothing is ever sent to them."
+msgstr ""
+"El correu que arriba des de qualsevol d'aquestes adreces s'associa a aquest "
+"contacte.\n"
+"                        Mai no s'hi envia res."
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model,name:vmk_partner_email_multiple.model_base_partner_merge_automatic_wizard
+msgid "Merge Partner Wizard"
+msgstr "Assistent per a fusionar contactes"
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_vmk_partner_email__email_normalized
+msgid "Normalized Email"
+msgstr "Correu normalitzat"
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,help:vmk_partner_email_multiple.field_res_partner__vmk_email_ids
+#: model:ir.model.fields,help:vmk_partner_email_multiple.field_res_users__vmk_email_ids
+msgid ""
+"Other addresses this contact writes from. Mail arriving from any of them is "
+"matched to this contact. Nothing is ever sent to them."
+msgstr ""
+"Altres adreces des de les quals escriu aquest contacte. El correu que arriba "
+"des de qualsevol d'elles s'associa a aquest contacte. Mai no s'hi envia res."
+
+#. module: vmk_partner_email_multiple
+#. odoo-javascript
+#: code:addons/vmk_partner_email_multiple/static/src/email_link_field/email_link_field.xml:0
+msgid "Send Email"
+msgstr "Enviar correu"
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_vmk_partner_email__sequence
+msgid "Sequence"
+msgstr "Seqüència"
+
+#. module: vmk_partner_email_multiple
+#: model_terms:ir.ui.view,arch_db:vmk_partner_email_multiple.view_partner_form_vmk_email_multiple
+msgid "Swap with the contact's primary email address"
+msgstr "Intercanviar amb l'adreça de correu electrònic principal del contacte"
+
+#. module: vmk_partner_email_multiple
+#: model_terms:ir.ui.view,arch_db:vmk_partner_email_multiple.view_partner_form_vmk_email_multiple
+msgid "e.g. billing"
+msgstr "p. ex. facturació"
