@@ -58,13 +58,28 @@ view but to the plain `email` in a **list**. Only the form variant draws the env
 so with an xpath onto `//input`, which exists only in the template's _edit_ branch. A list row that
 nobody is editing renders the readonly branch, so neither widget can put an envelope there.
 
-`vmk_email_link` therefore extends `EmailField` and inherits its template twice, adding the anchor
-to both branches. Core's readonly branch wraps its own anchor in a `d-grid`, which would stack the
-envelope underneath the address, so that container becomes an inline flex row first.
+`vmk_email_link` therefore extends `EmailField` and replaces its readonly branch, which core renders
+as a `mailto:` anchor carrying `t-on-click.stop`. That is wrong twice over for a list of addresses
+you are maintaining: it makes the address itself a link, and the `.stop` swallows the click that
+would otherwise open the cell for editing. The address becomes plain text and the envelope alone
+sends mail, so clicking anywhere in the cell edits it, as in any other list.
 
-Clicking the address text has always opened the mail client — core's readonly branch is already a
-`mailto:` anchor, with `t-on-click.stop` so it does not open the row for editing. The envelope adds
-discoverability rather than a new capability.
+The envelope appears on hover, which is what core's field does too — its `mailto:` anchor is
+`display: none` until hovered, while a second, permanent envelope sits in front of the input as a
+marker. We reveal ours with `visibility` rather than `display`, because `ms-auto` pushes it to the
+right of the cell and reserving its box means revealing it never reflows the address beside it.
+
+### The cursor rules need `!important`, and not for the usual reason
+
+The list renderer stamps a `cursor-pointer` utility class onto every data cell, and that utility is
+declared `!important`. An ordinary declaration therefore loses to it no matter how specific the
+selector, which is silent and looks like the stylesheet not loading at all. Among `!important`
+declarations specificity decides again, so the scoped rules in `email_link_field.scss` win.
+
+The point of them: both text cells read as editable text, because that is what clicking one does,
+and only the controls themselves are pointer — not the cells around them. The envelope's gap from
+the label column is a margin rather than padding so that the pointer covers the icon and nothing
+else. The drag handle keeps the grab cursor core gives it.
 
 ## Why the non-obvious parts are that way
 

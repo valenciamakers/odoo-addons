@@ -1,0 +1,47 @@
+// Copyright 2026 Valencia Makers, SL
+// License MIT (https://opensource.org/licenses/MIT).
+
+// Scoped to our own o2m so nothing here can reach another list in the database.
+.o_field_widget[name="vmk_email_ids"] {
+    // Revealed on hover, which is what core's own email field does: its mailto
+    // anchor is display:none until the field is hovered, and a second envelope
+    // sits permanently in front of the input as a marker. `visibility` rather
+    // than `display` because the anchor is pushed right by `ms-auto`, so
+    // reserving its box means revealing it never reflows the address beside it.
+    .vmk_email_send {
+        visibility: hidden;
+    }
+
+    .o_data_row:hover,
+    .o_data_row.o_selected_row {
+        .vmk_email_send {
+            visibility: visible;
+        }
+    }
+
+    // Every one of these needs !important, and not for the usual bad reason.
+    // The list renderer stamps a `cursor-pointer` utility class onto each data
+    // cell, and that utility is declared !important -- so an ordinary
+    // declaration loses to it no matter how specific the selector is. Among
+    // !important declarations specificity decides again, which is why the
+    // scoped selectors below win.
+    .o_data_cell {
+        cursor: default !important;
+    }
+
+    // Both text cells read as editable text, because that is what clicking one
+    // does to them.
+    .o_data_cell[name="email"],
+    .o_data_cell[name="label"] {
+        cursor: text !important;
+    }
+
+    // Only the control itself is a control -- not the cell around it. The
+    // envelope's gap is a margin rather than padding for exactly this reason,
+    // so the pointer covers the icon and nothing else.
+    .vmk_email_send,
+    .o_button_icon,
+    .o_list_record_remove button {
+        cursor: pointer !important;
+    }
+}
