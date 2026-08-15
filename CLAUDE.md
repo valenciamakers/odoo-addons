@@ -436,8 +436,27 @@ does poorly. What we hit building `vmk_partner_email_multiple`, all verified in 
 - **Never hide a control with `display` or `visibility`.** Both remove it from the tab order and the
   accessibility tree, so the control does not exist for anyone not using a mouse. Hide with
   `opacity: 0`, which stays focusable, and reveal on `:focus-within` as well as `:hover`.
+- **An accessible name must say what the control _does_, not what it currently reads.** Core is
+  split on this: `switch_company_item.xml` gets it right with
+  `t-att-aria-label="'Switch to ' + props.company.name"`, while `switch_company_menu.xml`'s toggle
+  carries only the bare company name. Copy the former. A label that is just the current value
+  announces as "Español, button" and tells a screen-reader user nothing, which bites hardest on an
+  icon-only control where there is no visible text to fall back on. Keep the visible text as a
+  substring of the label, per WCAG 2.5.3.
+- **A selected-state class is not a selected state.** Core's global
+  `:not(.dropstart) > .dropdown-item.selected` rule marks the active entry with `font-weight` and a
+  FontAwesome glyph in a `:before`, neither of which reaches the accessibility tree. Pass
+  `attrs="{ role: 'menuitemradio', 'aria-checked': … }"` — `attrs` is `DropdownItem`'s escape hatch,
+  spread through `t-att` _after_ its static `role="menuitem"`, so the later value wins.
+- **Systray icons need `fa-lg`.** Core's own carry it (`fa-lg fa-comments`, `fa-lg fa-clock-o`) and
+  render at 18.41px; without it FontAwesome inherits 14px and the icon reads as visibly undersized
+  beside them. Measure `getComputedStyle` against a neighbour rather than eyeballing a screenshot.
 - **Check the rendered DOM, not the arch.** These failures are invisible in the source and in the
   arch alike.
+- **An empty `.pot` can be a symptom rather than a fact.** A module whose only strings are database
+  values legitimately needs no catalogue — but check that it is not empty _because_ nothing is being
+  said to a screen reader. `vmk_language_systray` exported zero terms until its icon-only button
+  gained a real accessible name, at which point it needed `i18n/` after all.
 
 **Test twice: automated, and in a real browser.** Every module carries tests; that is the floor, not
 the ceiling. Anything touching a view, a widget, or a stylesheet also gets driven in Chrome through
