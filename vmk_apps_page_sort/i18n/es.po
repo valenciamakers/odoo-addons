@@ -1,0 +1,33 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* vmk_apps_page_sort
+#
+# This module extends only core models and authors no strings of its own, so
+# `i18n export` finds nothing to translate. The two entries below are the
+# module's own name and summary, attributed to base rather than this module
+# (see README.md) and hand-maintained here because the exporter cannot see
+# them.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-08-15 14:10+0000\n"
+"PO-Revision-Date: 2026-08-15 14:10+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_vmk_apps_page_sort
+msgid "Apps Page Sort"
+msgstr "Orden de la página de Aplicaciones"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_vmk_apps_page_sort
+msgid "Order the Apps page by the name on the card, not the hidden technical name"
+msgstr "Ordena la página de Aplicaciones por el nombre de la tarjeta, no por el nombre técnico oculto"

@@ -80,6 +80,16 @@ obviously worth it, but the option is real if the clumping grates.
 - **Byte order, not human alphabetical order**, because Odoo builds databases with `LC_COLLATE 'C'`.
   Acronyms clump at the top and accented initials fall to the end; see above.
 
+## Translations
+
+The module's own name and summary in `i18n/vmk_apps_page_sort.pot`, `es.po` and `ca.po` are
+hand-maintained, not exported — `ir.module.module` records belong to `base`'s xmlid namespace, so
+`odoo i18n export` never sees them. The module's own view attributes generate no other translatable
+terms, so that is the whole of this catalogue. See
+[`vmk_language_systray`'s README](../vmk_language_systray#the-modules-own-name-and-summary-are-hand-maintained-in-i18n)
+for the full explanation. `tests/test_apps_page_sort.py::TestModuleNameTranslation` fails loudly if
+re-running the export drops them.
+
 ## Requirements
 
 Odoo 19. Depends on `base` only, and ships no Python beyond an empty package marker.

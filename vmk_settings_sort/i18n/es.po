@@ -1,0 +1,59 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* vmk_settings_sort
+#
+# Terms shared with Odoo core reuse core's own Spanish wording. Everything here
+# except the module's own name and summary belongs to core -- inheriting
+# res.config.settings and ir.ui.menu attributes those models' names and their
+# display_name/id fields to this module in the export.
+#
+# The two "module: base" blocks are hand-maintained: `ir.module.module` records
+# are registered as base.module_<name>, so `i18n export` never emits them here.
+# They must stay in the .pot as well, or PoFileReader's merge silently discards
+# them. See vmk_language_systray/README.md for the full explanation.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-08-15 14:19+0000\n"
+"PO-Revision-Date: 2026-08-15 14:19+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_vmk_settings_sort
+msgid "Alphabetical order for the Settings sidebar and the Technical menu groupings"
+msgstr "Orden alfabético para la barra lateral de Ajustes y los grupos del menú Técnico"
+
+#. module: vmk_settings_sort
+#: model:ir.model,name:vmk_settings_sort.model_res_config_settings
+msgid "Config Settings"
+msgstr "Ajustes de configuración"
+
+#. module: vmk_settings_sort
+#: model:ir.model.fields,field_description:vmk_settings_sort.field_ir_ui_menu__display_name
+#: model:ir.model.fields,field_description:vmk_settings_sort.field_res_config_settings__display_name
+msgid "Display Name"
+msgstr "Nombre para mostrar"
+
+#. module: vmk_settings_sort
+#: model:ir.model.fields,field_description:vmk_settings_sort.field_ir_ui_menu__id
+#: model:ir.model.fields,field_description:vmk_settings_sort.field_res_config_settings__id
+msgid "ID"
+msgstr "ID"
+
+#. module: vmk_settings_sort
+#: model:ir.model,name:vmk_settings_sort.model_ir_ui_menu
+msgid "Menu"
+msgstr "Menú"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_vmk_settings_sort
+msgid "Settings Sort"
+msgstr "Orden de los ajustes"

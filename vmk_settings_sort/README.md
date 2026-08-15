@@ -92,6 +92,17 @@ odoo -d <db> -u vmk_settings_sort --test-enable --test-tags /vmk_settings_sort -
 - Sorting interleaves app names with functional groupings: _Database Structure_ lands between
   _Calendar_ and _Discuss_. That is the trade for a list you can scan.
 
+## Translations
+
+The module's own name and summary in `i18n/vmk_settings_sort.pot`, `es.po` and `ca.po` are
+hand-maintained, not exported — `ir.module.module` records belong to `base`'s xmlid namespace, so
+`odoo i18n export` never sees them. The module's own extracted terms (Config Settings, Display Name,
+ID, Menu) all belong to core and are deliberately left untranslated, so that is the whole of this
+catalogue. See
+[`vmk_language_systray`'s README](../vmk_language_systray#the-modules-own-name-and-summary-are-hand-maintained-in-i18n)
+for the full explanation. `tests/test_settings_sort.py::TestModuleNameTranslation` fails loudly if
+re-running the export drops them.
+
 ## Requirements
 
 Odoo 19. Depends on `base` only.
