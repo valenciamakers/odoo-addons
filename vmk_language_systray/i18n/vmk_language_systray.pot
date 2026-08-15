@@ -41,3 +41,13 @@ msgstr ""
 #: code:addons/vmk_language_systray/static/src/language_systray.js:0
 msgid "Language: %s"
 msgstr ""
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_vmk_language_systray
+msgid "Backend Language Menu"
+msgstr ""
+
+#. module: base
+#: model:ir.module.module,summary:base.module_vmk_language_systray
+msgid "Switch your own backend language from a systray dropdown"
+msgstr ""

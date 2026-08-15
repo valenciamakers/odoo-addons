@@ -146,6 +146,34 @@ carry `Display Name`, `HTTP Routing` and `ID`, which are not ours — inheriting
 that model's name and its `display_name`/`id` fields to this module in the export — so they take
 core's wording verbatim.
 
+### The module's own name and summary are hand-maintained in `i18n/`
+
+`ir.module.module.shortdesc` and `summary` are `translate=True`, and Odoo does translate them —
+`base`'s Spanish catalogue carries 1,526 module names. But it carries them under `#. module: base`,
+because `ir_module.py`'s `create()` registers every module record as `base.module_<name>` with
+`'module': 'base'`. The record is base's, so `odoo i18n export vmk_language_systray` attributes
+those terms to base and omits them from our POT entirely.
+
+They are therefore written into `vmk_language_systray.pot`, `es.po` and `ca.po` **by hand**, and the
+POT half is not optional:
+
+```
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_vmk_language_systray
+```
+
+`PoFileReader.__init__` merges every PO against its module's POT — _"the POT comments are correct on
+GitHub but the PO comments tend to be outdated"_ — and `__iter__` skips `entry.obsolete`. polib's
+`merge()` marks anything absent from the POT obsolete, so a PO entry with no POT counterpart is
+discarded **in silence**: no warning, no error, the name simply stays English. The first attempt
+here did exactly that, and looked like the translation had been written wrongly.
+
+**So re-running `i18n export` for this module deletes both entries and silently un-translates its
+name.** Re-add them afterwards. `tests/test_language_systray.py` fails loudly if they go missing,
+rather than leaving it to be noticed in the Apps list, and also asserts the premise they encode —
+that the xmlid still belongs to `base` — so that a future Odoo change making the export emit them
+would surface too.
+
 `Language` is one core already owns — `base` translates it `Idioma` in both Spanish and Catalan — so
 `es.po` and `ca.po` reuse that wording rather than introducing a second vocabulary for the same
 word, and `Language: %s` follows it.

@@ -22,6 +22,11 @@ msgstr ""
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_vmk_language_systray
+msgid "Backend Language Menu"
+msgstr "Menú d'idioma del backend"
+
 #. module: vmk_language_systray
 #: model:ir.model.fields,field_description:vmk_language_systray.field_ir_http__display_name
 msgid "Display Name"
@@ -48,3 +53,8 @@ msgstr "Idioma"
 #: code:addons/vmk_language_systray/static/src/language_systray.js:0
 msgid "Language: %s"
 msgstr "Idioma: %s"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_vmk_language_systray
+msgid "Switch your own backend language from a systray dropdown"
+msgstr "Canvia el teu propi idioma del backend des d'un menú de la barra superior"
