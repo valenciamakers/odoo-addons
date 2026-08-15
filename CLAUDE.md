@@ -397,6 +397,27 @@ backend instead of introducing a second vocabulary for the same word. Match core
 Catalan and Spanish both take the infinitive for action labels (`Afegir una línia`,
 `Añadir una línea`), while a message reporting what just happened takes the perfect.
 
+**A module's own name and summary are translatable, but `i18n export` will never give them to you.**
+`ir.module.module.shortdesc` and `summary` are `translate=True` and Odoo translates them wholesale —
+`base`'s `es.po` carries 1,526 module names. They live in **base's** catalogue because
+`ir_module.py`'s `create()` registers every module record as `base.module_<name>` with
+`'module': 'base'`, so the exporter attributes them to base and omits them from ours. Write them in
+by hand, in the `.pot` **as well as** each `.po`:
+
+```
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_<your module>
+```
+
+**The POT half is not decorative, and skipping it fails silently.** `PoFileReader.__init__` merges
+every PO against its module's POT — the comment says the POT comments are the trustworthy ones — and
+`__iter__` skips `entry.obsolete`. polib's `merge()` marks anything absent from the POT obsolete, so
+a PO entry with no POT counterpart is dropped with no warning and the name just stays English. It
+reads like a bad translation, not a missing one. **Re-running `i18n export` therefore un-translates
+the module name**, so guard both entries with a test —
+`vmk_language_systray/tests/test_language_systray.py` does, and also asserts the xmlid still belongs
+to `base`, which is the premise the whole workaround rests on.
+
 **A module whose only extracted terms belong to core needs no catalogue at all.** Extending a core
 model attributes that model's name and its `display_name`/`id` fields to your module in the export,
 so a POT can be entirely `Display Name`, `ID`, `Menu`, `Config Settings` — every one of them a
