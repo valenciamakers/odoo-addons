@@ -114,6 +114,23 @@ about which language is currently in force. The items therefore also carry
 value wins — and `menuitemradio` is the correct role for a single-select list, matching what core
 does for `web.CheckboxItem`.
 
+## Letting the menu shrink to the longest language name
+
+Bootstrap floors every dropdown at `$dropdown-min-width: 10rem`, applied as
+`min-width: var(--dropdown-min-width)` — unprefixed, because Odoo sets `$variable-prefix: ''` in
+`web/static/src/scss/bootstrap_overridden.scss`.
+
+160px is wider than any language name, and this menu is anchored `bottom-end`: pinned by its right
+edge to a button barely wider than the globe in it. The result was a fixed-width box whose
+left-aligned text stopped well short of its right edge, reading as though the menu had come detached
+from the control that opened it. `language_systray.scss` clears the floor with
+`--dropdown-min-width: unset`, which is core's own escape hatch for the same problem in
+`web/static/src/core/time_picker/time_picker.scss`.
+
+`unset` rather than a width of our own, because the content is language names and their length is
+not ours to predict. Measured after the change: the menu is 124px against a longest-item content
+width of 122px, and its right edge still lands exactly on the button's.
+
 ## Accessibility: the button says what it does, not just what it reads
 
 The button is a bare globe by default, and still icon-only below the `lg` breakpoint even when

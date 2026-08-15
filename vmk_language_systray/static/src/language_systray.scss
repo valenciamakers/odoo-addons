@@ -1,0 +1,22 @@
+// Copyright 2026 Valencia Makers, SL
+// License MIT (https://opensource.org/licenses/MIT).
+
+// Let the menu shrink to its longest language name.
+//
+// Bootstrap floors every dropdown at `$dropdown-min-width: 10rem`, applied as
+// `min-width: var(--dropdown-min-width)` in `_dropdown.scss`. The variable is
+// unprefixed because Odoo sets `$variable-prefix: ''` in
+// `web/static/src/scss/bootstrap_overridden.scss`.
+//
+// 10rem is wider than any language name, and the menu is anchored
+// `bottom-end` -- pinned by its right edge to a globe that is barely wider
+// than the icon itself. So the box kept a fixed 160px while its left-aligned
+// text sat well short of the right edge, reading as though the menu were
+// detached from the control that opened it.
+//
+// `unset` rather than a fixed width of our own: the content is language names,
+// whose length is not ours to predict. Core takes the same escape hatch for
+// the same reason in `web/static/src/core/time_picker/time_picker.scss`.
+.o_vmk_language_systray_menu.o-dropdown--menu {
+    --dropdown-min-width: unset;
+}

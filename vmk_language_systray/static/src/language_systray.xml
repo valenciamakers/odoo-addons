@@ -4,7 +4,7 @@
 <t t-name="vmk_language_systray.LanguageSystray">
     <div class="o_vmk_language_systray d-none d-md-block">
         <DropdownGroup group="'web-navbar-group'">
-            <Dropdown position="'bottom-end'">
+            <Dropdown position="'bottom-end'" menuClass="'o_vmk_language_systray_menu'">
                 <button class="py-1 py-lg-0" t-att-aria-label="buttonLabel" t-att-title="buttonLabel">
                     <!-- `fa-lg` is what the neighbouring systray icons carry (mail's
                          `fa-lg fa-comments`, the activity menu's `fa-lg fa-clock-o`), and it is
