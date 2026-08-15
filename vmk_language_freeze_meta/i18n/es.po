@@ -48,3 +48,13 @@ msgstr "Idiomas"
 #: model:ir.model.fields,field_description:vmk_language_freeze_meta.field_res_lang__protect_from_updates
 msgid "Protect From Updates"
 msgstr "Proteger de las actualizaciones"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_vmk_language_freeze_meta
+msgid "Language Metadata Protection"
+msgstr "Protección de los metadatos de idioma"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_vmk_language_freeze_meta
+msgid "Stop Odoo updates reverting your edits to language metadata"
+msgstr "Evita que las actualizaciones de Odoo reviertan tus cambios en los metadatos de idioma"

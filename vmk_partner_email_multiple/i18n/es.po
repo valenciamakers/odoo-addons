@@ -172,3 +172,13 @@ msgstr "Intercambiar con la dirección de correo electrónico principal del cont
 #: model_terms:ir.ui.view,arch_db:vmk_partner_email_multiple.view_partner_form_vmk_email_multiple
 msgid "e.g. billing"
 msgstr "p. ej. facturación"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_vmk_partner_email_multiple
+msgid "Multiple Contact Emails"
+msgstr "Varios correos electrónicos por contacto"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_vmk_partner_email_multiple
+msgid "Several email addresses per contact, matched by Odoo's own machinery"
+msgstr "Varias direcciones de correo por contacto, reconocidas por los propios mecanismos de Odoo"

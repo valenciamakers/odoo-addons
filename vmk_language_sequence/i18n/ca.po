@@ -48,3 +48,13 @@ msgstr ""
 #: model:ir.model.fields,field_description:vmk_language_sequence.field_res_lang__sequence
 msgid "Sequence"
 msgstr "Seqüència"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_vmk_language_sequence
+msgid "Language Sequence"
+msgstr "Seqüència d'idiomes"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_vmk_language_sequence
+msgid "Order enabled languages by hand instead of alphabetically"
+msgstr "Ordena manualment els idiomes activats en lloc d'alfabèticament"

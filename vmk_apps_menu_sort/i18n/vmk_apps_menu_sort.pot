@@ -53,3 +53,13 @@ msgstr ""
 #: model:ir.model,name:vmk_apps_menu_sort.model_res_users_settings
 msgid "User Settings"
 msgstr ""
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_vmk_apps_menu_sort
+msgid "Apps Menu Sort"
+msgstr ""
+
+#. module: base
+#: model:ir.module.module,summary:base.module_vmk_apps_menu_sort
+msgid "List the apps alphabetically, with Apps and Settings kept at the end"
+msgstr ""

@@ -41,3 +41,13 @@ msgstr ""
 #: model:ir.model.fields,field_description:vmk_language_sequence.field_res_lang__sequence
 msgid "Sequence"
 msgstr ""
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_vmk_language_sequence
+msgid "Language Sequence"
+msgstr ""
+
+#. module: base
+#: model:ir.module.module,summary:base.module_vmk_language_sequence
+msgid "Order enabled languages by hand instead of alphabetically"
+msgstr ""

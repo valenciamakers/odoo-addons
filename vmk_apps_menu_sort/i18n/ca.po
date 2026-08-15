@@ -59,3 +59,13 @@ msgstr "S'ha restablert l'ordre de la graella d'aplicacions de %s usuari(s)."
 #: model:ir.model,name:vmk_apps_menu_sort.model_res_users_settings
 msgid "User Settings"
 msgstr "Arranjament d'usuari"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_vmk_apps_menu_sort
+msgid "Apps Menu Sort"
+msgstr "Ordre del menú d'aplicacions"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_vmk_apps_menu_sort
+msgid "List the apps alphabetically, with Apps and Settings kept at the end"
+msgstr "Ordena les aplicacions alfabèticament, deixant Aplicacions i Configuració al final"

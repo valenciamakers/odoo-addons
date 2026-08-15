@@ -119,6 +119,15 @@ failing to the head of the disabled languages is much better than wedging in amo
   variants of the same base language; unrelated base languages each get their own short code
   regardless.
 
+## Translations
+
+The module's own name and summary in `i18n/vmk_language_sequence.pot`, `es.po` and `ca.po` are
+hand-maintained, not exported — `ir.module.module` records belong to `base`'s xmlid namespace, so
+`odoo i18n export` never sees them. See
+[`vmk_language_systray`'s README](../vmk_language_systray#the-modules-own-name-and-summary-are-hand-maintained-in-i18n)
+for the full explanation. `tests/test_language_sequence.py::TestModuleNameTranslation` fails loudly
+if re-running the export drops them.
+
 ## Requirements
 
 Odoo 19. Depends on `website`, which supplies the `_get_frontend()` override point that makes the

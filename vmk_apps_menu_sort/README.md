@@ -160,6 +160,15 @@ fallback and is independent of this module.
   as soon as there is a search term, `fuzzyLookup` ranks by text relevance instead.
 - **Users with a stored grid order keep it** until the reset action is run.
 
+## Translations
+
+The module's own name and summary in `i18n/vmk_apps_menu_sort.pot`, `es.po` and `ca.po` are
+hand-maintained, not exported — `ir.module.module` records belong to `base`'s xmlid namespace, so
+`odoo i18n export` never sees them. See
+[`vmk_language_systray`'s README](../vmk_language_systray#the-modules-own-name-and-summary-are-hand-maintained-in-i18n)
+for the full explanation. `tests/test_apps_menu_sort.py::TestModuleNameTranslation` fails loudly if
+re-running the export drops them.
+
 ## Requirements
 
 Odoo 19. Depends on `base` only. Both overridden methods are defined there, and `res.users.settings`

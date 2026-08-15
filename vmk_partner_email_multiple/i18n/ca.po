@@ -173,3 +173,13 @@ msgstr "Intercanviar amb l'adreça de correu electrònic principal del contacte"
 #: model_terms:ir.ui.view,arch_db:vmk_partner_email_multiple.view_partner_form_vmk_email_multiple
 msgid "e.g. billing"
 msgstr "p. ex. facturació"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_vmk_partner_email_multiple
+msgid "Multiple Contact Emails"
+msgstr "Diversos correus electrònics per contacte"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_vmk_partner_email_multiple
+msgid "Several email addresses per contact, matched by Odoo's own machinery"
+msgstr "Diverses adreces de correu per contacte, reconegudes pels mecanismes propis d'Odoo"

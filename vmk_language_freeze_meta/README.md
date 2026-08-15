@@ -67,6 +67,15 @@ returns `['ca', 'ca_ES']`, so `ca.po` is found whatever `iso_code` says. What `i
 drives is `num2words`, for amounts in words (`res_currency.py`). Changing it is safe either way;
 this module just stops the change being reverted.
 
+## Translations
+
+The module's own name and summary in `i18n/vmk_language_freeze_meta.pot`, `es.po` and `ca.po` are
+hand-maintained, not exported — `ir.module.module` records belong to `base`'s xmlid namespace, so
+`odoo i18n export` never sees them. See
+[`vmk_language_systray`'s README](../vmk_language_systray#the-modules-own-name-and-summary-are-hand-maintained-in-i18n)
+for the full explanation. `tests/test_language_freeze.py::TestModuleNameTranslation` fails loudly if
+re-running the export drops them.
+
 ## Requirements
 
 Odoo 19. Depends only on `base`.

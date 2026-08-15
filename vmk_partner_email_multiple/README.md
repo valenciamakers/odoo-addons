@@ -246,6 +246,13 @@ folder, which the harness mounts read-only.
 Upgrade the module with the database's language loaded to see a change take effect; `-u` alone
 reloads the `.po` but the terms only render for a user whose language is set.
 
+**The module's own name and summary are a separate, hand-maintained exception.** They live on
+`ir.module.module` records that belong to `base`'s xmlid namespace, so the export above never sees
+them — they are written into the POT and both catalogues by hand and re-running the export would
+silently drop them. See
+[`vmk_language_systray`'s README](../vmk_language_systray#the-modules-own-name-and-summary-are-hand-maintained-in-i18n)
+for the full explanation; `tests/test_model.py::TestModuleNameTranslation` guards it here.
+
 ## Testing
 
 ```bash

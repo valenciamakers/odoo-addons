@@ -1,6 +1,8 @@
 # Copyright 2026 Valencia Makers, SL
 # License MIT (https://opensource.org/licenses/MIT).
 
+from pathlib import Path
+
 from odoo.addons.vmk_language_sequence.hooks import seed_language_sequence
 from odoo.tests.common import TransactionCase, tagged
 
@@ -156,3 +158,58 @@ class TestLanguageSequence(TransactionCase):
         self.assertIn("sequence", self.ResLang.CACHED_FIELDS)
         self.lang_es.sequence = 42
         self.assertEqual(self.ResLang._get_data(code="es_ES").sequence, 42)
+
+
+@tagged("post_install", "-at_install")
+class TestModuleNameTranslation(TransactionCase):
+    """Guard the two catalogue entries `i18n export` will never regenerate.
+
+    The module's own name and summary live on `ir.module.module` records whose
+    `ir.model.data` row belongs to **base** (`ir_module.py` creates them as
+    `base.module_<name>`), so the exporter attributes them to base and omits
+    them from our POT. They are in `i18n/` by hand.
+
+    That matters because `PoFileReader` merges each PO against its module's
+    POT and skips anything the merge marks obsolete -- so an entry missing
+    from the POT is discarded in silence, translations and all. Re-running
+    `i18n export` overwrites the POT and would do exactly that. This test is
+    what turns that into a failure instead of a quiet regression.
+    """
+
+    I18N = Path(__file__).resolve().parent.parent / "i18n"
+    HAND_MAINTAINED = (
+        "Language Sequence",
+        "Order enabled languages by hand instead of alphabetically",
+    )
+
+    def test_pot_still_carries_the_hand_added_module_metadata(self):
+        pot = (self.I18N / "vmk_language_sequence.pot").read_text(encoding="utf-8")
+        for msgid in self.HAND_MAINTAINED:
+            with self.subTest(msgid=msgid):
+                self.assertIn(
+                    f'msgid "{msgid}"',
+                    pot,
+                    "The POT has lost an entry `odoo i18n export` does not generate. If you "
+                    "just re-exported it, re-add the two `base.module_vmk_language_sequence` "
+                    "blocks by hand -- without them the module name and summary silently stop "
+                    "being translated. See the README's Translations section.",
+                )
+
+    def test_every_catalogue_translates_them(self):
+        for po_name in ("es.po", "ca.po"):
+            po = (self.I18N / po_name).read_text(encoding="utf-8")
+            for msgid in self.HAND_MAINTAINED:
+                with self.subTest(po=po_name, msgid=msgid):
+                    self.assertIn(f'msgid "{msgid}"', po)
+
+    def test_the_module_record_really_is_owned_by_base(self):
+        """The premise the POT entries encode: the xmlid is base's, not ours.
+
+        If Odoo ever attributes these records to the module itself, the
+        exporter would start emitting them and the hand-maintenance above
+        becomes not just unnecessary but actively wrong.
+        """
+        data = self.env["ir.model.data"].search(
+            [("model", "=", "ir.module.module"), ("name", "=", "module_vmk_language_sequence")]
+        )
+        self.assertEqual(data.module, "base")
