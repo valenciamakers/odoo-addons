@@ -99,6 +99,13 @@ Seven things that will otherwise cost you an hour each:
   restart the server. Getting this backwards looks exactly like a caching bug in your module.
 - **The running server holds the Python it started with.** `docker compose restart odoo` after
   editing code, or you are testing the previous version.
+- **`-u` on a module that is not installed does nothing, and says so nowhere.** The run completes,
+  the log looks ordinary, and the module stays `uninstalled` — no code loads, no `.po` files load.
+  It is a convincing false pass: translations appear not to work, or a fix appears not to take, when
+  in fact nothing ran. Check `state` rather than trusting the log —
+  `SELECT name, state FROM ir_module_module WHERE name LIKE 'vmk_%';` — and use `-i` for anything
+  not yet installed. Easy to hit in this harness, where recreating the database leaves you with only
+  the one module you passed to `--init`.
 - **There is no `--uninstall` flag.** Use `button_immediate_uninstall()` on the `ir.module.module`
   record from a shell, with the server stopped.
 - **A fixture created and then modified inside one flush cycle produces no tracked change.**
@@ -418,12 +425,21 @@ the module name**, so guard both entries with a test —
 `vmk_language_systray/tests/test_language_systray.py` does, and also asserts the xmlid still belongs
 to `base`, which is the premise the whole workaround rests on.
 
-**A module whose only extracted terms belong to core needs no catalogue at all.** Extending a core
-model attributes that model's name and its `display_name`/`id` fields to your module in the export,
-so a POT can be entirely `Display Name`, `ID`, `Menu`, `Config Settings` — every one of them a
-record core already translates. `vmk_settings_sort` is exactly this case and `vmk_apps_page_sort`
-exports nothing at all; both deliberately have no `i18n/`. Check the POT for a term you actually
-wrote before adding files.
+**Every module needs a catalogue, because every module has at least two untranslated terms.** Its
+own name and summary, per the section above — and the exporter never shows them to you, so an empty
+POT is not evidence there is nothing to translate.
+
+This reverses an earlier rule here, which held that a module whose extracted terms all belong to
+core needs no `i18n/` at all. That reasoning was sound as far as it went: extending a core model
+attributes that model's name and its `display_name`/`id` fields to your module in the export, so a
+POT can be entirely `Display Name`, `ID`, `Menu`, `Config Settings` — every one a record core
+already translates. `vmk_settings_sort` was exactly that case and `vmk_apps_page_sort` exports
+nothing whatsoever. But both still appeared in the Apps list under an English name in a Spanish
+database, which is the thing a catalogue exists to prevent. Both now carry one.
+
+What survives of the old rule: when a module's POT does carry core-owned terms, translate them with
+core's own wording rather than afresh — and `vmk_apps_page_sort` shows the floor, a catalogue whose
+entire contents are the two hand-written `base.module_*` blocks.
 
 Exporting needs two workarounds, both harness-specific:
 
