@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+<t t-name="vmk_language_systray.LanguageSystray">
+    <div class="o_vmk_language_systray d-none d-md-block">
+        <DropdownGroup group="'web-navbar-group'">
+            <Dropdown position="'bottom-end'">
+                <button class="py-1 py-lg-0" t-att-aria-label="buttonLabel" t-att-title="buttonLabel">
+                    <!-- `fa-lg` is what the neighbouring systray icons carry (mail's
+                         `fa-lg fa-comments`, the activity menu's `fa-lg fa-clock-o`), and it is
+                         load-bearing rather than decorative: without it FontAwesome renders at the
+                         inherited 14px against their 18.41px, and the globe reads as visibly
+                         undersized in the row. -->
+                    <i class="fa fa-lg fa-globe"/>
+                    <!-- Opt-in, and then only where there is room for it: the flag says the
+                         user wants the name, `d-lg-block` still withholds it at widths where
+                         it would crowd the row. Hidden either way, the button is a bare globe,
+                         which is what makes `buttonLabel` the only accessible name it has. -->
+                    <span
+                        t-if="showName and activeLanguage"
+                        class="oe_topbar_name d-none d-lg-block ms-2 text-truncate"
+                        t-esc="activeLanguage.name"
+                    />
+                </button>
+                <t t-set-slot="content">
+                    <t t-foreach="languages" t-as="lang" t-key="lang.code">
+                        <!-- `selected` alone marks the active language for sighted users only:
+                             core's global `.dropdown-item.selected` rule bolds it and draws a
+                             checkmark via a `:before` glyph, which carries no accessible name.
+                             `attrs` is DropdownItem's own escape hatch (it spreads through
+                             `t-att` in web.DropdownItem), so the state also reaches the
+                             accessibility tree, the way core does it for web.CheckboxItem. -->
+                        <DropdownItem
+                            class="{ selected: isActive(lang) }"
+                            attrs="{ role: 'menuitemradio', 'aria-checked': isActive(lang) ? 'true' : 'false' }"
+                            onSelected="() => this.selectLanguage(lang.code)"
+                        >
+                            <t t-esc="lang.name"/>
+                        </DropdownItem>
+                    </t>
+                </t>
+            </Dropdown>
+        </DropdownGroup>
+    </div>
+</t>
+
+</templates>

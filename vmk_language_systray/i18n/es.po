@@ -1,0 +1,49 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* vmk_language_systray
+#
+# Terms shared with Odoo core reuse core's own Spanish wording. "Display Name",
+# "HTTP Routing" and "ID" are core's, attributed here only because the module
+# inherits ir.http; the two the module actually authors are "Language" and
+# "Language: %s", and base already translates "Language" as "Idioma".
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-08-15 13:39+0000\n"
+"PO-Revision-Date: 2026-08-15 13:39+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: vmk_language_systray
+#: model:ir.model.fields,field_description:vmk_language_systray.field_ir_http__display_name
+msgid "Display Name"
+msgstr "Nombre para mostrar"
+
+#. module: vmk_language_systray
+#: model:ir.model,name:vmk_language_systray.model_ir_http
+msgid "HTTP Routing"
+msgstr "Enrutamiento HTTP"
+
+#. module: vmk_language_systray
+#: model:ir.model.fields,field_description:vmk_language_systray.field_ir_http__id
+msgid "ID"
+msgstr "ID"
+
+#. module: vmk_language_systray
+#. odoo-javascript
+#: code:addons/vmk_language_systray/static/src/language_systray.js:0
+msgid "Language"
+msgstr "Idioma"
+
+#. module: vmk_language_systray
+#. odoo-javascript
+#: code:addons/vmk_language_systray/static/src/language_systray.js:0
+msgid "Language: %s"
+msgstr "Idioma: %s"
