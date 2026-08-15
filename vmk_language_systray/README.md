@@ -1,4 +1,4 @@
-# Language Systray (`vmk_language_systray`)
+# Backend Language Menu (`vmk_language_systray`)
 
 A globe icon in the backend systray, next to the company switcher. It lists the active languages;
 clicking one sets the **current user's** backend interface language and reloads. It never touches
