@@ -86,6 +86,20 @@ Seven things that will otherwise cost you an hour each:
   the container names `dev-db-1` / `dev-odoo-1` and the `dev_` volume namespace. Only one can run at
   a time, and bringing one down to start the other takes the first one's databases with it (see
   above). Expect to recreate the database whenever you switch repos.
+- **Testing a module from each repo together needs a third harness.** Neither `dev/` can see the
+  other repo — each mounts only its own root — so a module here that extends a vendored one cannot
+  be exercised against it by either. Write a throwaway Compose file in the scratchpad mounting both
+  repo roots at separate paths, run it under its own project name so it collides with neither `dev`,
+  and pass the addons path explicitly, since the image's `odoo.conf` names only `/mnt/extra-addons`:
+
+  ```bash
+  docker compose -f "$SCRATCH/docker-compose.yml" -p <name> run --rm odoo \
+      odoo --addons-path=/mnt/external,/mnt/custom -d test \
+      --init <their_module>,<our_module> --without-demo=all --stop-after-init
+  ```
+
+  Core's own addons are found without an entry. Tear it down with `down -v` afterwards; it has no
+  reason to outlive the question it answered.
 
 - **Keep exactly one database.** With two, Odoo can no longer auto-select and serves the database
   selector instead — anonymous frontend requests then 404 and the website looks broken. Drop the
