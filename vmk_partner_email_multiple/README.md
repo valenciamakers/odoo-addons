@@ -216,10 +216,21 @@ Each of these keeps reading the primary address only:
 
 ## Mailflow
 
-`unified_mail_client` bypasses Odoo's matching entirely — `[('email', '=ilike', addr)]` on the raw
-column, in three places — so this module alone will not stop it creating duplicates. A patch routing
-it through the core helper is ready to send upstream; if accepted, this module works with Mailflow
-automatically.
+`unified_mail_client` used to bypass Odoo's matching entirely — `[('email', '=ilike', addr)]` on the
+raw column, in three places — so this module alone could not stop it creating duplicates. Routing
+all three through the core helper was accepted upstream and shipped in **19.0.2.15.0**. No bridge
+module is needed: Mailflow's lookups now funnel through `_find_or_create_from_emails`, which this
+module already overrides.
+
+Verified 2026-08-18 with both modules installed in one database. An additional address resolves to
+the right contact through the inbound sync (`_match_partner`), the To/Cc contact cards
+(`resolve_contact`), and recipient matching on send (`_match_recipient_partners`), while an unknown
+address still misses and no contact is created along the way. Both test suites pass together — 427
+tests, the single failure being one of Mailflow's own inline-image tests, which fails identically
+without this module installed.
+
+The contact backfill added in the same release calls `_match_partner`, so running it links historic
+mail that arrived before an additional address was recorded.
 
 ## Translations
 

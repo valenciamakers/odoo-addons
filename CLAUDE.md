@@ -114,6 +114,15 @@ Seven things that will otherwise cost you an hour each:
   tracking bug in your code. Flush between the two — `self.env.flush_all()` then `self.cr.flush()`,
   which is all `MailCommon.flush_tracking()` does.
 
+## Deploying to production
+
+**oec.sh ships code, not schema.** New module files plus a restart do not upgrade anything — Odoo
+creates columns only during an install or upgrade — so deploying a module whose fields have changed
+means running `-u <module>` on the server by hand. Skipping it has taken production down twice, and
+a new field on a **core** model takes the whole instance down rather than just the module, because
+Odoo prefetches every stored field of a record in one `SELECT`. The procedure and the symptom are in
+`../Tech Stack/oec.sh/Deploying Addon Updates.md`.
+
 ## Verify against source, not memory
 
 Read the real 19.0 source before building on any claim about what Odoo does. It is right there in
