@@ -232,6 +232,13 @@ without this module installed.
 The contact backfill added in the same release calls `_match_partner`, so running it links historic
 mail that arrived before an additional address was recorded.
 
+**Re-check this on every Mailflow upgrade.** The coupling is that its three lookups call
+`_partner_find_from_emails_single` / `_mail_find_partner_from_emails` rather than querying `email`
+themselves, and nothing enforces that from this side. If a future version reverts to a raw domain,
+additional addresses silently stop matching and Mailflow resumes minting duplicate contacts — no
+error, just wrong contacts. `grep -rn "_partner_find_from_emails\|'email', '=ilike'" models/` over
+the new version answers it in one command.
+
 ## Translations
 
 `i18n/` carries the template and a Spanish catalogue; Odoo loads `i18n/*.po` on install with no
