@@ -130,8 +130,8 @@ result lists back into input order. Per-email resolution cannot cross-contaminat
 matches each input against its own normalized value.
 
 Copying `_find_or_create_from_emails` and widening both halves in place would be the obvious
-approach and is the wrong one twice over: it would leave LGPL source inside an MIT module, and it
-would silently stop tracking whatever Odoo changes in that method next.
+approach and is the wrong one: it would silently stop tracking whatever Odoo changes in that method
+next.
 
 ### There is deliberately no unique constraint, on any column
 
