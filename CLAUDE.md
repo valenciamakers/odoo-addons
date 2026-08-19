@@ -381,8 +381,30 @@ effect. The manifest version is the only marker of which build someone is runnin
 getting it wrong is asymmetric: a bump nobody needed is invisible, while a changed module still
 claiming its old version makes every later question — did this deploy, is production current, which
 build has the fix — unanswerable. `./odev doctor` reads `latest_version` straight from
-`ir_module_module`, so a stale number misreports there too. This applies in
-`../Odoo Addons - Private` as well, which defers to this file.
+`ir_module_module`, so a stale number misreports there too.
+
+Odoo prefixes its own series, leaving three digits that we use as plain semver:
+
+```
+19.0  .  1  .  1  .  1
+└──┬─┘    │    │    └── patch
+Odoo      │    └─────── minor
+series    └──────────── major
+```
+
+- **patch** — no behaviour change: a bug fix, a refactor, a docstring, a comment. This is the
+  default, and the one to reach for whenever the change needs no upgrade to take effect.
+- **minor** — new behaviour that does not break existing use: a new field, a new view, an added
+  option. Usually needs `-u` to take effect.
+- **major** — a breaking change: a removed or renamed field, altered data semantics, anything
+  needing a migration script.
+
+**Documentation-only changes do not bump.** A `README.md` edit is not a change to the module, and
+bumping for one makes the version stop meaning anything. The test is whether a file Odoo loads
+changed — Python, XML, JS, SCSS, CSV, or the manifest itself. A docstring counts, because it lives
+in a file Odoo loads; a README does not.
+
+This applies in `../Odoo Addons - Private` as well, which defers to this file.
 
 **We license our modules AGPL-3**, and **LGPL-3** where the module is meant to be depended on —
 currently only `vmk_partner_email_multiple`. Both are exact members of the `Selection` on
