@@ -134,11 +134,21 @@ These are properties of Odoo, not of any one harness.
 
 ## Deploying to production
 
-**oec.sh ships code, not schema.** New module files plus a restart do not upgrade anything — Odoo
-creates columns only during an install or upgrade — so deploying a module whose fields have changed
-means running `-u <module>` on the server by hand. Skipping it has taken production down twice, and
-a new field on a **core** model takes the whole instance down rather than just the module, because
-Odoo prefetches every stored field of a record in one `SELECT`. The procedure and the symptom are in
+**New files plus a restart do not upgrade anything.** Odoo creates columns only during an install or
+upgrade, so a deploy has to include that step. Skipping it has taken production down twice, and a
+new field on a **core** model takes the whole instance down rather than just the module, because
+Odoo prefetches every stored field of a record in one `SELECT`.
+
+oec.sh's **quick update** button does the whole deploy — git pull, upgrade, restart — and is the
+normal path, since the step it performs is the one that has broken production before. Two things it
+does not do: it takes **no backup** (take one first, upgrades are one-way), and it upgrades at
+`-u all` scope, which re-applies every module's `data` records and so reverts anything hand-edited
+in the UI that came from a module data file. Use a targeted
+`odoo -u <module> --no-http --stop-after-init` when that matters.
+
+Verify with `latest_version` and `license` on `ir_module_module` rather than a clean log — both are
+written only during an install or upgrade. The full procedure, including a query that answers
+whether this database has hand-edited module data at all, is in
 `../Tech Stack/oec.sh/Deploying Addon Updates.md`.
 
 ## Verify against source, not memory
