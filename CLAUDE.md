@@ -18,7 +18,8 @@ remotes differ by one word, so check which one you are pushing to.
 - **`vmk_settings_sort`** — alphabetical ordering of the Settings sidebar and Technical groupings.
 - **`vmk_partner_email_multiple`** — several email addresses per contact, matched by Odoo's own
   machinery, and kept rather than dropped when contacts are merged.
-- **`dev/`** — the local Odoo 19 test harness.
+- The local test harness is `../Tech Stack/odoo-dev`, shared with our other two Odoo module repos.
+  The `dev/` directory that used to live here was retired on 2026-08-19.
 
 Read the existing modules' `README.md` files before writing another; between them they document most
 of the traps below in context.
@@ -52,10 +53,24 @@ subject, a `-` bullet body explaining the why, never `git add -A`, and never pus
 
 ## Testing locally
 
-The harness mounts the repo root as an addons path, so any module here installs by name.
+Modules here install by name against a local Odoo 19 with this repo on the addons path.
+
+Valencia Makers uses a shared harness at `../Tech Stack/odoo-dev` (private — it mounts Odoo
+Enterprise, which we may not redistribute). It mounts all three of our module repos at once in
+production's addons order, keeps its databases across a restart, and can restore a neutered copy of
+production data:
 
 ```bash
-cd dev
+cd "../Tech Stack/odoo-dev"
+./odev install vmk_language_sequence
+./odev test    vmk_language_sequence
+./odev up                                 # serve on localhost:8069
+```
+
+Working from a clone of this repo alone, the equivalent is a two-service Compose file — Postgres 17
+and `odoo:19` with the repo root mounted at `/mnt/extra-addons`:
+
+```bash
 docker compose up -d db
 
 # create a database and install a module (post_init_hook runs on install only)
@@ -66,62 +81,50 @@ docker compose run --rm odoo odoo -d test --init vmk_language_sequence \
 docker compose run --rm odoo odoo -d test -u vmk_language_sequence \
     --test-enable --test-tags /vmk_language_sequence --stop-after-init
 
-# interactive shell
-docker compose exec -T odoo odoo shell -d test \
-    --db_host=db --db_user=odoo --db_password=odoo --no-http
-
 docker compose up -d odoo          # serve on localhost:8069
-docker compose down                # stop everything — DROPS EVERY DATABASE, see below
-docker compose down -v             # the above, and drop the filestore volume too
 ```
 
-Seven things that will otherwise cost you an hour each:
+Two modules here will mislead you on Community, though. `web_enterprise` replaces both the apps grid
+and the settings form with its own implementations —
+`web_enterprise/static/src/webclient/home_menu/` and
+`web_enterprise/static/src/webclient/settings_form_view/` — so `vmk_apps_menu_sort` and
+`vmk_settings_sort` are reordering a surface Community renders differently from production. Verify
+those against an Enterprise instance before believing a result. (`vmk_apps_page_sort` is safe: the
+Apps list is Community's own.)
 
-- **`docker compose down` destroys your databases.** Only the Odoo _filestore_ is a named volume;
-  PostgreSQL's data directory is not, so it lives on the `db` container's writable layer and dies
-  with it. `down` therefore discards every database while faithfully preserving the filestore of the
-  databases it just deleted. Use `docker compose stop` to pause without losing them.
-- **Both repos' harnesses are the same Compose project.** The project name comes from the directory,
-  and this repo's harness and `../Odoo Addons - External/dev` are both called `dev` — so they share
-  the container names `dev-db-1` / `dev-odoo-1` and the `dev_` volume namespace. Only one can run at
-  a time, and bringing one down to start the other takes the first one's databases with it (see
-  above). Expect to recreate the database whenever you switch repos.
-- **Testing a module from each repo together needs a third harness.** Neither `dev/` can see the
-  other repo — each mounts only its own root — so a module here that extends a vendored one cannot
-  be exercised against it by either. Write a throwaway Compose file in the scratchpad mounting both
-  repo roots at separate paths, run it under its own project name so it collides with neither `dev`,
-  and pass the addons path explicitly, since the image's `odoo.conf` names only `/mnt/extra-addons`:
+### Things that will otherwise cost you an hour each
 
-  ```bash
-  docker compose -f "$SCRATCH/docker-compose.yml" -p <name> run --rm odoo \
-      odoo --addons-path=/mnt/external,/mnt/custom -d test \
-      --init <their_module>,<our_module> --without-demo=all --stop-after-init
-  ```
+These are properties of Odoo, not of any one harness.
 
-  Core's own addons are found without an entry. Tear it down with `down -v` afterwards; it has no
-  reason to outlive the question it answered.
-
-- **Keep exactly one database.** With two, Odoo can no longer auto-select and serves the database
-  selector instead — anonymous frontend requests then 404 and the website looks broken. Drop the
-  spare (`docker compose exec db dropdb -U odoo --force <name>`) rather than debugging the site.
-- **`docker compose exec` skips the entrypoint**, which is what translates `HOST`/`USER`/`PASSWORD`
-  into CLI flags. Pass `--db_host=db --db_user=odoo --db_password=odoo` to anything run that way, or
-  it will try a local socket and fail.
-- **`odoo shell` does not signal cache invalidation to the running server.** `service/model.py`
-  calls `registry.signal_changes()` after each RPC; the shell has no such hook, so a write there
-  leaves other workers stale. Call `env.registry.signal_changes()` **before** `env.cr.commit()`, or
-  restart the server. Getting this backwards looks exactly like a caching bug in your module.
-- **The running server holds the Python it started with.** `docker compose restart odoo` after
-  editing code, or you are testing the previous version.
 - **`-u` on a module that is not installed does nothing, and says so nowhere.** The run completes,
   the log looks ordinary, and the module stays `uninstalled` — no code loads, no `.po` files load.
   It is a convincing false pass: translations appear not to work, or a fix appears not to take, when
   in fact nothing ran. Check `state` rather than trusting the log —
   `SELECT name, state FROM ir_module_module WHERE name LIKE 'vmk_%';` — and use `-i` for anything
-  not yet installed. Easy to hit in this harness, where recreating the database leaves you with only
-  the one module you passed to `--init`.
+  not yet installed. Easy to hit after recreating a database, which leaves you with only the one
+  module you passed to `--init`. (`./odev upgrade` refuses outright rather than letting this
+  happen.)
 - **There is no `--uninstall` flag.** Use `button_immediate_uninstall()` on the `ir.module.module`
   record from a shell, with the server stopped.
+- **`odoo shell` does not signal cache invalidation to the running server.** `service/model.py`
+  calls `registry.signal_changes()` after each RPC; the shell has no such hook, so a write there
+  leaves other workers stale. Call `env.registry.signal_changes()` **before** `env.cr.commit()`, or
+  restart the server. Getting this backwards looks exactly like a caching bug in your module.
+- **The running server holds the Python it started with**, unless `--dev=reload` is on and the
+  watcher saw the change. Restart after editing code, or you are testing the previous version — and
+  restart regardless after changing a `__manifest__.py` or an asset bundle.
+- **A second database breaks the website unless the server is told which one to serve.** With two
+  and no `dbfilter`, Odoo can no longer auto-select, serves the database selector instead, and
+  anonymous frontend requests 404. Set `db_name` (`-d`, or `PGDATABASE`) — `http.py db_filter()`
+  falls back to exposing exactly that database — or drop the spare, rather than debugging the site.
+- **`docker compose down` destroys databases unless Postgres' data directory is a named volume.** It
+  is easy to make only the Odoo _filestore_ a named volume, in which case `down` discards every
+  database while faithfully preserving the filestore of the databases it just deleted. Use `stop` to
+  pause, or make both named.
+- **`docker compose exec` skips the entrypoint**, which is what translates `HOST`/`USER`/`PASSWORD`
+  into CLI flags. Either pass `--db_host=db --db_user=odoo --db_password=odoo` to anything run that
+  way, or put those settings in the config file at `$ODOO_RC` (`/etc/odoo/odoo.conf` in the official
+  image), which Odoo reads for itself.
 - **A fixture created and then modified inside one flush cycle produces no tracked change.**
   Tracking compares against the values at the last flush, so a `TransactionCase` that creates a
   record in `setUpClass` and writes to it in the test sees an empty chatter and looks like a
