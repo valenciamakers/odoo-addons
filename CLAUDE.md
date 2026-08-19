@@ -1,8 +1,9 @@
 # CLAUDE.md — Odoo Addons
 
-The Odoo 19 modules Valencia Makers writes and maintains, MIT licensed. They run against a
-self-hosted **Odoo 19 Enterprise** instance but depend only on Community modules. See
-`../.claude/CLAUDE.md` for the business context; this file wins inside this repo.
+The Odoo 19 modules Valencia Makers writes and maintains, AGPL-3 licensed (LGPL-3 where a module is
+meant to be depended on). They run against a self-hosted **Odoo 19 Enterprise** instance but depend
+only on Community modules. See `../.claude/CLAUDE.md` for the business context; this file wins
+inside this repo.
 
 Third-party modules under evaluation live in a separate private repo (`../Odoo Addons - External`
 locally), not here — this repo is publishable, so nothing enters it that we do not own. The two
@@ -372,41 +373,53 @@ publish the same name between our checking it and our publishing, though with a 
 is unlikely. And it only covers the Apps Store; a module distributed purely through GitHub would not
 show up at all.
 
-Manifest: `"version": "19.0.1.0.0"` (Odoo series first), `"author": "Valencia Makers, SL"`. Keep
+Manifest: `"version": "19.0.1.1.0"` (Odoo series first), `"author": "Valencia Makers, SL"`. Keep
 `depends` minimal and honest — depend on `website` only if you override something it defines.
 
-**We license our modules MIT**, declared as `"license": "Other OSI approved licence"` (British
-spelling, exactly that string) with the MIT text in a `LICENSE` file beside the manifest. Odoo
-validates `license` against a fixed `Selection` on `ir.module.module` that has **no MIT entry**, and
-the failure is silent: module loading bypasses the ORM, so `"license": "MIT"` installs cleanly and
-leaves an invalid value in the database that renders blank in the Apps list and raises
-`ValueError: Wrong value for ir.module.module.license` the moment anything writes that field.
+**Bump the version on every change to our code**, not only when a change needs an upgrade to take
+effect. The manifest version is the only marker of which build someone is running, and the cost of
+getting it wrong is asymmetric: a bump nobody needed is invisible, while a changed module still
+claiming its old version makes every later question — did this deploy, is production current, which
+build has the fix — unanswerable. `./odev doctor` reads `latest_version` straight from
+`ir_module_module`, so a stale number misreports there too. This applies in
+`../Odoo Addons - Private` as well, which defers to this file.
 
-Nothing obliges us to copyleft. Odoo Community is LGPL-3, which exists to let works that merely
-_use_ the library carry any license, and Odoo SA's own position permits proprietary modules. Two
-conditions to keep true: do not copy Odoo source into a module (override by calling `super()`,
-rather than copy-pasting a core method to tweak it — the copied block would stay LGPL), and do not
-depend on an Enterprise module, which would put distribution under OEEL whatever the manifest says.
+**We license our modules AGPL-3**, and **LGPL-3** where the module is meant to be depended on —
+currently only `vmk_partner_email_multiple`. Both are exact members of the `Selection` on
+`ir.module.module`, so the manifest string is just `"license": "AGPL-3"`, with the matching text in
+a `LICENSE` file beside the manifest.
 
-**MIT is the default, not a rule.** An individual module may ship under a GPL variant where that is
-the better trade, and the decision is per module rather than per repo. Weigh it explicitly, the way
-`vmk_partner_email_multiple` weighed wrapping `super()` against copying core, and record the
-reasoning in that module's `README.md` — a licence with no stated reason is one nobody can revisit
-safely. Three cases where copyleft is the honest answer rather than a concession:
+The choice follows the OCA's: copyleft by default, LGPL for what others build on. The reasoning is
+that MIT does not merely fail to prevent someone repackaging a module and selling it closed — it
+_permits_ it, so there is nothing to object to. Under copyleft the same act is infringement. Decided
+2026-08-19.
 
+**The decision is per module, and the reason goes in that module's `README.md`.** A licence with no
+stated reason is one nobody can revisit safely. AGPL-3 is the default; depart from it when:
+
+- **Other modules should be able to build on it** — LGPL-3, so a dependent may carry any licence.
+  This is why `vmk_partner_email_multiple` is LGPL: several addresses per contact is a gap in Odoo
+  that nothing free fills, and AGPL would push authors towards reimplementing it instead of
+  depending on it. Modifying and redistributing the module itself still requires source either way.
 - **The module genuinely needs to copy core implementation.** Where an override cannot express the
   change and a core method has to be lifted and edited, that block stays LGPL-3. Relicensing the
-  module to match is more honest than contorting the design to avoid the copy, or shipping MIT over
-  code that is not ours to relicense.
-- **We want it upstreamed to the OCA**, whose repository policy requires LGPL-3 or AGPL-3. That is
-  policy rather than legal consequence, and we hold the copyright either way — but a module intended
-  for them may as well be born under it.
-- **We want derivatives to stay open**, which is a preference we are entitled to hold per module.
+  module to match is more honest than contorting the design to avoid the copy.
 
-Odoo validates the manifest string against a fixed `Selection`, so use its exact values — `LGPL-3`,
-`AGPL-3`, `GPL-3`, `GPL-3 or any later version` — and put the matching licence text in `LICENSE`.
-Only MIT needs the `Other OSI approved licence` workaround above, because only MIT is missing from
-that list.
+LGPL-3 is written as additional permissions on top of GPL-3 and incorporates it by reference, so its
+text alone is not a complete licence — `vmk_partner_email_multiple/LICENSE` carries both, LGPL-3
+first.
+
+Two conditions to keep true whatever the licence: do not copy Odoo source into a module (override by
+calling `super()` rather than copy-pasting a core method to tweak it), and do not depend on an
+Enterprise module, which would put distribution under OEEL whatever the manifest says — that module
+belongs in `../Odoo Addons - Private` instead.
+
+**The MIT trap, kept because it is easy to walk back into.** Odoo validates `license` against that
+fixed `Selection`, which has **no MIT entry**, and the failure is silent: module loading bypasses
+the ORM, so `"license": "MIT"` installs cleanly and leaves an invalid value that renders blank in
+the Apps list and raises `ValueError: Wrong value for ir.module.module.license` the moment anything
+writes the field. The workaround was `"Other OSI approved licence"`. Nothing here uses MIT now, but
+any licence outside that `Selection` fails the same way.
 
 **Prettier**: a `.prettierrc` at the root covers everything, and each module carries its own as well
 (`proseWrap: always`, `printWidth: 100`). Give every new module one — the duplication is deliberate,
