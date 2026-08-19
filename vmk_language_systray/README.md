@@ -215,5 +215,7 @@ docker compose run --rm odoo odoo -d test -u vmk_language_systray --test-enable 
 
 ## License
 
-MIT. See `LICENSE`. Declared in the manifest as `"Other OSI approved licence"`, which is the only
-value Odoo's `Selection` accepts for it.
+**AGPL-3**, the default across this repo. See `LICENSE`.
+
+Copyleft so the module cannot be repackaged and sold as a closed product: a modified version must
+ship as AGPL with source. Using it, and depending on it from another module, is unaffected.

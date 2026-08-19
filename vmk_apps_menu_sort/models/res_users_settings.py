@@ -1,5 +1,5 @@
 # Copyright 2026 Valencia Makers, SL
-# License MIT (https://opensource.org/licenses/MIT).
+# License AGPL-3 (https://www.gnu.org/licenses/agpl-3.0.html).
 
 from odoo import _, api, models
 

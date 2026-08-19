@@ -1,12 +1,12 @@
 # Copyright 2026 Valencia Makers, SL
-# License MIT (https://opensource.org/licenses/MIT).
+# License LGPL-3 (https://www.gnu.org/licenses/lgpl-3.0.html).
 
 {
     "name": "Multiple Contact Emails",
     "summary": "Several email addresses per contact, matched by Odoo's own machinery",
-    "version": "19.0.1.0.0",
+    "version": "19.0.1.1.0",
     "author": "Valencia Makers, SL",
-    "license": "Other OSI approved licence",  # MIT; see LICENSE
+    "license": "LGPL-3",
     "category": "Productivity/Discuss",
     "depends": ["mail"],
     "data": [
