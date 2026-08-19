@@ -249,17 +249,18 @@ part of the backend.
 Regenerating the template after changing any user-facing string:
 
 ```bash
-cd dev
+# Run from the directory holding your Compose file; REPO is the path to this repo.
+REPO=/path/to/odoo-addons
 docker compose run --rm -e PGHOST=db -e PGUSER=odoo -e PGPASSWORD=odoo \
-    -v "$PWD/../vmk_partner_email_multiple/i18n:/mnt/out" --entrypoint odoo odoo \
+    -v "$REPO/vmk_partner_email_multiple/i18n:/mnt/out" --entrypoint odoo odoo \
     i18n export -d test -o /mnt/out/vmk_partner_email_multiple.pot vmk_partner_email_multiple
 ```
 
-Two harness details are doing work in that command. `--entrypoint odoo` is required because the
-image's entrypoint translates `HOST`/`USER`/`PASSWORD` into `--db_host` and friends, which the
-`i18n` subcommand rejects outright — hence passing the connection as libpq's `PG*` variables
-instead. And `-o` is required because the export otherwise writes into each module's own `i18n/`
-folder, which the harness mounts read-only.
+Two details are doing work in that command. `--entrypoint odoo` is required because the image's
+entrypoint translates `HOST`/`USER`/`PASSWORD` into `--db_host` and friends, which the `i18n`
+subcommand rejects outright — hence passing the connection as libpq's `PG*` variables instead. And
+`-o` is required because the export otherwise writes into each module's own `i18n/` folder, which
+the harness mounts read-only.
 
 Upgrade the module with the database's language loaded to see a change take effect; `-u` alone
 reloads the `.po` but the terms only render for a user whose language is set.
@@ -273,13 +274,21 @@ for the full explanation; `tests/test_model.py::TestModuleNameTranslation` guard
 
 ## Testing
 
+Against a local Odoo 19 with this repo on the addons path — Postgres, the `odoo:19` image, and the
+repo root mounted at `/mnt/extra-addons`:
+
 ```bash
-cd dev
 docker compose run --rm odoo odoo -d test --init vmk_partner_email_multiple \
     --without-demo=all --stop-after-init
 docker compose run --rm odoo odoo -d test -u vmk_partner_email_multiple \
     --test-enable --test-tags /vmk_partner_email_multiple --stop-after-init
 ```
+
+`-u` on a module that is not installed does nothing and reports nothing, so install first and check
+`ir_module_module.state` rather than trusting a clean log.
+
+Valencia Makers uses a shared harness for this, covered in `CLAUDE.md`; it is not needed to run the
+tests above.
 
 ## License
 
