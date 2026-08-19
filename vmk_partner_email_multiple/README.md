@@ -283,5 +283,22 @@ docker compose run --rm odoo odoo -d test -u vmk_partner_email_multiple \
 
 ## License
 
-MIT. See `LICENSE`. Declared in the manifest as `"Other OSI approved licence"`, which is the only
-value Odoo's `Selection` accepts for it.
+**LGPL-3**, and deliberately not AGPL-3 like the rest of this repo. See `LICENSE`, which carries the
+LGPL-3 text followed by the GPL-3 it incorporates by reference.
+
+The repo default is AGPL-3, chosen so that a module cannot be repackaged and sold as a closed
+product. This one is the exception because **other modules should be able to build on it.** Several
+addresses per contact is a gap in Odoo itself, and nothing free fills it — so anything that wants to
+work with contact email is likely to want this underneath rather than to reimplement it. AGPL would
+force every such module to be AGPL too, including commercial ones, which would push authors back
+towards reinventing it badly.
+
+LGPL keeps both halves. A module may `depends` on this one under any licence it likes, proprietary
+included, because that is a work that _uses_ the library. But modifying and redistributing **this**
+module still obliges the modified version to be LGPL with source — so the case the default was
+chosen to prevent, someone shipping a closed copy of this code as their own product, is prevented
+here too.
+
+It is the same split the OCA uses: AGPL-3 across most repositories, LGPL-3 where modules are
+expected to be extended. `web_chatter_position` from `OCA/web`, vendored in
+`../Odoo Addons - External`, is one of theirs under LGPL-3 for this reason.

@@ -1,5 +1,5 @@
 # Copyright 2026 Valencia Makers, SL
-# License MIT (https://opensource.org/licenses/MIT).
+# License AGPL-3 (https://www.gnu.org/licenses/agpl-3.0.html).
 
 """Almost all of this module is assets, and the JS leans entirely on core's
 own behaviour: an unprivileged self-write on ``res.users.lang``, and

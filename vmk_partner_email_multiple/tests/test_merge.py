@@ -1,5 +1,5 @@
 # Copyright 2026 Valencia Makers, SL
-# License MIT (https://opensource.org/licenses/MIT).
+# License LGPL-3 (https://www.gnu.org/licenses/lgpl-3.0.html).
 
 from odoo.tests import tagged
 
