@@ -134,7 +134,7 @@ baseline, not the last word.
 
 Suppressing drag-to-reorder altogether would mean overriding Enterprise JavaScript, which would
 require depending on `web_enterprise` and would put distribution of this module under the OEEL
-rather than MIT. Not worth it for a cosmetic edge case.
+rather than AGPL-3. Not worth it for a cosmetic edge case.
 
 ## The landing screen
 

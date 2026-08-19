@@ -43,9 +43,9 @@ class ResPartner(models.Model):
         recordset.
 
         So rather than reimplement the method with both halves widened -- which would
-        also mean copying LGPL source into an MIT module -- resolve the addresses we
-        can here, pass only the rest to ``super()``, and splice the two result lists
-        back into input order. Per-email resolution cannot cross-contaminate, because
+        silently stop tracking whatever Odoo changes in it next -- resolve the
+        addresses we can here, pass only the rest to ``super()``, and splice the two
+        result lists back into input order. Per-email resolution cannot cross-contaminate, because
         core matches each input against its own normalized value.
         """
         name_emails = [tools.parse_contact_from_email(email) for email in emails]
