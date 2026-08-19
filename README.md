@@ -2,7 +2,8 @@
 
 Odoo 19 modules written and maintained by Valencia Makers, SL — a digital-fabrication education,
 makerspace, and retail business in Valencia, Spain. Each one is small, solves a problem we hit
-running our own instance, and is MIT licensed.
+running our own instance, and is copyleft-licensed — AGPL-3, or LGPL-3 where the module is meant to
+be built on.
 
 They depend only on Odoo Community modules, so they work on Community and Enterprise alike.
 
@@ -54,9 +55,17 @@ time — all verified against real Odoo source rather than against documentation
 ## Contributing
 
 Issues and pull requests are welcome. These are maintained for our own use first, so a change that
-suits your deployment but not ours may be happier as a fork; MIT makes that easy, and no hard
-feelings.
+suits your deployment but not ours may be happier as a fork, and no hard feelings — the licences
+here are chosen to keep forking open, not to close it.
+
+We have no CLA, which means we cannot relicense contributed code. Bear that in mind if you send
+something substantial.
 
 ## License
 
-MIT, © 2026 Valencia Makers, SL. See each module's `LICENSE`.
+© 2026 Valencia Makers, SL. Licensed per module — see each module's `LICENSE` and manifest:
+
+- **AGPL-3** for everything by default. Use them freely, including commercially; distribute a
+  modified version and it stays AGPL, with source.
+- **LGPL-3** for `vmk_partner_email_multiple`, so other modules may depend on it under any licence.
+  Its README explains why it is the exception.
