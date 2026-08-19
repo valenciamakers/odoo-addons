@@ -205,13 +205,21 @@ needed.
 
 ## Testing
 
+Against a local Odoo 19 with this repo on the addons path — Postgres, the `odoo:19` image, and the
+repo root mounted at `/mnt/extra-addons`:
+
 ```bash
-cd dev
-docker compose run --rm odoo odoo -d test --init vmk_language_systray --without-demo=all \
-    --stop-after-init
-docker compose run --rm odoo odoo -d test -u vmk_language_systray --test-enable \
-    --test-tags /vmk_language_systray --stop-after-init
+docker compose run --rm odoo odoo -d test --init vmk_language_systray \
+    --without-demo=all --stop-after-init
+docker compose run --rm odoo odoo -d test -u vmk_language_systray \
+    --test-enable --test-tags /vmk_language_systray --stop-after-init
 ```
+
+`-u` on a module that is not installed does nothing and reports nothing, so install first and check
+`ir_module_module.state` rather than trusting a clean log.
+
+Valencia Makers uses a shared harness for this, covered in `CLAUDE.md`; it is not needed to run the
+tests above.
 
 ## License
 
