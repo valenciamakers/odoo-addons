@@ -38,25 +38,35 @@ odoo --addons-path=/path/to/odoo-addons,... -d <db> -i vmk_language_sequence
 
 ## Developing
 
-`dev/` holds a Docker harness — Odoo 19 and PostgreSQL 17, with this repo mounted as an addons path:
+Valencia Makers maintains a shared dev harness at `../Tech Stack/odoo-dev` (private; it mounts Odoo
+Enterprise, which we cannot redistribute). It mounts all three of our module repos at once in
+production's addons order, keeps its databases across a restart, and can restore a neutered copy of
+production data.
+
+Working from a clone of this repo alone, the equivalent is a two-service Compose file — Postgres 17
+and `odoo:19` with the repo root mounted at `/mnt/extra-addons`:
 
 ```bash
-cd dev
 docker compose up -d db
-docker compose run --rm odoo odoo -d test --init vmk_language_sequence --stop-after-init
-docker compose run --rm odoo odoo -d test -u vmk_language_sequence \
-    --test-enable --test-tags /vmk_language_sequence --stop-after-init
-docker compose down
+
+# create a database and install a module (post_init_hook runs on install only)
+docker compose run --rm odoo odoo -d test --init vmk_language_sequence --without-demo=all --stop-after-init
+
+# run that module's tests
+docker compose run --rm odoo odoo -d test -u vmk_language_sequence --test-enable --test-tags /vmk_language_sequence --stop-after-init
+
+# serve on localhost:8069
+docker compose up -d odoo
 ```
 
-`CLAUDE.md` documents the harness's sharp edges, plus a catalogue of Odoo 19 behaviours that cost us
-time — all verified against real Odoo source rather than against documentation.
+`.claude/CLAUDE.md` documents the harness's sharp edges, plus a catalogue of Odoo 19 behaviours that
+cost us time — all verified against real Odoo source rather than against documentation.
 
 ## Contributing
 
-Issues and pull requests are welcome. These are maintained for our own use first, so a change that
-suits your deployment but not ours may be happier as a fork, and no hard feelings — the licences
-here are chosen to keep forking open, not to close it.
+Issues and pull requests are welcome. These addons are maintained for our own use first, so a change
+that suits your deployment but not ours may be happier as a fork, and no hard feelings — the
+licences here are chosen to keep forking open, not to close it.
 
 We have no CLA, which means we cannot relicense contributed code. Bear that in mind if you send
 something substantial.

@@ -20,7 +20,6 @@ remotes differ by one word, so check which one you are pushing to.
 - **`vmk_partner_email_multiple`** — several email addresses per contact, matched by Odoo's own
   machinery, and kept rather than dropped when contacts are merged.
 - The local test harness is `../Tech Stack/odoo-dev`, shared with our other two Odoo module repos.
-  The `dev/` directory that used to live here was retired on 2026-08-19.
 
 Read the existing modules' `README.md` files before writing another; between them they document most
 of the traps below in context.
@@ -29,43 +28,34 @@ of the traps below in context.
 
 `~/.claude/rules/git-workflow.md` says to commit as `Claude <claude@pvt.jfe.xyz>` with no
 `Co-Authored-By` trailer. **That does not apply here.** This repo is published, so its history
-should attribute to the maintainer and link on GitHub, with assistance disclosed rather than
-substituted for authorship.
+should attribute to the maintainer in order to link properly on GitHub.
 
 - **Author and commit as Felix.** That is already the global git identity, so a plain `git commit`
   is correct — no `-c user.name=…` overrides.
-- **Add one trailer to commits Claude wrote**, and nothing else — no "Generated with" line:
+- **Add no trailers to commits Claude writes**, no "Generated with" line, no "Co-Authored-By".
 
-  ```
-  Co-Authored-By: Claude <noreply@anthropic.com>
-  ```
+Signing commits: `commit.gpgsign` is on globally and signs with Felix's SSH key through 1Password,
+so commits still fail while the vault is locked, which is expected and not worth investigating.
 
-  Commits Felix writes get no trailer.
-
-The whole history was rewritten to this convention on 2026-08-13 and is uniform; keep it that way.
-Signing is unaffected — `commit.gpgsign` is on globally and signs with Felix's SSH key through
-1Password whoever the author is, so commits still fail while the vault is locked, which is expected
-and not worth investigating. The rewritten history is itself unsigned, because rewriting invalidates
-signatures.
-
-**Only this repo.** `../Odoo Addons - External` and every other repo keep the machine-wide
-convention. Everything else in `git-workflow.md` still holds here: one topic per commit, imperative
-subject, a `-` bullet body explaining the why, never `git add -A`, and never push — Felix does that.
+**Only follow this commit pattern in this repo.** `../Odoo Addons - External` and every other repo
+keep the project-wide convention. Everything else in `git-workflow.md` still holds here: one topic
+per commit, imperative subject, a `-` bullet body explaining the why, never `git add -A`, and never
+`git push` — Felix does that.
 
 ## Testing locally
 
 Modules here install by name against a local Odoo 19 with this repo on the addons path.
 
-Valencia Makers uses a shared harness at `../Tech Stack/odoo-dev` (private — it mounts Odoo
-Enterprise, which we may not redistribute). It mounts all three of our module repos at once in
+Valencia Makers uses a shared harness at `../Tech Stack/odoo-dev` (private; it mounts Odoo
+Enterprise, which we cannot redistribute). It mounts all three of our module repos at once in
 production's addons order, keeps its databases across a restart, and can restore a neutered copy of
 production data:
 
 ```bash
 cd "../Tech Stack/odoo-dev"
 ./odev install vmk_language_sequence
-./odev test    vmk_language_sequence
-./odev up                                 # serve on localhost:8069
+./odev test vmk_language_sequence
+./odev up # serve on localhost:8069
 ```
 
 Working from a clone of this repo alone, the equivalent is a two-service Compose file — Postgres 17
@@ -75,14 +65,13 @@ and `odoo:19` with the repo root mounted at `/mnt/extra-addons`:
 docker compose up -d db
 
 # create a database and install a module (post_init_hook runs on install only)
-docker compose run --rm odoo odoo -d test --init vmk_language_sequence \
-    --without-demo=all --stop-after-init
+docker compose run --rm odoo odoo -d test --init vmk_language_sequence --without-demo=all --stop-after-init
 
 # run that module's tests
-docker compose run --rm odoo odoo -d test -u vmk_language_sequence \
-    --test-enable --test-tags /vmk_language_sequence --stop-after-init
+docker compose run --rm odoo odoo -d test -u vmk_language_sequence --test-enable --test-tags /vmk_language_sequence --stop-after-init
 
-docker compose up -d odoo          # serve on localhost:8069
+# serve on localhost:8069
+docker compose up -d odoo
 ```
 
 Two modules here will mislead you on Community, though. `web_enterprise` replaces both the apps grid
