@@ -174,6 +174,19 @@ in `web/static/src/**`, not in Python. Half the surprises below live there.
 - **A `--` inside an XML comment is a parse error** —
   `XMLSyntaxError: Double hyphen within comment`, which fails the install outright. Our prose style
   uses `--` as a dash, so this catches you in data files specifically; use a comma or rephrase.
+- **The search bar's relative date ranges exclude today, by design.**
+  `web/static/src/core/tree_editor/virtual_operators.js:187` maps "last 7 days" to the bounds
+  `(today -7d, today)`, each rendered as `datetime.combine(<day>, time(0, 0, 0)).to_utc()` — so the
+  upper bound is _this_ morning's midnight and nothing created today matches. Every "last N" entry
+  ends on a completed period that way, while `today`, `month to date` and `year to date` carry
+  `days = 1` on the upper bound and do include the current day. A rolling window that includes today
+  needs a lower-bound-only domain, or an `any of` with `today`.
+- **A saved favourite keeps its domain unevaluated, so relative filters stay rolling.**
+  `search_model.js:1994` serialises with `raw: true`, and `_getDomain` ends
+  `return params.raw ? domain : domain.toList(this.domainEvalContext)` — `context_today()` is stored
+  as text in `ir.filters.domain` and re-evaluated on every use rather than frozen to the day it was
+  saved. `ir.filters.model_id` is a **Selection** of model names despite the `_id`, so a data record
+  writes the literal `res.partner`, never a `ref=`.
 - **A `state="code"` server action only shows its Run button when `model_id` is `ir.actions.server`
   itself.** `view_server_action_form` carries
   `invisible="model_name != 'ir.actions.server' or state != 'code'"`, and `model_name` is
