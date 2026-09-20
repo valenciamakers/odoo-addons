@@ -17,6 +17,7 @@ remotes differ by one word, so check which one you are pushing to.
 - **`vmk_apps_menu_sort`** — alphabetical ordering of the apps on the main menu.
 - **`vmk_apps_page_sort`** — alphabetical ordering of the Apps page, by displayed name.
 - **`vmk_settings_sort`** — alphabetical ordering of the Settings sidebar and Technical groupings.
+- **`vmk_event_host`** — who runs an event, as contacts; several per event.
 - **`vmk_partner_email_multiple`** — several email addresses per contact, matched by Odoo's own
   machinery, and kept rather than dropped when contacts are merged.
 - The local test harness is `../Tech Stack/odoo-dev`, shared with our other two Odoo module repos.
@@ -419,9 +420,9 @@ in a file Odoo loads; a README does not.
 This applies in `../Odoo Addons - Private` as well, which defers to this file.
 
 **We license our modules AGPL-3**, and **LGPL-3** where the module is meant to be depended on —
-currently only `vmk_partner_email_multiple`. Both are exact members of the `Selection` on
-`ir.module.module`, so the manifest string is just `"license": "AGPL-3"`, with the matching text in
-a `LICENSE` file beside the manifest.
+currently `vmk_partner_email_multiple` and `vmk_event_host`. Both are exact members of the
+`Selection` on `ir.module.module`, so the manifest string is just `"license": "AGPL-3"`, with the
+matching text in a `LICENSE` file beside the manifest.
 
 The choice follows the OCA's: copyleft by default, LGPL for what others build on. The reasoning is
 that MIT does not merely fail to prevent someone repackaging a module and selling it closed — it
@@ -435,6 +436,12 @@ stated reason is one nobody can revisit safely. AGPL-3 is the default; depart fr
   This is why `vmk_partner_email_multiple` is LGPL: several addresses per contact is a gap in Odoo
   that nothing free fills, and AGPL would push authors towards reimplementing it instead of
   depending on it. Modifying and redistributing the module itself still requires source either way.
+- **One of our own proprietary modules depends on it** — LGPL-3, because Odoo's licence
+  compatibility table (in its [Apps FAQ](https://apps.odoo.com/apps/faq)) lets an `OPL-1` or
+  `OEEL-1` module depend on LGPL-3 but **not** on AGPL-3. This is why `vmk_event_host` is LGPL:
+  `vmk_event_sessions` in `../Odoo Addons - Private` is proprietary, and the glue module putting a
+  host on a session depends on both. AGPL here would leave that glue with no licence it could
+  legally carry. Added 2026-09-20.
 - **The module genuinely needs to copy core implementation.** Where an override cannot express the
   change and a core method has to be lifted and edited, that block stays LGPL-3. Relicensing the
   module to match is more honest than contorting the design to avoid the copy.
