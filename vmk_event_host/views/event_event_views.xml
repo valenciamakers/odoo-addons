@@ -9,7 +9,9 @@
             <!-- Anchored on fields and named pages rather than the root tag,
                  which survives core renaming its own elements. -->
             <field name="user_id" position="after">
-                <field name="vmk_host_names" placeholder="Added in the Hosts tab"/>
+                <field name="vmk_host_names" widget="vmk_host_summary"
+                       options="{'page': 'vmk_hosts'}"
+                       placeholder="Added in the Hosts tab"/>
             </field>
             <page name="tickets" position="after">
                 <page string="Hosts" name="vmk_hosts">

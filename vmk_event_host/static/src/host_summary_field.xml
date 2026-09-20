@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+
+    <t t-name="vmk_event_host.HostSummaryField">
+        <button type="button" t-ref="root" t-on-click="showPage"
+                class="btn btn-link p-0 border-0 text-start align-baseline"
+                t-att-aria-label="label">
+            <span t-if="value" t-esc="value"/>
+            <span t-else="" class="text-muted" t-esc="props.placeholder"/>
+        </button>
+    </t>
+
+</templates>

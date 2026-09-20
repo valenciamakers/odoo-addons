@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e-20260817\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-20 12:13+0000\n"
-"PO-Revision-Date: 2026-09-20 12:13+0000\n"
+"POT-Creation-Date: 2026-09-20 12:22+0000\n"
+"PO-Revision-Date: 2026-09-20 12:22+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ca\n"
@@ -30,6 +30,12 @@ msgstr "Amfitrions de l'esdeveniment"
 #: model:ir.module.module,summary:base.module_vmk_event_host
 msgid "Record who runs an event, as one or more contacts"
 msgstr "Registreu qui dirigeix un esdeveniment, com un o més contactes"
+
+#. module: vmk_event_host
+#. odoo-javascript
+#: code:addons/vmk_event_host/static/src/host_summary_field.js:0
+msgid "%s — show the Hosts tab"
+msgstr "%s — mostrar la pestanya Amfitrions"
 
 #. module: vmk_event_host
 #: model:ir.model.constraint,message:vmk_event_host.constraint_vmk_event_host_partner_event_uniq
@@ -86,6 +92,12 @@ msgid "Host Lines"
 msgstr "Línies d'amfitrió"
 
 #. module: vmk_event_host
+#. odoo-javascript
+#: code:addons/vmk_event_host/static/src/host_summary_field.js:0
+msgid "Host summary"
+msgstr "Resum d'amfitrions"
+
+#. module: vmk_event_host
 #: model:ir.model.fields,field_description:vmk_event_host.field_event_event__vmk_host_names
 #: model:ir.model.fields,field_description:vmk_event_host.field_event_event__vmk_host_partner_ids
 #: model_terms:ir.ui.view,arch_db:vmk_event_host.view_event_form_host
@@ -114,6 +126,18 @@ msgid "Lead, Assistant, Guest speaker…"
 msgstr "Principal, Ajudant, Ponent convidat…"
 
 #. module: vmk_event_host
+#. odoo-javascript
+#: code:addons/vmk_event_host/static/src/host_summary_field.js:0
+msgid "Name of the notebook page this summary opens."
+msgstr "Nom de la pestanya que obre aquest resum."
+
+#. module: vmk_event_host
+#. odoo-javascript
+#: code:addons/vmk_event_host/static/src/host_summary_field.js:0
+msgid "Notebook page"
+msgstr "Pestanya"
+
+#. module: vmk_event_host
 #: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__role
 msgid "Role"
 msgstr "Rol"
@@ -122,6 +146,12 @@ msgstr "Rol"
 #: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__sequence
 msgid "Sequence"
 msgstr "Seqüència"
+
+#. module: vmk_event_host
+#. odoo-javascript
+#: code:addons/vmk_event_host/static/src/host_summary_field.js:0
+msgid "Show the Hosts tab"
+msgstr "Mostrar la pestanya Amfitrions"
 
 #. module: vmk_event_host
 #: model:ir.model.fields,help:vmk_event_host.field_vmk_event_host__partner_id

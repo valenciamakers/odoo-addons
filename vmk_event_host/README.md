@@ -40,6 +40,21 @@ order. A one2many keeps the order it was read in until the cache is invalidated,
 within the same transaction. Without the explicit `sorted()`, the header lagged a drag by one save.
 A test covers it.
 
+## The summary opens the tab
+
+Clicking the header summary switches the form to the Hosts tab, so the field behaves like any other
+field that takes you where you can edit it.
+
+`vmk_host_summary` is a small field widget doing that. **The notebook keeps its active page in
+component state with no public way in** (`web/static/src/core/notebook/notebook.js`), so the widget
+clicks the tab the user would have clicked. That tab is findable by name rather than by position or
+label, because `Notebook`'s template renders `t-att-name` on each `.nav-link`; the page to open is a
+field option (`options="{'page': 'vmk_hosts'}"`) rather than hard-coded.
+
+It renders a real `<button>`, not a styled `<div>`: a div is invisible to the keyboard and to a
+screen reader. Its accessible name says what the control does rather than only what it reads — "Ada
+Lovelace, Zoe — show the Hosts tab" — with the visible text kept as a substring, per WCAG 2.5.3.
+
 ## Other decisions
 
 **Prefixed field names.** `vmk_host_ids`, not `host_ids`. Field names on a core model are a shared
