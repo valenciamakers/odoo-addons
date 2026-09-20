@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Mirrors event.ir_rule_event_event_ticket_company: a host line is
+             reachable exactly when its event is. -->
+        <record id="ir_rule_vmk_event_host_company" model="ir.rule">
+            <field name="name">Event/Host: multi-company</field>
+            <field name="model_id" ref="model_vmk_event_host"/>
+            <field name="domain_force">[('event_id.company_id', 'in', company_ids + [False])]</field>
+        </record>
+
+    </data>
+</odoo>

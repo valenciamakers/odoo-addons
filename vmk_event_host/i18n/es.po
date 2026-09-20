@@ -2,16 +2,17 @@
 # This file contains the translation of the following modules:
 # 	* vmk_event_host
 #
-# Terms this module shares with core take core's own wording: "Evento" and
-# "Nombre para mostrar" come from event and base respectively, so the module
-# reads as part of the backend.
+# Terms this module shares with core take core's own wording, out of base and
+# event's catalogues, so the module reads as part of the backend. The two
+# `base.module_vmk_event_host` entries are the module's own name and summary,
+# which `i18n export` never emits (see the POT).
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e-20260817\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-20 11:51+0000\n"
-"PO-Revision-Date: 2026-09-20 11:51+0000\n"
+"POT-Creation-Date: 2026-09-20 12:13+0000\n"
+"PO-Revision-Date: 2026-09-20 12:13+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es\n"
@@ -31,36 +32,106 @@ msgid "Record who runs an event, as one or more contacts"
 msgstr "Registre quién dirige un evento, como uno o varios contactos"
 
 #. module: vmk_event_host
+#: model:ir.model.constraint,message:vmk_event_host.constraint_vmk_event_host_partner_event_uniq
+msgid "A contact can only be listed once as a host of an event."
+msgstr "Un contacto solo puede figurar una vez como anfitrión de un evento."
+
+#. module: vmk_event_host
+#: model_terms:ir.ui.view,arch_db:vmk_event_host.view_event_form_host
+msgid "Added in the Hosts tab"
+msgstr "Se añaden en la pestaña Anfitriones"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__company_id
+msgid "Company"
+msgstr "Compañía"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__create_date
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: vmk_event_host
 #: model:ir.model.fields,field_description:vmk_event_host.field_event_event__display_name
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__display_name
 msgid "Display Name"
 msgstr "Nombre para mostrar"
 
 #. module: vmk_event_host
 #: model:ir.model,name:vmk_event_host.model_event_event
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__event_id
 msgid "Event"
 msgstr "Evento"
 
 #. module: vmk_event_host
+#: model:ir.model,name:vmk_event_host.model_vmk_event_host
+msgid "Event Host"
+msgstr "Anfitrión del evento"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__partner_id
 #: model_terms:ir.ui.view,arch_db:vmk_event_host.view_event_search_host
 msgid "Host"
 msgstr "Anfitrión"
 
 #. module: vmk_event_host
 #: model:ir.model.fields,field_description:vmk_event_host.field_event_event__vmk_host_ids
+msgid "Host Lines"
+msgstr "Líneas de anfitrión"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_event_event__vmk_host_names
+#: model:ir.model.fields,field_description:vmk_event_host.field_event_event__vmk_host_partner_ids
+#: model_terms:ir.ui.view,arch_db:vmk_event_host.view_event_form_host
 msgid "Hosts"
 msgstr "Anfitriones"
 
 #. module: vmk_event_host
 #: model:ir.model.fields,field_description:vmk_event_host.field_event_event__id
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__id
 msgid "ID"
 msgstr "ID"
 
 #. module: vmk_event_host
-#: model:ir.model.fields,help:vmk_event_host.field_event_event__vmk_host_ids
-msgid "The people running the event: speakers, teachers or facilitators."
-msgstr "Las personas que dirigen el evento: ponentes, profesores o facilitadores."
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__write_uid
+msgid "Last Updated by"
+msgstr "Última actualización por"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__write_date
+msgid "Last Updated on"
+msgstr "Última actualización el"
 
 #. module: vmk_event_host
 #: model_terms:ir.ui.view,arch_db:vmk_event_host.view_event_form_host
-msgid "Who is running this event?"
-msgstr "¿Quién dirige este evento?"
+msgid "Lead, Assistant, Guest speaker…"
+msgstr "Principal, Ayudante, Ponente invitado…"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__role
+msgid "Role"
+msgstr "Rol"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__sequence
+msgid "Sequence"
+msgstr "Secuencia"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,help:vmk_event_host.field_vmk_event_host__partner_id
+msgid "The person running the event: a speaker, teacher or facilitator."
+msgstr "La persona que dirige el evento: un ponente, profesor o facilitador."
+
+#. module: vmk_event_host
+#: model:ir.model.fields,help:vmk_event_host.field_vmk_event_host__role
+msgid ""
+"What this host does, when it is worth saying: Lead, Assistant, Guest "
+"speaker."
+msgstr ""
+"Qué hace este anfitrión, cuando merece la pena indicarlo: Principal, "
+"Ayudante, Ponente invitado."

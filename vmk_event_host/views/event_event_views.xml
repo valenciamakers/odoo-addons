@@ -6,12 +6,22 @@
         <field name="model">event.event</field>
         <field name="inherit_id" ref="event.view_event_form"/>
         <field name="arch" type="xml">
-            <!-- Anchored on a field rather than the form tag, which survives
-                 core renaming its own elements. -->
+            <!-- Anchored on fields and named pages rather than the root tag,
+                 which survives core renaming its own elements. -->
             <field name="user_id" position="after">
-                <field name="vmk_host_ids" widget="many2many_tags"
-                       placeholder="Who is running this event?"/>
+                <field name="vmk_host_names" placeholder="Added in the Hosts tab"/>
             </field>
+            <page name="tickets" position="after">
+                <page string="Hosts" name="vmk_hosts">
+                    <field name="vmk_host_ids">
+                        <list string="Hosts" editable="bottom">
+                            <field name="sequence" widget="handle"/>
+                            <field name="partner_id"/>
+                            <field name="role" placeholder="Lead, Assistant, Guest speaker…"/>
+                        </list>
+                    </field>
+                </page>
+            </page>
         </field>
     </record>
 
@@ -21,7 +31,7 @@
         <field name="inherit_id" ref="event.view_event_tree"/>
         <field name="arch" type="xml">
             <field name="user_id" position="after">
-                <field name="vmk_host_ids" widget="many2many_tags" optional="hide"/>
+                <field name="vmk_host_partner_ids" widget="many2many_tags" optional="hide"/>
             </field>
         </field>
     </record>
@@ -32,11 +42,11 @@
         <field name="inherit_id" ref="event.view_event_search"/>
         <field name="arch" type="xml">
             <field name="user_id" position="after">
-                <field name="vmk_host_ids"/>
+                <field name="vmk_host_partner_ids" string="Host"/>
             </field>
             <filter name="venue" position="after">
-                <filter string="Host" name="vmk_host_ids"
-                        context="{'group_by': 'vmk_host_ids'}"/>
+                <filter string="Host" name="vmk_host_partner_ids"
+                        context="{'group_by': 'vmk_host_partner_ids'}"/>
             </filter>
         </field>
     </record>

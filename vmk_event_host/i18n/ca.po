@@ -3,15 +3,16 @@
 # 	* vmk_event_host
 #
 # Odoo 19 has no Valencian variant, so ca_ES is what a Valencian speaker
-# selects. Terms shared with core take core's own wording: "Esdeveniment"
-# and "Nom mostrat" come from event and base respectively.
+# selects. Terms shared with core take core's own wording. The two
+# `base.module_vmk_event_host` entries are the module's own name and summary,
+# which `i18n export` never emits (see the POT).
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e-20260817\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-20 11:51+0000\n"
-"PO-Revision-Date: 2026-09-20 11:51+0000\n"
+"POT-Creation-Date: 2026-09-20 12:13+0000\n"
+"PO-Revision-Date: 2026-09-20 12:13+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ca\n"
@@ -31,38 +32,108 @@ msgid "Record who runs an event, as one or more contacts"
 msgstr "Registreu qui dirigeix un esdeveniment, com un o més contactes"
 
 #. module: vmk_event_host
+#: model:ir.model.constraint,message:vmk_event_host.constraint_vmk_event_host_partner_event_uniq
+msgid "A contact can only be listed once as a host of an event."
+msgstr ""
+"Un contacte només pot figurar una vegada com a amfitrió d'un esdeveniment."
+
+#. module: vmk_event_host
+#: model_terms:ir.ui.view,arch_db:vmk_event_host.view_event_form_host
+msgid "Added in the Hosts tab"
+msgstr "S'afegeixen a la pestanya Amfitrions"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__company_id
+msgid "Company"
+msgstr "Empresa"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__create_uid
+msgid "Created by"
+msgstr "Creat per"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__create_date
+msgid "Created on"
+msgstr "Creat el"
+
+#. module: vmk_event_host
 #: model:ir.model.fields,field_description:vmk_event_host.field_event_event__display_name
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__display_name
 msgid "Display Name"
 msgstr "Nom mostrat"
 
 #. module: vmk_event_host
 #: model:ir.model,name:vmk_event_host.model_event_event
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__event_id
 msgid "Event"
 msgstr "Esdeveniment"
 
 #. module: vmk_event_host
+#: model:ir.model,name:vmk_event_host.model_vmk_event_host
+msgid "Event Host"
+msgstr "Amfitrió de l'esdeveniment"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__partner_id
 #: model_terms:ir.ui.view,arch_db:vmk_event_host.view_event_search_host
 msgid "Host"
 msgstr "Amfitrió"
 
 #. module: vmk_event_host
 #: model:ir.model.fields,field_description:vmk_event_host.field_event_event__vmk_host_ids
+msgid "Host Lines"
+msgstr "Línies d'amfitrió"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_event_event__vmk_host_names
+#: model:ir.model.fields,field_description:vmk_event_host.field_event_event__vmk_host_partner_ids
+#: model_terms:ir.ui.view,arch_db:vmk_event_host.view_event_form_host
 msgid "Hosts"
 msgstr "Amfitrions"
 
 #. module: vmk_event_host
 #: model:ir.model.fields,field_description:vmk_event_host.field_event_event__id
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__id
 msgid "ID"
 msgstr "ID"
 
 #. module: vmk_event_host
-#: model:ir.model.fields,help:vmk_event_host.field_event_event__vmk_host_ids
-msgid "The people running the event: speakers, teachers or facilitators."
-msgstr ""
-"Les persones que dirigeixen l'esdeveniment: ponents, professors o "
-"facilitadors."
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__write_uid
+msgid "Last Updated by"
+msgstr "Última actualització per"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__write_date
+msgid "Last Updated on"
+msgstr "Última actualització el"
 
 #. module: vmk_event_host
 #: model_terms:ir.ui.view,arch_db:vmk_event_host.view_event_form_host
-msgid "Who is running this event?"
-msgstr "Qui dirigeix aquest esdeveniment?"
+msgid "Lead, Assistant, Guest speaker…"
+msgstr "Principal, Ajudant, Ponent convidat…"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__role
+msgid "Role"
+msgstr "Rol"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__sequence
+msgid "Sequence"
+msgstr "Seqüència"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,help:vmk_event_host.field_vmk_event_host__partner_id
+msgid "The person running the event: a speaker, teacher or facilitator."
+msgstr ""
+"La persona que dirigeix l'esdeveniment: un ponent, professor o facilitador."
+
+#. module: vmk_event_host
+#: model:ir.model.fields,help:vmk_event_host.field_vmk_event_host__role
+msgid ""
+"What this host does, when it is worth saying: Lead, Assistant, Guest "
+"speaker."
+msgstr ""
+"Què fa aquest amfitrió, quan val la pena indicar-ho: Principal, Ajudant, "
+"Ponent convidat."
