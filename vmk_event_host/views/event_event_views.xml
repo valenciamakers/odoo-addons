@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_event_form_host" model="ir.ui.view">
+        <field name="name">event.event.form.host</field>
+        <field name="model">event.event</field>
+        <field name="inherit_id" ref="event.view_event_form"/>
+        <field name="arch" type="xml">
+            <!-- Anchored on a field rather than the form tag, which survives
+                 core renaming its own elements. -->
+            <field name="user_id" position="after">
+                <field name="vmk_host_ids" widget="many2many_tags"
+                       placeholder="Who is running this event?"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_event_tree_host" model="ir.ui.view">
+        <field name="name">event.event.list.host</field>
+        <field name="model">event.event</field>
+        <field name="inherit_id" ref="event.view_event_tree"/>
+        <field name="arch" type="xml">
+            <field name="user_id" position="after">
+                <field name="vmk_host_ids" widget="many2many_tags" optional="hide"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_event_search_host" model="ir.ui.view">
+        <field name="name">event.event.search.host</field>
+        <field name="model">event.event</field>
+        <field name="inherit_id" ref="event.view_event_search"/>
+        <field name="arch" type="xml">
+            <field name="user_id" position="after">
+                <field name="vmk_host_ids"/>
+            </field>
+            <filter name="venue" position="after">
+                <filter string="Host" name="vmk_host_ids"
+                        context="{'group_by': 'vmk_host_ids'}"/>
+            </filter>
+        </field>
+    </record>
+
+</odoo>

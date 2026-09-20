@@ -1,0 +1,68 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* vmk_event_host
+#
+# Odoo 19 has no Valencian variant, so ca_ES is what a Valencian speaker
+# selects. Terms shared with core take core's own wording: "Esdeveniment"
+# and "Nom mostrat" come from event and base respectively.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0+e-20260817\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-20 11:51+0000\n"
+"PO-Revision-Date: 2026-09-20 11:51+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ca\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_vmk_event_host
+msgid "Event Hosts"
+msgstr "Amfitrions de l'esdeveniment"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_vmk_event_host
+msgid "Record who runs an event, as one or more contacts"
+msgstr "Registreu qui dirigeix un esdeveniment, com un o més contactes"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_event_event__display_name
+msgid "Display Name"
+msgstr "Nom mostrat"
+
+#. module: vmk_event_host
+#: model:ir.model,name:vmk_event_host.model_event_event
+msgid "Event"
+msgstr "Esdeveniment"
+
+#. module: vmk_event_host
+#: model_terms:ir.ui.view,arch_db:vmk_event_host.view_event_search_host
+msgid "Host"
+msgstr "Amfitrió"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_event_event__vmk_host_ids
+msgid "Hosts"
+msgstr "Amfitrions"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_event_event__id
+msgid "ID"
+msgstr "ID"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,help:vmk_event_host.field_event_event__vmk_host_ids
+msgid "The people running the event: speakers, teachers or facilitators."
+msgstr ""
+"Les persones que dirigeixen l'esdeveniment: ponents, professors o "
+"facilitadors."
+
+#. module: vmk_event_host
+#: model_terms:ir.ui.view,arch_db:vmk_event_host.view_event_form_host
+msgid "Who is running this event?"
+msgstr "Qui dirigeix aquest esdeveniment?"

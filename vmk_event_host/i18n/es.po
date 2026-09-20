@@ -1,0 +1,66 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* vmk_event_host
+#
+# Terms this module shares with core take core's own wording: "Evento" and
+# "Nombre para mostrar" come from event and base respectively, so the module
+# reads as part of the backend.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0+e-20260817\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-20 11:51+0000\n"
+"PO-Revision-Date: 2026-09-20 11:51+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_vmk_event_host
+msgid "Event Hosts"
+msgstr "Anfitriones del evento"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_vmk_event_host
+msgid "Record who runs an event, as one or more contacts"
+msgstr "Registre quién dirige un evento, como uno o varios contactos"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_event_event__display_name
+msgid "Display Name"
+msgstr "Nombre para mostrar"
+
+#. module: vmk_event_host
+#: model:ir.model,name:vmk_event_host.model_event_event
+msgid "Event"
+msgstr "Evento"
+
+#. module: vmk_event_host
+#: model_terms:ir.ui.view,arch_db:vmk_event_host.view_event_search_host
+msgid "Host"
+msgstr "Anfitrión"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_event_event__vmk_host_ids
+msgid "Hosts"
+msgstr "Anfitriones"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_event_event__id
+msgid "ID"
+msgstr "ID"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,help:vmk_event_host.field_event_event__vmk_host_ids
+msgid "The people running the event: speakers, teachers or facilitators."
+msgstr "Las personas que dirigen el evento: ponentes, profesores o facilitadores."
+
+#. module: vmk_event_host
+#: model_terms:ir.ui.view,arch_db:vmk_event_host.view_event_form_host
+msgid "Who is running this event?"
+msgstr "¿Quién dirige este evento?"
