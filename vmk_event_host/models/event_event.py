@@ -21,7 +21,9 @@ class EventEvent(models.Model):
     # contradict the order set in the Hosts tab, which is the whole point of
     # the line model.
     vmk_host_names = fields.Char(
-        string="Hosts",
+        # Not "Hosts": two fields on one model sharing a label makes Odoo warn
+        # on every upgrade, and the form labels this one itself.
+        string="Host Summary",
         compute="_compute_vmk_host_names",
     )
     # Ordering is why the line model exists, and it costs the search view its
