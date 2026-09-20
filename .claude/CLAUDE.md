@@ -396,6 +396,13 @@ claiming its old version makes every later question — did this deploy, is prod
 build has the fix — unanswerable. `./odev doctor` reads `latest_version` straight from
 `ir_module_module`, so a stale number misreports there too.
 
+**The unit is a release, not an edit.** Iterating on a module within one working session — writing
+it, reworking it, fixing what the first version got wrong — is one version, however many commits it
+takes, because nothing could have been installed from any intermediate state. Bump when time has
+passed and a build could have gone somewhere: deployed, published, or handed over. Felix,
+2026-09-20, on a module that reached `19.0.2.4.0` before it existed anywhere but this laptop:
+_"releasing a new module at 2.4.0 seems weird."_ Added 2026-09-20.
+
 Odoo prefixes its own series, leaving three digits that we use as plain semver:
 
 ```
