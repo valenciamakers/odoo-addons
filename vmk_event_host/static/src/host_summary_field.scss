@@ -1,0 +1,11 @@
+// Copyright 2026 Valencia Makers, SL
+// License LGPL-3 (https://www.gnu.org/licenses/lgpl-3.0.html).
+
+// Bootstrap's reboot gives every enabled button `cursor: pointer`
+// (`button:not(:disabled)`), which makes this control read as a link. It is
+// the field's own value, plain text that happens to be clickable, so it keeps
+// the ordinary cursor. The selector has to out-specify that reboot rule,
+// which is why the wrapper class is in it.
+.o_field_widget button.vmk_field_as_text {
+    cursor: default;
+}

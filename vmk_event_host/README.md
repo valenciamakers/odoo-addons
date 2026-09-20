@@ -55,6 +55,16 @@ It renders a real `<button>`, not a styled `<div>`: a div is invisible to the ke
 screen reader. Its accessible name says what the control does rather than only what it reads — "Ada
 Lovelace, Zoe — show the Hosts tab" — with the visible text kept as a substring, per WCAG 2.5.3.
 
+**The field's label opens the tab too, and that costs no code.** The button carries `props.id`, and
+`web.FormLabel` renders `for="props.id"`; a `<button>` is a labelable element, so the browser
+forwards the label's click to it.
+
+**It is styled as plain text on purpose.** Odoo shows no hyperlinks in this part of a form, so a
+blue underlined value would read as a different kind of thing. The button keeps the field's own
+colour and no underline, and `host_summary_field.scss` puts the ordinary cursor back: Bootstrap's
+reboot sets `cursor: pointer` on every enabled button via `button:not(:disabled)`, so the override
+has to out-specify that rule rather than merely follow it.
+
 ## Other decisions
 
 **Prefixed field names.** `vmk_host_ids`, not `host_ids`. Field names on a core model are a shared

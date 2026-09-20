@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <templates xml:space="preserve">
 
+    <!-- A button, so it is reachable by keyboard and carries an accessible
+         name, but styled as the plain text it replaces: no link colour, no
+         underline, and the default cursor, because nothing in an Odoo form
+         reads as a hyperlink here. Carrying `props.id` is what makes the
+         field's own label activate it: `web.FormLabel` renders
+         `for="props.id"`, and a button is a labelable element. -->
     <t t-name="vmk_event_host.HostSummaryField">
-        <button type="button" t-ref="root" t-on-click="showPage"
-                class="btn btn-link p-0 border-0 text-start align-baseline"
+        <button type="button" t-ref="root" t-att-id="props.id" t-on-click="showPage"
+                class="vmk_field_as_text o_field_char text-reset text-start align-baseline p-0 border-0 bg-transparent"
                 t-att-aria-label="label">
             <span t-if="value" t-esc="value"/>
             <span t-else="" class="text-muted" t-esc="props.placeholder"/>
