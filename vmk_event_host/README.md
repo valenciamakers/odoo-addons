@@ -65,6 +65,19 @@ colour and no underline, and `host_summary_field.scss` puts the ordinary cursor 
 reboot sets `cursor: pointer` on every enabled button via `button:not(:disabled)`, so the override
 has to out-specify that rule rather than merely follow it.
 
+## The Hosts list is left alone on purpose
+
+It behaves like any editable list: the cell shows a pointer, a click puts the row in edit, and the
+contact's internal-link arrow appears only then. That is how core renders a many2one in a list — the
+link button lives in the editable branch of the template, never the readonly one — and how core's
+own contact-in-a-tab list behaves, `account.move`'s Journal Items.
+
+Two overrides were considered in September 2026 and dropped: a text cursor (which needs
+`!important`, because the list renderer's `cursor-pointer` utility is declared that way), and a
+custom cell widget rendering the link arrow on hover. The second is not a core pattern anywhere, so
+it would be ours to keep working across Odoo upgrades, for a module we may sell. Revisit if the
+missing arrow actually costs anyone time.
+
 ## Other decisions
 
 **Prefixed field names.** `vmk_host_ids`, not `host_ids`. Field names on a core model are a shared
