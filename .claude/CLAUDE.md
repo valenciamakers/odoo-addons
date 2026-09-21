@@ -195,6 +195,16 @@ in `web/static/src/**`, not in Python. Half the surprises below live there.
   stays callable from `run()` — so a test calling `run()` still passes — while being unreachable
   from the interface entirely. Assert `model_name` in the test, not just that it runs.
 
+- **A tab's x2many list only gets the full-width treatment when it is the tab's first element.**
+  `form_controller.scss` ("Full width on first x2many") matches `> :first-child` of the tab pane and
+  sets two custom properties on `.o_list_renderer` —
+  `--ListRenderer-margin-x: var(--Notebook-margin-x)` pulls the table out to the form sheet's edges,
+  and `--ListRenderer-table-padding-x: var(--Notebook-padding-x)` repads the cells so the columns
+  land back on the tab's content edge. Put anything above the list — a paragraph, a row of links —
+  and the list silently keeps the default 8px cell padding instead, sitting visibly inset from the
+  text above it. Set those two properties yourself rather than reaching for negative margins: the
+  wrapper's width is not yours to change, and the variables track whatever the sheet padding is.
+
 **Models**
 
 - An inherit-only module needs **no `security/ir.model.access.csv`** — ACLs are per model, and
