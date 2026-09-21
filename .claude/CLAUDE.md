@@ -370,6 +370,24 @@ in `web/static/src/**`, not in Python. Half the surprises below live there.
 
 ## Authoring conventions
 
+**Capitalise by the kind of string, following core.** Measured across every core `.pot` on
+2026-09-21, so it need not be measured again:
+
+| Kind                         | Core writes                   | Evidence                                       |
+| ---------------------------- | ----------------------------- | ---------------------------------------------- |
+| Field labels, column headers | **Title Case**                | 60% Title Case vs 11% sentence, 14,167 strings |
+| Selection values             | **Title Case**, less strictly | 41% vs 14%, 4,268 strings                      |
+| Add-line controls            | **Sentence case**             | "Add a line", "Add a section", "Add a product" |
+| Dialog titles, buttons       | **Title Case**, verb-noun     | "Generate Leads", "Generate Budget"            |
+| Help text, placeholders      | Sentences, full stop          | throughout                                     |
+
+Where both spellings of one idea exist in core, Title Case wins outright: "End Date" 18 to "End
+date" 3, "Start Date" 17 to "Start date" 1. The consequence is that one module legitimately carries
+several capitalisations of the same words — a dialog titled _Generate Event Sessions_ whose button
+says _Generate Sessions_ and whose add-line link says _Generate sessions_. That is three kinds of
+string, not drift, and a translation file lining them up will make it look like drift. Say so in the
+module's notes when it happens.
+
 **Decide what the chatter says, rather than letting it happen.** Felix, 21 September 2026: _"I want
 to make sure we are writing to chatter at the appropriate times. For this module and all we write."_
 A module that writes to a tracked core field produces chatter entries whether or not anyone chose
