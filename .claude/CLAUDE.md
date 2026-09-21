@@ -370,6 +370,31 @@ in `web/static/src/**`, not in Python. Half the surprises below live there.
 
 ## Authoring conventions
 
+**Be a first-class citizen: mimic core, reuse core, and never overwrite it.** Felix, 21 September
+2026: _"we mimic (and reuse from) core as much as possible. We want to be a first-class citizen, and
+care to not overwrite terms, concepts, behaviors."_ An addon that invents its own vocabulary or
+quietly rewrites shared state reads as foreign to anyone who knows Odoo, and breaks in ways nobody
+can attribute to it.
+
+In practice that is four different things, and only one of them saves work:
+
+- **Reuse the component, not the wording.** Where core ships a widget, a view or a field that does
+  the job, use it: those strings then belong to core and never enter our catalogue at all. Copying
+  core's _wording_ into our own field is worth doing for the reader, but it costs exactly the same
+  to translate — a related field carries core's English and still needs our own `.po` entry.
+- **Never assert a translation for a record we do not own.** Every module that `_inherit`s a model
+  gets its own `ir.model.data` xmlid pointing at the _same_ row, so the exporter writes core's model
+  descriptions and inherited field help into our `.pot` under our namespace. Translating them makes
+  our `.po` claim a value for a shared row. `_load_module_terms` defaults to `overwrite=False`, so
+  the ordinary upgrade is safe — but "Update Translations" and `-l` pass `overwrite=True`, and then
+  we clobber whatever core or the user put there. Leave those `msgstr` empty; the importer skips
+  them.
+- **Extend behaviour, do not replace it.** Prefer adding to what core does over patching it out. A
+  patch that stops applying raises nothing, so anything unavoidable gets named in the module's
+  README with the file and line it depends on.
+- **Borrow core's terms in prose.** Core says slot, venue, attendee, registration. Our internal word
+  for an idea — cohort, for one — belongs in comments, never in a label, a message or a tooltip.
+
 **Capitalise by the kind of string, following core.** Measured across every core `.pot` on
 2026-09-21, so it need not be measured again:
 
