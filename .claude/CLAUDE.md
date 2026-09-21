@@ -389,6 +389,15 @@ In practice that is four different things, and only one of them saves work:
   the ordinary upgrade is safe — but "Update Translations" and `-l` pass `overwrite=True`, and then
   we clobber whatever core or the user put there. Leave those `msgstr` empty; the importer skips
   them.
+- **Copy core's translation, not just core's English.** Where a string of ours says what core says,
+  its `msgstr` is core's `msgstr` — looked up in `base/i18n/<lang>.po` or the relevant module's, and
+  pasted verbatim. This is not optional polish: the ORM's automatic fields (`create_uid`,
+  `create_date`, `write_uid`, `write_date`, `display_name`, `id`, `company_id`) land in our `.pot`
+  as rows on _our_ models, so nothing is being overwritten and they do need filling in — but if we
+  translate them ourselves, our model reads "Creado por" where the rest of the backend reads
+  something else, or worse the reverse. Felix, 21 September 2026: _"you should just be copying core
+  terminology when possible. Both in English, and for translations."_ Applies equally to any term we
+  deliberately took from core: having matched the English, match the Spanish and the Catalan.
 - **Extend behaviour, do not replace it.** Prefer adding to what core does over patching it out. A
   patch that stops applying raises nothing, so anything unavoidable gets named in the module's
   README with the file and line it depends on.
