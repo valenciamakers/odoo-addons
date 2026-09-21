@@ -370,6 +370,20 @@ in `web/static/src/**`, not in Python. Half the surprises below live there.
 
 ## Authoring conventions
 
+**Decide what the chatter says, rather than letting it happen.** Felix, 21 September 2026: _"I want
+to make sure we are writing to chatter at the appropriate times. For this module and all we write."_
+A module that writes to a tracked core field produces chatter entries whether or not anyone chose
+them — `vmk_event_sessions` writes `event.event.date_begin`, which core tracks, so adding a session
+logs a date change that never mentions the session. That is the failure mode: not silence, but a
+history that records the side effect instead of the act.
+
+So for each model a module touches, answer three things and write the answer down: whether the
+record deserves `mail.thread` of its own or belongs in its parent's history; which fields are worth
+`tracking=True`, remembering every one of them is a line somebody reads later; and whether a bulk
+action should `message_post` once instead of leaving a dozen tracked changes. Where core already
+tracks a field we write, decide whether its message is the one we want, or whether to post something
+that names what actually happened.
+
 **Name every module `vmk_<what it does>`** — Valencia Makers, not anyone's initials. Apps Store
 technical names are a single global namespace, so an unprefixed generic name like
 `language_sequence` is exactly the kind most likely to collide, and a collision blocks publishing.
