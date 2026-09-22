@@ -10,6 +10,7 @@ from odoo.tests import TransactionCase, tagged
 
 from odoo.addons.vmk_event_registration_cutoff.models.res_config_settings import (
     CUTOFF_PARAM,
+    ENABLED_PARAM,
 )
 
 
@@ -21,6 +22,13 @@ class TestRegistrationCutoff(TransactionCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.now = fields.Datetime.now()
+        # The feature is off until somebody turns it on, so most of what
+        # follows has to turn it on first.
+        cls._enable(cls.env)
+
+    @staticmethod
+    def _enable(env, on=True):
+        env["ir.config_parameter"].sudo().set_param(ENABLED_PARAM, "True" if on else "False")
 
     def _event(self, starts_in_hours, length_hours=8, **extra):
         begin = self.now + timedelta(hours=starts_in_hours)
@@ -57,6 +65,19 @@ class TestRegistrationCutoff(TransactionCase):
 
     def _set_default(self, hours):
         self.env["ir.config_parameter"].sudo().set_param(CUTOFF_PARAM, hours)
+
+    def test_the_feature_is_off_until_enabled(self):
+        """Installing the module must not change how anything sells."""
+        self._enable(self.env, False)
+        event = self._event(starts_in_hours=-1)
+        self.assertGreater(event.date_end, self.now, "core would keep this open")
+        self.assertTrue(event.event_registrations_open)
+
+    def test_an_event_with_its_own_cutoff_needs_no_global_switch(self):
+        """The switch means "by default"; an event that sets one has opted in."""
+        self._enable(self.env, False)
+        event = self._event(starts_in_hours=-1, vmk_cutoff_custom=True, vmk_cutoff_hours=0)
+        self.assertFalse(event.event_registrations_open)
 
     def test_an_event_yet_to_start_is_open(self):
         self.assertTrue(self._event(starts_in_hours=48).event_registrations_open)

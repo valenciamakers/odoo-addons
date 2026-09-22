@@ -18,11 +18,19 @@ already happened.
 
 A cutoff, expressed as a duration before the event starts:
 
-- **A default in Settings → Events → Registration.** `float_time`, so it takes hours and minutes:
-  `1:30` closes registration ninety minutes before the start. Zero closes it as the event begins.
+- **A switch in Settings → Events → Registration**, with the duration beside it. Off by default, so
+  installing the module changes nothing until somebody turns it on — core gates a feature inside an
+  installed module the same way, with `use_event_barcode` on this very page and `use_invoice_terms`
+  in `account`.
+- **The duration is `float_time`,** so it takes hours and minutes: `1:30` closes registration ninety
+  minutes before the start. Zero closes it as the event begins.
 - **A per-event override**, beside the seat limit on the event form. A checkbox turns it on, the way
   core pairs `seats_limited` with `seats_max` — a float alone could not express "no override",
   because zero is a real setting.
+
+An event that sets its own cutoff is opted in whatever the global switch says. The switch means
+"apply a cutoff to events by default", and an event asking for one has answered for itself — so
+turning the feature off stops it applying everywhere it was implicit, and nowhere it was asked for.
 
 ## What it deliberately leaves alone
 

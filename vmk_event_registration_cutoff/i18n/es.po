@@ -20,8 +20,9 @@ msgstr ""
 
 #. module: vmk_event_registration_cutoff
 #: model:ir.model.fields,field_description:vmk_event_registration_cutoff.field_event_event__vmk_cutoff_hours
-msgid "Close Registration (Hours Before Start)"
-msgstr "Cerrar inscripciones (horas antes del inicio)"
+#: model:ir.model.fields,field_description:vmk_event_registration_cutoff.field_res_config_settings__vmk_registration_cutoff_hours
+msgid "Close Registration Before Start"
+msgstr "Cerrar inscripciones antes del inicio"
 
 #. module: vmk_event_registration_cutoff
 #: model:ir.model,name:vmk_event_registration_cutoff.model_res_config_settings
@@ -51,19 +52,14 @@ msgid "Event Slot"
 msgstr "Franja horaria"
 
 #. module: vmk_event_registration_cutoff
-#: model:ir.model.fields,field_description:vmk_event_registration_cutoff.field_res_config_settings__vmk_registration_cutoff_hours
-msgid "Hours Before Start"
-msgstr "Horas antes del inicio"
-
-#. module: vmk_event_registration_cutoff
 #: model:ir.model.fields,help:vmk_event_registration_cutoff.field_res_config_settings__vmk_registration_cutoff_hours
-msgid "Hours before an event starts when registration closes. Zero closes it as the event begins. An event can override this."
-msgstr "Horas antes del inicio de un evento en que se cierran las inscripciones. Cero las cierra cuando el evento empieza. Un evento puede anular este valor."
+msgid "How long before an event starts registration closes. Zero closes it as the event begins. An event can override this."
+msgstr "Cuánto antes del inicio de un evento se cierran las inscripciones. Cero las cierra cuando el evento empieza. Un evento puede anular este valor."
 
 #. module: vmk_event_registration_cutoff
 #: model:ir.model.fields,help:vmk_event_registration_cutoff.field_event_event__vmk_cutoff_hours
-msgid "Hours before this event starts when registration closes."
-msgstr "Horas antes del inicio de este evento en que se cierran las inscripciones."
+msgid "How long before this event starts registration closes."
+msgstr "Cuánto antes del inicio de este evento se cierran las inscripciones."
 
 #. module: vmk_event_registration_cutoff
 #: model:ir.model.fields,field_description:vmk_event_registration_cutoff.field_event_event__id
@@ -73,11 +69,12 @@ msgid "ID"
 msgstr "ID"
 
 #. module: vmk_event_registration_cutoff
-#: model_terms:ir.ui.view,arch_db:vmk_event_registration_cutoff.res_config_settings_view_form
+#: model:ir.model.fields,field_description:vmk_event_registration_cutoff.field_res_config_settings__vmk_registration_cutoff_enabled
 msgid "Registration Cutoff"
 msgstr "Cierre de inscripciones"
 
 #. module: vmk_event_registration_cutoff
+#: model:ir.model.fields,help:vmk_event_registration_cutoff.field_res_config_settings__vmk_registration_cutoff_enabled
 #: model_terms:ir.ui.view,arch_db:vmk_event_registration_cutoff.res_config_settings_view_form
 msgid "Stop selling registrations when an event starts, or a set time before it."
 msgstr "Dejar de vender inscripciones cuando empieza un evento, o un tiempo antes."
@@ -86,9 +83,3 @@ msgstr "Dejar de vender inscripciones cuando empieza un evento, o un tiempo ante
 #: model:ir.model.fields,help:vmk_event_registration_cutoff.field_event_event__vmk_cutoff_custom
 msgid "Use a cutoff for this event instead of the one in Settings."
 msgstr "Usar un cierre para este evento en lugar del de Ajustes."
-
-#. module: vmk_event_registration_cutoff
-#: model_terms:ir.ui.view,arch_db:vmk_event_registration_cutoff.res_config_settings_view_form
-#: model_terms:ir.ui.view,arch_db:vmk_event_registration_cutoff.view_event_form_cutoff
-msgid "hours before the event starts"
-msgstr "horas antes del inicio del evento"

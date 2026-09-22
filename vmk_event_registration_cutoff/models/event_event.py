@@ -5,7 +5,7 @@ from datetime import timedelta
 
 from odoo import api, fields, models
 
-from .res_config_settings import CUTOFF_PARAM
+from .res_config_settings import CUTOFF_PARAM, ENABLED_PARAM
 
 
 class EventEvent(models.Model):
@@ -24,13 +24,21 @@ class EventEvent(models.Model):
     )
 
     def _vmk_cutoff_hours(self):
-        """This event's cutoff, or the global default behind it."""
+        """This event's cutoff in hours, or None where none applies.
+
+        An event that sets its own is opted in whatever the global switch
+        says: the switch means "apply a cutoff to events by default", and an
+        event asking for one has already answered for itself. Turning the
+        feature off therefore stops it applying everywhere it was implicit,
+        and nowhere it was asked for.
+        """
         self.ensure_one()
         if self.vmk_cutoff_custom:
             return self.vmk_cutoff_hours
-        return float(
-            self.env["ir.config_parameter"].sudo().get_param(CUTOFF_PARAM) or 0.0
-        )
+        config = self.env["ir.config_parameter"].sudo()
+        if config.get_param(ENABLED_PARAM) not in ("True", "true", "1"):
+            return None
+        return float(config.get_param(CUTOFF_PARAM) or 0.0)
 
     @api.depends("date_begin", "vmk_cutoff_custom", "vmk_cutoff_hours")
     def _compute_event_registrations_open(self):
@@ -60,7 +68,8 @@ class EventEvent(models.Model):
                 continue
             if any(ticket.end_sale_datetime for ticket in event.event_ticket_ids):
                 continue
-            if not event.date_begin:
+            cutoff = event._vmk_cutoff_hours()
+            if cutoff is None or not event.date_begin:
                 continue
-            if event.date_begin - timedelta(hours=event._vmk_cutoff_hours()) <= now:
+            if event.date_begin - timedelta(hours=cutoff) <= now:
                 event.event_registrations_open = False

@@ -27,8 +27,11 @@ class EventSlot(models.Model):
         if not slots:
             return slots
         now = datetime.now()
-        return slots.filtered(
-            lambda slot: slot.start_datetime
-            - timedelta(hours=slot.event_id._vmk_cutoff_hours())
-            > now
-        )
+
+        def still_open(slot):
+            cutoff = slot.event_id._vmk_cutoff_hours()
+            if cutoff is None:
+                return True
+            return slot.start_datetime - timedelta(hours=cutoff) > now
+
+        return slots.filtered(still_open)
