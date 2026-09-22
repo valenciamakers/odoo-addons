@@ -7,16 +7,21 @@
         <field name="inherit_id" ref="event.view_event_form"/>
         <field name="arch" type="xml">
             <!-- Beside the seat limit, which is the same shape of setting: a
-                 checkbox that turns on a value, and the field it governs. -->
-            <field name="seats_limited" position="after">
+                 checkbox that turns on a value, and the field it governs.
+
+                 Anchored on the div that holds `seats_limited`, not on the
+                 field itself. The field sits inside that div, so `after` on
+                 it puts our label and row inside core's cell, next to core's
+                 own checkbox, rather than starting a row of our own. -->
+            <xpath expr="//field[@name='seats_limited']/.." position="after">
                 <label for="vmk_deadline_custom"/>
-                <div class="o_row">
+                <div>
                     <field name="vmk_deadline_custom"/>
                     <field name="vmk_deadline_hours" widget="float_time"
                            invisible="not vmk_deadline_custom"
-                           class="oe_inline o_input_5ch"/>
+                           class="oe_inline o_input_5ch ms-2"/>
                 </div>
-            </field>
+            </xpath>
         </field>
     </record>
 

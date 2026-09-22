@@ -22,7 +22,7 @@ class ResConfigSettings(models.TransientModel):
         help="Sell tickets only until an event starts, or a set time in advance.",
     )
     vmk_registration_deadline_hours = fields.Float(
-        string="Close Registration Before Start",
+        string="Time Before Start",
         config_parameter=DEADLINE_PARAM,
         help="How long before an event starts registration closes. "
         "Zero closes it as the event begins. An event can override this.",

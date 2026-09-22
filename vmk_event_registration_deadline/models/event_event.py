@@ -15,11 +15,12 @@ class EventEvent(models.Model):
     # `seats_max`. A float alone could not say "no override": zero is a real
     # setting, meaning close exactly as the event begins.
     vmk_deadline_custom = fields.Boolean(
-        string="Custom Registration Deadline",
-        help="Use a deadline for this event instead of the one in Settings.",
+        string="Registration Deadline",
+        help="Use a custom registration deadline for the event, overriding the "
+        "global setting.",
     )
     vmk_deadline_hours = fields.Float(
-        string="Close Registration Before Start",
+        string="Time Before Start",
         help="How long before this event starts registration closes.",
     )
 
