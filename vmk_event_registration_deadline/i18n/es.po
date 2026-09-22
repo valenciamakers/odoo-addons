@@ -5,6 +5,11 @@
 # Terms shared with core take core's own wording, so ./odev terms reports
 # this module clean.
 #
+# The two `base.module_` entries below are the module's own name and summary.
+# They belong to base, not to this module, so `i18n export` never writes them
+# -- and a PO entry with no POT counterpart is dropped in silence. Keep them
+# in all three files. See README.md.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e-20260817\n"
@@ -18,6 +23,16 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_vmk_event_registration_deadline
+msgid "Event Registration Deadline"
+msgstr "Fecha límite de inscripción al evento"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_vmk_event_registration_deadline
+msgid "Sell tickets only until an event starts, or a set time in advance"
+msgstr "Vender entradas solo hasta que empieza un evento, o un tiempo antes"
 
 #. module: vmk_event_registration_deadline
 #: model_terms:ir.ui.view,arch_db:vmk_event_registration_deadline.view_event_form_deadline

@@ -68,6 +68,28 @@ slot. Where a module makes an event's dates follow a series of sessions — `vmk
 — `date_begin` is already the first session's start, so a series gets the right behaviour here
 without this module knowing sessions exist.
 
+## Translations
+
+`i18n/` carries `es` and `ca`, and `./odev terms vmk_event_registration_deadline` reports both clean
+against core. Shared terms — _Event_, _Config Settings_, _Display Name_ — take core's own `msgstr`
+rather than a fresh translation. _Event Slot_ is core's row and core's Catalan leaves it
+untranslated, so ours stays empty rather than asserting a value on a record we do not own.
+
+**The module's own name and summary are hand-maintained**, in the POT as well as both PO files.
+`ir_module.py` registers every module record as `base.module_<name>`, so `odoo i18n export` never
+emits them — and `PoFileReader` merges each PO against its POT and drops whatever the merge marks
+obsolete, so a PO entry with no POT counterpart disappears in silence and the module keeps its
+English name in a Spanish database. `tests/test_translations.py::TestModuleNameTranslation` fails
+loudly if a re-export drops them.
+
+## Nothing reaches the chatter, deliberately
+
+Both fields added to `event.event` carry no `tracking`. A deadline is a sales rule, not a fact about
+the event anyone will later ask when it changed, and `event.event` already tracks the dates a
+deadline is derived from. Writing the override into the chatter would record the setting rather than
+the decision, which is the failure mode worth avoiding: a history that logs the side effect instead
+of the act. Nothing here calls `message_post` either.
+
 ## Testing
 
 ```bash
