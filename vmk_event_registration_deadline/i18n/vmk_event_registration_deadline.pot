@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e-20260817\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-22 11:09+0000\n"
-"PO-Revision-Date: 2026-09-22 11:09+0000\n"
+"POT-Creation-Date: 2026-09-22 11:28+0000\n"
+"PO-Revision-Date: 2026-09-22 11:28+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,19 +16,13 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: vmk_event_registration_deadline
-#: model:ir.model.fields,field_description:vmk_event_registration_deadline.field_event_event__vmk_deadline_hours
-#: model:ir.model.fields,field_description:vmk_event_registration_deadline.field_res_config_settings__vmk_registration_deadline_hours
-msgid "Close Registration Before Start"
+#: model_terms:ir.ui.view,arch_db:vmk_event_registration_deadline.view_event_form_deadline
+msgid "Before Start"
 msgstr ""
 
 #. module: vmk_event_registration_deadline
 #: model:ir.model,name:vmk_event_registration_deadline.model_res_config_settings
 msgid "Config Settings"
-msgstr ""
-
-#. module: vmk_event_registration_deadline
-#: model:ir.model.fields,field_description:vmk_event_registration_deadline.field_event_event__vmk_deadline_custom
-msgid "Custom Registration Deadline"
 msgstr ""
 
 #. module: vmk_event_registration_deadline
@@ -68,6 +62,7 @@ msgid "ID"
 msgstr ""
 
 #. module: vmk_event_registration_deadline
+#: model:ir.model.fields,field_description:vmk_event_registration_deadline.field_event_event__vmk_deadline_custom
 #: model:ir.model.fields,field_description:vmk_event_registration_deadline.field_res_config_settings__vmk_registration_deadline_enabled
 msgid "Registration Deadline"
 msgstr ""
@@ -79,6 +74,14 @@ msgid "Sell tickets only until an event starts, or a set time in advance."
 msgstr ""
 
 #. module: vmk_event_registration_deadline
+#: model:ir.model.fields,field_description:vmk_event_registration_deadline.field_event_event__vmk_deadline_hours
+#: model:ir.model.fields,field_description:vmk_event_registration_deadline.field_res_config_settings__vmk_registration_deadline_hours
+msgid "Time Before Start"
+msgstr ""
+
+#. module: vmk_event_registration_deadline
 #: model:ir.model.fields,help:vmk_event_registration_deadline.field_event_event__vmk_deadline_custom
-msgid "Use a deadline for this event instead of the one in Settings."
+msgid ""
+"Use a custom registration deadline for the event, overriding the global "
+"setting."
 msgstr ""
