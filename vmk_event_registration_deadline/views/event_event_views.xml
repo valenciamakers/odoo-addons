@@ -17,9 +17,11 @@
                 <label for="vmk_deadline_custom"/>
                 <div>
                     <field name="vmk_deadline_custom"/>
-                    <field name="vmk_deadline_hours" widget="float_time"
-                           invisible="not vmk_deadline_custom"
-                           class="oe_inline o_input_5ch ms-2"/>
+                    <!-- Value then text, as core writes "to [9] Attendees"
+                         beside `seats_limited`. Kept on one line: the arch is
+                         extracted verbatim, so a wrapped source line puts the
+                         indentation inside the msgid. -->
+                    <span invisible="not vmk_deadline_custom" class="ms-2"><field name="vmk_deadline_hours" widget="float_time" class="oe_inline o_input_5ch"/> Before Start</span>
                 </div>
             </xpath>
         </field>
