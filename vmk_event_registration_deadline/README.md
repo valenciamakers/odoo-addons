@@ -23,7 +23,12 @@ A deadline, expressed as a duration before the event starts:
   installed module the same way, with `use_event_barcode` on this very page and `use_invoice_terms`
   in `account`.
 - **The duration is `float_time`,** so it takes hours and minutes: `1:30` closes registration ninety
-  minutes before the start. Zero closes it as the event begins.
+  minutes before the start. `00:00` ends registration at the event start time.
+
+The duration field carries no `help` in Settings: a `<setting>` labels its own fields and does not
+give them the `?` a form label would, so anything written there is never seen. What needed saying
+moved into the setting's own help, which renders as the muted line under the title.
+
 - **A per-event override**, beside the seat limit on the event form. A checkbox turns it on, the way
   core pairs `seats_limited` with `seats_max` — a float alone could not express "no override",
   because zero is a real setting.

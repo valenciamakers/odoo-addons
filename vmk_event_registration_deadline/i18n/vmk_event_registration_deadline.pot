@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e-20260817\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-22 11:28+0000\n"
-"PO-Revision-Date: 2026-09-22 11:28+0000\n"
+"POT-Creation-Date: 2026-09-22 11:36+0000\n"
+"PO-Revision-Date: 2026-09-22 11:36+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -43,13 +43,6 @@ msgid "Event Slot"
 msgstr ""
 
 #. module: vmk_event_registration_deadline
-#: model:ir.model.fields,help:vmk_event_registration_deadline.field_res_config_settings__vmk_registration_deadline_hours
-msgid ""
-"How long before an event starts registration closes. Zero closes it as the "
-"event begins. An event can override this."
-msgstr ""
-
-#. module: vmk_event_registration_deadline
 #: model:ir.model.fields,help:vmk_event_registration_deadline.field_event_event__vmk_deadline_hours
 msgid "How long before this event starts registration closes."
 msgstr ""
@@ -70,7 +63,9 @@ msgstr ""
 #. module: vmk_event_registration_deadline
 #: model:ir.model.fields,help:vmk_event_registration_deadline.field_res_config_settings__vmk_registration_deadline_enabled
 #: model_terms:ir.ui.view,arch_db:vmk_event_registration_deadline.res_config_settings_view_form
-msgid "Sell tickets only until an event starts, or a set time in advance."
+msgid ""
+"Sell tickets only until an event starts, or a set time in advance. Set to "
+"00:00 to end registration at the event start time."
 msgstr ""
 
 #. module: vmk_event_registration_deadline
