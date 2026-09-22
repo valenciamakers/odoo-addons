@@ -2,15 +2,15 @@
 # This file contains the translation of the following modules:
 # 	* vmk_event_registration_deadline
 #
-# As `es`. Core leaves the slot vocabulary untranslated, so "Event Slot"
-# stays empty rather than asserting a value on core's row.
+# As `es`. "Event Slot" is core's row and core's Catalan leaves it
+# untranslated, so it stays empty rather than asserting a value there.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e-20260817\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-22 10:40+0000\n"
-"PO-Revision-Date: 2026-09-22 10:40+0000\n"
+"POT-Creation-Date: 2026-09-22 11:38+0000\n"
+"PO-Revision-Date: 2026-09-22 11:38+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ca\n"
@@ -20,20 +20,14 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. module: vmk_event_registration_deadline
-#: model:ir.model.fields,field_description:vmk_event_registration_deadline.field_event_event__vmk_deadline_hours
-#: model:ir.model.fields,field_description:vmk_event_registration_deadline.field_res_config_settings__vmk_registration_deadline_hours
-msgid "Close Registration Before Start"
-msgstr "Tancar inscripcions abans de l'inici"
+#: model_terms:ir.ui.view,arch_db:vmk_event_registration_deadline.view_event_form_deadline
+msgid "Before Start"
+msgstr "abans de l'inici"
 
 #. module: vmk_event_registration_deadline
 #: model:ir.model,name:vmk_event_registration_deadline.model_res_config_settings
 msgid "Config Settings"
 msgstr "Ajustos de configuració"
-
-#. module: vmk_event_registration_deadline
-#: model:ir.model.fields,field_description:vmk_event_registration_deadline.field_event_event__vmk_deadline_custom
-msgid "Custom Registration Deadline"
-msgstr "Data límit d'inscripció personalitzada"
 
 #. module: vmk_event_registration_deadline
 #: model:ir.model.fields,field_description:vmk_event_registration_deadline.field_event_event__display_name
@@ -53,16 +47,6 @@ msgid "Event Slot"
 msgstr ""
 
 #. module: vmk_event_registration_deadline
-#: model:ir.model.fields,help:vmk_event_registration_deadline.field_res_config_settings__vmk_registration_deadline_hours
-msgid "How long before an event starts registration closes. Zero closes it as the event begins. An event can override this."
-msgstr "Quant abans de l'inici d'un esdeveniment es tanquen les inscripcions. Zero les tanca quan l'esdeveniment comença. Un esdeveniment pot anul·lar aquest valor."
-
-#. module: vmk_event_registration_deadline
-#: model:ir.model.fields,help:vmk_event_registration_deadline.field_event_event__vmk_deadline_hours
-msgid "How long before this event starts registration closes."
-msgstr "Quant abans de l'inici d'aquest esdeveniment es tanquen les inscripcions."
-
-#. module: vmk_event_registration_deadline
 #: model:ir.model.fields,field_description:vmk_event_registration_deadline.field_event_event__id
 #: model:ir.model.fields,field_description:vmk_event_registration_deadline.field_event_slot__id
 #: model:ir.model.fields,field_description:vmk_event_registration_deadline.field_res_config_settings__id
@@ -70,6 +54,7 @@ msgid "ID"
 msgstr "ID"
 
 #. module: vmk_event_registration_deadline
+#: model:ir.model.fields,field_description:vmk_event_registration_deadline.field_event_event__vmk_deadline_custom
 #: model:ir.model.fields,field_description:vmk_event_registration_deadline.field_res_config_settings__vmk_registration_deadline_enabled
 msgid "Registration Deadline"
 msgstr "Data límit d'inscripció"
@@ -77,10 +62,16 @@ msgstr "Data límit d'inscripció"
 #. module: vmk_event_registration_deadline
 #: model:ir.model.fields,help:vmk_event_registration_deadline.field_res_config_settings__vmk_registration_deadline_enabled
 #: model_terms:ir.ui.view,arch_db:vmk_event_registration_deadline.res_config_settings_view_form
-msgid "Sell tickets only until an event starts, or a set time in advance."
-msgstr "Vendre entrades només fins que comença un esdeveniment, o un temps abans."
+msgid "Sell tickets only until an event starts, or a set time in advance. Set to 00:00 to end registration at the event start time."
+msgstr "Vendre entrades només fins que comença un esdeveniment, o un temps abans. Establiu 00:00 per tancar les inscripcions a l'hora d'inici de l'esdeveniment."
+
+#. module: vmk_event_registration_deadline
+#: model:ir.model.fields,field_description:vmk_event_registration_deadline.field_event_event__vmk_deadline_hours
+#: model:ir.model.fields,field_description:vmk_event_registration_deadline.field_res_config_settings__vmk_registration_deadline_hours
+msgid "Time Before Start"
+msgstr "Temps abans de l'inici"
 
 #. module: vmk_event_registration_deadline
 #: model:ir.model.fields,help:vmk_event_registration_deadline.field_event_event__vmk_deadline_custom
-msgid "Use a deadline for this event instead of the one in Settings."
-msgstr "Usar una data límit per a aquest esdeveniment en lloc de la d'Ajustos."
+msgid "Use a custom registration deadline for the event, overriding the global setting."
+msgstr "Usar una data límit d'inscripció pròpia per a aquest esdeveniment, anul·lant l'ajust global."

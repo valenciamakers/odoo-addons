@@ -19,10 +19,10 @@ class EventEvent(models.Model):
         help="Use a custom registration deadline for the event, overriding the "
         "global setting.",
     )
-    vmk_deadline_hours = fields.Float(
-        string="Time Before Start",
-        help="How long before this event starts registration closes.",
-    )
+    # No `help`: the field renders inline beside the checkbox with no label of
+    # its own, and Odoo hangs the `?` off a label, so anything here is never
+    # seen. "Before Start" sits next to the value and says it anyway.
+    vmk_deadline_hours = fields.Float(string="Time Before Start")
 
     def _vmk_deadline_hours(self):
         """This event's deadline in hours, or None where none applies.
