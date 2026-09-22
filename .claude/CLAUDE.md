@@ -18,7 +18,7 @@ remotes differ by one word, so check which one you are pushing to.
 - **`vmk_apps_page_sort`** — alphabetical ordering of the Apps page, by displayed name.
 - **`vmk_settings_sort`** — alphabetical ordering of the Settings sidebar and Technical groupings.
 - **`vmk_event_host`** — who runs an event, as contacts; several per event.
-- **`vmk_event_registration_cutoff`** — stop selling registrations when an event starts, or a set
+- **`vmk_event_registration_deadline`** — stop selling registrations when an event starts, or a set
   time before; per-event override, and the same rule applied to slots.
 - **`vmk_partner_email_multiple`** — several email addresses per contact, matched by Odoo's own
   machinery, and kept rather than dropped when contacts are merged.
