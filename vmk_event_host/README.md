@@ -96,6 +96,22 @@ event users and managers. The multi-company record rule mirrors
 renaming its own elements; the `<tree>` to `<list>` rename in Odoo 18 broke exactly that kind of
 xpath.
 
+## Translations
+
+`i18n/` carries `es` and `ca`, and `./odev terms vmk_event_host` reports both clean against core.
+Terms this module shares with core — _Event_, _Sequence_, _Company_, the ORM's own _Created by_ and
+_Last Updated on_ — take core's own `msgstr` out of `base`'s and `event`'s catalogues rather than
+being translated afresh, so the Hosts tab reads as part of the backend rather than introducing a
+second vocabulary. Strings core does not have, such as the host `help` text, are ours to write.
+
+**The module's own name and summary are hand-maintained**, in the POT as well as both PO files.
+`ir_module.py` registers every module record as `base.module_<name>`, so the exporter attributes
+them to `base` and omits them from our catalogue — and `PoFileReader` merges each PO against its POT
+and drops whatever the merge marks obsolete, so a PO entry with no POT counterpart disappears in
+silence and the module keeps its English name in a Spanish database.
+`tests/test_translations.py::TestModuleNameTranslation` fails loudly if a re-export drops them, and
+also asserts the premise the whole workaround rests on: that the xmlid still belongs to `base`.
+
 ## Licence: LGPL-3, not this repo's AGPL-3 default
 
 Our own proprietary modules depend on this one: `vmk_event_sessions` (sessions under an event) is
