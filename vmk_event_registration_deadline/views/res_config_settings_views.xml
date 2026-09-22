@@ -22,6 +22,12 @@
                          catalogue free of a msgid that would be markup. -->
                     <div class="content-group mt16"
                          invisible="not vmk_registration_deadline_enabled">
+                        <!-- Label before the field, carrying core's own
+                             classes, as `use_google_maps_static_api` does in
+                             this same page. A label placed after the field,
+                             or without them, is dropped. -->
+                        <label for="vmk_registration_deadline_hours"
+                               class="o_form_label col-lg-4 o_light_label"/>
                         <field name="vmk_registration_deadline_hours"
                                widget="float_time" class="o_light_label"/>
                     </div>
