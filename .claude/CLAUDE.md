@@ -400,6 +400,14 @@ In practice that is four different things, and only one of them saves work:
   something else, or worse the reverse. Felix, 21 September 2026: _"you should just be copying core
   terminology when possible. Both in English, and for translations."_ Applies equally to any term we
   deliberately took from core: having matched the English, match the Spanish and the Catalan.
+- **Where you depart from core anyway, declare it.** Copying core's _wording_ is the rule; copying
+  its _typography_ or its outright mistakes is not, and neither is copying a translation that is
+  simply wrong for our sense of the word. Two stand today: core's Catalan _User Settings_ carries a
+  stray space after the apostrophe in twelve modules, and core renders a bare _Slot_ in Catalan as
+  `Ranura`, a groove, where ours means a band of time. A departure goes in three places or it rots —
+  the module's `README.md` with the reason and the date, a note in the `.po` header, and `DECLARED`
+  in `odoo-dev`'s `check-terms.py`, which records the expected value so the exception stops covering
+  the module the moment somebody edits the string. Decided 22 September 2026.
 - **Extend behaviour, do not replace it.** Prefer adding to what core does over patching it out. A
   patch that stops applying raises nothing, so anything unavoidable gets named in the module's
   README with the file and line it depends on.
@@ -592,7 +600,16 @@ to `base`, which is the premise the whole workaround rests on.
 
 **Every module needs a catalogue, because every module has at least two untranslated terms.** Its
 own name and summary, per the section above — and the exporter never shows them to you, so an empty
-POT is not evidence there is nothing to translate.
+POT is not evidence there is nothing to translate. **Put them in the POT as well as every `.po`, and
+guard them with a test.** This is the half that fails silently: `PoFileReader.__init__` merges each
+PO against its module's POT and `__iter__` skips whatever polib's `merge()` marked obsolete, so a PO
+entry with no POT counterpart is discarded without a warning and the module simply keeps its English
+name. `vmk_event_sessions` shipped in exactly that state — both entries present in `es.po` and
+`ca.po`, both dropped on load — until 22 September 2026. Every module now carries a
+`TestModuleNameTranslation`, which checks the POT still has them, that both catalogues give them a
+non-empty `msgstr`, and that the xmlid still belongs to `base`. Newer modules keep it in
+`tests/test_translations.py`; the first seven put it at the foot of their own test file, which is
+where to look.
 
 This reverses an earlier rule here, which held that a module whose extracted terms all belong to
 core needs no `i18n/` at all. That reasoning was sound as far as it went: extending a core model
