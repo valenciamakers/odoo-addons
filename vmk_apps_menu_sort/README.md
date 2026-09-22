@@ -169,6 +169,12 @@ hand-maintained, not exported — `ir.module.module` records belong to `base`'s 
 for the full explanation. `tests/test_apps_menu_sort.py::TestModuleNameTranslation` fails loudly if
 re-running the export drops them.
 
+**One term departs from core on purpose.** Core's Catalan for _User Settings_ is
+`Arranjament d' usuari` — with a space after the apostrophe — in twelve modules including `base`.
+This module writes `Arranjament d'usuari`. Taking core's wording is the rule here; taking its
+typography is not. `./odev terms vmk_apps_menu_sort` therefore reports one divergence by design, and
+carries it as a declared exception so the check still ends clean. Decided 22 September 2026.
+
 ## Requirements
 
 Odoo 19. Depends on `base` only. Both overridden methods are defined there, and `res.users.settings`
