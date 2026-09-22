@@ -1,6 +1,6 @@
 # Event Registration Deadline
 
-Stops selling registrations when an event starts, or a set time before it.
+Sells tickets only until an event starts, or a set time in advance.
 
 ## Why
 
@@ -50,8 +50,8 @@ policy would apply to single events and not to cohorts: sales stopping ninety mi
 and exactly on the hour for the other. This module tightens that filter with the same deadline.
 
 It only ever tightens. A ticket's Registration End overrides the rule on a single event but not
-here: it cannot loosen a deadline core itself applies, and on a multi-slot event a ticket says nothing
-about which slot it belongs to.
+here: it cannot loosen a deadline core itself applies, and on a multi-slot event a ticket says
+nothing about which slot it belongs to.
 
 **This is why the module depends on `website_event` rather than `event`** — half the rule lives in a
 method that module defines.

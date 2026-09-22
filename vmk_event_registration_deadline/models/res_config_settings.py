@@ -19,7 +19,7 @@ class ResConfigSettings(models.TransientModel):
     vmk_registration_deadline_enabled = fields.Boolean(
         string="Registration Deadline",
         config_parameter=ENABLED_PARAM,
-        help="Stop selling registrations when an event starts, or a set time before it.",
+        help="Sell tickets only until an event starts, or a set time in advance.",
     )
     vmk_registration_deadline_hours = fields.Float(
         string="Close Registration Before Start",

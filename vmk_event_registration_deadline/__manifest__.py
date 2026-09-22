@@ -3,7 +3,7 @@
 
 {
     "name": "Event Registration Deadline",
-    "summary": "Stop selling registrations when an event starts, or a set time before",
+    "summary": "Sell tickets only until an event starts, or a set time in advance",
     "version": "19.0.1.0.0",
     "author": "Valencia Makers, SL",
     "license": "AGPL-3",
