@@ -181,7 +181,7 @@ class TestModuleNameTranslation(TransactionCase):
     I18N = Path(__file__).resolve().parent.parent / "i18n"
     HAND_MAINTAINED = (
         "Apps Menu Sort",
-        "List the apps alphabetically, with Apps and Settings kept at the end",
+        "Alphabetical order for the apps menu, with Apps and Settings at the end",
     )
 
     def test_pot_still_carries_the_hand_added_module_metadata(self):

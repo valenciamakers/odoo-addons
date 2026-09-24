@@ -1,5 +1,16 @@
 # Apps Menu Sort (`vmk_apps_menu_sort`)
 
+Alphabetical order for the apps menu, with Apps and Settings at the end. In standard Odoo, apps are
+listed in whatever order they set for themselves, so the apps grid reads as no order at all. This
+module lists them alphabetically, with **Apps** and **Settings** kept at the end.
+
+**How to use it** is in the user documentation, [`doc/index.rst`](doc/index.rst), which the Odoo
+Apps Store also shows on the module's page, together with the changelog.
+
+It depends only on `base`. LGPL-3, © 2026 Valencia Makers, SL.
+
+## For developers
+
 Odoo lists the apps on the main menu in whatever order their `sequence` values happen to give, which
 is a number each app's own module picked for itself. This module sorts them alphabetically instead,
 keeping **Apps** and **Settings** at the end where Odoo conventionally puts them.
@@ -11,7 +22,7 @@ stock  : Discuss, Calendar, Contacts, CRM, Website, Inventory, Apps, Settings
 sorted : Calendar, Contacts, CRM, Discuss, Inventory, Website, Apps, Settings
 ```
 
-## Where the order applies
+### Where the order applies
 
 | Surface                                   | Edition    | Path                          |
 | ----------------------------------------- | ---------- | ----------------------------- |
@@ -23,7 +34,7 @@ sorted : Calendar, Contacts, CRM, Discuss, Inventory, Website, Apps, Settings
 Everything in that list consumes a server payload verbatim — none of it sorts — so ordering the
 payload reaches all of it at once.
 
-## Why it sorts the payload, not the `sequence` values
+### Why it sorts the payload, not the `sequence` values
 
 The obvious implementation writes new `sequence` values onto the root menus. It would not survive.
 
@@ -37,7 +48,7 @@ Sorting the payload on the way out is stateless. Nothing is written, so there is
 module update to undo, and **Settings → Technical → User Interface → Menu Items** keeps showing true
 stored sequence rather than a fiction this module maintains.
 
-## Two payloads, not one
+### Two payloads, not one
 
 There are two independent code paths producing an app list, cached separately, and both need the
 override:
@@ -56,7 +67,7 @@ rather than by reading the payload. `load_menus` entries include an `xmlid` key 
 directly; `load_menus_root` entries come from `read()` and carry no xmlid at all. One mechanism that
 works on both beats two that each work on one.
 
-## Why the result is copied rather than sorted in place
+### Why the result is copied rather than sorted in place
 
 `ir.ui.menu.load_menus` is `@ormcache('self.env.uid', 'debug', 'self.env.lang')`, so the dict
 `super()` returns is shared between requests. Sorting `root['children']` in place would appear to
@@ -69,7 +80,7 @@ No cache invalidation of our own is needed. `ir.ui.menu`'s `create`, `write`, an
 a bare `registry.clear_cache()`, which clears the `'default'` group — where all three menu-loading
 caches live, none of them having passed an explicit `cache=` to `ormcache`.
 
-## Pinning Apps and Settings
+### Pinning Apps and Settings
 
 Nothing in Odoo marks those two as special. They carry `sequence="500"` and `"550"` in
 `base/views/base_menus.xml`, purely by convention, and `base.menu_tests` sits above both on `1000` —
@@ -79,7 +90,7 @@ They are ranked by their **position in `PINNED_LAST`**, never by name. Apps prec
 English, but in Spanish the names are _Aplicaciones_ and _Ajustes_, which sort the other way.
 Ranking by name would swap the pair when a user changed language.
 
-## Sorting and language
+### Sorting and language
 
 The payload is built per user language and cached per language, so each user gets the order that is
 alphabetical **in their own language**. That is the intended behaviour, not a wrinkle: two users on
@@ -92,7 +103,7 @@ process-global `locale` state which has no business in a threaded Odoo worker. T
 consequence is that Spanish `ñ` folds onto `n` rather than sorting after it. The displayed name is
 never modified; folding affects the sort key only.
 
-## Interaction with the Enterprise app grid
+### Interaction with the Enterprise app grid
 
 Dragging an icon on the Enterprise app grid stores that user's own order in `homemenu_config` on
 `res.users.settings`, and `home_menu_service.js` applies it over ours:
@@ -136,7 +147,7 @@ Suppressing drag-to-reorder altogether would mean overriding Enterprise JavaScri
 require depending on `web_enterprise` and would put distribution of this module under the OEEL
 rather than LGPL-3. Not worth it for a cosmetic edge case.
 
-## The landing screen
+### The landing screen
 
 On **Community**, reordering the apps changes where users land after login. `action_service.js`
 falls back to the user's Home Action (`res.users.action_id`) and, when that is unset — the default,
@@ -149,7 +160,7 @@ so `root.children[0]` is never consulted.
 If a fixed landing screen matters, set **Home Action** on the user. It takes priority over the
 fallback and is independent of this module.
 
-## Known limitations
+### Known limitations
 
 - **Menus inside an app are untouched.** Their order is deliberate and semantic — Sales runs Orders
   → To Invoice → Products → Reporting → Configuration, roughly workflow order — and alphabetising it
@@ -160,7 +171,7 @@ fallback and is independent of this module.
   as soon as there is a search term, `fuzzyLookup` ranks by text relevance instead.
 - **Users with a stored grid order keep it** until the reset action is run.
 
-## Translations
+### Translations
 
 The module's own name and summary in `i18n/vmk_apps_menu_sort.pot`, `es.po` and `ca.po` are
 hand-maintained, not exported — `ir.module.module` records belong to `base`'s xmlid namespace, so
@@ -175,13 +186,13 @@ This module writes `Arranjament d'usuari`. Taking core's wording is the rule her
 typography is not. `./odev terms vmk_apps_menu_sort` therefore reports one divergence by design, and
 carries it as a declared exception so the check still ends clean. Decided 22 September 2026.
 
-## Requirements
+### Requirements
 
 Odoo 19. Depends on `base` only. Both overridden methods are defined there, and `res.users.settings`
 is a `base` model too — the Enterprise-only `homemenu_config` field is detected at runtime, so the
 reset action degrades to a no-op on Community rather than needing a dependency.
 
-## Testing
+### Testing
 
 ```bash
 odoo -d <db> -u vmk_apps_menu_sort --test-enable --test-tags /vmk_apps_menu_sort --stop-after-init

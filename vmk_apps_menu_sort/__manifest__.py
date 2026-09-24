@@ -3,13 +3,14 @@
 
 {
     "name": "Apps Menu Sort",
-    "summary": "List the apps alphabetically, with Apps and Settings kept at the end",
+    "summary": "Alphabetical order for the apps menu, with Apps and Settings at the end",
     "version": "19.0.1.1.1",
     "author": "Valencia Makers",
     "license": "LGPL-3",
     "category": "Technical",
     "depends": ["base"],
     "data": ["data/ir_actions_server.xml"],
+    "images": ["static/description/cover.png"],
     "installable": True,
     "application": False,
 }

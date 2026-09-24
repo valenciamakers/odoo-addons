@@ -68,5 +68,5 @@ msgstr "Orden del menú de aplicaciones"
 
 #. module: base
 #: model:ir.module.module,summary:base.module_vmk_apps_menu_sort
-msgid "List the apps alphabetically, with Apps and Settings kept at the end"
-msgstr "Ordena las aplicaciones alfabéticamente, dejando Aplicaciones y Ajustes al final"
+msgid "Alphabetical order for the apps menu, with Apps and Settings at the end"
+msgstr "Orden alfabético para el menú de aplicaciones, con Aplicaciones y Ajustes al final"
