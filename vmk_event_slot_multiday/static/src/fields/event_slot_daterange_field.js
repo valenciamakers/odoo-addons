@@ -30,7 +30,11 @@ const toEventTime = (value, tz) =>
     value ? value.setZone(tz).setZone("local", { keepLocalTime: true }) : value;
 const hourOf = (value) => value.hour + value.minute / 60;
 
-// Written by this widget, so they must be loaded, and saved.
+// Written by this widget, so they must be loaded and saved, and must call the
+// server's onchange: that is what recomputes the datetimes the range shows.
+// The server marks a field for onchange only where the view's arch declares
+// it; `vmk_event_sessions` happens to declare `date`, which hid this, and on
+// a database without it an edit left the range showing the old dates.
 const SLOT_FIELDS = [
     { name: "date", type: "date" },
     { name: "start_hour", type: "float" },
@@ -98,7 +102,7 @@ export const eventSlotDateRangeField = {
     }),
     fieldDependencies: (fieldInfo) => [
         ...dateRangeField.fieldDependencies(fieldInfo),
-        ...SLOT_FIELDS.map((field) => ({ ...field, readonly: false })),
+        ...SLOT_FIELDS.map((field) => ({ ...field, readonly: false, onChange: true })),
     ],
 };
 

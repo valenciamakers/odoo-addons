@@ -80,6 +80,13 @@ that wall-clock time, never the datetimes (`buildRawRecord`). The widget does bo
 `DateTimeField`, which it uses unchanged: it hands the field a view of the record in which the range
 reads as event time, and in which updating the range writes the slot's date, hours and day count.
 
+**The widget declares those four fields itself, flagged for onchange.** The server marks a field for
+onchange only where a view's arch declares it, and it is the onchange that recomputes the datetimes
+the range shows. Declared only by the widget, an edit to the range made the form dirty but left it
+showing the old dates until saved. `vmk_event_sessions` happens to put `date` in the slot form,
+which hid this on a database with it installed; the check on a database with only core's event
+modules found it.
+
 So the datetimes stay read-only computed fields on the model, as in core, and the server has no
 datetime handling of its own. That matters: core's slot calendar creates slots with the datetimes in
 the vals **as well as** the date and hours, relying on the datetimes being ignored. Making them
