@@ -681,9 +681,17 @@ is colour, font, margin, padding, border, `width`/`max-width`, `display`, `line-
 `text-align`, and `opacity`; `gap`, `flex`, `display:grid`, and `grid-template-columns` are dropped.
 So lay out with Bootstrap classes, which the store's rules ask for and the backend also loads — the
 feature grid is a `row` of `col-md-6` — and space things with margins, never `gap`. The first
-published pages lost both: the grid fell to one column and the icons touched their text. Screenshots
-are taken at 2x in English (UK), with any polish (colours, widths, a drawn cursor) injected as CSS
-during capture only, never shipped.
+published pages lost both: the grid fell to one column and the icons touched their text.
+
+**Every inline colour carries a dark-mode value, with `light-dark()`.** Enterprise's dark mode swaps
+in a dark stylesheet and sets `color-scheme: dark` on the web client, but inline colours stay put,
+so near-black text vanished on its `#262A36` background. Odoo's light mode sets the invalid
+`color-scheme: bright`, which browsers read as light. So: body text `light-dark(#111827, #E4E4E4)`,
+subtitles `light-dark(#333333, #E4E4E4)` at 50% opacity, and headings, links, and icons
+`light-dark(#531B93, #B794F4)`; `#E4E4E4` is the dark theme's own text colour, and `#531B93` is
+unreadable on its background. Screenshots stay light in both modes. Screenshots are taken at 2x in
+English (UK), with any polish (colours, widths, a drawn cursor) injected as CSS during capture only,
+never shipped.
 
 **The manual, `doc/index.rst`, has no RST headings.** The store shows it in a Documentation tab with
 headings at 53px, 42px, and 31px against 16px text, and pure RST cannot set a size; top-level
