@@ -16,6 +16,11 @@
     "data": [
         "views/event_slot_views.xml",
     ],
+    "assets": {
+        "web.assets_backend": [
+            "vmk_event_slot_multiday/static/src/fields/*.js",
+        ],
+    },
     "installable": True,
     "application": False,
 }

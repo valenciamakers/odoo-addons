@@ -67,7 +67,7 @@ class TestSlotMultiday(TransactionCase):
 
     def test_a_slot_cannot_end_before_it_starts(self):
         slot = self._slot(vmk_end_date="2026-10-11", end_hour=13.0)
-        with self.assertRaises(ValidationError):
+        with self.assertRaisesRegex(ValidationError, "cannot end before it starts"):
             slot.write({"vmk_end_date": "2026-10-08"})
 
     def test_moving_a_multiday_slot_keeps_its_length(self):
@@ -78,7 +78,11 @@ class TestSlotMultiday(TransactionCase):
         self.assertEqual(slot.end_datetime, fields.Datetime.to_datetime("2026-10-18 11:00:00"))
 
     def test_moving_a_one_day_slot_keeps_it_one_day(self):
-        slot = self._slot()
+        """Either way: an end that stayed put when a slot moved earlier once
+        turned a one-day slot into a five-day one."""
+        slot = self._slot(date="2026-10-17")
+        slot.write({"date": "2026-10-13"})
+        self.assertEqual(slot.vmk_end_date, fields.Date.to_date("2026-10-13"))
         slot.write({"date": "2026-10-16"})
         self.assertEqual(slot.vmk_end_date, fields.Date.to_date("2026-10-16"))
 
@@ -103,9 +107,41 @@ class TestSlotMultiday(TransactionCase):
             registration.event_end_date, fields.Datetime.to_datetime("2026-10-11 11:00:00")
         )
 
-    def test_the_form_shows_both_dates(self):
+    def test_across_the_clock_change(self):
+        """Summer time ends on 25 October 2026: 13:00 that Sunday is 12:00
+        UTC, where 13:00 the day before is 11:00."""
+        self.event.date_end = "2026-10-31 20:00:00"
+        slot = self._slot(date="2026-10-24", vmk_end_date="2026-10-25", end_hour=13.0)
+        self.assertEqual(slot.start_datetime, fields.Datetime.to_datetime("2026-10-24 16:00:00"))
+        self.assertEqual(slot.end_datetime, fields.Datetime.to_datetime("2026-10-25 12:00:00"))
+
+    def test_an_end_date_and_hour_written_together(self):
+        """A one-day slot given a later end and an earlier end hour in one
+        write. Odoo checks a write's plain fields before running inverses,
+        so the end date is turned into the day count first; otherwise
+        core's one-day hour check would refuse 18:00 to 13:00."""
+        slot = self._slot()
+        slot.write({"vmk_end_date": "2026-10-11", "end_hour": 13.0})
+        self.assertEqual(slot.vmk_end_day_offset, 2)
+        self.assertEqual(slot.end_datetime, fields.Datetime.to_datetime("2026-10-11 11:00:00"))
+
+    def test_each_slot_counts_from_its_own_date(self):
+        first, second = self._slot(), self._slot(date="2026-10-10")
+        (first | second).write({"vmk_end_date": "2026-10-11"})
+        self.assertEqual((first.vmk_end_day_offset, second.vmk_end_day_offset), (2, 1))
+
+    def test_given_both_the_day_count_wins(self):
+        """So the stored end date can never disagree with the count."""
+        slot = self._slot()
+        slot.write({"vmk_end_date": "2026-10-16", "vmk_end_day_offset": 2, "end_hour": 13.0})
+        self.assertEqual(slot.vmk_end_date, fields.Date.to_date("2026-10-11"))
+
+    def test_the_form_shows_one_range(self):
+        """One range in the event's timezone; core's hour row hidden, not
+        removed, so other modules can still anchor on it."""
         arch = self.env["event.slot"].get_view(
             view_id=self.env.ref("event.view_event_slot_form").id
         )["arch"]
-        self.assertIn('name="vmk_end_date"', arch)
-        self.assertIn('name="date"', arch)
+        self.assertIn('widget="vmk_event_slot_daterange"', arch)
+        self.assertIn("'end_date_field': 'end_datetime'", arch)
+        self.assertIn('name="start_hour"', arch)

@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e-20260908\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-24 09:53+0000\n"
-"PO-Revision-Date: 2026-09-24 09:53+0000\n"
+"POT-Creation-Date: 2026-09-24 10:40+0000\n"
+"PO-Revision-Date: 2026-09-24 10:40+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es\n"
@@ -32,11 +32,6 @@ msgid "Let an event slot run over several days, not only within one"
 msgstr "Permite que un espacio de evento dure varios días, no solo uno"
 
 #. module: vmk_event_slot_multiday
-#: model_terms:ir.ui.view,arch_db:vmk_event_slot_multiday.view_event_slot_form_multiday
-msgid "<i class=\"fa fa-arrow-right mx-2\" title=\"to\"/>"
-msgstr "<i class=\"fa fa-arrow-right mx-2\" title=\"a\"/>"
-
-#. module: vmk_event_slot_multiday
 #. odoo-python
 #: code:addons/vmk_event_slot_multiday/models/event_slot.py:0
 msgid "A slot cannot end before it starts: %(slot)s ends on %(end)s."
@@ -51,8 +46,13 @@ msgstr "La hora de un espacio debe ser entre 0:00 y 23:59."
 
 #. module: vmk_event_slot_multiday
 #: model_terms:ir.ui.view,arch_db:vmk_event_slot_multiday.view_event_slot_form_multiday
-msgid "Date range"
-msgstr "Rango de fecha"
+msgid "Date"
+msgstr "Fecha"
+
+#. module: vmk_event_slot_multiday
+#: model:ir.model.fields,field_description:vmk_event_slot_multiday.field_event_slot__vmk_end_day_offset
+msgid "Days Spanned"
+msgstr "Días que abarca"
 
 #. module: vmk_event_slot_multiday
 #: model:ir.model.fields,field_description:vmk_event_slot_multiday.field_event_slot__display_name
@@ -70,9 +70,27 @@ msgid "Event Slot"
 msgstr "Franja horaria"
 
 #. module: vmk_event_slot_multiday
+#: model_terms:ir.ui.view,arch_db:vmk_event_slot_multiday.view_event_slot_form_multiday
+msgid "Expressed in the event timezone."
+msgstr "Se muestra en la zona horaria del evento."
+
+#. module: vmk_event_slot_multiday
+#: model:ir.model.fields,help:vmk_event_slot_multiday.field_event_slot__vmk_end_day_offset
+msgid ""
+"How many days after its date the slot ends. 0 for a slot within one day."
+msgstr ""
+"Cuántos días después de su fecha termina el espacio. 0 para un espacio de un solo día."
+
+#. module: vmk_event_slot_multiday
 #: model:ir.model.fields,field_description:vmk_event_slot_multiday.field_event_slot__id
 msgid "ID"
 msgstr "ID"
+
+#. module: vmk_event_slot_multiday
+#. odoo-javascript
+#: code:addons/vmk_event_slot_multiday/static/src/fields/event_slot_daterange_field.js:0
+msgid "Slot Date Range"
+msgstr "Rango de fecha del espacio"
 
 #. module: vmk_event_slot_multiday
 #: model:ir.model.fields,help:vmk_event_slot_multiday.field_event_slot__vmk_end_date

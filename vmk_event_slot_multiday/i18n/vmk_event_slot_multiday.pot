@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e-20260908\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-24 09:53+0000\n"
-"PO-Revision-Date: 2026-09-24 09:53+0000\n"
+"POT-Creation-Date: 2026-09-24 10:40+0000\n"
+"PO-Revision-Date: 2026-09-24 10:40+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -31,11 +31,6 @@ msgid "Let an event slot run over several days, not only within one"
 msgstr ""
 
 #. module: vmk_event_slot_multiday
-#: model_terms:ir.ui.view,arch_db:vmk_event_slot_multiday.view_event_slot_form_multiday
-msgid "<i class=\"fa fa-arrow-right mx-2\" title=\"to\"/>"
-msgstr ""
-
-#. module: vmk_event_slot_multiday
 #. odoo-python
 #: code:addons/vmk_event_slot_multiday/models/event_slot.py:0
 msgid "A slot cannot end before it starts: %(slot)s ends on %(end)s."
@@ -49,7 +44,12 @@ msgstr ""
 
 #. module: vmk_event_slot_multiday
 #: model_terms:ir.ui.view,arch_db:vmk_event_slot_multiday.view_event_slot_form_multiday
-msgid "Date range"
+msgid "Date"
+msgstr ""
+
+#. module: vmk_event_slot_multiday
+#: model:ir.model.fields,field_description:vmk_event_slot_multiday.field_event_slot__vmk_end_day_offset
+msgid "Days Spanned"
 msgstr ""
 
 #. module: vmk_event_slot_multiday
@@ -68,8 +68,25 @@ msgid "Event Slot"
 msgstr ""
 
 #. module: vmk_event_slot_multiday
+#: model_terms:ir.ui.view,arch_db:vmk_event_slot_multiday.view_event_slot_form_multiday
+msgid "Expressed in the event timezone."
+msgstr ""
+
+#. module: vmk_event_slot_multiday
+#: model:ir.model.fields,help:vmk_event_slot_multiday.field_event_slot__vmk_end_day_offset
+msgid ""
+"How many days after its date the slot ends. 0 for a slot within one day."
+msgstr ""
+
+#. module: vmk_event_slot_multiday
 #: model:ir.model.fields,field_description:vmk_event_slot_multiday.field_event_slot__id
 msgid "ID"
+msgstr ""
+
+#. module: vmk_event_slot_multiday
+#. odoo-javascript
+#: code:addons/vmk_event_slot_multiday/static/src/fields/event_slot_daterange_field.js:0
+msgid "Slot Date Range"
 msgstr ""
 
 #. module: vmk_event_slot_multiday

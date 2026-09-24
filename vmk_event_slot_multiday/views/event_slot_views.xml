@@ -6,18 +6,27 @@
         <field name="model">event.slot</field>
         <field name="inherit_id" ref="event.view_event_slot_form"/>
         <field name="arch" type="xml">
-            <!-- Core's slot form has no date at all: a slot is created by
-                 clicking a day in the slot calendar. A slot that can end on
-                 another day needs both days in front of whoever edits it, so
-                 they sit above core's "Hour range", in the same shape. -->
+            <!-- One range of start and end, as the event form has, in place
+                 of core's "Hour range". Core's slot form has no date at all:
+                 a slot is created by clicking a day in the slot calendar, and
+                 a slot that may end on another day needs both days shown.
+                 Shown in the event's timezone, as core shows a slot
+                 everywhere else; the help is core's own, from the hours.
+                 Core computes both datetimes; the widget saves the slot's
+                 date, hours and day count instead, so they stay read-only
+                 on the model and are editable only here. -->
             <label for="start_hour" position="before">
-                <label for="date" string="Date range"/>
-                <div>
-                    <field name="date" class="oe_inline"/>
-                    <i class="fa fa-arrow-right mx-2" title="to"/>
-                    <field name="vmk_end_date" class="oe_inline"/>
-                </div>
+                <field name="start_datetime" string="Date" widget="vmk_event_slot_daterange"
+                       options="{'end_date_field': 'end_datetime', 'tz_field': 'date_tz'}"
+                       readonly="0" help="Expressed in the event timezone."/>
             </label>
+            <!-- Hidden, not removed: other modules anchor on these. -->
+            <label for="start_hour" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </label>
+            <xpath expr="//field[@name='start_hour']/.." position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
         </field>
     </record>
 
