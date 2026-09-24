@@ -50,8 +50,10 @@ Limits
   the slot form instead.
 - **The event's own dates must cover its slots.** Odoo refuses to save a slot that ends after the
   event does, so extend the event first.
-- **On the website, a multi-day slot is listed under its first day**, with its start time, the same
-  way Odoo lists every slot. The registration modal window shows both days once a visitor selects one.
+- **On its own, this module doesn't change the website.** Odoo's registration window shows a slot's
+  start date and time but only its end time, so a Friday-to-Sunday slot reads as a single evening.
+  **Multi-Day Event Slots (Website)** shows both dates. With or without it, a multi-day slot is
+  listed under its first day, with its start time, the same way Odoo lists every slot.
 
 Changelog
 =========
