@@ -297,7 +297,9 @@ in `web/static/src/**`, not in Python. Half the surprises below live there.
   template is `template0`, which is the normal path. So any SQL `ORDER BY` on text is byte order:
   capitals sort before lowercase (`CRM` before `Calendar`) and accented initials land after `Z`.
   Neither `_order` nor a view's `default_order` can fix it, both taking bare field names with no
-  room for `lower()`. Sort in Python, or store a normalised key and order on that.
+  room for `lower()`. Sort in Python, or override `_order_field_to_sql` on the model for that one
+  field and add `COLLATE "und-x-icu"`, falling back to `lower()` where `pg_collation` lacks it, as
+  `vmk_apps_page_sort` does (19.0.1.2.0).
 - `post_init_hook(env)` takes the environment, and runs on **install only** — never on upgrade. If a
   hook seeds data, an upgrade will not re-seed it; apply it by hand when testing on an existing
   database.

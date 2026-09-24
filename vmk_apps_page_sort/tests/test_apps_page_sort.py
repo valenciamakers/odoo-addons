@@ -2,6 +2,7 @@
 # License LGPL-3 (https://www.gnu.org/licenses/lgpl-3.0.html).
 
 from pathlib import Path
+from unittest.mock import patch
 
 from lxml import etree
 
@@ -48,6 +49,68 @@ class TestAppsPageSort(TransactionCase):
         others = [i for i, module in enumerate(modules) if not module.application]
         self.assertTrue(applications and others, "expected both kinds installed")
         self.assertLess(max(applications), min(others))
+
+
+@tagged("post_install", "-at_install")
+class TestAlphabeticalOrder(TransactionCase):
+    """The names sort as a person reads them, not in the database's byte order."""
+
+    NAMES = {
+        "vmk_test_crm": "Zz CRM",
+        "vmk_test_calendar": "Zz Calendar",
+        "vmk_test_contacts": "Zz Contacts",
+        "vmk_test_exito": "Zz \u00c9xito",
+        "vmk_test_exit": "Zz Exit",
+        "vmk_test_zebra": "Zz Zebra",
+    }
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        Module = cls.env["ir.module.module"]
+        for name, shortdesc in cls.NAMES.items():
+            Module.create({"name": name, "shortdesc": shortdesc})
+
+    def _ordered(self):
+        modules = self.env["ir.module.module"].search(
+            [("name", "in", list(self.NAMES))], order=EXPECTED_ORDER
+        )
+        return modules.mapped("shortdesc")
+
+    def test_case_does_not_decide_the_order(self):
+        """`CRM` sorts after `Calendar` and `Contacts`; byte order puts it first."""
+        order = self._ordered()
+        self.assertLess(order.index("Zz Calendar"), order.index("Zz Contacts"))
+        self.assertLess(order.index("Zz Contacts"), order.index("Zz CRM"))
+
+    def test_accented_names_sort_beside_their_letter(self):
+        """With ICU, `\u00c9xito` sorts beside `Exit`, not after `Zebra`."""
+        if not self.env["ir.module.module"]._vmk_name_collation():
+            self.skipTest("this PostgreSQL has no ICU collation; lower() fixes case only")
+        order = self._ordered()
+        self.assertLess(order.index("Zz Exit"), order.index("Zz \u00c9xito"))
+        self.assertLess(order.index("Zz \u00c9xito"), order.index("Zz Zebra"))
+
+    def test_without_icu_case_still_does_not_decide(self):
+        """A PostgreSQL built without ICU falls back to lower(): case is fixed, accents are not."""
+        Module = type(self.env["ir.module.module"])
+        with patch.object(Module, "_vmk_name_collation", return_value=None):
+            order = self._ordered()
+        self.assertLess(order.index("Zz Calendar"), order.index("Zz Contacts"))
+        self.assertLess(order.index("Zz Contacts"), order.index("Zz CRM"))
+
+    def test_descending_reverses_it(self):
+        modules = self.env["ir.module.module"].search(
+            [("name", "in", list(self.NAMES))], order="shortdesc desc"
+        )
+        self.assertEqual(modules.mapped("shortdesc"), list(reversed(self._ordered())))
+
+    def test_other_fields_keep_core_ordering(self):
+        """Only `shortdesc` is touched; ordering by the technical name is unchanged."""
+        modules = self.env["ir.module.module"].search(
+            [("name", "in", list(self.NAMES))], order="name"
+        )
+        self.assertEqual(modules.mapped("name"), sorted(self.NAMES))
 
 
 @tagged("post_install", "-at_install")

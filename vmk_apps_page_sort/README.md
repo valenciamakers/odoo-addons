@@ -11,7 +11,7 @@ This module orders both Apps views by the name actually on the card.
 
 ## What it changes
 
-Two view inherits, no Python:
+Two view inherits, and one small override of how the name is compared:
 
 | View                      | Used by                        |
 | ------------------------- | ------------------------------ |
@@ -19,7 +19,9 @@ Two view inherits, no Python:
 | `base.module_tree`        | its list mode                  |
 
 Both gain `default_order="application desc, shortdesc"`. Neither carries a `default_order` in stock,
-so nothing is being overridden — the views simply fall back to the model's `_order` today.
+so nothing is being overridden — the views simply fall back to the model's `_order` today. The names
+are then compared alphabetically rather than in the database's byte order; see
+[Sorting and language](#sorting-and-language).
 
 `application desc` is kept deliberately. The Apps action passes `{'search_default_app': 1}`, so the
 page is filtered to applications and the prefix changes nothing there; it earns its place when you
@@ -54,31 +56,40 @@ original order.
 
 `shortdesc` is `translate=True`, so the order follows each user's own language.
 
-The comparison itself is PostgreSQL's, and **Odoo creates every database with `LC_COLLATE 'C'`** —
-`service/db.py` passes it whenever the template is `template0`, which is the normal path. `C` means
-byte order, so this page is not alphabetical in the way a person means it:
+**Odoo creates every database with `LC_COLLATE 'C'`** — `service/db.py` passes it whenever the
+template is `template0`, which is the normal path — and `C` means byte order. A plain
+`ORDER BY shortdesc` is therefore not alphabetical in the way a person means it: `CRM` sorts before
+`Calendar`, because `R` (82) precedes `a` (97), and accented initials sort after `Z`. The app grid,
+sorted by [`vmk_apps_menu_sort`](../vmk_apps_menu_sort) in Python with case and accents folded,
+disagreed with this page until 19.0.1.2.0.
 
-- `CRM` sorts before `Calendar`, because `R` (82) precedes `a` (97). Odoo has enough all-caps names
-  — CRM, MRP, IoT, SMS — for them to clump at the top.
-- Accented initials sort after `Z`, so a Spanish or Catalan name beginning `Á` lands at the end.
+**So the module also decides how `shortdesc` is compared.** `default_order` takes field names and
+cannot wrap one in a function, but the ORM builds each ORDER BY term in
+`BaseModel._order_field_to_sql` (`odoo/orm/models.py`), and `models/ir_module_module.py` overrides
+it on `ir.module.module` for `shortdesc` alone:
 
-This is the one place these two modules genuinely differ:
-[`vmk_apps_menu_sort`](../vmk_apps_menu_sort) folds case and accents into a Python sort key and is
-alphabetical in the human sense, while this module hands the comparison to the database and inherits
-its answer.
+- **With ICU**, it orders by `shortdesc COLLATE "und-x-icu"`, ICU's root collation: case does not
+  decide the order, and accented letters sit beside their base letter, so `Éxito` follows `Exit`
+  rather than `Zebra`. ICU ships with the standard PostgreSQL packages and Docker images.
+- **Without ICU**, naming the collation would be an error, so it falls back to `lower(shortdesc)`,
+  which fixes case but not accents. Which applies is checked once per registry, from `pg_collation`.
 
-Fixing it would mean a stored, normalised sort key on `ir.module.module` and ordering on that, since
-`default_order` takes field names and cannot wrap one in `lower()`. That is a column, a compute, and
-a recompute on every Apps-list update, to correct the position of a handful of acronyms. Not
-obviously worth it, but the option is real if the clumping grates.
+It reaches nothing else. Core never orders modules by `shortdesc` — its `_order` uses the technical
+`name` — so the override changes only the two Apps views that ask for it, keeping the reasoning of
+the section above. It is the same term core would build, with the collation added: the field
+expression is still added to the query's `_order_groupby`, and direction and `NULLS` pass through.
+
+A stored, normalised sort key was the alternative: a column, a compute, and a recompute on every
+Apps-list update, and a key per language, since `shortdesc` is translated. Ordering in the query
+needs none of that.
 
 ## Known limitations
 
 - **Sorting is by display name, not by relevance.** Odoo's `sequence` curation is gone; see above.
 - **Only the two Apps views are affected.** Any other list of `ir.module.module` keeps the model's
   `_order`, including Settings → Technical → Modules if you reach it through a different action.
-- **Byte order, not human alphabetical order**, because Odoo builds databases with `LC_COLLATE 'C'`.
-  Acronyms clump at the top and accented initials fall to the end; see above.
+- **Accents need ICU.** On a PostgreSQL built without it, case is folded but accented initials still
+  sort after `Z`; see above.
 
 ## Translations
 
@@ -92,7 +103,7 @@ re-running the export drops them.
 
 ## Requirements
 
-Odoo 19. Depends on `base` only, and ships no Python beyond an empty package marker.
+Odoo 19. Depends on `base` only. The Python is the one `_order_field_to_sql` override above.
 
 ## Testing
 
