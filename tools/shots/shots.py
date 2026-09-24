@@ -27,7 +27,8 @@ POLISH = r"""async (extraCss) => {
   document.head.appendChild(style);
   const mine = /res[.]partner[/]3[/]avatar|res[.]users[/]2[/]avatar|model=res[.]users&field=avatar_128&id=2(?![0-9])/;
   for (const img of [...document.querySelectorAll('img')].filter(i => mine.test(i.getAttribute('src') || ''))) {
-    const svg = await (await fetch(img.src)).text();
+    let svg;
+    try { svg = await (await fetch(img.src)).text(); } catch (e) { continue; }  // mid-reload: leave it
     if (!svg.trim().startsWith('<')) continue;
     img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(
       svg.replace(/fill=['"](#?[0-9a-fA-F]{3,6}|hsl\([^)]*\)|rgb\([^)]*\))['"]/, "fill='#531B93'"));

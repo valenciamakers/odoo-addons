@@ -45,7 +45,13 @@ env['event.event'].create({'name': 'Open Studio Evening', 'date_begin': start,
 env.cr.commit()
 ```
 
-Recipes find records by these names, so ids do not matter.
+- for the sort modules, a spread of Odoo's own apps: CRM, Sales, Invoicing, Inventory, Purchase,
+  Project, Employees, Time Off, Calendar, Contacts, Manufacturing, Point of Sale, and Helpdesk,
+  with the company's country set to Spain.
+
+Recipes find records by these names, so ids do not matter. The three sort recipes uninstall their
+module over RPC for the "before" captures and install it again for the "after"; `_sorting.py`
+waits for the backend to come back after each, since a request made mid-reload fails.
 
 ## Running
 
