@@ -8,7 +8,8 @@ them as one range.
 **How to use it** is in the user documentation, [`doc/index.rst`](doc/index.rst), which the Odoo
 Apps Store also shows on the module's page, together with the changelog.
 
-It needs only the Events app. With Website Events installed as well, the companion module
+It depends only on `event` (_Events Organization_). The _Events_ app is `website_event`, which
+brings the website with it, so most databases have both; there the companion module
 [`vmk_website_event_slot_multiday`](../vmk_website_event_slot_multiday) installs itself from a clone
 of this repo and shows visitors both days of a multi-day slot. From the Apps Store, website users
 download the companion instead: it depends on this module, so the store includes both, while this

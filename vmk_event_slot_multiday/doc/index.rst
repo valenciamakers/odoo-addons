@@ -12,11 +12,13 @@ it needs.
 Installation
 ============
 
-Install **Multi-Day Event Slots** from the Apps menu. It only requires the **Events** app.
+Install **Multi-Day Event Slots** from the Apps menu. It only requires **Events Organization**,
+the backend part of the **Events** app.
 
-If you use **Website Events**, install **Website Multi-Day Slots** instead. It includes this
-module, and also displays the start and end dates to website visitors when they select a slot. If
-you add Website Events later, install Website Multi-Day Slots then.
+The **Events** app includes the website, so if you use it, install **Website Multi-Day Slots**
+instead: it includes this module, and also displays the start and end dates to website visitors
+when they select a slot. If you install the Events app later, install Website Multi-Day Slots
+then.
 
 Existing slots are left unchanged until you give them a later end date.
 
