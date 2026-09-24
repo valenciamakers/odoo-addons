@@ -17,6 +17,7 @@
             "vmk_event_slot_multiday/static/src/fields/*.js",
         ],
     },
+    "images": ["static/description/main_screenshot.png"],
     "installable": True,
     "application": False,
 }

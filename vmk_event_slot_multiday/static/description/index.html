@@ -1,62 +1,70 @@
 <section class="oe_container">
     <div class="oe_row oe_spaced">
-        <h2 class="oe_slogan">Multi-Day Event Slots</h2>
-        <h3 class="oe_slogan">A slot that runs from Friday evening to Sunday afternoon</h3>
+        <h2 class="oe_slogan" style="color:#531B93;">Multi-Day Event Slots</h2>
+        <h3 class="oe_slogan">Organize weekend retreats, overnight hackathons, and multi-day courses as slots</h3>
         <div class="oe_span12">
-            <p class="oe_mt32">
-                An Odoo event slot is one date and two hours on it, so it can never leave its day. A
-                weekend retreat, an overnight hackathon, or a two-day course offered on several dates
-                cannot be a slot.
-            </p>
-            <p>
-                This module adds an <b>End Date</b> to each slot. Leave it as it is and the slot is
-                exactly what it was; set it to a later day and the slot runs until then.
-            </p>
+            <img class="oe_screenshot" style="max-width:100%;" src="main_screenshot.png" alt="The slot calendar, with a slot from Friday 9 October 18:00 to Sunday 11 October 13:00"/>
+        </div>
+        <div class="oe_span12">
+            <div class="oe_mt32" style="max-width:700px; margin-left:auto; margin-right:auto;">
+                <p>
+                    In standard Odoo, an event slot must start and end on the same day, so it can
+                    never span more than one. <b>Multi-Day Event Slots</b> gives each slot a start date and
+                    an end date, so it can span as many days as it needs.
+                </p>
+            </div>
         </div>
     </div>
 </section>
 
 <section class="oe_container oe_dark">
     <div class="oe_row oe_spaced">
+        <h2 class="oe_slogan" style="color:#531B93;">Fits right into Odoo</h2>
+        <h3 class="oe_slogan">Odoo's own features work as before, just with longer slots</h3>
         <div class="oe_span12">
-            <h3 class="oe_slogan">Everything follows the real end</h3>
-            <ul>
-                <li>The slot calendar draws the slot across all its days.</li>
-                <li>An attendee's registration ends when the slot does, so their calendar links and
-                    any mail scheduled after the event go out at the right time.</li>
-                <li>The slot is still kept inside its event's dates, by Odoo's own check.</li>
-                <li>A multi-day slot is named by both its days, such as
-                    <i>Oct 9, 2026, 18:00 - Oct 11, 2026, 13:00</i>.</li>
-                <li>Moving a weekend slot to another date keeps it a weekend.</li>
-            </ul>
+            <div style="max-width:700px; margin:32px auto 0;">
+                <img class="oe_screenshot" style="width:100%;" src="slot_form.png" alt="A slot form with one range, 9 Oct 18:00 to 11 Oct 13:00"/>
+            </div>
+            <div style="max-width:800px; margin:40px auto 48px; display:grid; grid-template-columns:1fr 1fr; gap:28px 48px;">
+                <div style="display:flex; gap:16px;">
+                    <span class="fa fa-calendar fa-2x fa-fw" style="color:#531B93; flex:none;"></span>
+                    <p style="margin:0;">The slots calendar view displays multi-day slots spanning all days.</p>
+                </div>
+                <div style="display:flex; gap:16px;">
+                    <span class="fa fa-ticket fa-2x fa-fw" style="color:#531B93; flex:none;"></span>
+                    <p style="margin:0;">An attendee's registration ends when the slot does, so calendar links include all days.</p>
+                </div>
+                <div style="display:flex; gap:16px;">
+                    <span class="fa fa-envelope fa-2x fa-fw" style="color:#531B93; flex:none;"></span>
+                    <p style="margin:0;">Mail scheduled for after the event is sent once the slot ends.</p>
+                </div>
+                <div style="display:flex; gap:16px;">
+                    <span class="fa fa-arrows-h fa-2x fa-fw" style="color:#531B93; flex:none;"></span>
+                    <p style="margin:0;">Move a multi-day slot to another start date and the end date moves with it.</p>
+                </div>
+            </div>
         </div>
     </div>
 </section>
 
 <section class="oe_container">
     <div class="oe_row oe_spaced">
+        <h2 class="oe_slogan" style="color:#531B93;">Small and focused on purpose</h2>
+        <h3 class="oe_slogan">Nothing changes for single-day slots</h3>
         <div class="oe_span12">
-            <h3 class="oe_slogan">One range, like the event form</h3>
-            <p>
-                The slot form shows a slot as one start-to-end range, the way the event form shows
-                an event's dates, in place of an hour range with no date at all. It is shown in the
-                event's timezone, as Odoo shows slots everywhere else, so the slot calendar and the
-                form always agree.
-            </p>
-        </div>
-    </div>
-</section>
-
-<section class="oe_container oe_dark">
-    <div class="oe_row oe_spaced">
-        <div class="oe_span12">
-            <h3 class="oe_slogan">Small on purpose</h3>
-            <p>
-                Slots within one day are stored exactly as before. It depends on nothing but
-                <b>Events</b>; with <b>Website Events</b> installed as well, the companion module
-                <i>Multi-Day Event Slots on the Website</i> installs itself and shows both days to
-                visitors when they pick a slot.
-            </p>
+            <div class="oe_mt32" style="max-width:700px; margin-left:auto; margin-right:auto;">
+                <p>
+                    The event slot form uses a single start-to-end range, the same way the event
+                    form does. Slots are configured and displayed in the event's timezone, as they currently are
+                    in Odoo. Existing slots are left unchanged until you give them a later end date.
+                </p>
+                <p>
+                    This module only requires the <b>Events</b> app. When the <b>Website Events</b>
+                    module is also installed, the companion <b>Website Multi-Day Slots</b> module
+                    installs itself automatically, and displays the start and end dates to website
+                    visitors when they select a slot.
+                </p>
+            </div>
         </div>
     </div>
 </section>
