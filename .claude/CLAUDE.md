@@ -663,6 +663,26 @@ uv run tools/make_cover.py --all
 
 Put a non-breaking hyphen (`&#8209;`) in a hyphenated name, or the title can wrap inside it.
 
+**The store page, `static/description/index.html`, styles its text inline.** The Apps Store and the
+backend's Apps page style Odoo's `oe_*` description classes differently: the store makes body text
+grey 16px at weight 300, pulls the subtitle up under the title, and paints `oe_dark` sections grey,
+which Odoo 19's backend never matches. So every heading and paragraph carries the backend's own
+computed values inline — `vmk_event_slot_multiday`'s page is the model to copy — and no section uses
+`oe_dark`. Widths are fixed to two: 700px for paragraphs and supporting screenshots, 800px for
+two-column feature grids, with the main screenshot full width. Name our modules and Odoo's apps in
+bold, and link a mention of another of our modules to its store page with `target="_blank"`: the
+store's rules allow only `static/description`, YouTube, Teams, and `mailto:` links, but links to its
+own module pages survive in live descriptions. Screenshots are taken at 2x in English (UK), with any
+polish (colours, widths, a drawn cursor) injected as CSS during capture only, never shipped.
+
+**The manual, `doc/index.rst`, has no RST headings.** The store shows it in a Documentation tab with
+headings at 53px, 42px, and 31px against 16px text, and pure RST cannot set a size; top-level
+sections are always its `h2`. So there is no title (the page already names the module), section
+names are bold paragraphs — **Installation**, **Using it**, **Limits**, **Changelog** — and each
+changelog version is an italic line, `*19.0.1.0.1 (24 September 2026)*`, over a bullet list, newest
+first. A mention of the other module where the reader should install it instead links to its store
+page. Check that it parses with docutils before committing.
+
 **Bump the version on every change to our code**, not only when a change needs an upgrade to take
 effect. The manifest version is the only marker of which build someone is running, and the cost of
 getting it wrong is asymmetric: a bump nobody needed is invisible, while a changed module still
