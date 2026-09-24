@@ -94,7 +94,7 @@ class TestModuleNameTranslation(TransactionCase):
     I18N = Path(__file__).resolve().parent.parent / "i18n"
     HAND_MAINTAINED = (
         "Protect Language Edits",
-        "Stop Odoo updates reverting your edits to language metadata",
+        "Stop Odoo updates from reverting your edits to language settings",
     )
 
     def test_pot_still_carries_the_hand_added_module_metadata(self):

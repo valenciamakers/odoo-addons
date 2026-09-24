@@ -1,5 +1,17 @@
 # Protect Language Edits (`vmk_language_freeze_meta`)
 
+Stop Odoo updates from reverting your edits to language settings. In standard Odoo, every module
+update resets the languages to Odoo's own values, so a renamed language or a changed date format is
+quietly reverted. This module keeps your changes: a language you edit is protected from updates from
+then on.
+
+**How to use it** is in the user documentation, [`doc/index.rst`](doc/index.rst), which the Odoo
+Apps Store also shows on the module's page, together with the changelog.
+
+It depends only on `base`. LGPL-3, © 2026 Valencia Makers, SL.
+
+## For developers
+
 Odoo ships its languages as module data and re-applies them on every module update, so any edit you
 make to a language is reverted. Rename `English (US)` to `English`, broaden Catalan's ISO code from
 `ca_ES` to `ca`, and the next `-u base` — which is what `-u all` and most update scripts do — puts
@@ -8,7 +20,7 @@ both back.
 This module keeps those edits. It freezes the language **record**, not its translations: the two are
 unrelated, and translation updates are unaffected. Hence _freeze_meta_.
 
-## What gets reverted, and why
+### What gets reverted, and why
 
 The values come from `base/data/res.lang.csv`, a plain CSV in base's `data` list. CSV data files
 have no `noupdate` mechanism — unlike XML, which can wrap records in `<data noupdate="1">` — so
@@ -20,7 +32,7 @@ every row loads with `noupdate = False` and is re-applied on each update. The co
 `base/data/res_lang_data.xml` additionally sets `url_code` and `flag_image` for a handful of
 languages, some of it outside its `noupdate` block.
 
-## How it protects them
+### How it protects them
 
 By setting `noupdate` on the language's external id. `_load_records` in `odoo/orm/models.py` decides
 what to re-apply with:
@@ -39,7 +51,7 @@ Protection is per record and all-or-nothing — there is no per-field granularit
 language also stops receiving genuine Odoo corrections to its date formats or week start. That is
 the trade, and it is why disabled languages are left alone.
 
-## When it applies
+### When it applies
 
 - **On install**, every **enabled** language is protected. Edits made before this module existed are
   already in the database and cannot be told apart from shipped values after the fact, so protecting
@@ -59,7 +71,7 @@ handing that language back to Odoo.
 Languages you create by hand have no external id, so no data file can overwrite them and there is
 nothing to protect. The toggle stays off for them, correctly.
 
-## A note on `iso_code`
+### A note on `iso_code`
 
 Its help text — _"This ISO code is the name of po files to use for translations"_ — is stale in 19.
 `_load_module_terms` passes the language **`code`** to `get_po_paths`, and `get_base_langs('ca_ES')`
@@ -67,7 +79,7 @@ returns `['ca', 'ca_ES']`, so `ca.po` is found whatever `iso_code` says. What `i
 drives is `num2words`, for amounts in words (`res_currency.py`). Changing it is safe either way;
 this module just stops the change being reverted.
 
-## Translations
+### Translations
 
 The module's own name and summary in `i18n/vmk_language_freeze_meta.pot`, `es.po` and `ca.po` are
 hand-maintained, not exported — `ir.module.module` records belong to `base`'s xmlid namespace, so
@@ -76,11 +88,11 @@ hand-maintained, not exported — `ir.module.module` records belong to `base`'s 
 for the full explanation. `tests/test_language_freeze.py::TestModuleNameTranslation` fails loudly if
 re-running the export drops them.
 
-## Requirements
+### Requirements
 
 Odoo 19. Depends only on `base`.
 
-## Testing
+### Testing
 
 ```bash
 odoo -d <db> -u vmk_language_freeze_meta --test-enable \

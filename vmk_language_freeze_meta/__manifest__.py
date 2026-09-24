@@ -3,7 +3,7 @@
 
 {
     "name": "Protect Language Edits",
-    "summary": "Stop Odoo updates reverting your edits to language metadata",
+    "summary": "Stop Odoo updates from reverting your edits to language settings",
     "version": "19.0.1.1.1",
     "author": "Valencia Makers",
     "license": "LGPL-3",
@@ -11,6 +11,7 @@
     "depends": ["base"],
     "data": ["views/res_lang_views.xml"],
     "post_init_hook": "protect_enabled_languages",
+    "images": ["static/description/cover.png"],
     "installable": True,
     "application": False,
 }

@@ -57,5 +57,5 @@ msgstr "Protegir les edicions dels idiomes"
 
 #. module: base
 #: model:ir.module.module,summary:base.module_vmk_language_freeze_meta
-msgid "Stop Odoo updates reverting your edits to language metadata"
-msgstr "Evita que les actualitzacions d'Odoo reverteixin els teus canvis a les metadades d'idioma"
+msgid "Stop Odoo updates from reverting your edits to language settings"
+msgstr "Evita que les actualitzacions d'Odoo reverteixin els teus canvis a la configuració d'idioma"
