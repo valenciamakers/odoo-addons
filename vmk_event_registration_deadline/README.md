@@ -1,8 +1,17 @@
 # Event Registration Deadline (`vmk_event_registration_deadline`)
 
-Sells tickets only until an event starts, or a set time in advance.
+Sell tickets only until an event starts, or a set time in advance. Standard Odoo keeps registrations
+open until an event ends; this module closes them at the start, or a set time before, globally or
+per event.
 
-## Why
+**How to use it** is in the user documentation, [`doc/index.rst`](doc/index.rst), which the Odoo
+Apps Store also shows on the module's page, together with the changelog.
+
+It depends on `website_event` (the _Events_ app). LGPL-3, © 2026 Valencia Makers, SL.
+
+## For developers
+
+### Why
 
 Core decides whether registration is open in `event.event._compute_event_registrations_open`, and
 the only test it makes against the event's own dates is **`date_end >= now`**. There is no reference
@@ -14,7 +23,7 @@ taught. Core offers a per-ticket _Registration End_ to handle it, but that has t
 ticket of every event, and the failure mode of forgetting is selling somebody a course that has
 already happened.
 
-## What it does
+### What it does
 
 A deadline, expressed as a duration before the event starts:
 
@@ -37,7 +46,7 @@ An event that sets its own deadline is opted in whatever the global switch says.
 "apply a deadline to events by default", and an event asking for one has answered for itself — so
 turning the feature off stops it applying everywhere it was implicit, and nowhere it was asked for.
 
-## What it deliberately leaves alone
+### What it deliberately leaves alone
 
 **A ticket that defines its own Registration End.** Core's `is_expired` is False whenever
 `end_sale_datetime` is blank, so blank is the case this module is for. A date somebody typed is a
@@ -47,7 +56,7 @@ deliberate choice to allow late registration, and it wins.
 closing the event there would stop selling every later slot too. Core handles those per slot — and
 so does this module, by extending `_filter_open_slots`.
 
-## Slots get the same rule
+### Slots get the same rule
 
 `website_event` retires a slot whose `start_datetime` has passed
 (`website_event/models/event_slot.py`, `_filter_open_slots`), with **no lead time**. Left alone, the
@@ -61,14 +70,14 @@ nothing about which slot it belongs to.
 **This is why the module depends on `website_event` rather than `event`** — half the rule lives in a
 method that module defines.
 
-## What it does not depend on
+### What it does not depend on
 
 Nothing about sessions. The rule reads `date_begin` for an event and `slot.start_datetime` for a
 slot. Where a module makes an event's dates follow a series of sessions — `vmk_event_sessions` does
 — `date_begin` is already the first session's start, so a series gets the right behaviour here
 without this module knowing sessions exist.
 
-## Translations
+### Translations
 
 `i18n/` carries `es` and `ca`, and `./odev terms vmk_event_registration_deadline` reports both clean
 against core. Shared terms — _Event_, _Config Settings_, _Display Name_ — take core's own `msgstr`
@@ -82,7 +91,7 @@ obsolete, so a PO entry with no POT counterpart disappears in silence and the mo
 English name in a Spanish database. `tests/test_translations.py::TestModuleNameTranslation` fails
 loudly if a re-export drops them.
 
-## Nothing reaches the chatter, deliberately
+### Nothing reaches the chatter, deliberately
 
 Both fields added to `event.event` carry no `tracking`. A deadline is a sales rule, not a fact about
 the event anyone will later ask when it changed, and `event.event` already tracks the dates a
@@ -90,7 +99,7 @@ deadline is derived from. Writing the override into the chatter would record the
 the decision, which is the failure mode worth avoiding: a history that logs the side effect instead
 of the act. Nothing here calls `message_post` either.
 
-## Testing
+### Testing
 
 ```bash
 cd ../../Tech\ Stack/odoo-dev
@@ -106,6 +115,6 @@ timezone, not an offset — a literal `10.0` in a test built from `now` lands wh
 the first draft of these put slots outside their own events. `_slot()` in the test file converts a
 moment into the date and hours core wants.
 
-## Licence
+### Licence
 
 LGPL-3, as the whole repo is. See `LICENSE`.

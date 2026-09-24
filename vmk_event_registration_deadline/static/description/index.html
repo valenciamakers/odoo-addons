@@ -1,63 +1,74 @@
 <section class="oe_container">
     <div class="oe_row oe_spaced">
-        <h2 class="oe_slogan">Registration Deadline</h2>
-        <h3 class="oe_slogan">Stop selling a course that has already started</h3>
+        <h2 class="oe_slogan" style="font-family:Lato, 'Open Sans', Helvetica, sans-serif; font-weight:300; text-align:center; margin:32px 0; font-size:40px; line-height:48px; color:#531B93;">Event Registration Deadline</h2>
+        <h3 class="oe_slogan" style="font-family:Lato, 'Open Sans', Helvetica, sans-serif; font-weight:300; text-align:center; margin:32px 0; font-size:26px; line-height:31px; color:#333333; opacity:0.5;">Close registrations before an event starts, not after it ends</h3>
         <div class="oe_span12">
-            <p class="oe_mt32">
-                Odoo keeps registration open until an event <b>ends</b>. The only date it checks is
-                <code>date_end</code>. So a nine-to-five workshop is still on sale at 16:55, and a
-                four-week course can be bought in week three with three weeks already missed.
-            </p>
-            <p>
-                That is right for a conference, where arriving on day two is normal. It is wrong for
-                anything taught. This module closes registration when the event <b>starts</b>, or a
-                set time before it.
-            </p>
+            <img class="oe_screenshot" style="max-width:100%;" src="main_screenshot.png" alt="An event page showing Registrations Closed, with the event starting in under two hours"/>
         </div>
-    </div>
-</section>
-
-<section class="oe_container oe_dark">
-    <div class="oe_row oe_spaced">
         <div class="oe_span12">
-            <h3 class="oe_slogan">One switch, one duration</h3>
-            <p>
-                <b>Settings &rarr; Events &rarr; Registration</b> carries a switch and a duration
-                beside it. Set <code>1:30</code> and registration closes ninety minutes before the
-                start; set <code>00:00</code> and it closes as the event begins.
-            </p>
-            <p>
-                The switch is off by default, so installing the module changes nothing until
-                somebody turns it on.
-            </p>
+            <div class="oe_mt32" style="max-width:700px; margin-left:auto; margin-right:auto;">
+                <p style="font-family:-apple-system, system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', Ubuntu, 'Noto Sans', Arial, sans-serif; font-size:14px; font-weight:400; line-height:21px; color:#111827; margin:0 0 16px;">
+                    In standard Odoo, registrations stay open until an event <b>ends</b>, so people can sign up
+                    for a workshop that is already under way, or a course that is half over.
+                    <b>Event Registration Deadline</b> closes registrations when an event starts, or a set
+                    time before, for every event or only the ones you choose.
+                </p>
+            </div>
         </div>
     </div>
 </section>
 
 <section class="oe_container">
     <div class="oe_row oe_spaced">
+        <h2 class="oe_slogan" style="font-family:Lato, 'Open Sans', Helvetica, sans-serif; font-weight:300; text-align:center; margin:32px 0; font-size:40px; line-height:48px; color:#531B93;">Fits right into Odoo</h2>
+        <h3 class="oe_slogan" style="font-family:Lato, 'Open Sans', Helvetica, sans-serif; font-weight:300; text-align:center; margin:32px 0; font-size:26px; line-height:31px; color:#333333; opacity:0.5;">Set it once, and adjust it for any event</h3>
         <div class="oe_span12">
-            <h3 class="oe_slogan">Per-event override</h3>
-            <p>
-                An event can set its own deadline, beside the seat limit on the event form. An event
-                that asks for one keeps it whatever the global switch says &mdash; turning the
-                feature off stops it applying everywhere it was implicit, and nowhere it was asked
-                for.
-            </p>
+            <div style="max-width:700px; margin:32px auto 0;">
+                <img class="oe_screenshot" style="width:100%;" src="deadline_settings.png" alt="Events settings, with Registration Deadline on and Time Before Start set to 01:30"/>
+            </div>
+        </div>
+        <div class="oe_span12">
+            <div class="row" style="max-width:800px; margin:40px auto 20px;">
+                <div class="col-md-6" style="margin-bottom:28px;"><div style="display:flex;">
+                    <span class="fa fa-cog fa-2x fa-fw" style="color:#531B93; margin-right:16px;"></span>
+                    <p style="font-family:-apple-system, system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', Ubuntu, 'Noto Sans', Arial, sans-serif; font-size:14px; font-weight:400; line-height:21px; color:#111827; margin:0;">Turn it on in the Events settings, with one deadline for every event, such as 01:30 before the start.</p>
+                </div></div>
+                <div class="col-md-6" style="margin-bottom:28px;"><div style="display:flex;">
+                    <span class="fa fa-calendar-check-o fa-2x fa-fw" style="color:#531B93; margin-right:16px;"></span>
+                    <p style="font-family:-apple-system, system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', Ubuntu, 'Noto Sans', Arial, sans-serif; font-size:14px; font-weight:400; line-height:21px; color:#111827; margin:0;">Give any event its own deadline, next to its registration limit.</p>
+                </div></div>
+                <div class="col-md-6" style="margin-bottom:28px;"><div style="display:flex;">
+                    <span class="fa fa-ticket fa-2x fa-fw" style="color:#531B93; margin-right:16px;"></span>
+                    <p style="font-family:-apple-system, system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', Ubuntu, 'Noto Sans', Arial, sans-serif; font-size:14px; font-weight:400; line-height:21px; color:#111827; margin:0;">A ticket with its own Registration End keeps it: the deadline only applies where none is set.</p>
+                </div></div>
+                <div class="col-md-6" style="margin-bottom:28px;"><div style="display:flex;">
+                    <span class="fa fa-clock-o fa-2x fa-fw" style="color:#531B93; margin-right:16px;"></span>
+                    <p style="font-family:-apple-system, system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', Ubuntu, 'Noto Sans', Arial, sans-serif; font-size:14px; font-weight:400; line-height:21px; color:#111827; margin:0;">Events with multiple slots close each slot the same time before it starts.</p>
+                </div></div>
+            </div>
         </div>
     </div>
 </section>
 
-<section class="oe_container oe_dark">
+<section class="oe_container">
     <div class="oe_row oe_spaced">
+        <h2 class="oe_slogan" style="font-family:Lato, 'Open Sans', Helvetica, sans-serif; font-weight:300; text-align:center; margin:32px 0; font-size:40px; line-height:48px; color:#531B93;">Small and focused on purpose</h2>
+        <h3 class="oe_slogan" style="font-family:Lato, 'Open Sans', Helvetica, sans-serif; font-weight:300; text-align:center; margin:32px 0; font-size:26px; line-height:31px; color:#333333; opacity:0.5;">Nothing changes until you turn it on</h3>
         <div class="oe_span12">
-            <h3 class="oe_slogan">What it leaves alone</h3>
-            <ul>
-                <li>A ticket that sets its own <b>Registration End</b>. A date somebody typed is a
-                    deliberate choice to allow late registration, and it wins.</li>
-                <li>Multi-slot events are handled per slot, as core handles them, so one late slot
-                    does not close the earlier ones &mdash; or keep them open.</li>
-            </ul>
+            <div style="max-width:430px; margin:32px auto 0;">
+                <img class="oe_screenshot" style="width:100%;" src="deadline_event.png" alt="An event form with its own Registration Deadline of 02:00 before the start"/>
+            </div>
+        </div>
+        <div class="oe_span12">
+            <div class="oe_mt32" style="max-width:700px; margin-left:auto; margin-right:auto;">
+                <p style="font-family:-apple-system, system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', Ubuntu, 'Noto Sans', Arial, sans-serif; font-size:14px; font-weight:400; line-height:21px; color:#111827; margin:0 0 16px;">
+                    The deadline is off by default, so installing the module changes nothing. An event given
+                    its own deadline keeps it even when the setting is off.
+                </p>
+                <p style="font-family:-apple-system, system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', Ubuntu, 'Noto Sans', Arial, sans-serif; font-size:14px; font-weight:400; line-height:21px; color:#111827; margin:0 0 16px;">
+                    This module requires the <b>Events</b> app.
+                </p>
+            </div>
         </div>
     </div>
 </section>

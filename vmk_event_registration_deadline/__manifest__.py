@@ -15,6 +15,7 @@
         "views/res_config_settings_views.xml",
         "views/event_event_views.xml",
     ],
+    "images": ["static/description/cover.png"],
     "installable": True,
     "application": False,
 }
