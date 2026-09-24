@@ -1,4 +1,4 @@
-# Website Multi-Day Slots (`vmk_website_event_slot_multiday`)
+# Multi-Day Event Slots (Website) (`vmk_website_event_slot_multiday`)
 
 Allow event slots to span multiple days, on the website too: a weekend retreat from Friday evening
 to Sunday afternoon, an overnight hackathon, or a two-day course offered on several dates. It

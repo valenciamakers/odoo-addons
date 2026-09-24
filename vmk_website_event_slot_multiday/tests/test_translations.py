@@ -25,7 +25,7 @@ class TestModuleNameTranslation(TransactionCase):
     MODULE = "vmk_website_event_slot_multiday"
     I18N = Path(__file__).resolve().parent.parent / "i18n"
     HAND_MAINTAINED = (
-        "Website Multi-Day Slots",
+        "Multi-Day Event Slots (Website)",
         "Allow event slots to span multiple days, on the website too",
     )
 

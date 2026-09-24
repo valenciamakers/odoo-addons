@@ -2,7 +2,7 @@
 # License LGPL-3 (https://www.gnu.org/licenses/lgpl-3.0.html).
 
 {
-    "name": "Website Multi-Day Slots",
+    "name": "Multi-Day Event Slots (Website)",
     "summary": "Allow event slots to span multiple days, on the website too",
     "version": "19.0.1.0.1",
     "author": "Valencia Makers",

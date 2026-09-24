@@ -1,6 +1,6 @@
-=======================
-Website Multi-Day Slots
-=======================
+===============================
+Multi-Day Event Slots (Website)
+===============================
 
 Allow event slots to span multiple days, on the website too: a weekend retreat from Friday evening
 to Sunday afternoon, an overnight hackathon, or a two-day course offered on several dates.
@@ -13,7 +13,7 @@ part.
 Installation
 ============
 
-Install **Website Multi-Day Slots** from the Apps menu. It requires the **Events** app, and
+Install **Multi-Day Event Slots (Website)** from the Apps menu. It requires the **Events** app, and
 installs **Multi-Day Event Slots** with it.
 
 For the backend alone, without the website, install **Multi-Day Event Slots** instead.
