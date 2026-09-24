@@ -48,6 +48,9 @@ env.cr.commit()
 - for the sort modules, a spread of Odoo's own apps: CRM, Sales, Invoicing, Inventory, Purchase,
   Project, Employees, Time Off, Calendar, Contacts, Manufacturing, Point of Sale, and Helpdesk,
   with the company's country set to Spain.
+- for the language modules, six enabled languages, all on the website: English (UK), English (US),
+  Catalan, French, German, and Spanish. The Language Sequence recipe sets their order; the Protect
+  Language Edits recipe changes Catalan's ISO code to `ca`, which protects it.
 
 Recipes find records by these names, so ids do not matter. The three sort recipes uninstall their
 module over RPC for the "before" captures and install it again for the "after"; `_sorting.py`
