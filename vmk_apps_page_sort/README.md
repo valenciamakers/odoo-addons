@@ -1,5 +1,16 @@
 # Apps Page Sort (`vmk_apps_page_sort`)
 
+Alphabetical order on the Apps page, sorted by the name shown on the card. In standard Odoo, the
+Apps page is ordered by the hidden technical name of each app, so Employees is filed under _hr_ and
+Invoicing under _account_. This module orders it by the name on the card, alphabetically.
+
+**How to use it** is in the user documentation, [`doc/index.rst`](doc/index.rst), which the Odoo
+Apps Store also shows on the module's page, together with the changelog.
+
+It depends only on `base`. LGPL-3, © 2026 Valencia Makers, SL.
+
+## For developers
+
 The Apps page at `/odoo/apps` looks unsorted because it is ordered by a field it does not display.
 
 `ir.module.module` declares `_order = 'application desc, sequence, name'`, where `name` is the
@@ -9,7 +20,7 @@ Discuss under `m`, and the result reads as no order at all.
 
 This module orders both Apps views by the name actually on the card.
 
-## What it changes
+### What it changes
 
 Two view inherits, and one small override of how the name is compared:
 
@@ -32,7 +43,7 @@ What is given up is `sequence`, which Odoo uses to float particular modules to t
 A purely alphabetical page cannot also honour a curated order, and the curation is what makes the
 page look arbitrary in the first place.
 
-## Why the views rather than `_order`
+### Why the views rather than `_order`
 
 Overriding `_order` on `ir.module.module` is one line and reaches every module list at once, which
 is precisely the problem: that model is searched during install and upgrade paths, not only for
@@ -41,7 +52,7 @@ display. A `default_order` on the two views confines the change to the screens t
 This is the same reasoning as [`vmk_apps_menu_sort`](../vmk_apps_menu_sort) sorting the menu payload
 instead of writing `sequence` values — order the presentation, leave the data alone.
 
-## Why both records anchor on the root tag
+### Why both records anchor on the root tag
 
 This repo's conventions warn against anchoring an inherit on a view's root tag, because core renamed
 `<tree>` to `<list>` in 18 while keeping the old view record ids. There is no way to follow that
@@ -52,7 +63,7 @@ attribute arrived, so an anchor that stops matching fails loudly. Without that, 
 silent — the inherit matches nothing, no error is raised, and the Apps page carries on in its
 original order.
 
-## Sorting and language
+### Sorting and language
 
 `shortdesc` is `translate=True`, so the order follows each user's own language.
 
@@ -83,7 +94,7 @@ A stored, normalised sort key was the alternative: a column, a compute, and a re
 Apps-list update, and a key per language, since `shortdesc` is translated. Ordering in the query
 needs none of that.
 
-## Known limitations
+### Known limitations
 
 - **Sorting is by display name, not by relevance.** Odoo's `sequence` curation is gone; see above.
 - **Only the two Apps views are affected.** Any other list of `ir.module.module` keeps the model's
@@ -91,7 +102,7 @@ needs none of that.
 - **Accents need ICU.** On a PostgreSQL built without it, case is folded but accented initials still
   sort after `Z`; see above.
 
-## Translations
+### Translations
 
 The module's own name and summary in `i18n/vmk_apps_page_sort.pot`, `es.po` and `ca.po` are
 hand-maintained, not exported — `ir.module.module` records belong to `base`'s xmlid namespace, so
@@ -101,11 +112,11 @@ terms, so that is the whole of this catalogue. See
 for the full explanation. `tests/test_apps_page_sort.py::TestModuleNameTranslation` fails loudly if
 re-running the export drops them.
 
-## Requirements
+### Requirements
 
 Odoo 19. Depends on `base` only. The Python is the one `_order_field_to_sql` override above.
 
-## Testing
+### Testing
 
 ```bash
 odoo -d <db> -u vmk_apps_page_sort --test-enable --test-tags /vmk_apps_page_sort --stop-after-init

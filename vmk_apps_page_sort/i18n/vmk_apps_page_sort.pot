@@ -22,5 +22,5 @@ msgstr ""
 
 #. module: base
 #: model:ir.module.module,summary:base.module_vmk_apps_page_sort
-msgid "Order the Apps page by the name on the card, not the hidden technical name"
+msgid "Alphabetical order on the Apps page, sorted by the name shown on the card"
 msgstr ""

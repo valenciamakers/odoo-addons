@@ -134,7 +134,7 @@ class TestModuleNameTranslation(TransactionCase):
     I18N = Path(__file__).resolve().parent.parent / "i18n"
     HAND_MAINTAINED = (
         "Apps Page Sort",
-        "Order the Apps page by the name on the card, not the hidden technical name",
+        "Alphabetical order on the Apps page, sorted by the name shown on the card",
     )
 
     def test_pot_still_carries_the_hand_added_module_metadata(self):

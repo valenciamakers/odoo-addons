@@ -30,5 +30,5 @@ msgstr "Ordre de la pàgina d'Aplicacions"
 
 #. module: base
 #: model:ir.module.module,summary:base.module_vmk_apps_page_sort
-msgid "Order the Apps page by the name on the card, not the hidden technical name"
-msgstr "Ordena la pàgina d'Aplicacions pel nom de la targeta, no pel nom tècnic ocult"
+msgid "Alphabetical order on the Apps page, sorted by the name shown on the card"
+msgstr "Ordre alfabètic a la pàgina d'Aplicacions, pel nom que es mostra a la targeta"

@@ -1,51 +1,70 @@
 <section class="oe_container">
     <div class="oe_row oe_spaced">
-        <h2 class="oe_slogan">Apps Page Sort</h2>
-        <h3 class="oe_slogan">Order the Apps page by the name on the card</h3>
+        <h2 class="oe_slogan" style="font-family:Lato, 'Open Sans', Helvetica, sans-serif; font-weight:300; text-align:center; margin:32px 0; font-size:40px; line-height:48px; color:light-dark(#531B93, #B794F4);">Apps Page Sort</h2>
+        <h3 class="oe_slogan" style="font-family:Lato, 'Open Sans', Helvetica, sans-serif; font-weight:300; text-align:center; margin:32px 0; font-size:26px; line-height:31px; color:light-dark(#333333, #E4E4E4); opacity:0.5;">Browse apps on the Apps page by the name you see</h3>
         <div class="oe_span12">
-            <p class="oe_mt32">
-                The Apps page looks unsorted because it is ordered by a name it never shows you: the
-                module's technical name. <b>Employees</b> is filed under <i>hr</i>,
-                <b>Invoicing</b> under <i>account</i>, <b>Discuss</b> under <i>mail</i>. Nothing on
-                screen explains the order.
-            </p>
-            <p>
-                This module sorts the page by the name written on the card, which is the one you are
-                actually reading.
-            </p>
+            <img class="oe_screenshot" style="max-width:100%;" src="main_screenshot.png" alt="The Apps page sorted alphabetically by app name, from Barcode to Sales"/>
         </div>
-    </div>
-</section>
-
-<section class="oe_container oe_dark">
-    <div class="oe_row oe_spaced">
         <div class="oe_span12">
-            <h3 class="oe_slogan">Both ways of looking at it</h3>
-            <ul>
-                <li>The Apps page in its usual card view.</li>
-                <li>The same page switched to list view.</li>
-            </ul>
-            <p>
-                Applications stay ahead of technical modules, so clearing the Apps filter still gives
-                you something sensible rather than several hundred entries in one run.
-            </p>
+            <div class="oe_mt32" style="max-width:700px; margin-left:auto; margin-right:auto;">
+                <p style="font-family:-apple-system, system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', Ubuntu, 'Noto Sans', Arial, sans-serif; font-size:14px; font-weight:400; line-height:21px; color:light-dark(#111827, #E4E4E4); margin:0 0 16px;">
+                    In standard Odoo, the Apps page is ordered by the hidden technical name of each app, so Employees is filed under <i>hr</i> and Invoicing under <i>account</i>. <b>Apps Page Sort</b> orders it by the name on the card, alphabetically.
+                </p>
+            </div>
         </div>
     </div>
 </section>
 
 <section class="oe_container">
     <div class="oe_row oe_spaced">
+        <h2 class="oe_slogan" style="font-family:Lato, 'Open Sans', Helvetica, sans-serif; font-weight:300; text-align:center; margin:32px 0; font-size:40px; line-height:48px; color:light-dark(#531B93, #B794F4);">Before and after</h2>
+        <h3 class="oe_slogan" style="font-family:Lato, 'Open Sans', Helvetica, sans-serif; font-weight:300; text-align:center; margin:32px 0; font-size:26px; line-height:31px; color:light-dark(#333333, #E4E4E4); opacity:0.5;">The same installed apps, in standard Odoo and sorted</h3>
         <div class="oe_span12">
-            <h3 class="oe_slogan">Nothing to configure</h3>
-            <p>
-                Install it and the page is sorted. No setting, no data changed, and nothing written
-                to your modules &mdash; the order is applied when the page is drawn, so uninstalling
-                puts everything back exactly as it was.
-            </p>
-            <p>
-                Module names are translatable, so each user sees the page sorted in their own
-                language.
-            </p>
+            <div class="row" style="max-width:800px; margin:32px auto 0;">
+                <div class="col-md-6" style="margin-bottom:24px;">
+                    <p style="font-family:-apple-system, system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', Ubuntu, 'Noto Sans', Arial, sans-serif; font-size:13px; font-weight:600; line-height:21px; color:light-dark(#111827, #E4E4E4); margin:0 0 8px; text-align:center;">Standard</p>
+                    <img class="oe_screenshot" style="width:100%;" src="apps_before.png" alt="The Apps page in standard Odoo's order"/>
+                </div>
+                <div class="col-md-6" style="margin-bottom:24px;">
+                    <p style="font-family:-apple-system, system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', Ubuntu, 'Noto Sans', Arial, sans-serif; font-size:13px; font-weight:600; line-height:21px; color:light-dark(#111827, #E4E4E4); margin:0 0 8px; text-align:center;">With Apps Page Sort</p>
+                    <img class="oe_screenshot" style="width:100%;" src="apps_after.png" alt="The Apps page sorted alphabetically"/>
+                </div>
+            </div>
+            <div class="row" style="max-width:800px; margin:24px auto 20px;">
+                <div class="col-md-6" style="margin-bottom:28px;"><div style="display:flex;">
+                    <span class="fa fa-sort-alpha-asc fa-2x fa-fw" style="color:light-dark(#531B93, #B794F4); margin-right:16px;"></span>
+                    <p style="font-family:-apple-system, system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', Ubuntu, 'Noto Sans', Arial, sans-serif; font-size:14px; font-weight:400; line-height:21px; color:light-dark(#111827, #E4E4E4); margin:0;">Cards and list rows are ordered by the app name visible to the user.</p>
+                </div></div>
+                <div class="col-md-6" style="margin-bottom:28px;"><div style="display:flex;">
+                    <span class="fa fa-language fa-2x fa-fw" style="color:light-dark(#531B93, #B794F4); margin-right:16px;"></span>
+                    <p style="font-family:-apple-system, system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', Ubuntu, 'Noto Sans', Arial, sans-serif; font-size:14px; font-weight:400; line-height:21px; color:light-dark(#111827, #E4E4E4); margin:0;">The order follows each user's own language setting, with accented names sorted correctly.</p>
+                </div></div>
+                <div class="col-md-6" style="margin-bottom:28px;"><div style="display:flex;">
+                    <span class="fa fa-th-large fa-2x fa-fw" style="color:light-dark(#531B93, #B794F4); margin-right:16px;"></span>
+                    <p style="font-family:-apple-system, system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', Ubuntu, 'Noto Sans', Arial, sans-serif; font-size:14px; font-weight:400; line-height:21px; color:light-dark(#111827, #E4E4E4); margin:0;">Apps are sorted in front of other modules when you clear the Apps filter.</p>
+                </div></div>
+                <div class="col-md-6" style="margin-bottom:28px;"><div style="display:flex;">
+                    <span class="fa fa-undo fa-2x fa-fw" style="color:light-dark(#531B93, #B794F4); margin-right:16px;"></span>
+                    <p style="font-family:-apple-system, system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', Ubuntu, 'Noto Sans', Arial, sans-serif; font-size:14px; font-weight:400; line-height:21px; color:light-dark(#111827, #E4E4E4); margin:0;">Nothing is stored; uninstall the module and the original order returns.</p>
+                </div></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="oe_container">
+    <div class="oe_row oe_spaced">
+        <h2 class="oe_slogan" style="font-family:Lato, 'Open Sans', Helvetica, sans-serif; font-weight:300; text-align:center; margin:32px 0; font-size:40px; line-height:48px; color:light-dark(#531B93, #B794F4);">Small and focused on purpose</h2>
+        <h3 class="oe_slogan" style="font-family:Lato, 'Open Sans', Helvetica, sans-serif; font-weight:300; text-align:center; margin:32px 0; font-size:26px; line-height:31px; color:light-dark(#333333, #E4E4E4); opacity:0.5;">Only the Apps page changes</h3>
+        <div class="oe_span12">
+            <div class="oe_mt32" style="max-width:700px; margin-left:auto; margin-right:auto;">
+                <p style="font-family:-apple-system, system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', Ubuntu, 'Noto Sans', Arial, sans-serif; font-size:14px; font-weight:400; line-height:21px; color:light-dark(#111827, #E4E4E4); margin:0 0 16px;">
+                    Other lists of modules maintain Odoo's default order.
+                </p>
+                <p style="font-family:-apple-system, system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', Ubuntu, 'Noto Sans', Arial, sans-serif; font-size:14px; font-weight:400; line-height:21px; color:light-dark(#111827, #E4E4E4); margin:0 0 16px;">
+                    This module only requires Odoo's <b>base</b> module, so it works with any set of apps, on both Community and Enterprise.
+                </p>
+            </div>
         </div>
     </div>
 </section>
