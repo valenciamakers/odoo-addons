@@ -14,6 +14,8 @@ They depend only on Odoo Community modules, so they work on Community and Enterp
   users and contacts, and the Languages list itself.
 - **[`vmk_language_freeze_meta`](vmk_language_freeze_meta)** — stop Odoo module updates reverting
   your edits to language records, such as a renamed language or a broadened ISO code.
+- **[`vmk_language_systray`](vmk_language_systray)** — switch your own backend language from a
+  dropdown in the systray, instead of going through your preferences.
 - **[`vmk_apps_menu_sort`](vmk_apps_menu_sort)** — sort the apps on the main menu alphabetically
   rather than by the `sequence` each module picked for itself, keeping Apps and Settings at the end.
 - **[`vmk_apps_page_sort`](vmk_apps_page_sort)** — sort the Apps page by the name on the card, since
@@ -25,6 +27,9 @@ They depend only on Odoo Community modules, so they work on Community and Enterp
   duplicate. Merging two contacts keeps both their addresses.
 - **[`vmk_event_host`](vmk_event_host)** — record who runs an event: the speakers, teachers or
   facilitators, as contacts. An event can have several, and they are searchable and groupable.
+- **[`vmk_event_registration_deadline`](vmk_event_registration_deadline)** — stop selling tickets
+  when an event starts, or a set time before it, instead of when it ends as Odoo does. A default in
+  the Event settings, an override per event, and the same rule for each slot.
 - **[`vmk_event_slot_multiday`](vmk_event_slot_multiday)** — let an event slot end on a later day
   than it starts, such as Friday evening to Sunday afternoon. Everything that reads the slot's end
   follows: the calendar, the attendee's registration, and scheduled mail.
