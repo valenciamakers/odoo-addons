@@ -620,12 +620,12 @@ each linked to a search. The legal name stays in the copyright lines. Fixed 24 S
 `depends` minimal and honest — depend on `website` only if you override something it defines.
 
 **Store icons are rendered by `tools/make_icon.py`, never drawn or resized by hand.** Every module's
-`static/description/icon.png` is a 256px rounded tile in our purple, `#531B93`, with a white glyph
-from [Lucide](https://lucide.dev/icons/) (ISC), chosen 24 September 2026 over Font Awesome,
-Phosphor, Tabler, and Material Symbols. The glyph's source is `tools/icons/<module>.svg`: either a
-Lucide icon as published, fetched with `--lucide <name>`, or our own composition on Lucide's 24px
-grid and stroke, which is how a family of modules, such as the three sort modules, is meant to read
-as one. So an icon can always be rebuilt, and restyling every module is one `--all`.
+`static/description/icon.png` is a 256px glyph in our purple, `#531B93`, on a transparent
+background, from [Lucide](https://lucide.dev/icons/) (ISC), chosen 24 September 2026 over Font
+Awesome, Phosphor, Tabler, and Material Symbols. The glyph's source is `tools/icons/<module>.svg`:
+either a Lucide icon as published, fetched with `--lucide <name>`, or our own composition on
+Lucide's 24px grid and stroke, which is how a family of modules, such as the three sort modules, is
+meant to read as one. So an icon can always be rebuilt, and restyling every module is one `--all`.
 
 ```bash
 uv run tools/make_icon.py --install-browser              # once: Playwright's own Chromium
@@ -639,6 +639,12 @@ size by a browser. And colours drawn in the page came out shifted, `#531B93` as 
 screenshot passes through colour management; so the page draws only black on white, and Pillow
 paints the exact colours through those as masks. Font Awesome 4.7 stays the right choice for the
 small `fa` icons _inside_ `index.html`, since the Apps Store renders those with its own copy.
+
+**No tile behind the glyph.** The first icons were a white glyph on a purple rounded tile;
+published, the store framed that tile inside its own white icon box, and Felix asked for a
+transparent background instead (24 September 2026), which is also how Odoo's own app icons are
+drawn. A composition knocks a gap out of a glyph with a white shape; the renderer turns white into
+transparency, so the gap shows whatever the icon sits on.
 
 **Bump the version on every change to our code**, not only when a change needs an upgrade to take
 effect. The manifest version is the only marker of which build someone is running, and the cost of

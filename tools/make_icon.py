@@ -5,18 +5,20 @@
 """Render a module's store icon, static/description/icon.png, from an SVG glyph.
 
 Each module's glyph lives in tools/icons/<module>.svg: a Lucide icon copied as published, or our own
-drawing on Lucide's 24px grid. The icon is a 256px rounded tile in our purple with the glyph in
-white, rendered at its final size so nothing is resampled.
+drawing on Lucide's 24px grid. The icon is the glyph alone, in our purple on a transparent
+background, filling a 256px square and rendered at its final size so nothing is resampled. The Apps
+Store frames an icon in its own white box, and Odoo's own app icons have no tile either.
 
     uv run tools/make_icon.py vmk_event_slot_multiday          # render from tools/icons/
     uv run tools/make_icon.py vmk_foo --lucide calendar-range   # fetch a Lucide glyph first
     uv run tools/make_icon.py --all                             # re-render every module
     uv run tools/make_icon.py --install-browser                 # once: Playwright's Chromium
 
-Chromium draws the shapes, black on a white tile; Pillow then paints the colours, using the tile's
-alpha and the glyph's inverted luminance as masks. Screenshots pass through the browser's colour
-management, which shifted #531B93 to #4C1F8D when the colours were drawn in the page, so the page
-never draws them.
+Chromium draws the glyph black on white; Pillow then paints it purple and takes its alpha from the
+render's inverted luminance. Drawing on white rather than on transparency is what lets a composition
+knock a gap out of a glyph with a white shape: white becomes transparent, as the background does.
+Screenshots pass through the browser's colour management, which shifted #531B93 to #4C1F8D when the
+colours were drawn in the page, so the page never draws them.
 """
 
 import argparse
@@ -33,17 +35,13 @@ ROOT = Path(__file__).resolve().parent.parent
 ICONS = Path(__file__).resolve().parent / "icons"
 LUCIDE = "https://cdn.jsdelivr.net/npm/lucide-static@1.47.0/icons/{}.svg"
 
-SIZE = 256  # the tile
-GLYPH = 160  # the glyph's 24px box; Lucide leaves ~2px of it empty on each side
-RADIUS = 0.2  # of SIZE
+SIZE = 256  # the icon, and the glyph's 24px box; Lucide leaves ~2px of the box empty on each side
 PURPLE = (0x53, 0x1B, 0x93, 255)
-WHITE = (255, 255, 255, 255)
 
 PAGE = """<!doctype html><html><head><style>
 html, body {{ margin: 0; background: transparent; }}
-#tile {{ width: {size}px; height: {size}px; border-radius: {radius}px; background: #fff; color: #000;
-         display: flex; align-items: center; justify-content: center; }}
-#tile svg {{ width: {glyph}px; height: {glyph}px; }}
+#tile {{ width: {size}px; height: {size}px; background: #fff; color: #000; }}
+#tile svg {{ display: block; width: {size}px; height: {size}px; }}
 </style></head><body><div id="tile">{svg}</div></body></html>"""
 
 
@@ -64,13 +62,12 @@ async def render(modules):
         page = await browser.new_page(viewport={"width": SIZE, "height": SIZE}, device_scale_factor=1)
         for module in modules:
             svg = (ICONS / f"{module}.svg").read_text()
-            await page.set_content(PAGE.format(size=SIZE, radius=int(SIZE * RADIUS), glyph=GLYPH, svg=svg))
+            await page.set_content(PAGE.format(size=SIZE, svg=svg))
             with tempfile.NamedTemporaryFile(suffix=".png") as tmp:
-                await page.locator("#tile").screenshot(path=tmp.name, omit_background=True)
-                shot = Image.open(tmp.name).convert("RGBA")
-            glyph = ImageOps.invert(shot.convert("L"))
-            icon = Image.composite(Image.new("RGBA", shot.size, WHITE), Image.new("RGBA", shot.size, PURPLE), glyph)
-            icon.putalpha(shot.getchannel("A"))
+                await page.locator("#tile").screenshot(path=tmp.name)
+                shot = Image.open(tmp.name)
+            icon = Image.new("RGBA", shot.size, PURPLE)
+            icon.putalpha(ImageOps.invert(shot.convert("L")))
             out = ROOT / module / "static" / "description" / "icon.png"
             icon.save(out, optimize=True)
             print(f"rendered {out.relative_to(ROOT)}")
