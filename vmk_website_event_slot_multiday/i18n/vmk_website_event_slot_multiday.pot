@@ -27,5 +27,5 @@ msgstr ""
 
 #. module: base
 #: model:ir.module.module,summary:base.module_vmk_website_event_slot_multiday
-msgid "Show the start and end day of a multi-day slot when a visitor picks it"
+msgid "Allow event slots to span multiple days, on the website too"
 msgstr ""

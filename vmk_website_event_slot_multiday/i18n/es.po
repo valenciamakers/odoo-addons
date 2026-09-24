@@ -25,5 +25,5 @@ msgstr "Espacios de varios días en el sitio web"
 
 #. module: base
 #: model:ir.module.module,summary:base.module_vmk_website_event_slot_multiday
-msgid "Show the start and end day of a multi-day slot when a visitor picks it"
-msgstr "Muestra el día de inicio y de fin de un espacio de varios días cuando un visitante lo elige"
+msgid "Allow event slots to span multiple days, on the website too"
+msgstr "Permita que los espacios de evento abarquen varios días, también en el sitio web"
