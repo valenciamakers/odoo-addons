@@ -1,5 +1,17 @@
 # Language Sequence (`vmk_language_sequence`)
 
+Order enabled languages by hand instead of alphabetically. In standard Odoo, languages are always
+listed alphabetically by their English name, so the website offers _Català, English, Français,
+Deutsch, Español_, in that order. This module lets you drag your languages into the order you
+choose.
+
+**How to use it** is in the user documentation, [`doc/index.rst`](doc/index.rst), which the Odoo
+Apps Store also shows on the module's page, together with the changelog.
+
+It depends only on `website`. LGPL-3, © 2026 Valencia Makers, SL.
+
+## For developers
+
 Odoo orders languages alphabetically by name, everywhere, with no way to change it. This module adds
 a `sequence` field to `res.lang` and a drag handle to **Settings → Translations → Languages**, so
 the enabled languages appear in the order you choose.
@@ -10,7 +22,7 @@ The chosen order drives:
 - the **language dropdowns** on users and contacts;
 - the Languages list itself, and any other `res.lang` search.
 
-## Why it needs more than a `sequence` field
+### Why it needs more than a `sequence` field
 
 The obvious implementation — add `sequence`, override `_order` — reorders the Languages list and
 nothing else. Three separate code paths produce language lists, and none of them consults `_order`:
@@ -49,7 +61,7 @@ because `LangDataDict.__getitem__` returns a dummy entry for unknown keys rather
 `Mapping.__contains__` is implemented on top of `__getitem__`, so `code in some_lang_data_dict` is
 **always true** and cannot detect a missing language.
 
-## `_order`, and what actually orders the Languages list
+### `_order`, and what actually orders the Languages list
 
 `_order` is `active desc, sequence, name`. The `active desc` prefix is kept so that a plain
 `res.lang.search()` anywhere in Odoo keeps returning enabled languages first, as it does in stock
@@ -77,7 +89,7 @@ Any order that groups enabled languages first has to start with `active desc`, w
 disable drag and drop. The grouping therefore has to live in the sequence **values** rather than in
 the sort order.
 
-## Why sequences are seeded on install
+### Why sequences are seeded on install
 
 `post_init_hook` (`hooks.py`) gives enabled languages a low block — 10, 20, 30… by name — and parks
 the ~80 disabled ones above `DISABLED_SEQUENCE_BASE` (10000). Without it every language shares the
@@ -106,7 +118,7 @@ reason: a language created without an explicit `active` is disabled, so that is 
 in. `create()` re-parks it immediately, so the default is visible only if that ever fails — and
 failing to the head of the disabled languages is much better than wedging in among the enabled ones.
 
-## Known limitations
+### Known limitations
 
 - **The Languages list is developer-mode only.** Both Settings → Translations → Languages and the
   Manage Languages button in General Settings carry `groups="base.group_no_one"` in stock Odoo, so a
@@ -119,7 +131,7 @@ failing to the head of the disabled languages is much better than wedging in amo
   variants of the same base language; unrelated base languages each get their own short code
   regardless.
 
-## Translations
+### Translations
 
 The module's own name and summary in `i18n/vmk_language_sequence.pot`, `es.po` and `ca.po` are
 hand-maintained, not exported — `ir.module.module` records belong to `base`'s xmlid namespace, so
@@ -128,13 +140,13 @@ hand-maintained, not exported — `ir.module.module` records belong to `base`'s 
 for the full explanation. `tests/test_language_sequence.py::TestModuleNameTranslation` fails loudly
 if re-running the export drops them.
 
-## Requirements
+### Requirements
 
 Odoo 19. Depends on `website`, which supplies the `_get_frontend()` override point that makes the
 site selector follow the order. On a database without `website`, split this into a `base`-only
 module plus an `auto_install` bridge carrying override 3.
 
-## Testing
+### Testing
 
 ```bash
 # unit tests

@@ -11,6 +11,7 @@
     "depends": ["website"],
     "data": ["views/res_lang_views.xml"],
     "post_init_hook": "seed_language_sequence",
+    "images": ["static/description/cover.png"],
     "installable": True,
     "application": False,
 }
