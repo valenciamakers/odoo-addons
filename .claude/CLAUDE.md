@@ -406,6 +406,19 @@ in `web/static/src/**`, not in Python. Half the surprises below live there.
 - Cover `create()` as well as `write()`. A record created later takes the field default and lands
   wherever that points, reintroducing ties.
 
+**Module names**
+
+- **The "Events" app is `website_event`**, not `event`. `website_event` carries `'name': 'Events'`
+  and `application: True`, and depends on `website`; `event` is "Events Organization" and is not an
+  app. So anyone who installed Events from the app grid has the website, and "requires the Events
+  app" is wrong for a module depending only on `event`. "Website Events" is not a name Odoo uses at
+  all. Check a module's `name` in its manifest before naming it in copy. Found 24 September 2026,
+  after the multi-day store pages had shipped saying otherwise.
+- **An auto-install module installs only while one of its dependencies is being installed**
+  (`button_install` in `base/models/ir_module.py`: some dependency must be `to install`). One that
+  arrives in the addons path after its dependencies are installed sits uninstalled until someone
+  installs it.
+
 **Caches**
 
 - Odoo caches by **name**: `'default'`, `'stable'`, and others. `Registry.clear_cache(*names)`
