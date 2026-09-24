@@ -33,6 +33,15 @@ we do not own. The three remotes differ by one word — `odoo-addons`, `odoo-add
 Read the existing modules' `README.md` files before writing another; between them they document most
 of the traps below in context.
 
+## Branches — one per Odoo series
+
+All three module repos follow Odoo's and the OCA's convention: **a branch per Odoo series, named for
+it**, and no `main`. `19.0` holds the Odoo 19 modules and is the default branch; it replaced `main`
+on 24 September 2026, with the same commits. The Apps Store reads a repository by its series
+branches, and oec.sh's repository settings should name `19.0` for any repo it deploys. When Odoo 20
+arrives, `20.0` starts from `19.0`, which then carries fixes for Odoo 19 installs only. Work on the
+series' branch; a separate branch only when Felix asks for one.
+
 ## Commits — this repo departs from the machine-wide rule
 
 `~/.claude/rules/git-workflow.md` says to commit as `Claude <claude@pvt.jfe.xyz>` with no

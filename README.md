@@ -45,9 +45,11 @@ and where. That is usually the interesting part.
 Clone onto your Odoo addons path, update the apps list, and install by name:
 
 ```bash
-git clone https://github.com/valenciamakers/odoo-addons.git
+git clone -b 19.0 https://github.com/valenciamakers/odoo-addons.git
 odoo --addons-path=/path/to/odoo-addons,... -d <db> -i vmk_language_sequence
 ```
+
+There is one branch per Odoo series, as Odoo and the OCA do: `19.0` holds the modules for Odoo 19.
 
 ## Developing
 
