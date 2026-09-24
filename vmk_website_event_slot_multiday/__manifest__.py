@@ -19,6 +19,7 @@
             "vmk_website_event_slot_multiday/static/src/interactions/*.js",
         ],
     },
+    "images": ["static/description/main_screenshot.png"],
     "installable": True,
     "application": False,
 }
