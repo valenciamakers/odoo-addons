@@ -6,8 +6,8 @@ Allow event slots to span multiple days, displayed on the website too: a weekend
 Friday evening to Sunday afternoon, an overnight hackathon, or a two-day course offered on several
 dates.
 
-In standard Odoo, an event slot must start and end on the same day, so it can never span more
-than one. This module gives each slot a start date and an end date, and displays both to website
+In standard Odoo, an event slot must start and end on the same date, so it can never span more
+than one day. This module gives each slot a start date and an end date, and displays both to website
 visitors when they select a slot. It includes **Multi-Day Event Slots**, which does the backend
 part.
 
