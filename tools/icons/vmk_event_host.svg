@@ -1,0 +1,10 @@
+<!-- Our composition, derived from lucide-static v1.47.0 (ISC): the plain calendar at 0.9 scale,
+     its stroke widened so it still draws at 2px, with circle-user-round as a badge cut out of its
+     bottom-right corner, sized like the website module's globe. The badge is drawn at 1.25px, not
+     Lucide's 2px: at this size a heavier head and shoulders crowd inside the circle. The knockout
+     circle is drawn in white, which tools/make_icon.py paints as transparency. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <g transform="translate(0.6 0.6) scale(0.9)" stroke-width="2.222"><rect x="3" y="4" width="18" height="18" rx="2" /><path d="M16 2v4" /><path d="M8 2v4" /><path d="M3 10h18" /></g>
+  <circle cx="18.5" cy="18.5" r="6.8" fill="#fff" stroke="none" />
+  <g transform="translate(12.980 12.980) scale(0.46)" stroke-width="2.717"><path d="M17.925 20.056a6 6 0 0 0-11.851.001" /><circle cx="12" cy="11" r="4" /><circle cx="12" cy="12" r="10" /></g>
+</svg>
