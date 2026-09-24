@@ -1,7 +1,3 @@
-=====================
-Multi-Day Event Slots
-=====================
-
 Allow event slots to span multiple days: a weekend retreat from Friday evening to Sunday
 afternoon, an overnight hackathon, or a two-day course offered on several dates.
 
@@ -9,8 +5,7 @@ In standard Odoo, an event slot must start and end on the same date, so it can n
 than one day. This module gives each slot a start date and an end date, so it can span as many days as
 it needs.
 
-Installation
-============
+**Installation**
 
 Install **Multi-Day Event Slots** from the Apps menu. It only requires **Events Organization**,
 the backend part of the **Events** app.
@@ -22,8 +17,7 @@ then.
 
 Existing slots are left unchanged until you give them a later end date.
 
-Using it
-========
+**Using it**
 
 Slots belong to events with **Multiple Slots** enabled on the event form.
 
@@ -43,8 +37,7 @@ moves with it.
 calendar links include all days. Mail scheduled for after the event is sent once the slot ends.
 A multi-day slot is named by its range, for example *9 Oct 2026, 18:00 - 11 Oct 2026, 13:00*.
 
-Limits
-======
+**Limits**
 
 - **Slots cannot be dragged on the calendar.** This is standard Odoo behaviour. Change the dates on
   the slot form instead.
@@ -55,16 +48,13 @@ Limits
   **Multi-Day Event Slots (Website)** shows both dates. With or without it, a multi-day slot is
   listed under its first day, with its start time, the same way Odoo lists every slot.
 
-Changelog
-=========
+**Changelog**
 
-19.0.1.0.1 (24 September 2026)
-------------------------------
+*19.0.1.0.1 (24 September 2026)*
 
 - Licensed LGPL-3, and credited to Valencia Makers. No change in behaviour.
 
-19.0.1.0.0 (24 September 2026)
-------------------------------
+*19.0.1.0.0 (24 September 2026)*
 
 - First release. Slots can span multiple dates; the slot form shows one start-to-end range in the
   event's timezone; registrations, calendars, and scheduled mail all use the slot's end date.

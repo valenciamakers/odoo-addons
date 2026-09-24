@@ -1,7 +1,3 @@
-===============================
-Multi-Day Event Slots (Website)
-===============================
-
 Allow event slots to span multiple days, displayed on the website too: a weekend retreat from
 Friday evening to Sunday afternoon, an overnight hackathon, or a two-day course offered on several
 dates.
@@ -11,8 +7,7 @@ than one day. This module gives each slot a start date and an end date, and disp
 visitors when they select a slot. It includes **Multi-Day Event Slots**, which handles the backend
 functionality.
 
-Installation
-============
+**Installation**
 
 Install **Multi-Day Event Slots (Website)** from the Apps menu. It requires the **Events** app, and
 installs **Multi-Day Event Slots** automatically.
@@ -22,8 +17,7 @@ For the backend alone, without the website features, install `Multi-Day Event Sl
 
 Existing slots are left unchanged until you give them a later end date.
 
-Using it
-========
+**Using it**
 
 Slots belong to events with **Multiple Slots** enabled on the event form.
 
@@ -45,8 +39,7 @@ moves with it.
 calendar links include all days. Mail scheduled for after the event is sent once the slot ends.
 A multi-day slot is named by its range, for example *9 Oct 2026, 18:00 - 11 Oct 2026, 13:00*.
 
-Limits
-======
+**Limits**
 
 - **On the website, a multi-day slot is listed under its first day**, with its start time, the same
   way Odoo lists every slot. The registration modal window shows both dates once a visitor selects
@@ -56,16 +49,13 @@ Limits
 - **The event's own dates must cover its slots.** Odoo refuses to save a slot that ends after the
   event does, so extend the event first.
 
-Changelog
-=========
+**Changelog**
 
-19.0.1.0.1 (24 September 2026)
-------------------------------
+*19.0.1.0.1 (24 September 2026)*
 
 - Credited to Valencia Makers. No change in behaviour.
 
-19.0.1.0.0 (24 September 2026)
-------------------------------
+*19.0.1.0.0 (24 September 2026)*
 
 - First release. The website's registration modal window shows a multi-day slot's start and end
   dates once a visitor selects it; a single-day slot is shown as before.
