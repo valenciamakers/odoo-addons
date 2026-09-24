@@ -663,7 +663,9 @@ uv run tools/make_cover.py --all
 
 Put a non-breaking hyphen (`&#8209;`) in a hyphenated name, or the title can wrap inside it. When a
 module's screenshots are too wide to crop into a card, capture the parts the cover needs separately
-into `tools/covers/img/`, so the module does not ship images its page never shows.
+into `tools/covers/img/`, so the module does not ship images its page never shows. Every card keeps
+its content 14px from its edges, wrapping a crop in a padded box where the screenshot runs to its
+edge, and stacked cards sit 28px apart.
 
 **The store page, `static/description/index.html`, styles its text inline.** The Apps Store and the
 backend's Apps page style Odoo's `oe_*` description classes differently: the store makes body text
@@ -691,7 +693,9 @@ subtitles `light-dark(#333333, #E4E4E4)` at 50% opacity, and headings, links, an
 `light-dark(#531B93, #B794F4)`; `#E4E4E4` is the dark theme's own text colour, and `#531B93` is
 unreadable on its background. Screenshots stay light in both modes. Screenshots are taken at 2x in
 English (UK), with any polish (colours, widths, a drawn cursor) injected as CSS during capture only,
-never shipped.
+never shipped. Each module's captures are a recipe in `tools/shots/recipes/`, which also holds a
+store preview and a dark-mode check; its README lists the demo data they expect. Write the recipe
+with the screenshots, so a later retake is one command.
 
 **The manual, `doc/index.rst`, has no RST headings.** The store shows it in a Documentation tab with
 headings at 53px, 42px, and 31px against 16px text, and pure RST cannot set a size; top-level
