@@ -1,4 +1,4 @@
-# Registration Deadline
+# Event Registration Deadline (`vmk_event_registration_deadline`)
 
 Sells tickets only until an event starts, or a set time in advance.
 

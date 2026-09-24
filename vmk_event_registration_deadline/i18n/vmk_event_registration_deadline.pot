@@ -22,7 +22,7 @@ msgstr ""
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_vmk_event_registration_deadline
-msgid "Registration Deadline"
+msgid "Event Registration Deadline"
 msgstr ""
 
 #. module: base
