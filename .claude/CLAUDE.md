@@ -21,6 +21,8 @@ remotes differ by one word, so check which one you are pushing to.
 - **`vmk_event_registration_deadline`** — stop selling registrations when an event starts, or a set
   time before; per-event override, and the same rule applied to slots.
 - **`vmk_event_slot_multiday`** — an end date on event slots, so a slot can span several days.
+- **`vmk_website_event_slot_multiday`** — both days of a multi-day slot in the website's
+  registration modal; `auto_install`.
 - **`vmk_partner_email_multiple`** — several email addresses per contact, matched by Odoo's own
   machinery, and kept rather than dropped when contacts are merged.
 - The local test harness is `../Tech Stack/odoo-dev`, shared with our other two Odoo module repos.
@@ -514,7 +516,7 @@ in a file Odoo loads; a README does not.
 This applies in `../Odoo Addons - Private` as well, which defers to this file.
 
 **We license our modules AGPL-3**, and **LGPL-3** where the module is meant to be depended on —
-currently `vmk_partner_email_multiple`, `vmk_event_host`, and `vmk_event_slot_multiday`. Both
+currently `vmk_partner_email_multiple`, `vmk_event_host`, and the two multi-day slot modules. Both
 licences are exact members of the `Selection` on `ir.module.module`, so the manifest string is just
 `"license": "AGPL-3"`, with the matching text in a `LICENSE` file beside the manifest.
 

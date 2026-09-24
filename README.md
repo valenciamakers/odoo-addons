@@ -28,6 +28,9 @@ They depend only on Odoo Community modules, so they work on Community and Enterp
 - **[`vmk_event_slot_multiday`](vmk_event_slot_multiday)** — let an event slot end on a later day
   than it starts, such as Friday evening to Sunday afternoon. Everything that reads the slot's end
   follows: the calendar, the attendee's registration, and scheduled mail.
+- **[`vmk_website_event_slot_multiday`](vmk_website_event_slot_multiday)** — show both days of a
+  multi-day slot to a visitor picking it on the event page. Installs itself alongside Website
+  Events.
 
 Each module's own `README.md` explains why it is built the way it is — which core method fights you,
 and where. That is usually the interesting part.
@@ -82,5 +85,6 @@ something substantial.
 
 - **AGPL-3** for everything by default. Use them freely, including commercially; distribute a
   modified version and it stays AGPL, with source.
-- **LGPL-3** for `vmk_partner_email_multiple`, `vmk_event_host`, and `vmk_event_slot_multiday`, so
-  other modules may depend on them under any licence. Each README explains why it is an exception.
+- **LGPL-3** for `vmk_partner_email_multiple`, `vmk_event_host`, and the two multi-day slot modules,
+  so other modules may depend on them under any licence. Each README explains why it is an
+  exception.

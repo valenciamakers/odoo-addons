@@ -1,0 +1,29 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* vmk_website_event_slot_multiday
+#
+# The module's own name and summary, which `i18n export` never emits (see the POT).
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0+e-20260908\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-24 09:53+0000\n"
+"PO-Revision-Date: 2026-09-24 09:53+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ca\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_vmk_website_event_slot_multiday
+msgid "Multi-Day Event Slots on the Website"
+msgstr "Franges horàries d'esdeveniment de diversos dies al lloc web"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_vmk_website_event_slot_multiday
+msgid "Show the start and end day of a multi-day slot when a visitor picks it"
+msgstr "Mostra el dia d'inici i de fi d'una franja horària de diversos dies quan un visitant la tria"
