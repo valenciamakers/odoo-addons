@@ -1,5 +1,17 @@
 # Settings Sort (`vmk_settings_sort`)
 
+Alphabetical order for the Settings sidebar and Technical menu groups. In standard Odoo, the
+Settings sidebar and the groups in the Technical menu appear in whatever order their modules happen
+to add them. This module sorts both lists alphabetically, while keeping **General Settings** at the
+top.
+
+**How to use it** is in the user documentation, [`doc/index.rst`](doc/index.rst), which the Odoo
+Apps Store also shows on the module's page, together with the changelog.
+
+It depends only on `base`. LGPL-3, © 2026 Valencia Makers, SL.
+
+## For developers
+
 Two lists inside the Settings app arrive in an order nobody chose. This module sorts both.
 
 **The settings sidebar**, down the left of the Settings screen, with **General Settings** kept at
@@ -14,7 +26,7 @@ Technical, after:  Actions, Activities, Automation, Calendar, Database Structure
 Both orders follow the user's own language, and neither writes anything: the sorting happens on the
 way out, so nothing is left behind if the module is removed.
 
-## The settings sidebar
+### The settings sidebar
 
 The sidebar is drawn in arch order. `settings_form_compiler.js` walks `{selector: "app"}` in
 document order, and `settings_page.js` sorts nothing at all. Each module contributes its section
@@ -43,7 +55,7 @@ blocks, `<field name="is_root_company" invisible="1"/>` among them. So each bloc
 into a slot an `<app>` already occupied, rather than detached and re-appended, which would shuffle
 those fields to the end.
 
-## The Technical groupings
+### The Technical groupings
 
 Their sequences collide in stock — three sit on `10`, two on `3`, two on `5`, two on `30` — so ties
 break by `id`, which is install order. That is why the list looks arbitrary and why it differs
@@ -60,7 +72,7 @@ This part only ever applies in **developer mode**. Technical carries `groups="ba
 so it is absent from the payload entirely otherwise, and the override hands it straight back
 unchanged.
 
-## Testing, and why it is shaped this way
+### Testing, and why it is shaped this way
 
 Neither sort can be proved against live data:
 
@@ -80,7 +92,7 @@ exercise it end to end.
 odoo -d <db> -u vmk_settings_sort --test-enable --test-tags /vmk_settings_sort --stop-after-init
 ```
 
-## Notes
+### Notes
 
 - **`folded_label` is a third copy** of the same three lines carried by
   [`vmk_apps_menu_sort`](../vmk_apps_menu_sort). Sharing it would mean one module depending on the
@@ -92,7 +104,7 @@ odoo -d <db> -u vmk_settings_sort --test-enable --test-tags /vmk_settings_sort -
 - Sorting interleaves app names with functional groupings: _Database Structure_ lands between
   _Calendar_ and _Discuss_. That is the trade for a list you can scan.
 
-## Translations
+### Translations
 
 The module's own name and summary in `i18n/vmk_settings_sort.pot`, `es.po` and `ca.po` are
 hand-maintained, not exported — `ir.module.module` records belong to `base`'s xmlid namespace, so
@@ -103,6 +115,6 @@ catalogue. See
 for the full explanation. `tests/test_settings_sort.py::TestModuleNameTranslation` fails loudly if
 re-running the export drops them.
 
-## Requirements
+### Requirements
 
 Odoo 19. Depends on `base` only.

@@ -28,7 +28,7 @@ msgstr ""
 
 #. module: base
 #: model:ir.module.module,summary:base.module_vmk_settings_sort
-msgid "Alphabetical order for the Settings sidebar and the Technical menu groupings"
+msgid "Alphabetical order for the Settings sidebar and Technical menu groups"
 msgstr "Orden alfabético para la barra lateral de Ajustes y los grupos del menú Técnico"
 
 #. module: vmk_settings_sort

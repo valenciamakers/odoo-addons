@@ -176,7 +176,7 @@ class TestModuleNameTranslation(TransactionCase):
     I18N = Path(__file__).resolve().parent.parent / "i18n"
     HAND_MAINTAINED = (
         "Settings Sort",
-        "Alphabetical order for the Settings sidebar and the Technical menu groupings",
+        "Alphabetical order for the Settings sidebar and Technical menu groups",
     )
 
     def test_pot_still_carries_the_hand_added_module_metadata(self):
