@@ -8,16 +8,16 @@ dates.
 
 In standard Odoo, an event slot must start and end on the same date, so it can never span more
 than one day. This module gives each slot a start date and an end date, and displays both to website
-visitors when they select a slot. It includes **Multi-Day Event Slots**, which does the backend
-part.
+visitors when they select a slot. It includes **Multi-Day Event Slots**, which handles the backend
+functionality.
 
 Installation
 ============
 
 Install **Multi-Day Event Slots (Website)** from the Apps menu. It requires the **Events** app, and
-installs **Multi-Day Event Slots** with it.
+installs **Multi-Day Event Slots** automatically.
 
-For the backend alone, without the website, install **Multi-Day Event Slots** instead.
+For the backend alone, without the website features, install **Multi-Day Event Slots** instead.
 
 Existing slots are left unchanged until you give them a later end date.
 
@@ -31,7 +31,7 @@ Slots belong to events with **Multiple Slots** enabled on the event form.
 #. On the slot form, the **Date** row shows the slot's start and end together, the same way the
    event form does. Click the end and pick a later date, such as Friday 18:00 to Sunday 13:00.
 #. Save. The slot calendar now draws the slot across all its days.
-#. On the event's website page, visitors who select the slot see its start and end dates, for
+#. On the event's website page, visitors who select the slot will see its start and end dates, for
    example *Fri, 9 Oct 2026, 18:00 - Sun, 11 Oct 2026, 13:00*.
 
 **Times are in the event's timezone, not yours**, as Odoo already does for slots. The slot form
@@ -49,7 +49,7 @@ Limits
 
 - **On the website, a multi-day slot is listed under its first day**, with its start time, the same
   way Odoo lists every slot. The registration modal window shows both dates once a visitor selects
-  one.
+  a slot.
 - **Slots cannot be dragged on the calendar.** This is standard Odoo behaviour. Change the dates on
   the slot form instead.
 - **The event's own dates must cover its slots.** Odoo refuses to save a slot that ends after the
