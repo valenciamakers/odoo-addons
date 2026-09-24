@@ -9,8 +9,10 @@ them as one range.
 Apps Store also shows on the module's page, together with the changelog.
 
 It needs only the Events app. With Website Events installed as well, the companion module
-[`vmk_website_event_slot_multiday`](../vmk_website_event_slot_multiday) installs itself and shows
-visitors both days of a multi-day slot. LGPL-3, © 2026 Valencia Makers, SL.
+[`vmk_website_event_slot_multiday`](../vmk_website_event_slot_multiday) installs itself from a clone
+of this repo and shows visitors both days of a multi-day slot. From the Apps Store, website users
+download the companion instead: it depends on this module, so the store includes both, while this
+module's own download does not include the companion. LGPL-3, © 2026 Valencia Makers, SL.
 
 ## For developers
 
