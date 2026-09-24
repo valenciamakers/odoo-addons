@@ -108,4 +108,4 @@ moment into the date and hours core wants.
 
 ## Licence
 
-AGPL-3. See `LICENSE`.
+LGPL-3, as the whole repo is. See `LICENSE`.

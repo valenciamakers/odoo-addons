@@ -1,12 +1,12 @@
 # Copyright 2026 Valencia Makers, SL
-# License AGPL-3 (https://www.gnu.org/licenses/agpl-3.0.html).
+# License LGPL-3 (https://www.gnu.org/licenses/lgpl-3.0.html).
 
 {
     "name": "Backend Language Menu",
     "summary": "Switch your own backend language from a systray dropdown",
-    "version": "19.0.1.1.0",
+    "version": "19.0.1.1.1",
     "author": "Valencia Makers, SL",
-    "license": "AGPL-3",
+    "license": "LGPL-3",
     "category": "Technical",
     "depends": ["web"],
     "assets": {

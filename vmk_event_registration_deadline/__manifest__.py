@@ -1,12 +1,12 @@
 # Copyright 2026 Valencia Makers, SL
-# License AGPL-3 (https://www.gnu.org/licenses/agpl-3.0.html).
+# License LGPL-3 (https://www.gnu.org/licenses/lgpl-3.0.html).
 
 {
     "name": "Event Registration Deadline",
     "summary": "Sell tickets only until an event starts, or a set time in advance",
-    "version": "19.0.1.0.1",
+    "version": "19.0.1.0.2",
     "author": "Valencia Makers, SL",
-    "license": "AGPL-3",
+    "license": "LGPL-3",
     "category": "Marketing/Events",
     # website_event, not event: half the rule lives in `_filter_open_slots`,
     # which that module defines. See README.md.

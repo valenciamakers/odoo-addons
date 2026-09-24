@@ -2,8 +2,7 @@
 
 Odoo 19 modules written and maintained by Valencia Makers, SL — a digital-fabrication education,
 makerspace, and retail business in Valencia, Spain. Each one is small, solves a problem we hit
-running our own instance, and is copyleft-licensed — AGPL-3, or LGPL-3 where the module is meant to
-be built on.
+running our own instance, and is licensed LGPL-3, as Odoo itself is.
 
 They depend only on Odoo Community modules, so they work on Community and Enterprise alike.
 
@@ -88,10 +87,11 @@ something substantial.
 
 ## License
 
-© 2026 Valencia Makers, SL. Licensed per module — see each module's `LICENSE` and manifest:
+© 2026 Valencia Makers, SL. **LGPL-3**, every module — see each module's `LICENSE` and manifest.
 
-- **AGPL-3** for everything by default. Use them freely, including commercially; distribute a
-  modified version and it stays AGPL, with source.
-- **LGPL-3** for `vmk_partner_email_multiple`, `vmk_event_host`, and the two multi-day slot modules,
-  so other modules may depend on them under any licence. Each README explains why it is an
-  exception.
+Use them freely, including commercially. Distribute a modified version of one and it stays LGPL-3,
+with source. A module that depends on ours may carry any licence it likes, proprietary included,
+which is the same arrangement Odoo's own modules offer.
+
+The modules were AGPL-3 by default from 19 August to 24 September 2026, and MIT before that. A copy
+taken under either keeps the licence it was taken under.

@@ -223,7 +223,8 @@ tests above.
 
 ## License
 
-**AGPL-3**, the default across this repo. See `LICENSE`.
+**LGPL-3**, as the whole repo is. See `LICENSE`.
 
-Copyleft so the module cannot be repackaged and sold as a closed product: a modified version must
-ship as AGPL with source. Using it, and depending on it from another module, is unaffected.
+Copyleft on the module itself, so it cannot be repackaged and sold as a closed product: a modified
+version must ship as LGPL with source. Using it, and depending on it from another module under any
+licence, is unaffected.

@@ -1,5 +1,5 @@
 # Copyright 2026 Valencia Makers, SL
-# License AGPL-3 (https://www.gnu.org/licenses/agpl-3.0.html).
+# License LGPL-3 (https://www.gnu.org/licenses/lgpl-3.0.html).
 
 
 def protect_enabled_languages(env):

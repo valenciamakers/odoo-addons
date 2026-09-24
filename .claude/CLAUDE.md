@@ -1,9 +1,8 @@
 # CLAUDE.md — Odoo Addons
 
-The Odoo 19 modules Valencia Makers writes and maintains, AGPL-3 licensed (LGPL-3 where a module is
-meant to be depended on). They run against a self-hosted **Odoo 19 Enterprise** instance but depend
-only on Community modules. See `../.claude/CLAUDE.md` for the business context; this file wins
-inside this repo.
+The Odoo 19 modules Valencia Makers writes and maintains, LGPL-3 licensed, as Odoo itself is. They
+run against a self-hosted **Odoo 19 Enterprise** instance but depend only on Community modules. See
+`../.claude/CLAUDE.md` for the business context; this file wins inside this repo.
 
 This is one of three module repos. Modules we write and do not publish — those depending on
 Enterprise, and those we may sell — live in the private `../Odoo Addons - Private`, which follows
@@ -639,42 +638,47 @@ in a file Odoo loads; a README does not.
 
 This applies in `../Odoo Addons - Private` as well, which defers to this file.
 
-**We license our modules AGPL-3**, and **LGPL-3** where the module is meant to be depended on —
-currently `vmk_partner_email_multiple`, `vmk_event_host`, and the two multi-day slot modules. Both
-licences are exact members of the `Selection` on `ir.module.module`, so the manifest string is just
-`"license": "AGPL-3"`, with the matching text in a `LICENSE` file beside the manifest.
+**Every module here is LGPL-3**, the licence Odoo's own modules carry. It is an exact member of the
+`Selection` on `ir.module.module`, so the manifest string is `"license": "LGPL-3"`, with the text in
+a `LICENSE` file beside the manifest. Decided 24 September 2026.
 
-The choice follows the OCA's: copyleft by default, LGPL for what others build on. The reasoning is
-that MIT does not merely fail to prevent someone repackaging a module and selling it closed — it
-_permits_ it, so there is nothing to object to. Under copyleft the same act is infringement. Decided
-2026-08-19.
+**Copyleft still applies to the module itself**: a modified version of one of ours, distributed,
+stays LGPL-3 with source. That is what moved us off MIT on 19 August 2026 — MIT does not merely fail
+to prevent someone repackaging a module and selling it closed, it _permits_ it. What LGPL leaves
+free is a module that depends on ours: it may carry any licence, proprietary included.
 
-**The decision is per module, and the reason goes in that module's `README.md`.** A licence with no
-stated reason is one nobody can revisit safely. AGPL-3 is the default; depart from it when:
+**Why not AGPL-3, the default from 19 August to 24 September 2026.** AGPL adds two things, and
+neither was worth what it cost us:
 
-- **Other modules should be able to build on it** — LGPL-3, so a dependent may carry any licence.
-  This is why `vmk_partner_email_multiple` is LGPL: several addresses per contact is a gap in Odoo
-  that nothing free fills, and AGPL would push authors towards reimplementing it instead of
-  depending on it. Modifying and redistributing the module itself still requires source either way.
-- **One of our own proprietary modules depends on it** — LGPL-3, because Odoo's licence
-  compatibility table (in its [Apps FAQ](https://apps.odoo.com/apps/faq)) lets an `OPL-1` or
-  `OEEL-1` module depend on LGPL-3 but **not** on AGPL-3. This is why `vmk_event_host` is LGPL:
-  `vmk_event_sessions` in `../Odoo Addons - Private` is proprietary, and the glue module putting a
-  host on a session depends on both. AGPL here would leave that glue with no licence it could
-  legally carry. Added 2026-09-20.
-- **The module genuinely needs to copy core implementation.** Where an override cannot express the
-  change and a core method has to be lifted and edited, that block stays LGPL-3. Relicensing the
-  module to match is more honest than contorting the design to avoid the copy.
+- **The network clause**: running a modified copy as a service for others obliges sharing the
+  source, where LGPL obliges it only on distribution. It is why the OCA defaults to AGPL, since
+  hosting partners are exactly that case. For small utility modules the risk is low.
+- **It bars proprietary modules from depending on ours.** Odoo's licence-compatibility table (in its
+  [Apps FAQ](https://apps.odoo.com/apps/faq)) lets an `OPL-1` or `OEEL-1` module depend on LGPL-3
+  but **not** on AGPL-3. Our own proprietary modules in `../Odoo Addons - Private` kept running into
+  that — `vmk_event_host` and `vmk_event_slot_multiday` both needed an exception, since
+  `vmk_event_sessions` (OPL-1) builds on them — and `vmk_partner_email_multiple` needed one because
+  AGPL would push other authors to reimplement it rather than depend on it.
+
+**And changing later only gets harder.** We are the sole copyright holder today and can relicense
+freely; once outside contributors send code, with no CLA, it would need every contributor's consent.
+A copy taken while a module was AGPL-3, or MIT before that, keeps the licence it was taken under.
+
+**Say in a module's `README.md` where its licence matters**, as `vmk_event_host` and
+`vmk_event_slot_multiday` do: a proprietary module depends on them, so moving them to a stricter
+licence would break that.
 
 LGPL-3 is written as additional permissions on top of GPL-3 and incorporates it by reference, so its
 text alone is not a complete licence — `vmk_partner_email_multiple/LICENSE` carries both, LGPL-3
 first.
 
-Two conditions to keep true whatever the licence: do not copy Odoo source into a module that is not
-LGPL-3 (override by calling `super()` rather than copy-pasting a core method to tweak it; where a
-copy is genuinely unavoidable, as with core's mail templates, it goes in an LGPL-3 module of its
-own, which Odoo's Apps FAQ lets depend even on an OPL-1 module), and do not depend on an Enterprise
-module, which would put distribution under OEEL whatever the manifest says — that module belongs in
+Two conditions to keep true whatever the licence. **Prefer overriding to copying**: call `super()`
+rather than copy-pasting a core method to tweak it, because a copy stops following core. Core is
+LGPL-3 like us, so a copy is allowed licence-wise; where one is genuinely unavoidable, as with
+core's mail templates, test it against core's source so an upgrade cannot leave it silently behind.
+Core code that a proprietary module in `../Odoo Addons - Private` needs goes in an LGPL-3 module of
+its own, as `vmk_event_sessions_mail` does. And **do not depend on an Enterprise module**, which
+would put distribution under OEEL whatever the manifest says — that module belongs in
 `../Odoo Addons - Private` instead.
 
 **The MIT trap, kept because it is easy to walk back into.** Odoo validates `license` against that

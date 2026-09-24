@@ -137,13 +137,13 @@ and drops whatever the merge marks obsolete, so a PO entry with no POT counterpa
 silence. `tests/test_translations.py::TestModuleNameTranslation` fails loudly if a re-export drops
 them. Those entries are kept on one line each, because the test reads them that way.
 
-## Licence: LGPL-3, not this repo's AGPL-3 default
+## Licence: LGPL-3
 
-Our own proprietary `vmk_event_sessions` (sessions under an event, OPL-1) is meant to build on this:
-a slot holding several sessions spans all of them, which is a multi-day slot. Odoo's
-licence-compatibility table (in its [Apps FAQ](https://apps.odoo.com/apps/faq)) lets an OPL-1 module
-depend on LGPL-3 but not on AGPL-3, so AGPL here would rule that out. It is also plainly a gap in
-core that other modules may want to build on, which is the repo's other reason for LGPL.
+LGPL-3, as the whole repo is, and for this module it is not optional. Our own proprietary
+`vmk_event_sessions` (sessions under an event, OPL-1) depends on it: a slot holding several sessions
+spans all of them, which is a multi-day slot. Odoo's licence-compatibility table (in its
+[Apps FAQ](https://apps.odoo.com/apps/faq)) lets an OPL-1 module depend on LGPL-3 but not on AGPL-3.
+It is also plainly a gap in core that other modules may want to build on.
 
 ## Testing
 

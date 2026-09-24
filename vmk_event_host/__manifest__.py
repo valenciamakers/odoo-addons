@@ -4,11 +4,8 @@
 {
     "name": "Event Hosts",
     "summary": "Record who runs an event, as one or more contacts",
-    "version": "19.0.1.0.1",
+    "version": "19.0.1.0.2",
     "author": "Valencia Makers, SL",
-    # LGPL-3 rather than this repo's AGPL-3 default: our own proprietary
-    # modules depend on this one, and Odoo's licence compatibility rules
-    # forbid a proprietary module depending on AGPL. See README.md.
     "license": "LGPL-3",
     "category": "Marketing/Events",
     "depends": ["event"],

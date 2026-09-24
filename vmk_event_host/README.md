@@ -112,15 +112,13 @@ silence and the module keeps its English name in a Spanish database.
 `tests/test_translations.py::TestModuleNameTranslation` fails loudly if a re-export drops them, and
 also asserts the premise the whole workaround rests on: that the xmlid still belongs to `base`.
 
-## Licence: LGPL-3, not this repo's AGPL-3 default
+## Licence: LGPL-3
 
-Our own proprietary modules depend on this one: `vmk_event_sessions` (sessions under an event) is
-OPL-1, and the glue module that puts a host on a session depends on both.
-
-Odoo's licence-compatibility table (in its [Apps FAQ](https://apps.odoo.com/apps/faq)) permits an
-OPL-1 or OEEL-1 module to depend on LGPL-3, but **not** on AGPL-3. AGPL here would therefore make
-that glue impossible to license at all. This is the repo's stated exception — LGPL for a module
-meant to be depended on — and the same reasoning behind `vmk_partner_email_multiple`.
+LGPL-3, as the whole repo is, and for this module it is not optional. Our own proprietary modules
+will depend on it: the planned glue module putting a host on each session depends on both this and
+`vmk_event_sessions`, which is OPL-1. Odoo's licence-compatibility table (in its
+[Apps FAQ](https://apps.odoo.com/apps/faq)) permits an OPL-1 or OEEL-1 module to depend on LGPL-3,
+but **not** on AGPL-3, so AGPL here would leave that glue with no licence it could carry.
 
 ## Testing
 
