@@ -1,0 +1,20 @@
+<!-- Our composition, derived from lucide-static v1.47.0 (ISC): layout-arrow-down, mirrored so the
+     arrow is on the left, with its lower tile replaced by Lucide's blocks, mirrored so the loose block sits top left, for installable modules.
+     The arrow and the top tile are shared by the three sort modules; the lower item says what each
+     one sorts. It is drawn at 1.25px, the badge weight, since at this size 2px fills its shapes in. -->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M6 3v18" />
+  <path d="m3 18 3 3 3-3" />
+  <rect width="7" height="7" x="14" y="3" rx="1" />
+  <g transform="translate(12.220 12.220) scale(0.44)" stroke-width="2.841"><g transform="translate(24 0) scale(-1 1)"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2" /><rect x="14" y="2" width="8" height="8" rx="1" /></g></g>
+</svg>
