@@ -1,0 +1,17 @@
+<!-- Our composition, derived from lucide-static v1.47.0 (ISC): book-a, the language modules' base
+     symbol, at 0.9 scale with its stroke widened so it still draws at 2px, and a lock badge in its
+     corner at 1.25px. The badge is knocked out by the lock's own outline, widened by 1.5px, not by
+     a circle; white is painted as transparency by tools/make_icon.py. -->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <g transform="translate(0.6 0.6) scale(0.9)" stroke-width="2.222"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20" /><path d="m8 13 4-7 4 7" /><path d="M9.1 11h5.7" /></g><g transform="translate(13.220 13.220) scale(0.44)" fill="#fff" stroke="#fff" stroke-width="9.659"><rect width="18" height="11" x="3" y="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></g><g transform="translate(13.220 13.220) scale(0.44)" stroke-width="2.841"><rect width="18" height="11" x="3" y="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></g>
+</svg>
