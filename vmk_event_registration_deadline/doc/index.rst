@@ -35,6 +35,11 @@ the whole event.
 
 **Changelog**
 
+*19.0.1.0.3 (24 September 2026)*
+
+- The setting's help reads "Allow registration only until an event starts", since a free event has
+  registrations but no tickets. No change in behaviour.
+
 *19.0.1.0.2 (24 September 2026)*
 
 - Licensed LGPL-3, and credited to Valencia Makers. No change in behaviour.

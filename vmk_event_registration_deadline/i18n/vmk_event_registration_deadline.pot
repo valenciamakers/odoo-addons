@@ -74,8 +74,8 @@ msgstr ""
 #: model:ir.model.fields,help:vmk_event_registration_deadline.field_res_config_settings__vmk_registration_deadline_enabled
 #: model_terms:ir.ui.view,arch_db:vmk_event_registration_deadline.res_config_settings_view_form
 msgid ""
-"Sell tickets only until an event starts, or a set time in advance. Set to "
-"00:00 to end registration at the event start time."
+"Allow registration only until an event starts, or a set time in advance. Set "
+"to 00:00 to end registration at the event start time."
 msgstr ""
 
 #. module: vmk_event_registration_deadline

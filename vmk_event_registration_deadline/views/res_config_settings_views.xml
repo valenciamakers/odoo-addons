@@ -14,7 +14,7 @@
                      `use_invoice_terms` in account. The setting renders the
                      boolean as its checkbox and the help beneath the label. -->
                 <setting id="vmk_registration_deadline"
-                         help="Sell tickets only until an event starts, or a set time in advance. Set to 00:00 to end registration at the event start time.">
+                         help="Allow registration only until an event starts, or a set time in advance. Set to 00:00 to end registration at the event start time.">
                     <field name="vmk_registration_deadline_enabled"/>
                     <!-- float_time rather than loose text naming the unit:
                          the value then reads as a duration on its own, and a
