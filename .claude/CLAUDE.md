@@ -674,8 +674,16 @@ computed values inline — `vmk_event_slot_multiday`'s page is the model to copy
 two-column feature grids, with the main screenshot full width. Name our modules and Odoo's apps in
 bold, and link a mention of another of our modules to its store page with `target="_blank"`: the
 store's rules allow only `static/description`, YouTube, Teams, and `mailto:` links, but links to its
-own module pages survive in live descriptions. Screenshots are taken at 2x in English (UK), with any
-polish (colours, widths, a drawn cursor) injected as CSS during capture only, never shipped.
+own module pages survive in live descriptions.
+
+**The store strips any inline style it does not allow,** silently. What survives on published pages
+is colour, font, margin, padding, border, `width`/`max-width`, `display`, `line-height`,
+`text-align`, and `opacity`; `gap`, `flex`, `display:grid`, and `grid-template-columns` are dropped.
+So lay out with Bootstrap classes, which the store's rules ask for and the backend also loads — the
+feature grid is a `row` of `col-md-6` — and space things with margins, never `gap`. The first
+published pages lost both: the grid fell to one column and the icons touched their text. Screenshots
+are taken at 2x in English (UK), with any polish (colours, widths, a drawn cursor) injected as CSS
+during capture only, never shipped.
 
 **The manual, `doc/index.rst`, has no RST headings.** The store shows it in a Documentation tab with
 headings at 53px, 42px, and 31px against 16px text, and pure RST cannot set a size; top-level
