@@ -1,0 +1,35 @@
+/* Shared layout for Apps Store covers: 880x440 CSS px, rendered at 2x by tools/make_cover.py. */
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { width: 880px; height: 440px; overflow: hidden; font-family: -apple-system, "Helvetica Neue", Arial, sans-serif; }
+.cover {
+    position: relative; width: 880px; height: 440px; overflow: hidden; color: #fff;
+    background: radial-gradient(circle at 85% 10%, #7a3fc0 0%, rgba(122, 63, 192, 0) 45%),
+                linear-gradient(135deg, #5d22a3 0%, #531b93 45%, #3a1068 100%);
+}
+.cover::after { /* a faint ring, for depth */
+    content: ""; position: absolute; left: -160px; bottom: -220px; width: 520px; height: 520px;
+    border-radius: 50%; border: 60px solid rgba(255, 255, 255, 0.05);
+}
+.text { position: absolute; left: 48px; top: 56px; width: 360px; z-index: 2; }
+.badges { display: flex; gap: 8px; margin-bottom: 22px; }
+.badge {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+    padding: 5px 10px; border-radius: 999px; background: rgba(255, 255, 255, 0.16);
+}
+h1 { margin: 0; font-size: 46px; line-height: 1.04; font-weight: 800; letter-spacing: -0.02em; }
+.tagline { margin: 18px 0 0; font-size: 19px; line-height: 1.35; color: rgba(255, 255, 255, 0.86); }
+.brand {
+    position: absolute; left: 48px; bottom: 40px; z-index: 2; display: flex; align-items: center;
+    gap: 10px; font-size: 14px; font-weight: 600; color: rgba(255, 255, 255, 0.9);
+}
+.brand img { width: 28px; height: 28px; filter: brightness(0) invert(1); }
+.shot {
+    position: absolute; z-index: 1; border-radius: 10px; overflow: hidden; background: #fff;
+    box-shadow: 0 24px 60px rgba(20, 0, 50, 0.45), 0 4px 14px rgba(20, 0, 50, 0.3);
+}
+.shot img { position: absolute; display: block; }
+.flag { /* marks a variant of a module, e.g. its website half, under the shared title */
+    display: inline-block; margin-top: 14px; font-size: 15px; font-weight: 800; letter-spacing: 0.08em;
+    text-transform: uppercase; padding: 6px 14px; border-radius: 6px; background: #fff; color: #531b93;
+}

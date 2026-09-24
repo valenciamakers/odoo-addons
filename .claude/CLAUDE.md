@@ -646,6 +646,23 @@ transparent background instead (24 September 2026), which is also how Odoo's own
 drawn. A composition knocks a gap out of a glyph with a white shape; the renderer turns white into
 transparency, so the gap shows whatever the icon sits on.
 
+**Every module has a designed cover, `static/description/cover.png`, named first in the manifest's
+`images`.** The store takes the first image as the cover: the thumbnail in search results and the
+picture at the top of the module's page, filled into a 2:1 frame. A bare screenshot there looked
+poor next to other vendors' designed covers (Felix, 24 September 2026), and a module without one
+ranks lower in the default listing, per the vendor guidelines. Each cover is
+`tools/covers/<module>.html` on the shared `tools/covers/cover.css`: purple background, the module's
+name and summary on the left, cards cut from the module's own screenshots on the right, and the icon
+with "Valencia Makers" at the bottom. `tools/make_cover.py` renders it at 1760x880, 2x the 880x440
+layout, with Chromium forced to sRGB so the purple stays `#531B93`.
+
+```bash
+uv run tools/make_cover.py vmk_foo
+uv run tools/make_cover.py --all
+```
+
+Put a non-breaking hyphen (`&#8209;`) in a hyphenated name, or the title can wrap inside it.
+
 **Bump the version on every change to our code**, not only when a change needs an upgrade to take
 effect. The manifest version is the only marker of which build someone is running, and the cost of
 getting it wrong is asymmetric: a bump nobody needed is invisible, while a changed module still
