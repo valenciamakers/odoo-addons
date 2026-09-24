@@ -27,6 +27,8 @@ we do not own. The three remotes differ by one word — `odoo-addons`, `odoo-add
   registration modal; `auto_install`.
 - **`vmk_partner_email_multiple`** — several email addresses per contact, matched by Odoo's own
   machinery, and kept rather than dropped when contacts are merged.
+- **`tools/`** — not a module. `make_icon.py` renders each module's store icon from the glyphs in
+  `tools/icons/`; see _Store icons_ under the authoring conventions.
 - The local test harness is `../Tech Stack/odoo-dev`, shared with our other two Odoo module repos.
 
 Read the existing modules' `README.md` files before writing another; between them they document most
@@ -603,6 +605,27 @@ comma**. `author` is a comma-separated list of authors, which is how the OCA is 
 company, so the Apps Store listed "Valencia Makers, SL" as two authors, "Valencia Makers" and "SL",
 each linked to a search. The legal name stays in the copyright lines. Fixed 24 September 2026. Keep
 `depends` minimal and honest — depend on `website` only if you override something it defines.
+
+**Store icons are rendered by `tools/make_icon.py`, never drawn or resized by hand.** Every module's
+`static/description/icon.png` is a 256px rounded tile in our purple, `#531B93`, with a white glyph
+from [Lucide](https://lucide.dev/icons/) (ISC), chosen 24 September 2026 over Font Awesome,
+Phosphor, Tabler, and Material Symbols. The glyph's source is `tools/icons/<module>.svg`: either a
+Lucide icon as published, fetched with `--lucide <name>`, or our own composition on Lucide's 24px
+grid and stroke, which is how a family of modules, such as the three sort modules, is meant to read
+as one. So an icon can always be rebuilt, and restyling every module is one `--all`.
+
+```bash
+uv run tools/make_icon.py --install-browser              # once: Playwright's own Chromium
+uv run tools/make_icon.py vmk_foo --lucide calendar-range
+uv run tools/make_icon.py --all
+```
+
+Two things the first attempts got wrong, and the tool exists to avoid. Drawing a font glyph with
+Pillow and scaling it down left the edges fuzzy and aliased, so the icon is rendered at its final
+size by a browser. And colours drawn in the page came out shifted, `#531B93` as `#4C1F8D`, because a
+screenshot passes through colour management; so the page draws only black on white, and Pillow
+paints the exact colours through those as masks. Font Awesome 4.7 stays the right choice for the
+small `fa` icons _inside_ `index.html`, since the Apps Store renders those with its own copy.
 
 **Bump the version on every change to our code**, not only when a change needs an upgrade to take
 effect. The manifest version is the only marker of which build someone is running, and the cost of

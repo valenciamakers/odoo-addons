@@ -73,6 +73,10 @@ docker compose run --rm odoo odoo -d test -u vmk_language_sequence --test-enable
 docker compose up -d odoo
 ```
 
+Each module's store icon is rendered from an SVG glyph in `tools/icons/` by
+`uv run tools/make_icon.py <module>`; the glyphs are [Lucide](https://lucide.dev/) icons (ISC,
+notice in `tools/icons/LICENSE-lucide`) or drawn to match them.
+
 `.claude/CLAUDE.md` documents the harness's sharp edges, plus a catalogue of Odoo 19 behaviours that
 cost us time — all verified against real Odoo source rather than against documentation.
 
