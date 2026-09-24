@@ -31,8 +31,8 @@ Slots belong to events with **Multiple Slots** enabled on the event form.
    event form does. Click the end and pick a later date, such as Friday 18:00 to Sunday 13:00.
 #. Save. The slot calendar now draws the slot across all its days.
 
-**Times are in the event's timezone**, shown under the Date row, wherever you are working from.
-Slots are configured and displayed in the event's timezone, as they currently are in Odoo.
+**Times are in the event's timezone, not yours**, as Odoo already does for slots. The slot form
+displays the timezone just under the Date row.
 
 **Moving a slot keeps its length.** Move a multi-day slot to another start date and the end date
 moves with it.
