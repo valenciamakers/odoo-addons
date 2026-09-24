@@ -28,8 +28,8 @@ msgstr "Espacios de evento de varios días"
 
 #. module: base
 #: model:ir.module.module,summary:base.module_vmk_event_slot_multiday
-msgid "Let an event slot run over several days, not only within one"
-msgstr "Permite que un espacio de evento dure varios días, no solo uno"
+msgid "Allow event slots to span multiple days"
+msgstr "Permita que los espacios de evento abarquen varios días"
 
 #. module: vmk_event_slot_multiday
 #. odoo-python

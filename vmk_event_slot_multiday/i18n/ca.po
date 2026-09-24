@@ -30,8 +30,8 @@ msgstr "Franges horàries d'esdeveniment de diversos dies"
 
 #. module: base
 #: model:ir.module.module,summary:base.module_vmk_event_slot_multiday
-msgid "Let an event slot run over several days, not only within one"
-msgstr "Permet que una franja horària d'esdeveniment duri diversos dies, no només un"
+msgid "Allow event slots to span multiple days"
+msgstr "Permetre que les franges horàries d'esdeveniment abastin diversos dies"
 
 #. module: vmk_event_slot_multiday
 #. odoo-python

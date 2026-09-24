@@ -26,7 +26,7 @@ class TestModuleNameTranslation(TransactionCase):
     I18N = Path(__file__).resolve().parent.parent / "i18n"
     HAND_MAINTAINED = (
         "Multi-Day Event Slots",
-        "Let an event slot run over several days, not only within one",
+        "Allow event slots to span multiple days",
     )
 
     def _translation(self, catalogue, msgid):

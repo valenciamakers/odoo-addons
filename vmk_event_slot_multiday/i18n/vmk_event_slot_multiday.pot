@@ -27,7 +27,7 @@ msgstr ""
 
 #. module: base
 #: model:ir.module.module,summary:base.module_vmk_event_slot_multiday
-msgid "Let an event slot run over several days, not only within one"
+msgid "Allow event slots to span multiple days"
 msgstr ""
 
 #. module: vmk_event_slot_multiday

@@ -3,7 +3,7 @@
 
 {
     "name": "Multi-Day Event Slots",
-    "summary": "Let an event slot run over several days, not only within one",
+    "summary": "Allow event slots to span multiple days",
     "version": "19.0.1.0.1",
     "author": "Valencia Makers",
     "license": "LGPL-3",
