@@ -2,7 +2,7 @@
 # License LGPL-3 (https://www.gnu.org/licenses/lgpl-3.0.html).
 
 {
-    "name": "Language Metadata Protection",
+    "name": "Protect Language Edits",
     "summary": "Stop Odoo updates reverting your edits to language metadata",
     "version": "19.0.1.1.1",
     "author": "Valencia Makers",

@@ -26,8 +26,8 @@ msgstr ""
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_vmk_event_registration_deadline
-msgid "Event Registration Deadline"
-msgstr "Fecha límite de inscripción al evento"
+msgid "Registration Deadline"
+msgstr "Fecha límite de inscripción"
 
 #. module: base
 #: model:ir.module.module,summary:base.module_vmk_event_registration_deadline

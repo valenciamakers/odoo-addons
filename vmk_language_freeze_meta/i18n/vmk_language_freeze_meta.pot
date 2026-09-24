@@ -45,7 +45,7 @@ msgstr ""
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_vmk_language_freeze_meta
-msgid "Language Metadata Protection"
+msgid "Protect Language Edits"
 msgstr ""
 
 #. module: base

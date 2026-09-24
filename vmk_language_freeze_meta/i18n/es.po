@@ -51,8 +51,8 @@ msgstr "Proteger de las actualizaciones"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_vmk_language_freeze_meta
-msgid "Language Metadata Protection"
-msgstr "Protección de los metadatos de idioma"
+msgid "Protect Language Edits"
+msgstr "Proteger las ediciones de idiomas"
 
 #. module: base
 #: model:ir.module.module,summary:base.module_vmk_language_freeze_meta

@@ -20,8 +20,8 @@ msgstr ""
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_vmk_website_event_slot_multiday
-msgid "Multi-Day Event Slots on the Website"
-msgstr "Espacios de evento de varios días en el sitio web"
+msgid "Website Multi-Day Slots"
+msgstr "Espacios de varios días en el sitio web"
 
 #. module: base
 #: model:ir.module.module,summary:base.module_vmk_website_event_slot_multiday

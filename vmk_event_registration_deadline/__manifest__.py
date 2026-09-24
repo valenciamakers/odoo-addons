@@ -2,7 +2,7 @@
 # License LGPL-3 (https://www.gnu.org/licenses/lgpl-3.0.html).
 
 {
-    "name": "Event Registration Deadline",
+    "name": "Registration Deadline",
     "summary": "Sell tickets only until an event starts, or a set time in advance",
     "version": "19.0.1.0.2",
     "author": "Valencia Makers",

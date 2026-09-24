@@ -1,4 +1,4 @@
-# Event Registration Deadline
+# Registration Deadline
 
 Sells tickets only until an event starts, or a set time in advance.
 

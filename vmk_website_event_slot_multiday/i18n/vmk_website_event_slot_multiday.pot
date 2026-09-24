@@ -22,7 +22,7 @@ msgstr ""
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_vmk_website_event_slot_multiday
-msgid "Multi-Day Event Slots on the Website"
+msgid "Website Multi-Day Slots"
 msgstr ""
 
 #. module: base

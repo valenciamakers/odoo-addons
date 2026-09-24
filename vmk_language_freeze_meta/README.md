@@ -1,4 +1,4 @@
-# Language Metadata Protection (`vmk_language_freeze_meta`)
+# Protect Language Edits (`vmk_language_freeze_meta`)
 
 Odoo ships its languages as module data and re-applies them on every module update, so any edit you
 make to a language is reverted. Rename `English (US)` to `English`, broaden Catalan's ISO code from

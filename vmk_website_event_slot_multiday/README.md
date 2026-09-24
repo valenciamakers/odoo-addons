@@ -1,4 +1,4 @@
-# Multi-Day Event Slots on the Website (`vmk_website_event_slot_multiday`)
+# Website Multi-Day Slots (`vmk_website_event_slot_multiday`)
 
 The website half of `vmk_event_slot_multiday`: when a visitor picks a slot that ends on a later day,
 the registration modal says both days.
