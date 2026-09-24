@@ -1,10 +1,10 @@
 <!-- Our composition, derived from lucide-static v1.47.0 (ISC): the plain calendar at 0.9 scale,
      its stroke widened so it still draws at 2px, with alarm-clock as a badge cut out of its
-     bottom-right corner by the clock's own outline: face filled, bells and feet stroked wide. The
-     badge is drawn at 1.5px rather than Lucide's 2px, as the website module's globe is. White is
-     painted as transparency by tools/make_icon.py. -->
+     bottom-right corner by the clock's own outline: face filled, bells and feet stroked wide, the
+     face centred where the globe and the circled person sit on their icons. The badge is drawn at
+     1.5px rather than Lucide's 2px. White is painted as transparency by tools/make_icon.py. -->
 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
   <g transform="translate(0.6 0.6) scale(0.9)" stroke-width="2.222"><rect x="3" y="4" width="18" height="18" rx="2" /><path d="M16 2v4" /><path d="M8 2v4" /><path d="M3 10h18" /></g>
-  <g transform="translate(12.980 12.750) scale(0.46)" fill="none" stroke="#fff" stroke-width="9.783"><circle cx="12" cy="13" r="8" fill="#fff" /><circle cx="12" cy="13" r="8" /><path d="M12 9v4l2 2" /><path d="M5 3 2 6" /><path d="m22 6-3-3" /><path d="M6.38 18.7 4 21" /><path d="M17.64 18.67 20 21" /></g>
-  <g transform="translate(12.980 12.750) scale(0.46)" stroke-width="3.261"><circle cx="12" cy="13" r="8" /><path d="M12 9v4l2 2" /><path d="M5 3 2 6" /><path d="m22 6-3-3" /><path d="M6.38 18.7 4 21" /><path d="M17.64 18.67 20 21" /></g>
+  <g transform="translate(12.980 12.520) scale(0.46)" fill="none" stroke="#fff" stroke-width="9.783"><circle cx="12" cy="13" r="8" fill="#fff" /><circle cx="12" cy="13" r="8" /><path d="M12 9v4l2 2" /><path d="M5 3 2 6" /><path d="m22 6-3-3" /><path d="M6.38 18.7 4 21" /><path d="M17.64 18.67 20 21" /></g>
+  <g transform="translate(12.980 12.520) scale(0.46)" stroke-width="3.261"><circle cx="12" cy="13" r="8" /><path d="M12 9v4l2 2" /><path d="M5 3 2 6" /><path d="m22 6-3-3" /><path d="M6.38 18.7 4 21" /><path d="M17.64 18.67 20 21" /></g>
 </svg>

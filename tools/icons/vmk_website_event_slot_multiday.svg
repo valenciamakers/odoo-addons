@@ -1,6 +1,6 @@
 <!-- Our composition, derived from lucide-static v1.47.0 (ISC): calendar-range at 0.9 scale, its
      stroke widened so it still draws at 2px, with a small globe badge (circle, meridian, equator)
-     cut out of its bottom-right corner. The badge is drawn at 1.5px rather than Lucide's 2px: at
+     cut out of its bottom-right corner. The badge is drawn at 1.25px rather than Lucide's 2px: at
      this size a 2px globe fills in to a disc. The knockout circle is drawn in white, which
      tools/make_icon.py paints as transparency. -->
 <svg
@@ -10,7 +10,7 @@
     <path d="M17 13h-6" /><path d="M13 17H7" /><path d="M7 13h.01" /><path d="M17 17h.01" />
   </g>
   <circle cx="18.5" cy="18.5" r="6.8" fill="#fff" stroke="none" />
-  <g stroke-width="1.5">
+  <g stroke-width="1.25">
   <circle cx="18.5" cy="18.5" r="4.6" />
   <path d="M18.5 13.9A6.290 6.290 0 0 0 18.5 23.1A6.290 6.290 0 0 0 18.5 13.9" />
   <path d="M13.9 18.5h9.2" />
