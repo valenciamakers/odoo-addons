@@ -25,6 +25,9 @@ They depend only on Odoo Community modules, so they work on Community and Enterp
   duplicate. Merging two contacts keeps both their addresses.
 - **[`vmk_event_host`](vmk_event_host)** — record who runs an event: the speakers, teachers or
   facilitators, as contacts. An event can have several, and they are searchable and groupable.
+- **[`vmk_event_slot_multiday`](vmk_event_slot_multiday)** — let an event slot end on a later day
+  than it starts, such as Friday evening to Sunday afternoon. Everything that reads the slot's end
+  follows: the calendar, the attendee's registration, and scheduled mail.
 
 Each module's own `README.md` explains why it is built the way it is — which core method fights you,
 and where. That is usually the interesting part.
@@ -79,5 +82,5 @@ something substantial.
 
 - **AGPL-3** for everything by default. Use them freely, including commercially; distribute a
   modified version and it stays AGPL, with source.
-- **LGPL-3** for `vmk_partner_email_multiple` and `vmk_event_host`, so other modules may depend on
-  them under any licence. Each README explains why it is an exception.
+- **LGPL-3** for `vmk_partner_email_multiple`, `vmk_event_host`, and `vmk_event_slot_multiday`, so
+  other modules may depend on them under any licence. Each README explains why it is an exception.

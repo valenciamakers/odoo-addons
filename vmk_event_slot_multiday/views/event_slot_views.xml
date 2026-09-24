@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_event_slot_form_multiday" model="ir.ui.view">
+        <field name="name">event.slot.form.multiday</field>
+        <field name="model">event.slot</field>
+        <field name="inherit_id" ref="event.view_event_slot_form"/>
+        <field name="arch" type="xml">
+            <!-- Core's slot form has no date at all: a slot is created by
+                 clicking a day in the slot calendar. A slot that can end on
+                 another day needs both days in front of whoever edits it, so
+                 they sit above core's "Hour range", in the same shape. -->
+            <label for="start_hour" position="before">
+                <label for="date" string="Date range"/>
+                <div>
+                    <field name="date" class="oe_inline"/>
+                    <i class="fa fa-arrow-right mx-2" title="to"/>
+                    <field name="vmk_end_date" class="oe_inline"/>
+                </div>
+            </label>
+        </field>
+    </record>
+
+    <record id="view_event_slot_tree_multiday" model="ir.ui.view">
+        <field name="name">event.slot.list.multiday</field>
+        <field name="model">event.slot</field>
+        <field name="inherit_id" ref="event.view_event_slot_tree"/>
+        <field name="arch" type="xml">
+            <field name="date" position="after">
+                <field name="vmk_end_date" optional="show"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>
