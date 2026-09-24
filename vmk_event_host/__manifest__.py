@@ -19,6 +19,7 @@
             "vmk_event_host/static/src/**/*",
         ],
     },
+    "images": ["static/description/cover.png"],
     "installable": True,
     "application": False,
 }

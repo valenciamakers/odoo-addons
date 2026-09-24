@@ -661,7 +661,9 @@ uv run tools/make_cover.py vmk_foo
 uv run tools/make_cover.py --all
 ```
 
-Put a non-breaking hyphen (`&#8209;`) in a hyphenated name, or the title can wrap inside it.
+Put a non-breaking hyphen (`&#8209;`) in a hyphenated name, or the title can wrap inside it. When a
+module's screenshots are too wide to crop into a card, capture the parts the cover needs separately
+into `tools/covers/img/`, so the module does not ship images its page never shows.
 
 **The store page, `static/description/index.html`, styles its text inline.** The Apps Store and the
 backend's Apps page style Odoo's `oe_*` description classes differently: the store makes body text

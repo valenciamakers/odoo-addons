@@ -1,8 +1,19 @@
 # Event Hosts (`vmk_event_host`)
 
+Record who runs an event, as one or more contacts: the instructors, speakers, and facilitators
+people meet in the room. Each host has an optional role, hosts keep the order you set, and events
+can be searched, grouped, and tracked by host.
+
+**How to use it** is in the user documentation, [`doc/index.rst`](doc/index.rst), which the Odoo
+Apps Store also shows on the module's page, together with the changelog.
+
+It depends only on `event` (_Events Organization_). LGPL-3, © 2026 Valencia Makers, SL.
+
+## For developers
+
 Adds **Hosts** to `event.event`: the people running the event, as contacts, in an order you set.
 
-## Why core does not cover this
+### Why core does not cover this
 
 An event already names two parties, and neither is the person in the room:
 
@@ -13,7 +24,7 @@ An event already names two parties, and neither is the person in the room:
 A teacher, speaker or facilitator is usually neither. They are frequently not an Odoo user at all,
 which is why hosts are `res.partner` records rather than `res.users`.
 
-## The model, and why it is a line model
+### The model, and why it is a line model
 
 `vmk.event.host` holds one row per host: `partner_id`, an optional `role` ("Lead", "Guest speaker"),
 and `sequence`.
@@ -40,7 +51,7 @@ order. A one2many keeps the order it was read in until the cache is invalidated,
 within the same transaction. Without the explicit `sorted()`, the header lagged a drag by one save.
 A test covers it.
 
-## The summary opens the tab
+### The summary opens the tab
 
 Clicking the header summary switches the form to the Hosts tab, so the field behaves like any other
 field that takes you where you can edit it.
@@ -65,7 +76,7 @@ colour and no underline, and `host_summary_field.scss` puts the ordinary cursor 
 reboot sets `cursor: pointer` on every enabled button via `button:not(:disabled)`, so the override
 has to out-specify that rule rather than merely follow it.
 
-## The Hosts list is left alone on purpose
+### The Hosts list is left alone on purpose
 
 It behaves like any editable list: the cell shows a pointer, a click puts the row in edit, and the
 contact's internal-link arrow appears only then. That is how core renders a many2one in a list — the
@@ -78,7 +89,7 @@ custom cell widget rendering the link arrow on hover. The second is not a core p
 it would be ours to keep working across Odoo upgrades, for a module we may sell. Revisit if the
 missing arrow actually costs anyone time.
 
-## Other decisions
+### Other decisions
 
 **Prefixed field names.** `vmk_host_ids`, not `host_ids`. Field names on a core model are a shared
 namespace: another module defining `host_ids` with a different type on `event.event` would break
@@ -96,7 +107,7 @@ event users and managers. The multi-company record rule mirrors
 renaming its own elements; the `<tree>` to `<list>` rename in Odoo 18 broke exactly that kind of
 xpath.
 
-## Translations
+### Translations
 
 `i18n/` carries `es` and `ca`, and `./odev terms vmk_event_host` reports both clean against core.
 Terms this module shares with core — _Event_, _Sequence_, _Company_, the ORM's own _Created by_ and
@@ -112,7 +123,7 @@ silence and the module keeps its English name in a Spanish database.
 `tests/test_translations.py::TestModuleNameTranslation` fails loudly if a re-export drops them, and
 also asserts the premise the whole workaround rests on: that the xmlid still belongs to `base`.
 
-## Licence: LGPL-3
+### Licence: LGPL-3
 
 LGPL-3, as the whole repo is, and for this module it is not optional. Our own proprietary modules
 will depend on it: the planned glue module putting a host on each session depends on both this and
@@ -120,7 +131,7 @@ will depend on it: the planned glue module putting a host on each session depend
 [Apps FAQ](https://apps.odoo.com/apps/faq)) permits an OPL-1 or OEEL-1 module to depend on LGPL-3,
 but **not** on AGPL-3, so AGPL here would leave that glue with no licence it could carry.
 
-## Testing
+### Testing
 
 ```bash
 cd "../Tech Stack/odoo-dev"
