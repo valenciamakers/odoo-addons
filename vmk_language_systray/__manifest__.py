@@ -14,6 +14,7 @@
             "vmk_language_systray/static/src/**/*",
         ],
     },
+    "images": ["static/description/cover.png"],
     "installable": True,
     "application": False,
 }

@@ -1,10 +1,21 @@
 # Backend Language Menu (`vmk_language_systray`)
 
+Switch your own backend language from a systray dropdown. In standard Odoo, changing your backend
+language means opening your preferences, finding the language field, and saving. This module adds a
+globe to the top bar: click it, pick a language, and the backend reloads in it.
+
+**How to use it** is in the user documentation, [`doc/index.rst`](doc/index.rst), which the Odoo
+Apps Store also shows on the module's page, together with the changelog.
+
+It depends only on `web`. LGPL-3, © 2026 Valencia Makers, SL.
+
+## For developers
+
 A globe icon in the backend systray, next to the company switcher. It lists the active languages;
 clicking one sets the **current user's** backend interface language and reloads. It never touches
 the website's frontend language, and it is invisible in a single-language database.
 
-## Showing the language name (off by default)
+### Showing the language name (off by default)
 
 The button is a bare globe. The systray is a crowded, fixed-width row, and a word as wide as
 `English (US)` should cost that space only for someone who has asked for it — so the name is opt-in,
@@ -25,7 +36,7 @@ per-user home for this would be `res.users.settings`, but that model lives in `m
 this module does not otherwise need) and ships no menu or action at all, so setting it by hand would
 mean `odoo shell`. A screen beat a scope here.
 
-## Why this is almost entirely assets
+### Why this is almost entirely assets
 
 One file of Python: `models/ir_http.py`, which puts the flag above into `session_info`. That is not
 a convenience — `ir.config_parameter` is readable only by `base.group_system`, so a plain internal
@@ -51,7 +62,7 @@ for a plain internal user, and `lang` paired with `login` (not self-writeable) r
 No `security/ir.model.access.csv` either. ACLs are per model, and `ir.http` is an abstract model
 with no table; inheriting it to extend one method grants nothing and needs nothing.
 
-## Gating on `isDisplayed`, not a `t-if`
+### Gating on `isDisplayed`, not a `t-if`
 
 `localization.multiLang` (`@web/core/l10n/localization`) is already `len(get_installed()) > 1`, set
 once by the localization service. The systray registry entry's `isDisplayed(env)` predicate
@@ -60,7 +71,7 @@ rather than a `t-if` inside the template. The difference matters: a `t-if` would
 component and fire its `onWillStart` RPC in a single-language database, paying for a dropdown nobody
 can meaningfully use. `isDisplayed` stops the component being created at all.
 
-## Placement
+### Placement
 
 The same `systrayItems` getter reverses the systray list before rendering, so a **lower** sequence
 renders **further right**. `web.user_menu` is sequence 0 and `SwitchCompanyMenu` is 1; this
@@ -71,7 +82,7 @@ there is no way to change language from a phone-width backend. That is deliberat
 `web.UserMenu` and `SwitchCompanyMenu`, which both disappear at the same width and hand over to the
 burger menu; adding a burger entry here would be the fix if it ever matters.
 
-## Reusing `vmk_language_sequence`'s order, and not sorting again
+### Reusing `vmk_language_sequence`'s order, and not sorting again
 
 `get_installed()` reads `_get_active_by('code')`, the method our own `vmk_language_sequence` module
 overrides to sort by `(sequence, name)` instead of core's plain `name`. So when that module is
@@ -80,7 +91,7 @@ order — sorting it again client-side would silently undo that work. This modul
 `vmk_language_sequence` (which pulls in `website`, which this must not); the integration is soft,
 and holds whether or not that module is present.
 
-## Trimming the name, and why `title`/`aria-label` need it that core's own text nodes do not
+### Trimming the name, and why `title`/`aria-label` need it that core's own text nodes do not
 
 Language names come back as `"Spanish / Español"` or, for a language with no slash,
 `"English (US)"`. Core displays them with `name.split('/').pop()` (see e.g.
@@ -91,13 +102,13 @@ trimmed name in a `title` and an `aria-label`, where whitespace is not collapsed
 rather than a literal string, so a future change to Odoo's own naming convention would surface
 there.
 
-## `localization.code`, not `user.lang`
+### `localization.code`, not `user.lang`
 
 The active entry is matched against `localization.code` — the current user's language in Odoo form
 (`es_ES`), set by the localization service. `user.lang` is the _browser_ locale form (`es-ES`) and
 never equals a `res.lang` code, so it cannot be used for this comparison.
 
-## Marking the active language, twice
+### Marking the active language, twice
 
 The active `DropdownItem` gets `class="{ selected: isActive(lang) }"`, following
 `control_panel.xml`'s view switcher and `report_view_measures.xml` rather than inventing a marker of
@@ -114,7 +125,7 @@ about which language is currently in force. The items therefore also carry
 value wins — and `menuitemradio` is the correct role for a single-select list, matching what core
 does for `web.CheckboxItem`.
 
-## Letting the menu shrink to the longest language name
+### Letting the menu shrink to the longest language name
 
 Bootstrap floors every dropdown at `$dropdown-min-width: 10rem`, applied as
 `min-width: var(--dropdown-min-width)` — unprefixed, because Odoo sets `$variable-prefix: ''` in
@@ -131,7 +142,7 @@ from the control that opened it. `language_systray.scss` clears the floor with
 not ours to predict. Measured after the change: the menu is 124px against a longest-item content
 width of 122px, and its right edge still lands exactly on the button's.
 
-## Accessibility: the button says what it does, not just what it reads
+### Accessibility: the button says what it does, not just what it reads
 
 The button is a bare globe by default, and still icon-only below the `lg` breakpoint even when
 `show_name` is on. So there is usually no visible text at all, and `aria-label`/`title` are the only
@@ -155,7 +166,7 @@ user's context carries no lang, so a browser set to `en-GB` against a database w
 leaves `localization.code` matching nothing in the list. Without the fallback the button would have
 no accessible name at all in that case, since the visible span is `t-if`'d out too.
 
-## Translations
+### Translations
 
 Two authored terms, both in `language_systray.js`: `Language` and `Language: %s`. Everything else on
 screen is a language's own name, which is data rather than a term to translate. The catalogues also
@@ -203,7 +214,7 @@ saying anything to a screen reader. An empty POT is worth a second look for that
 concluding, as `vmk_settings_sort` and `vmk_apps_page_sort` legitimately did, that no catalogue is
 needed.
 
-## Testing
+### Testing
 
 Against a local Odoo 19 with this repo on the addons path — Postgres, the `odoo:19` image, and the
 repo root mounted at `/mnt/extra-addons`:
@@ -221,7 +232,7 @@ docker compose run --rm odoo odoo -d test -u vmk_language_systray \
 Valencia Makers uses a shared harness for this, covered in `CLAUDE.md`; it is not needed to run the
 tests above.
 
-## License
+### License
 
 **LGPL-3**, as the whole repo is. See `LICENSE`.
 
