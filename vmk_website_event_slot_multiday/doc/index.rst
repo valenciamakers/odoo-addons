@@ -17,7 +17,8 @@ Installation
 Install **Multi-Day Event Slots (Website)** from the Apps menu. It requires the **Events** app, and
 installs **Multi-Day Event Slots** automatically.
 
-For the backend alone, without the website features, install **Multi-Day Event Slots** instead.
+For the backend alone, without the website features, install `Multi-Day Event Slots
+<https://apps.odoo.com/apps/modules/19.0/vmk_event_slot_multiday>`_ instead.
 
 Existing slots are left unchanged until you give them a later end date.
 

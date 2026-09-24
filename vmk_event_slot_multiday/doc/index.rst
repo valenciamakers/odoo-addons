@@ -15,9 +15,9 @@ Installation
 Install **Multi-Day Event Slots** from the Apps menu. It only requires **Events Organization**,
 the backend part of the **Events** app.
 
-If you publish events on your website, install **Multi-Day Event Slots (Website)** instead: it
-includes this module, and also displays the start and end dates to website visitors when they
-select a slot. If you start publishing events online later, install Multi-Day Event Slots (Website)
+If you publish events on your website, install `Multi-Day Event Slots (Website)
+<https://apps.odoo.com/apps/modules/19.0/vmk_website_event_slot_multiday>`_ instead: it includes this module, and also displays the
+start and end dates to website visitors when they select a slot. If you start publishing events online later, install Multi-Day Event Slots (Website)
 then.
 
 Existing slots are left unchanged until you give them a later end date.
