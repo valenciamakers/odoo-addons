@@ -35,6 +35,11 @@ turn it into the count **before** anything is stored or checked. An inverse woul
 because Odoo checks the other fields of a write before it runs inverses, so an end hour written
 alongside would meet core's one-day hour check while the slot was still one day long.
 
+**Given both an end date and a day count, they must agree**, and a disagreement is refused rather
+than settled by picking one. Letting the count win was the first rule, and it dropped an explicit
+end date in silence the first time another module's `create` filled in the count's default of 0
+beside it; the slot then failed core's hour check with a message about hours, not dates.
+
 **The end is computed on the end date.** `_compute_datetimes` calls core and then, for a multi-day
 slot only, rebuilds `end_datetime` from `vmk_end_date` and `end_hour` in the event's timezone. That
 is the whole change as far as the rest of Odoo is concerned, because everything downstream reads

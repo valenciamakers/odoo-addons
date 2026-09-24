@@ -50,13 +50,29 @@ class EventSlot(models.Model):
         Done up front rather than in an inverse: Odoo checks the other
         fields of a write before it runs an inverse, so a new end hour
         would meet core's one-day hour check while the slot was still one
-        day long. Given both, the day count wins, so the two cannot be
-        stored disagreeing.
+        day long.
+
+        Given both, they must agree, and a disagreement is refused rather
+        than settled by picking one: letting the count win once dropped an
+        explicit end date in silence, when another module's `create` had
+        filled in the count's default of 0 beside it, and the slot then
+        failed core's hour check with a message about hours.
         """
         end = fields.Date.to_date(vals.pop("vmk_end_date"))
         date = fields.Date.to_date(date)
+        offset = (end - date).days if end and date else 0
         if "vmk_end_day_offset" not in vals:
-            vals["vmk_end_day_offset"] = (end - date).days if end and date else 0
+            vals["vmk_end_day_offset"] = offset
+        elif vals["vmk_end_day_offset"] != offset:
+            raise ValidationError(
+                _(
+                    "A slot's end date and its number of days disagree: it ends on "
+                    "%(end)s, which is %(offset)s days after its date, not %(given)s.",
+                    end=format_date(self.env, end),
+                    offset=offset,
+                    given=vals["vmk_end_day_offset"],
+                )
+            )
         return vals
 
     @api.model_create_multi

@@ -130,11 +130,14 @@ class TestSlotMultiday(TransactionCase):
         (first | second).write({"vmk_end_date": "2026-10-11"})
         self.assertEqual((first.vmk_end_day_offset, second.vmk_end_day_offset), (2, 1))
 
-    def test_given_both_the_day_count_wins(self):
-        """So the stored end date can never disagree with the count."""
+    def test_given_both_they_must_agree(self):
+        """Agreeing, they are taken; disagreeing, refused rather than one
+        silently winning."""
         slot = self._slot()
-        slot.write({"vmk_end_date": "2026-10-16", "vmk_end_day_offset": 2, "end_hour": 13.0})
+        slot.write({"vmk_end_date": "2026-10-11", "vmk_end_day_offset": 2, "end_hour": 13.0})
         self.assertEqual(slot.vmk_end_date, fields.Date.to_date("2026-10-11"))
+        with self.assertRaisesRegex(ValidationError, "disagree"):
+            slot.write({"vmk_end_date": "2026-10-16", "vmk_end_day_offset": 2})
 
     def test_the_form_shows_one_range(self):
         """One range in the event's timezone; core's hour row hidden, not
