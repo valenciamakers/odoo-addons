@@ -3,7 +3,7 @@
 
 {
     "name": "Multi-Day Event Slots (Website)",
-    "summary": "Allow event slots to span multiple days, on the website too",
+    "summary": "Allow event slots to span multiple days, displayed on the website too",
     "version": "19.0.1.0.1",
     "author": "Valencia Makers",
     # LGPL-3, as vmk_event_slot_multiday is: see its README.

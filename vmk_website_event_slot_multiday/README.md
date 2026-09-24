@@ -1,10 +1,10 @@
 # Multi-Day Event Slots (Website) (`vmk_website_event_slot_multiday`)
 
-Allow event slots to span multiple days, on the website too: a weekend retreat from Friday evening
-to Sunday afternoon, an overnight hackathon, or a two-day course offered on several dates. It
-includes [`vmk_event_slot_multiday`](../vmk_event_slot_multiday), which gives each slot a start date
-and an end date, and adds the website half: when a visitor selects a slot that ends on a later day,
-the registration modal shows both dates.
+Allow event slots to span multiple days, displayed on the website too: a weekend retreat from Friday
+evening to Sunday afternoon, an overnight hackathon, or a two-day course offered on several dates.
+It includes [`vmk_event_slot_multiday`](../vmk_event_slot_multiday), which gives each slot a start
+date and an end date, and adds the website half: when a visitor selects a slot that ends on a later
+day, the registration modal shows both dates.
 
 **How to use it** is in the user documentation, [`doc/index.rst`](doc/index.rst), which the Odoo
 Apps Store also shows on the module's page, together with the changelog.

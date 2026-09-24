@@ -25,5 +25,5 @@ msgstr "Franges horàries d'esdeveniment de diversos dies (lloc web)"
 
 #. module: base
 #: model:ir.module.module,summary:base.module_vmk_website_event_slot_multiday
-msgid "Allow event slots to span multiple days, on the website too"
-msgstr "Permetre que les franges horàries d'esdeveniment abastin diversos dies, també al lloc web"
+msgid "Allow event slots to span multiple days, displayed on the website too"
+msgstr "Permetre que les franges horàries d'esdeveniment abastin diversos dies, també mostrades al lloc web"
