@@ -1,10 +1,23 @@
 # Multi-Day Event Slots (`vmk_event_slot_multiday`)
 
-Lets an event slot end on a later day than it starts, so a slot can run from Friday 18:00 to Sunday
-13:00, and gives the slot form one start-to-end range, as the event form has. Changes nothing about
-how a slot within one day is stored.
+Allow event slots to span multiple days: a weekend retreat from Friday evening to Sunday afternoon,
+an overnight hackathon, or a two-day course offered on several dates. Standard Odoo keeps every slot
+within one day; with this module each slot has a start date and an end date, and the slot form shows
+them as one range.
 
-## What core does
+**How to use it** is in the user documentation, [`doc/index.rst`](doc/index.rst), which the Odoo
+Apps Store also shows on the module's page, together with the changelog.
+
+It needs only the Events app. With Website Events installed as well, the companion module
+[`vmk_website_event_slot_multiday`](../vmk_website_event_slot_multiday) installs itself and shows
+visitors both days of a multi-day slot. LGPL-3, © 2026 Valencia Makers, SL.
+
+## For developers
+
+What follows is how the module works and why it is built this way: what core does, which of its
+methods this relies on, and the traps found on the way.
+
+### What core does
 
 A core `event.slot` is one `date` and two hours on it, `start_hour` and `end_hour`, both in the
 event's timezone (`event/models/event_slot.py`). `_compute_datetimes` builds `start_datetime` and
@@ -16,7 +29,7 @@ Core's slot form shows only an _Hour range_ — no date at all, since a slot is 
 day in the slot calendar — and core shows a slot in the **event's** timezone everywhere: the hours
 on the form, the slot calendar (`event_slot_calendar_model.js`, `normalizeRecord`), and the name.
 
-## What this changes
+### What this changes
 
 **A day count, not an end date.** `vmk_end_day_offset` is how many days after its `date` a slot
 ends, 0 for a slot within one day, which is every existing slot on install. Storing the length
@@ -66,7 +79,7 @@ multi-day slot is named `Oct 9, 2026, 18:00 - Oct 11, 2026, 13:00` instead, in t
 "(Sold out)" and the like, is added only when the event is _not_ multi-slot, so it never reaches a
 slot in use and replacing the whole name loses nothing.
 
-## The slot form: one range, in the event's timezone
+### The slot form: one range, in the event's timezone
 
 **One _Date_ row, start to end**, in place of core's _Hour range_:
 `Oct 9, 6:00 PM → Oct 11, 1:00 PM`, the same shape as the event form's own dates. Core's hour row is
@@ -109,7 +122,7 @@ record through `record.data` and writing through `record.update`, and on `dateRa
 `web/static/src/views/fields/datetime/ datetime_field.js`. A change there breaks the widget loudly
 rather than quietly — the form fails to render — but re-check it on any major upgrade.
 
-## What it does not do
+### What it does not do
 
 **Dragging a slot in the calendar.** Core's slot calendar cannot move slots at all (its `date_start`
 is the computed `start_datetime`, which the calendar needs writable), and this module leaves that as
@@ -123,7 +136,7 @@ is unchanged.
 **Event dates.** Core does not widen an event to fit its slots, and neither does this. Set the
 event's dates to cover the slots first; core refuses a slot that falls outside them.
 
-## Translations
+### Translations
 
 `i18n/` carries `es` and `ca`, and `./odev terms vmk_event_slot_multiday` reports both clean against
 core. _Date_, _End Date_, _Event Slot_, _Display Name_ and core's timezone help take core's own
@@ -137,7 +150,7 @@ and drops whatever the merge marks obsolete, so a PO entry with no POT counterpa
 silence. `tests/test_translations.py::TestModuleNameTranslation` fails loudly if a re-export drops
 them. Those entries are kept on one line each, because the test reads them that way.
 
-## Licence: LGPL-3
+### Licence: LGPL-3
 
 LGPL-3, as the whole repo is, and for this module it is not optional. Our own proprietary
 `vmk_event_sessions` (sessions under an event, OPL-1) depends on it: a slot holding several sessions
@@ -145,7 +158,7 @@ spans all of them, which is a multi-day slot. Odoo's licence-compatibility table
 [Apps FAQ](https://apps.odoo.com/apps/faq)) lets an OPL-1 module depend on LGPL-3 but not on AGPL-3.
 It is also plainly a gap in core that other modules may want to build on.
 
-## Testing
+### Testing
 
 ```bash
 cd "../Tech Stack/odoo-dev"
