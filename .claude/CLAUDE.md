@@ -5,9 +5,12 @@ meant to be depended on). They run against a self-hosted **Odoo 19 Enterprise** 
 only on Community modules. See `../.claude/CLAUDE.md` for the business context; this file wins
 inside this repo.
 
-Third-party modules under evaluation live in a separate private repo (`../Odoo Addons - External`
-locally), not here — this repo is publishable, so nothing enters it that we do not own. The two
-remotes differ by one word, so check which one you are pushing to.
+This is one of three module repos. Modules we write and do not publish — those depending on
+Enterprise, and those we may sell — live in the private `../Odoo Addons - Private`, which follows
+this file's conventions and adds only what differs. Third-party modules under evaluation live in the
+private `../Odoo Addons - External`, never here: this repo is publishable, so nothing enters it that
+we do not own. The three remotes differ by one word — `odoo-addons`, `odoo-addons-private`,
+`odoo-addons-external` — so check which one you are pushing to.
 
 ## Layout
 
@@ -731,19 +734,22 @@ What survives of the old rule: when a module's POT does carry core-owned terms, 
 core's own wording rather than afresh — and `vmk_apps_page_sort` shows the floor, a catalogue whose
 entire contents are the two hand-written `base.module_*` blocks.
 
-Exporting needs two workarounds, both harness-specific:
+Export from the running harness, into the container's `/tmp`, and read the file back out:
 
 ```bash
-cd dev
-docker compose run --rm -e PGHOST=db -e PGUSER=odoo -e PGPASSWORD=odoo \
-    -v "$PWD/../<module>/i18n:/mnt/out" --entrypoint odoo odoo \
-    i18n export -d test -o /mnt/out/<module>.pot <module>
+cd "../Tech Stack/odoo-dev"
+docker compose exec -T odoo sh -c \
+    'odoo i18n export -d dev -l pot -o /tmp/<module>.pot <module> && cat /tmp/<module>.pot' \
+    > /tmp/<module>.pot
 ```
 
-`--entrypoint odoo` because the image's entrypoint turns `HOST`/`USER`/`PASSWORD` into `--db_host`
-and friends, which the `i18n` subcommand rejects outright — hence passing the connection as libpq
-`PG*` variables. And `-o` because the export otherwise writes into each module's own `i18n/`, which
-the harness mounts read-only. The module must be installed for its terms to exist.
+`exec` skips the image's entrypoint, which would otherwise turn `HOST`/`USER`/`PASSWORD` into
+`--db_host` and friends that the `i18n` subcommand rejects outright; the harness's config file
+supplies the connection instead. `-o` into the container's `/tmp` because the export otherwise
+writes into each module's own `i18n/`, which the harness mounts read-only. The module must be
+installed for its terms to exist. **Compare the export with the committed POT rather than copying it
+over**: `dev` can hold terms from data another branch installed and left behind, and the exporter
+never writes the hand-kept `base.module_*` entries.
 
 **A view's translation reaches only the views its entry names.** Each `#:` line on a
 `model_terms:ir.ui.view,arch_db:` entry is a record the translation is applied to. Reusing an
