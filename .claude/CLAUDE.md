@@ -41,7 +41,16 @@ should attribute to the maintainer in order to link properly on GitHub.
 
 - **Author and commit as Felix.** That is already the global git identity, so a plain `git commit`
   is correct — no `-c user.name=…` overrides.
-- **Add no trailers to commits Claude writes**, no "Generated with" line, no "Co-Authored-By".
+- **End every commit Claude writes with a co-author trailer**, exactly
+  `Co-Authored-By: Claude <noreply@anthropic.com>`, after a blank line. This is the **one** repo
+  that carries it: the history attributes to Felix, and the trailer says Claude wrote it with him.
+  Still no "Generated with" line and no session link. A commit Felix writes himself gets no trailer.
+
+Correcting this took a history rewrite. From `95edc76` on (`12a0723` since the rewrite), 49 commits
+went in as Claude, or as Felix without the trailer, under an earlier version of this section that
+said to add no trailers; on 24 September 2026 they were rewritten to Felix as author and committer
+with the trailer, keeping their dates and messages. The earlier commits show the convention as it
+had been.
 
 Signing commits: `commit.gpgsign` is on globally and signs with Felix's SSH key through 1Password,
 so commits still fail while the vault is locked, which is expected and not worth investigating.
