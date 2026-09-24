@@ -677,9 +677,10 @@ rather than copy-pasting a core method to tweak it, because a copy stops followi
 LGPL-3 like us, so a copy is allowed licence-wise; where one is genuinely unavoidable, as with
 core's mail templates, test it against core's source so an upgrade cannot leave it silently behind.
 Core code that a proprietary module in `../Odoo Addons - Private` needs goes in an LGPL-3 module of
-its own, as `vmk_event_sessions_mail` does. And **do not depend on an Enterprise module**, which
-would put distribution under OEEL whatever the manifest says — that module belongs in
-`../Odoo Addons - Private` instead.
+its own, as `vmk_event_sessions_mail` does. And **do not depend on an Enterprise module**: this repo
+promises modules that work on Community and Enterprise alike, so one that needs Enterprise belongs
+in `../Odoo Addons - Private`. That is a choice, not a licence requirement: the OEEL would allow an
+Enterprise-dependent module under LGPL-3 (decided 24 September 2026).
 
 **The MIT trap, kept because it is easy to walk back into.** Odoo validates `license` against that
 fixed `Selection`, which has **no MIT entry**, and the failure is silent: module loading bypasses
