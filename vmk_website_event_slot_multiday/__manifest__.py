@@ -4,8 +4,8 @@
 {
     "name": "Multi-Day Event Slots on the Website",
     "summary": "Show the start and end day of a multi-day slot when a visitor picks it",
-    "version": "19.0.1.0.0",
-    "author": "Valencia Makers, SL",
+    "version": "19.0.1.0.1",
+    "author": "Valencia Makers",
     # LGPL-3, as vmk_event_slot_multiday is: see its README.
     "license": "LGPL-3",
     "category": "Marketing/Events",

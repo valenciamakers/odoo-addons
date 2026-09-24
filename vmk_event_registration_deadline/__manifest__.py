@@ -5,7 +5,7 @@
     "name": "Event Registration Deadline",
     "summary": "Sell tickets only until an event starts, or a set time in advance",
     "version": "19.0.1.0.2",
-    "author": "Valencia Makers, SL",
+    "author": "Valencia Makers",
     "license": "LGPL-3",
     "category": "Marketing/Events",
     # website_event, not event: half the rule lives in `_filter_open_slots`,

@@ -5,7 +5,7 @@
     "name": "Language Sequence",
     "summary": "Order enabled languages by hand instead of alphabetically",
     "version": "19.0.1.1.1",
-    "author": "Valencia Makers, SL",
+    "author": "Valencia Makers",
     "license": "LGPL-3",
     "category": "Website/Website",
     "depends": ["website"],

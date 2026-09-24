@@ -5,7 +5,7 @@
     "name": "Apps Menu Sort",
     "summary": "List the apps alphabetically, with Apps and Settings kept at the end",
     "version": "19.0.1.1.1",
-    "author": "Valencia Makers, SL",
+    "author": "Valencia Makers",
     "license": "LGPL-3",
     "category": "Technical",
     "depends": ["base"],

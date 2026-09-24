@@ -5,7 +5,7 @@
     "name": "Backend Language Menu",
     "summary": "Switch your own backend language from a systray dropdown",
     "version": "19.0.1.1.1",
-    "author": "Valencia Makers, SL",
+    "author": "Valencia Makers",
     "license": "LGPL-3",
     "category": "Technical",
     "depends": ["web"],

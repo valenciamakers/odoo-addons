@@ -4,8 +4,8 @@
 {
     "name": "Multiple Contact Emails",
     "summary": "Several email addresses per contact, matched by Odoo's own machinery",
-    "version": "19.0.1.1.1",
-    "author": "Valencia Makers, SL",
+    "version": "19.0.1.1.2",
+    "author": "Valencia Makers",
     "license": "LGPL-3",
     "category": "Productivity/Discuss",
     "depends": ["mail"],

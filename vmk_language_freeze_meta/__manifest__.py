@@ -5,7 +5,7 @@
     "name": "Language Metadata Protection",
     "summary": "Stop Odoo updates reverting your edits to language metadata",
     "version": "19.0.1.1.1",
-    "author": "Valencia Makers, SL",
+    "author": "Valencia Makers",
     "license": "LGPL-3",
     "category": "Technical",
     "depends": ["base"],

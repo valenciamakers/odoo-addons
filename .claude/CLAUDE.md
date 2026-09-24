@@ -598,7 +598,10 @@ publish the same name between our checking it and our publishing, though with a 
 is unlikely. And it only covers the Apps Store; a module distributed purely through GitHub would not
 show up at all.
 
-Manifest: `"version": "19.0.1.1.0"` (Odoo series first), `"author": "Valencia Makers, SL"`. Keep
+Manifest: `"version": "19.0.1.1.0"` (Odoo series first), `"author": "Valencia Makers"` — **no
+comma**. `author` is a comma-separated list of authors, which is how the OCA is credited beside a
+company, so the Apps Store listed "Valencia Makers, SL" as two authors, "Valencia Makers" and "SL",
+each linked to a search. The legal name stays in the copyright lines. Fixed 24 September 2026. Keep
 `depends` minimal and honest — depend on `website` only if you override something it defines.
 
 **Bump the version on every change to our code**, not only when a change needs an upgrade to take
