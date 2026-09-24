@@ -126,6 +126,15 @@ These are properties of Odoo, not of any one harness.
   record in `setUpClass` and writes to it in the test sees an empty chatter and looks like a
   tracking bug in your code. Flush between the two — `self.env.flush_all()` then `self.cr.flush()`,
   which is all `MailCommon.flush_tracking()` does.
+- **`-u <module> --test-enable` runs only the tests of modules being updated.** Tag core's suite in
+  (`--test-tags /event,/<ours>`) and it still does not run unless `event` itself is updated. To run
+  a dependency's tests alongside ours, update the dependency, which updates everything above it:
+  `DB=<scratch> ./odev test event --test-tags /event,/website_event,/<ours>`. Added 2026-09-24.
+- **A changed view shows up the second time it is opened.** The web client keeps every view it loads
+  in the browser's disk cache (`orm.cache({ type: "disk" })` around `get_views` in
+  `web/static/src/views/view_service.js`), shows that copy at once and refreshes it in the
+  background. After an upgrade, the first opening shows the old view even after a restart and a
+  reload. Open it again before debugging. Added 2026-09-24.
 
 ## Deploying to production
 
@@ -210,6 +219,53 @@ in `web/static/src/**`, not in Python. Half the surprises below live there.
   text above it. Set those two properties yourself rather than reaching for negative margins: the
   wrapper's width is not yours to change, and the variables track whatever the sheet padding is.
 
+- **A field a widget declares only through `fieldDependencies` never triggers an onchange, and is
+  never saved.** The server marks a field `on_change` only when the view's arch contains it, so an
+  edit to a widget-only field leaves every computed field on screen stale until the record is saved.
+  `addFieldDependencies` (`web/static/src/model/relational_model/utils.js`) also defaults each
+  dependency to `readonly: true`, which keeps it out of the save. Declare them
+  `{ ..., readonly: false, onChange: true }`, as core's `project_task_kanban_model.js` does with
+  `makeActiveField({ onChange: true })`. Found only on a database without a sibling module that
+  happened to put the same field in the arch. Added 2026-09-24.
+- **Extension views apply in priority-then-id order, so two modules' extensions of one view apply in
+  whichever order they were installed.** An extension anchoring on an element another module's
+  extension adds works on a fresh install and fails on a database where ours is older:
+  `Element '<field name="start_datetime">' cannot be located in parent view`. Inherit from that
+  module's extension (`inherit_id` its xmlid), which orders them explicitly. And where our own
+  extension replaces something of core's, hide it (`invisible="1"`) rather than removing it, so
+  other modules' anchors keep working. Added 2026-09-24.
+- **A view built per user needs its inputs in the cache key.** Overriding `_get_view` to shape the
+  arch at request time works, but the result is cached on `_get_view_cache_key`: view id, type,
+  `mobile`, `env.lang`, and any `*_view_ref` context keys (`base/models/ir_ui_view.py`). Anything
+  else the arch depends on goes into an override of that method, or the first user's version is
+  served to everyone. `vmk_event_sessions` orders its weekday checkboxes by `res.lang.week_start`
+  and adds it to the key: editing a language clears the `'stable'` cache, never the views'. Added
+  2026-09-24.
+- **Datetimes render in the browser's timezone, not the user's preference and not the record's.**
+  Nothing in `web` sets luxon's `Settings.defaultZone`, so it is the system zone. Core's slot
+  calendar shows slots in the event's timezone by converting and relabelling
+  (`event_slot_calendar_model.js`, `normalizeRecord`:
+  `setZone(tz).setZone("local", { keepLocalTime: true })`), and writes the slot's date and hours
+  back from that wall-clock time (`buildRawRecord`). `vmk_event_slot_multiday`'s range widget does
+  the same around core's own `DateTimeField`, through a proxy of the record. Added 2026-09-24.
+- **The calendar view only drags a record whose start field is writable** (`calendar_model.js`,
+  `canEdit`), so a computed start without an inverse makes a calendar read-only for moves. And a
+  refused drag stays drawn where it was dropped: `updateRecord` does not reload on failure, so
+  reload in a `catch` and rethrow. Added 2026-09-23.
+- **Core's slot calendar creates slots with the datetimes in the vals as well as the date and
+  hours** (`buildRawRecord` on top of the generic raw record), relying on the computed datetimes
+  being ignored. Give them an inverse and every click-created slot is shifted for a viewer outside
+  the event's timezone. Added 2026-09-24.
+- **A server action with a `path` binds `record` only when `active_model` is its own model**, so a
+  cold load of its URL runs with `record` as `None`; read `env.context.get("active_id")` instead.
+  And the action service reuses parameters from session storage keyed on `active_id`, so an action
+  returned without `active_id` in its context can open with the previous record's data. Put
+  `active_id`, `active_ids` and `active_model` in the returned context. Added 2026-09-23.
+- **`data` files load in manifest order, and a fresh install is the only test of it.** A view whose
+  button references an action defined in a later file fails with "External ID not found" on a new
+  database, and never on one where the action already exists. See _Test the minimal install_ below.
+  Added 2026-09-23.
+
 **Models**
 
 - An inherit-only module needs **no `security/ir.model.access.csv`** — ACLs are per model, and
@@ -251,6 +307,53 @@ in `web/static/src/**`, not in Python. Half the surprises below live there.
   plain class attribute, so _appending_ to one means restating the whole list and silently losing
   whatever core adds to it later. Where that matters, override `_search_display_name` and combine
   the domains, matching its own choice of `AND` for negative operators and `OR` otherwise.
+- **The ORM checks a write's plain fields before it runs any inverse** (`write`: validate
+  "non-inversed fields first", then inverses, then the rest; `create` likewise validates stored
+  fields first). So an alternative input — an end date standing in for a stored day count, say —
+  written together with a field a constraint reads meets that constraint before its inverse has run.
+  Translate the alternative input into the stored fields in `create` and `write`, before `super()`,
+  and refuse it when it disagrees with the stored field given beside it. Added 2026-09-24.
+- **Defaults filled in by an override look like the caller's.** A `create` that calls
+  `_add_missing_default_values` to decide something, then passes the filled-in vals to `super()`,
+  hands the next override a default as if the caller had written it — which is how a default day
+  count of 0 overrode an explicit end date. Use the filled-in copy for the decision, and pass the
+  caller's own vals on. Added 2026-09-24.
+- **A stored compute is not recomputed on upgrade.** Changing what one computes leaves every
+  existing row at its old value until something it depends on changes. Released, that needs a
+  `migrations/<version>/post-migrate.py`; unreleased, a one-off recompute on dev
+  (`env.add_to_compute`) will do. Added 2026-09-23.
+- **A compute or constraint override replaces core's by name**, since it is a method like any other.
+  To relax core's rule for some records only, call it on the rest:
+  `super(Model, records - exempt)._check_x()`. And guard core's compute where your view shows a
+  field core's own view never did: core's `event.slot._compute_datetimes` fails on a new slot with
+  no event yet, which core's form never displays and ours did. Added 2026-09-24.
+- **A computed field becomes writable when it gains an inverse** — `readonly` defaults to
+  `not inverse` (`fields.py`) — and redefining a core field in an `_inherit` with only `inverse=`
+  merges into core's definition.
+- **One2many `copy=True` on both a parent and a child relation copies the grandchildren twice.**
+  Core copies `event.event.event_slot_ids`; a sessions one2many on both the event and the slot made
+  each copy the same sessions, the event's still pointing at the original's slots. Copy them once,
+  in the parent's `copy`, through a map of old slot to new. Added 2026-09-23.
+- **A local date is not a UTC datetime's `.date()`.** An evening session west of Greenwich ends on
+  the next UTC day. Use the record's own local `date` field, or convert with its timezone first.
+  Added 2026-09-23.
+
+**Mail templates**
+
+- **Core's mail templates cannot be inherited.** Their bodies are `mail.template` records in
+  `noupdate="1"` data files, not views, and the date lines of `event.event_subscription` are written
+  straight into the body. Editing core's record in place is invisible to anyone reading our module
+  and lost to anyone who resets the template. So `vmk_event_sessions_mail` ships **copies**, byte
+  for byte except their id, name, description and five inserted lines, generated from core's file
+  rather than typed. Added 2026-09-24.
+- **A copy keeps core's licence**, so it lives in an LGPL-3 module of its own, and **a test holds it
+  to core**: read core's file with `odoo.tools.file_open("event/data/mail_template_data.xml")`,
+  strip the inserted lines, swap the id, name and description back, and compare with core's record
+  exactly. An upgrade that changes the original then fails the test instead of drifting silently.
+  Render both with `template._render_field("body_html", ids)` to prove a case with nothing to insert
+  is core's email exactly.
+- **A template body is translated as one entry**, the whole HTML body, not term by term. A copy's
+  translations are core's own `msgstr` for that body with the same lines inserted.
 
 **Module data is re-applied on every update**
 
@@ -546,10 +649,12 @@ LGPL-3 is written as additional permissions on top of GPL-3 and incorporates it 
 text alone is not a complete licence — `vmk_partner_email_multiple/LICENSE` carries both, LGPL-3
 first.
 
-Two conditions to keep true whatever the licence: do not copy Odoo source into a module (override by
-calling `super()` rather than copy-pasting a core method to tweak it), and do not depend on an
-Enterprise module, which would put distribution under OEEL whatever the manifest says — that module
-belongs in `../Odoo Addons - Private` instead.
+Two conditions to keep true whatever the licence: do not copy Odoo source into a module that is not
+LGPL-3 (override by calling `super()` rather than copy-pasting a core method to tweak it; where a
+copy is genuinely unavoidable, as with core's mail templates, it goes in an LGPL-3 module of its
+own, which Odoo's Apps FAQ lets depend even on an OPL-1 module), and do not depend on an Enterprise
+module, which would put distribution under OEEL whatever the manifest says — that module belongs in
+`../Odoo Addons - Private` instead.
 
 **The MIT trap, kept because it is easy to walk back into.** Odoo validates `license` against that
 fixed `Selection`, which has **no MIT entry**, and the failure is silent: module loading bypasses
@@ -640,6 +745,17 @@ and friends, which the `i18n` subcommand rejects outright — hence passing the 
 `PG*` variables. And `-o` because the export otherwise writes into each module's own `i18n/`, which
 the harness mounts read-only. The module must be installed for its terms to exist.
 
+**A view's translation reaches only the views its entry names.** Each `#:` line on a
+`model_terms:ir.ui.view,arch_db:` entry is a record the translation is applied to. Reusing an
+existing msgid in another view — the same note on a second form — needs that view's reference line
+added to the entry in the POT and every PO, or the second view stays English. Added 2026-09-24.
+
+**Write catalogues the way the exporter does.** Odoo writes PO files with `polib` at its defaults
+(`PoFileWriter`, `odoo/tools/translate.py`), wrapping at 78 columns, and sorts entries by msgid. An
+entry hand-inserted anywhere else, or wrapped differently, turns the next re-export into a diff of
+noise. The one exception is the `base.module_*` pair, which our guard test reads one line each.
+Added 2026-09-24.
+
 **`loadlang` wants the full locale code.** `-l es` works because a language's `url_code` is `es`,
 but `-l ca` silently matches nothing and leaves Catalan inactive — it is `ca_ES`. The `.po` file
 still gets the short name, `ca.po`, which Odoo matches to `ca_ES` on load.
@@ -680,6 +796,22 @@ does poorly. What we hit building `vmk_partner_email_multiple`, all verified in 
   said to a screen reader. `vmk_language_systray` exported zero terms until its icon-only button
   gained a real accessible name, at which point it needed `i18n/` after all.
 
+**Test the minimal install.** Before a module is called done, install it on a fresh scratch database
+with only its declared dependencies — `DB=<scratch> ./odev init <module>` — run its tests with its
+dependencies' own suites alongside (see _Things that will otherwise cost you an hour_), and drive it
+in Chrome **there**, not only on `dev`. Then do the same in combination with our related modules.
+`dev` carries dozens of modules, and any of them can supply something ours forgot to declare:
+`vmk_event_slot_multiday` passed every test and a Chrome check on dev, where `vmk_event_sessions`
+happened to put `date` in the slot form's arch, and was broken on a core-only database. Felix, 24
+September 2026: _"you should always test a minimal case, esp when we build these public stand-alone
+modules."_ Serving the scratch database needs `./odev db use <name>` and then `./odev up`, and Felix
+to log in; switch back afterwards.
+
+**Refuse a contradiction; do not guess.** Where a write contradicts state the module keeps
+consistent — event dates that disagree with their sessions, an end date that disagrees with a day
+count — refuse it with a `ValidationError` saying what to do instead, rather than silently picking a
+winner. A guess that goes wrong surfaces later as someone else's confusing error. Added 2026-09-24.
+
 **Test twice: automated, and in a real browser.** Every module carries tests; that is the floor, not
 the ceiling. Anything touching a view, a widget, or a stylesheet also gets driven in Chrome through
 `claude-in-chrome` before it is called done, because a whole class of failure never reaches a Python
@@ -692,6 +824,11 @@ rather than trusting a screenshot — a screenshot cannot show you a cursor or a
 Write tests that assert **behaviour, not ambient state**. A test asserting freshly-installed
 ordering fails on any database whose users have used the feature; re-run the seeding hook inside the
 test instead.
+
+**Build a test's expected text with the formatter the code uses.** A refusal message or a name
+carrying a date formats per language — `18:00` or `6:00 PM` — so compare against
+`format_datetime(...)` / `format_date(...)` of the same value, never a literal, or the test fails in
+another language. Added 2026-09-23.
 
 Documentation ships in the same commit as the code, and each module's `README.md` should explain
 _why the non-obvious parts are that way_ — which core method fights you, and where. That is the part
