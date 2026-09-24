@@ -26,7 +26,7 @@ class TestModuleNameTranslation(TransactionCase):
     I18N = Path(__file__).resolve().parent.parent / "i18n"
     HAND_MAINTAINED = (
         "Event Registration Deadline",
-        "Sell tickets only until an event starts, or a set time in advance",
+        "Allow registration only until an event starts, or a set time in advance",
     )
 
     def _translation(self, catalogue, msgid):

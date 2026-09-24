@@ -1,8 +1,8 @@
 # Event Registration Deadline (`vmk_event_registration_deadline`)
 
-Sell tickets only until an event starts, or a set time in advance. Standard Odoo keeps registrations
-open until an event ends; this module closes them at the start, or a set time before, globally or
-per event.
+Allow registration only until an event starts, or a set time in advance. Standard Odoo keeps
+registrations open until an event ends; this module closes them at the start, or a set time before,
+globally or per event.
 
 **How to use it** is in the user documentation, [`doc/index.rst`](doc/index.rst), which the Odoo
 Apps Store also shows on the module's page, together with the changelog.

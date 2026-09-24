@@ -1,4 +1,4 @@
-Sell tickets only until an event starts, or a set time in advance.
+Allow registration only until an event starts, or a set time in advance.
 
 In standard Odoo, registrations stay open until an event **ends**, so people can sign up for a
 workshop that is already under way, or a course that is half over. This module closes

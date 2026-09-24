@@ -27,7 +27,7 @@ msgstr ""
 
 #. module: base
 #: model:ir.module.module,summary:base.module_vmk_event_registration_deadline
-msgid "Sell tickets only until an event starts, or a set time in advance"
+msgid "Allow registration only until an event starts, or a set time in advance"
 msgstr ""
 
 #. module: vmk_event_registration_deadline

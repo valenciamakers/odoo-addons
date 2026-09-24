@@ -31,8 +31,8 @@ msgstr "Fecha límite de inscripción al evento"
 
 #. module: base
 #: model:ir.module.module,summary:base.module_vmk_event_registration_deadline
-msgid "Sell tickets only until an event starts, or a set time in advance"
-msgstr "Vender entradas solo hasta que empieza un evento, o un tiempo antes"
+msgid "Allow registration only until an event starts, or a set time in advance"
+msgstr "Permita la inscripción solo hasta que empiece un evento, o un tiempo antes"
 
 #. module: vmk_event_registration_deadline
 #: model_terms:ir.ui.view,arch_db:vmk_event_registration_deadline.view_event_form_deadline
