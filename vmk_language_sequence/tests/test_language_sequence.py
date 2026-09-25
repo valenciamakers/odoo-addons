@@ -3,7 +3,9 @@
 
 from pathlib import Path
 
+from odoo.addons.http_routing.tests.common import MockRequest
 from odoo.addons.vmk_language_sequence.hooks import seed_language_sequence
+from odoo.fields import Command
 from odoo.tests.common import TransactionCase, tagged
 
 
@@ -158,6 +160,48 @@ class TestLanguageSequence(TransactionCase):
         self.assertIn("sequence", self.ResLang.CACHED_FIELDS)
         self.lang_es.sequence = 42
         self.assertEqual(self.ResLang._get_data(code="es_ES").sequence, 42)
+
+
+@tagged("post_install", "-at_install")
+class TestHreflang(TransactionCase):
+    """The generic hreflang code goes to the first variant in your order, not by name.
+
+    Written the way ``website``'s own ``test_alternate_hreflang`` is, which fails
+    with this module installed because it asserts the name order.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.website = cls.env["website"].get_current_website() or cls.env["website"].browse(1)
+        cls.ResLang = cls.env["res.lang"].with_context(website_id=cls.website.id)
+        cls.lang_us = cls.ResLang._activate_lang("en_US")
+        cls.lang_uk = cls.ResLang._activate_lang("en_GB")
+
+    def _hreflangs(self, langs):
+        self.website.language_ids = [Command.set(langs.ids)]
+        with MockRequest(self.env, website=self.website):
+            return {code: data.hreflang for code, data in self.ResLang._get_frontend().items()}
+
+    def test_the_first_variant_in_your_order_is_generic(self):
+        langs = self.lang_us + self.lang_uk
+        self.lang_us.sequence, self.lang_uk.sequence = 10, 20
+        self.assertEqual(self._hreflangs(langs), {"en_US": "en", "en_GB": "en-gb"})
+        # By name, English (UK) would be generic in both cases.
+        self.lang_us.sequence, self.lang_uk.sequence = 20, 10
+        self.assertEqual(self._hreflangs(langs), {"en_US": "en-us", "en_GB": "en"})
+
+    def test_latin_american_spanish_stays_generic_as_in_core(self):
+        lang_es = self.ResLang._activate_lang("es_ES")
+        lang_419 = self.ResLang._activate_lang("es_419")
+        lang_es.sequence, lang_419.sequence = 10, 20
+        hreflangs = self._hreflangs(self.lang_us + lang_es + lang_419)
+        self.assertEqual(hreflangs["es_419"], "es")
+        self.assertEqual(hreflangs["es_ES"], "es-es")
+
+    def test_outside_a_website_request_no_hreflang_is_added(self):
+        for data in self.ResLang._get_frontend().values():
+            self.assertNotIn("hreflang", data)
 
 
 @tagged("post_install", "-at_install")

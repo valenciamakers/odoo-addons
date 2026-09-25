@@ -2,7 +2,7 @@
 # License LGPL-3 (https://www.gnu.org/licenses/lgpl-3.0.html).
 
 from odoo import api, fields, models, tools
-from odoo.addons.base.models.res_lang import LangDataDict
+from odoo.addons.base.models.res_lang import LangData, LangDataDict
 from odoo.tools import OrderedSet
 
 # Disabled languages are parked above this, keeping the enabled ones -- the only
@@ -91,7 +91,38 @@ class ResLang(models.Model):
         # clearing the whole default cache -- every compiled template and view
         # lookup on the site -- on each reorder. ``_get_active_by`` is on 'stable',
         # which core's own ``res.lang.write()`` already clears.
-        return self._sorted_by_sequence(super()._get_frontend(), self._live_sequences())
+        langs = self._sorted_by_sequence(super()._get_frontend(), self._live_sequences())
+        return self._hreflang_in_order(langs)
+
+    @staticmethod
+    def _hreflang_in_order(langs: LangDataDict) -> LangDataDict:
+        """Re-assign ``website``'s hreflang codes in the order of ``langs``.
+
+        ``website``'s ``_get_frontend()`` gives each base language's short code
+        (``en``) to the first variant it meets in *name* order and region-qualifies
+        the rest (``en-us``), so re-sorting afterwards would leave English (UK)
+        generic wherever it sits. This is core's own loop, walked in our order,
+        keeping its exception that Latin American Spanish, when enabled, is the
+        generic ``es``. Outside a website request there are no hreflang codes and
+        the data passes through untouched.
+        """
+        if not any("hreflang" in data for data in langs.values()):
+            return langs
+        # Not ``"es_419" in langs``: a LangDataDict answers every key.
+        es_419_exists = any(code == "es_419" for code in langs)
+        shortened = set()
+        result = {}
+        for code, data in langs.items():
+            short_code = code.split("_")[0]
+            if short_code not in shortened and not (
+                short_code == "es" and code != "es_419" and es_419_exists
+            ):
+                hreflang = short_code
+                shortened.add(short_code)
+            else:
+                hreflang = code.lower().replace("_", "-")
+            result[code] = LangData(dict(data, hreflang=hreflang))
+        return LangDataDict(result)
 
     def _park_in_active_block(self):
         """Move these languages to the end of the block matching their state.

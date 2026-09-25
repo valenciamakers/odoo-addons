@@ -20,7 +20,8 @@ The chosen order drives:
 
 - the **website language selector** in the site header;
 - the **language dropdowns** on user and contact forms;
-- the Languages list itself, and any other `res.lang` search.
+- the Languages list itself, and any other `res.lang` search;
+- which variant of a language search engines are told is the generic one, when two are enabled.
 
 ### Why it needs more than a `sequence` field
 
@@ -41,7 +42,30 @@ So `models/res_lang.py` does three things beyond declaring the field:
    the backend dropdowns and the portal selector, so one override covers both. It keeps its own
    `ormcache` because `_get_data()` reaches it on every date and number format.
 3. **`_get_frontend()`** re-sorts, undoing `website`'s `.sorted('name')`. No cache of its own —
-   `super()` is already cached, and this runs once per page render over a handful of entries.
+   `super()` is already cached, and this runs once per page render over a handful of entries. It
+   then re-assigns the hreflang codes, below.
+
+### hreflang follows the order too
+
+`website`'s `_get_frontend()` (`website/models/res_lang.py`) also hands out each language's
+`hreflang`, the code in the `<link rel="alternate">` tags that tell search engines which page is for
+whom. The first variant of each base language it meets gets the short code (`en`) and the rest a
+regional one (`en-us`), and it meets them in name order. Re-sorting afterwards moves the entries but
+not their codes, so English (UK) stayed the generic English wherever it was dragged.
+
+`_hreflang_in_order()` therefore runs core's loop again, over our order: the first variant in the
+chosen order is generic. It keeps core's one exception, that `es_419` takes `es` whenever it is
+enabled, because core treats Latin American Spanish as the generic Spanish. It is a copy of core's
+rule, so re-check it against that method on a major upgrade. Outside a website request the data
+carries no hreflang, and passes through untouched.
+
+The consequence is that dragging a language now changes a search-engine signal, which is the point —
+someone who puts English (UK) first means it — but worth knowing before reordering for looks.
+
+**Core's `website` test `test_alternate_hreflang` fails with this module installed**, and should. It
+enables French (FR), then French (BE) and French (CA), and asserts that French (BE) is generic,
+because it is first by name. Here French (FR) was enabled first, so it is first in the order and
+generic. `TestHreflang` covers the same ground in our order, including the `es_419` exception.
 
 ### Why no cache invalidation of our own
 
@@ -124,12 +148,6 @@ failing to the head of the disabled languages is much better than wedging in amo
   Manage Languages button in General Settings carry `groups="base.group_no_one"` in stock Odoo, so a
   non-developer admin cannot reach the drag handles. Enable developer mode, or go straight to
   `/odoo/action-base.res_lang_act_window`. This module adds no menu of its own.
-- **hreflang short codes still follow name order.** When two variants of one base language are
-  active (`es_ES` and `es_419`, say), Odoo gives the generic `hreflang="es"` to whichever it meets
-  first and region-qualifies the rest. That decision happens inside `website`'s `_get_frontend()`
-  before this module re-sorts, so the manual order does not influence it. Only relevant with two
-  variants of the same base language; unrelated base languages each get their own short code
-  regardless.
 
 ### Translations
 

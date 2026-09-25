@@ -19,15 +19,22 @@ Your order is used by:
 - the language dropdowns on user and contact forms
 - the Languages list itself
 
+With two variants of one language enabled, such as English (UK) and English (US), search
+engines are told to use the first language in your custom order as the generic version.
+
 New languages you enable are added to the end of the list, and can be dragged into place.
 
 **Limits**
 
 - **Odoo shows the Languages list only in developer mode**, and this module leaves that as it is.
-- **With two variants of one language enabled** (Spanish from Spain and Latin America, say), the
-  website's short language code goes to the alphabetically first, whatever your order.
 
 **Changelog**
+
+*19.0.1.2.0 (25 September 2026)*
+
+- With two variants of one language enabled, search engines are told to use the first language in
+  your custom order as the generic version, rather than the first alphabetically. Latin American
+  Spanish stays the generic Spanish whenever it is enabled, as it does in standard Odoo.
 
 *19.0.1.1.1 (24 September 2026)*
 
