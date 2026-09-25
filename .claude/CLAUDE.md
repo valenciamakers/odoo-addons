@@ -513,6 +513,25 @@ in `web/static/src/**`, not in Python. Half the surprises below live there.
   globally, and only mass mailing and SMS consult it — `mail/models/mail_mail.py` never does, so
   transactional mail goes out regardless. Addresses land there by unsubscribe or by auto-blacklist
   after repeated hard bounces.
+- **Apps copy a record's email onto its contact.** CRM (`crm.lead._inverse_email_from`), Recruitment
+  (`hr.applicant._inverse_partner_email`), and Enterprise Helpdesk
+  (`helpdesk.ticket._inverse_partner_email`) each write the record's email onto its contact when the
+  two differ. Core never notices, because it matches mail on the primary address only. Match on
+  anything more and a lead arrives with an email that differs from its contact's, and the sync
+  overwrites the contact's primary address. Found by `vmk_partner_email_multiple` on 25 September
+  2026; its `models/email_sync.py` guards all three.
+
+**Overriding a model you do not depend on**
+
+- **Patch it in `_register_hook`, as `base_automation` does.** An `_inherit` needs the other module
+  in `depends`, which for an optional app means a bridge module per app, and for an Enterprise app
+  one that cannot live in this repo. Instead, in `_register_hook` on a model you do own, look up
+  `env.registry.get("<model>")`, and where it exists wrap the method on that registry class, keeping
+  the original as `method.origin`. Every registry load builds fresh classes and calls the hook
+  again, so an app installed later is covered and uninstalling leaves nothing to undo. Mark the
+  wrapper so a second call does not wrap it twice, log a warning when the method is missing, and
+  test that each patch is in place: a renamed method otherwise stops the patch applying without a
+  word. `vmk_partner_email_multiple/models/email_sync.py` is the worked example.
 
 ## Authoring conventions
 

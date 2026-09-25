@@ -239,6 +239,48 @@ additional addresses silently stop matching and Mailflow resumes minting duplica
 error, just wrong contacts. `grep -rn "_partner_find_from_emails\|'email', '=ilike'" models/` over
 the new version answers it in one command.
 
+## CRM, Recruitment, and Helpdesk
+
+Three apps keep a record's email and its contact's email in step, and without help each would
+overwrite a contact's primary address with an additional one:
+
+| App         | Edition    | The sync                                                                         |
+| ----------- | ---------- | -------------------------------------------------------------------------------- |
+| CRM         | Community  | `crm.lead._inverse_email_from`, decided by `_get_partner_email_update`           |
+| Recruitment | Community  | `hr.applicant._inverse_partner_email`, which decides inline                      |
+| Helpdesk    | Enterprise | `helpdesk.ticket._inverse_partner_email`, decided by `_get_partner_email_update` |
+
+When the record's email differs from the contact's, the record's is written onto the contact. In
+core the two only differ when someone edits one of them, because core matches mail on the primary
+address alone. This module also matches on additional addresses, so a lead created from one arrives
+with an email that differs from its contact's primary, and the sync then replaces the primary with
+it. Found on 25 September 2026, when a lead emailed from a demo contact's additional address
+replaced the contact's primary address.
+
+**None of the three is a dependency, so the fix is a patch, not an `_inherit`.** A bridge module per
+app would be the conventional answer: three modules, one of them Enterprise-only and so unable to
+live in this repo. Instead `res.partner._register_hook` calls `email_sync.install()`, which patches
+the sync of whichever of the three apps is installed onto its registry class, the way
+`base_automation` patches models for its rules (`base_automation/models/base_automation.py`,
+`_register_hook`). Every registry load builds fresh classes and runs the hook again, so an app
+installed later is covered, and uninstalling leaves nothing to undo. The module names Helpdesk's
+model and method, but it neither depends on Helpdesk nor contains any of its code, so it still
+installs on Community.
+
+- **CRM and Helpdesk** decide the sync in `_get_partner_email_update`, which the patch answers
+  `False` when the record's email is one of the contact's additional addresses. The same answer
+  drives the form's warning that the contact's email will be updated, so both stop together.
+- **Recruitment** decides inline, in a loop that also syncs the name and phone, so its inverse runs
+  under the `vmk_keep_primary_email` context flag instead. Under that flag `res.partner.write` drops
+  an email that is one of that contact's own additional addresses, and writes the rest as asked.
+
+Outside those syncs nothing changes: a record with a genuinely new address still updates its
+contact, and typing an additional address into the contact's email field still makes it primary.
+
+**Patches break quietly**, so re-check them on every major upgrade. If Odoo renames one of these
+methods, `install()` logs a warning naming it, and `test_every_installed_app_is_patched` fails on a
+database that has the app.
+
 ## Translations
 
 `i18n/` carries the template and a Spanish catalogue; Odoo loads `i18n/*.po` on install with no
@@ -286,6 +328,10 @@ docker compose run --rm odoo odoo -d test -u vmk_partner_email_multiple \
 
 `-u` on a module that is not installed does nothing and reports nothing, so install first and check
 `ir_module_module.state` rather than trusting a clean log.
+
+`tests/test_email_sync.py` skips each app's tests where the app is missing, so run it on a database
+that also has `crm` and `hr_recruitment` installed, plus `helpdesk` where Enterprise is available.
+Core's own suites for all three pass with this module installed.
 
 Valencia Makers uses a shared harness for this, covered in `CLAUDE.md`; it is not needed to run the
 tests above.

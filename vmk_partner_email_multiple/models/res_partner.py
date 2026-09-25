@@ -5,6 +5,8 @@ from odoo import api, fields, models, tools
 from odoo.fields import Domain
 from odoo.tools import email_normalize
 
+from . import email_sync
+
 
 class ResPartner(models.Model):
     _inherit = "res.partner"
@@ -16,6 +18,36 @@ class ResPartner(models.Model):
         help="Other addresses this contact writes from. Mail arriving from any of "
         "them is matched to this contact. Nothing is ever sent to them.",
     )
+
+    # ------------------------------------------------------------
+    # Other apps' email sync
+    # ------------------------------------------------------------
+
+    def _register_hook(self):
+        """Patch the email sync of CRM, Recruitment, and Helpdesk, where present.
+
+        See ``email_sync.py`` for why this is a patch and not an ``_inherit``.
+        """
+        super()._register_hook()
+        email_sync.install(self.env)
+
+    def write(self, vals):
+        """Under ``email_sync.KEEP_PRIMARY``, never set the primary to an additional address.
+
+        Only the email is dropped, and only for contacts that hold it as an
+        additional address; the rest of the write goes through as asked.
+        """
+        if "email" in vals and self.env.context.get(email_sync.KEEP_PRIMARY):
+            keep = self.filtered(lambda partner: email_sync.is_additional(partner, vals["email"]))
+            if keep:
+                others = {field: value for field, value in vals.items() if field != "email"}
+                if others:
+                    super(ResPartner, keep).write(others)
+                rest = self - keep
+                if rest:
+                    super(ResPartner, rest).write(vals)
+                return True
+        return super().write(vals)
 
     # ------------------------------------------------------------
     # Matching
