@@ -11,7 +11,7 @@ It depends only on `base`. LGPL-3, © 2026 Valencia Makers, SL.
 
 ## For developers
 
-Odoo lists the apps on the main menu in whatever order their `sequence` values happen to give, which
+Odoo lists the apps in the main menu in whatever order their `sequence` values happen to give, which
 is a number each app's own module picked for itself. This module sorts them alphabetically instead,
 keeping **Apps** and **Settings** at the end where Odoo conventionally puts them.
 
@@ -105,7 +105,7 @@ never modified; folding affects the sort key only.
 
 ### Interaction with the Enterprise app grid
 
-Dragging an icon on the Enterprise app grid stores that user's own order in `homemenu_config` on
+Dragging an icon in the Enterprise apps grid stores that user's own order in `homemenu_config` on
 `res.users.settings`, and `home_menu_service.js` applies it over ours:
 
 ```js

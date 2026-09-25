@@ -3,7 +3,7 @@
     <!--
         An action an administrator runs by hand, deliberately not a
         `post_init_hook`. `homemenu_config` holds a per-user preference, set by
-        dragging an icon on the Enterprise app grid; wiping everybody's as a
+        dragging an icon in the Enterprise apps grid; wiping everybody's as a
         silent side effect of installing a module would be indefensible in
         something we publish. Users who have never dragged an app need nothing
         from this action, since `reorderApps` is only called when the stored

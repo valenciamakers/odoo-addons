@@ -11,7 +11,7 @@ class ResUsersSettings(models.Model):
     def reset_app_grid_order(self):
         """Clear every user's stored app grid order, and report what happened.
 
-        Dragging an icon on the Enterprise app grid stores that user's own order
+        Dragging an icon in the Enterprise apps grid stores that user's own order
         in `homemenu_config`, and `home_menu_service.js` then applies it over the
         order this module produces. Clearing it hands those users the module's
         order back; they remain free to drag their own again afterwards.
