@@ -8,7 +8,7 @@ They depend only on Odoo Community modules, so they work on Community and Enterp
 
 ## Modules
 
-- **[`vmk_language_sequence`](vmk_language_sequence)** — order the enabled languages by hand, by
+- **[`vmk_language_sequence`](vmk_language_sequence)** — reorder the enabled languages manually, by
   dragging, instead of alphabetically: in the website language selector, the language dropdowns on
   users and contacts, and the Languages list itself.
 - **[`vmk_language_protect_settings`](vmk_language_protect_settings)** — stop Odoo module updates

@@ -1,8 +1,8 @@
-Order enabled languages by hand instead of alphabetically.
+Reorder languages manually instead of alphabetically.
 
-In standard Odoo, languages are always listed alphabetically by their English name, so the website
-offers *Català, English, Français, Deutsch, Español*, in that order. This module lets you drag your
-languages into the order you choose.
+In standard Odoo, languages are always listed alphabetically by their English name, so a Valencia
+business that offers *Català, English, Français, Deutsch,* and *Español* will display them in that
+order. This module lets you drag enabled languages into any order you choose.
 
 **Installation**
 
@@ -11,19 +11,19 @@ Install **Language Sequence** from the Apps menu. It requires the **Website** ap
 **Using it**
 
 #. Turn on developer mode, then go to **Settings > Translations > Languages**.
-#. Drag the enabled languages into the order you want, using the handle at the start of each row.
+#. Drag the enabled languages into any order, using the handle at the start of each row.
 
 Your order is used by:
 
-- the website's language selector, in the header and the footer
-- the language dropdowns on users and contacts
+- the website language selector and the footer language list
+- the language dropdowns on user and contact forms
 - the Languages list itself
 
-New languages you enable are added at the end of the list, and can be dragged into place.
+New languages you enable are added to the end of the list, and can be dragged into place.
 
 **Limits**
 
-- **The Languages list is visible while the site is in developer mode**, as in standard Odoo.
+- **Odoo shows the Languages list only in developer mode**, and this module leaves that as it is.
 - **With two variants of one language enabled** (Spanish from Spain and Latin America, say), the
   website's short language code goes to the alphabetically first, whatever your order.
 

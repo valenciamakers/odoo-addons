@@ -55,5 +55,5 @@ msgstr "Secuencia de idiomas"
 
 #. module: base
 #: model:ir.module.module,summary:base.module_vmk_language_sequence
-msgid "Order enabled languages by hand instead of alphabetically"
-msgstr "Ordena manualmente los idiomas activados en lugar de alfabéticamente"
+msgid "Reorder languages manually instead of alphabetically"
+msgstr "Reordena los idiomas manualmente en lugar de alfabéticamente"

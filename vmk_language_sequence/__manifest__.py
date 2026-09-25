@@ -3,7 +3,7 @@
 
 {
     "name": "Language Sequence",
-    "summary": "Order enabled languages by hand instead of alphabetically",
+    "summary": "Reorder languages manually instead of alphabetically",
     "version": "19.0.1.1.1",
     "author": "Valencia Makers",
     "license": "LGPL-3",

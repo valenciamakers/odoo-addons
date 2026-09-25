@@ -1,9 +1,9 @@
 # Language Sequence (`vmk_language_sequence`)
 
-Order enabled languages by hand instead of alphabetically. In standard Odoo, languages are always
-listed alphabetically by their English name, so the website offers _Català, English, Français,
-Deutsch, Español_, in that order. This module lets you drag your languages into the order you
-choose.
+Reorder languages manually instead of alphabetically. In standard Odoo, languages are always listed
+alphabetically by their English name, so a Valencia business that offers _Català, English, Français,
+Deutsch,_ and _Español_ will display them in that order. This module lets you drag enabled languages
+into any order you choose.
 
 **How to use it** is in the user documentation, [`doc/index.rst`](doc/index.rst), which the Odoo
 Apps Store also shows on the module's page, together with the changelog.
@@ -19,7 +19,7 @@ the enabled languages appear in the order you choose.
 The chosen order drives:
 
 - the **website language selector** in the site header;
-- the **language dropdowns** on users and contacts;
+- the **language dropdowns** on user and contact forms;
 - the Languages list itself, and any other `res.lang` search.
 
 ### Why it needs more than a `sequence` field

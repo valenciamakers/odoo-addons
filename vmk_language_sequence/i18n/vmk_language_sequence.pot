@@ -49,5 +49,5 @@ msgstr ""
 
 #. module: base
 #: model:ir.module.module,summary:base.module_vmk_language_sequence
-msgid "Order enabled languages by hand instead of alphabetically"
+msgid "Reorder languages manually instead of alphabetically"
 msgstr ""

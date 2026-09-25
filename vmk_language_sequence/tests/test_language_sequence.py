@@ -179,7 +179,7 @@ class TestModuleNameTranslation(TransactionCase):
     I18N = Path(__file__).resolve().parent.parent / "i18n"
     HAND_MAINTAINED = (
         "Language Sequence",
-        "Order enabled languages by hand instead of alphabetically",
+        "Reorder languages manually instead of alphabetically",
     )
 
     def test_pot_still_carries_the_hand_added_module_metadata(self):
