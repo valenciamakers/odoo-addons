@@ -18,18 +18,22 @@ Chrome, named by `window.name`, rather than opening a new tab each time; public-
 headless and logged out.
 
 ```bash
-open -na "Google Chrome" --args --remote-debugging-port=9222 --user-data-dir="$HOME/.chrome-odoo-shots"
+open -na "Google Chrome" --args --remote-debugging-port=9222 --user-data-dir="$HOME/.chrome-devtools-profile"
 ```
+
+The tools connect to `127.0.0.1:9222`, so only one Chrome may hold that port: a second one started
+with the flag binds only the IPv6 half and is never reached. If a capture hangs or the backend tab
+shows Odoo's "Offline" page, quit every Chrome and start this one again.
 
 **The demo data**, in English (UK), which gives 24-hour times and day-first dates:
 
 - the admin user named **Mitchell Admin**, as in Odoo's own demo data, with English (UK) as their
   language and the website's default;
-- **Beginner's Bootcamp**, with Multiple Slots, three slots in Violet (the first from Friday
-  evening to Sunday afternoon), a venue, and hosts **Marc Demo** (Lead Instructor) and **Edith
-  Sanchez** (Assistant);
-- three more events with hosts, for the grouped list: **Weekend Festival**, **Design Workshop**,
-  and **Back to Basics**, the last with its own 02:00 registration deadline and an Admission ticket;
+- **Beginner's Bootcamp**, with Multiple Slots, three slots in Violet (the first from Friday evening
+  to Sunday afternoon), a venue, and hosts **Marc Demo** (Lead Instructor) and **Edith Sanchez**
+  (Assistant);
+- three more events with hosts, for the grouped list: **Weekend Festival**, **Design Workshop**, and
+  **Back to Basics**, the last with its own 02:00 registration deadline and an Admission ticket;
 - the Registration Deadline setting on, at 01:30;
 - for the deadline's public page, a published event named **Open Studio Evening** starting within
   the deadline. It is temporary by nature; recreate it just before capturing:
@@ -46,15 +50,15 @@ env.cr.commit()
 ```
 
 - for the sort modules, a spread of Odoo's own apps: CRM, Sales, Invoicing, Inventory, Purchase,
-  Project, Employees, Time Off, Calendar, Contacts, Manufacturing, Point of Sale, and Helpdesk,
-  with the company's country set to Spain.
+  Project, Employees, Time Off, Calendar, Contacts, Manufacturing, Point of Sale, and Helpdesk, with
+  the company's country set to Spain.
 - for the language modules, six enabled languages, all on the website: English (UK), English (US),
   Catalan, French, German, and Spanish. The Language Sequence recipe sets their order; the Protect
   Language Edits recipe changes Catalan's ISO code to `ca`, which protects it.
 
 Recipes find records by these names, so ids do not matter. The three sort recipes uninstall their
-module over RPC for the "before" captures and install it again for the "after"; `_sorting.py`
-waits for the backend to come back after each, since a request made mid-reload fails.
+module over RPC for the "before" captures and install it again for the "after"; `_sorting.py` waits
+for the backend to come back after each, since a request made mid-reload fails.
 
 ## Running
 
