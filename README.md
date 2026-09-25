@@ -11,8 +11,8 @@ They depend only on Odoo Community modules, so they work on Community and Enterp
 - **[`vmk_language_sequence`](vmk_language_sequence)** — order the enabled languages by hand, by
   dragging, instead of alphabetically: in the website language selector, the language dropdowns on
   users and contacts, and the Languages list itself.
-- **[`vmk_language_freeze_meta`](vmk_language_freeze_meta)** — stop Odoo module updates reverting
-  your edits to language records, such as a renamed language or a broadened ISO code.
+- **[`vmk_language_protect_settings`](vmk_language_protect_settings)** — stop Odoo module updates
+  reverting your edits to language records, such as a renamed language or a broadened ISO code.
 - **[`vmk_language_systray`](vmk_language_systray)** — switch your own backend language from a
   dropdown in the systray, instead of going through your preferences.
 - **[`vmk_apps_menu_sort`](vmk_apps_menu_sort)** — sort the apps on the main menu alphabetically

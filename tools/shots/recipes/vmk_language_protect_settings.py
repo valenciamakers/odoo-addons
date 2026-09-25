@@ -30,4 +30,4 @@ async def main(out):
 
 
 if __name__ == "__main__":
-    asyncio.run(main(shots.out_dir("vmk_language_freeze_meta", sys.argv)))
+    asyncio.run(main(shots.out_dir("vmk_language_protect_settings", sys.argv)))

@@ -14,7 +14,8 @@ we do not own. The three remotes differ by one word — `odoo-addons`, `odoo-add
 ## Layout
 
 - **`vmk_language_sequence`** — manual ordering of the enabled languages.
-- **`vmk_language_freeze_meta`** — stops Odoo updates reverting edits to language metadata.
+- **`vmk_language_protect_settings`** — stops Odoo updates reverting edits to language settings;
+  renamed from `vmk_language_freeze_meta` on 25 September 2026.
 - **`vmk_language_systray`** — a systray dropdown switching the current user's backend language.
 - **`vmk_apps_menu_sort`** — alphabetical ordering of the apps on the main menu.
 - **`vmk_apps_page_sort`** — alphabetical ordering of the Apps page, by displayed name.

@@ -32,6 +32,12 @@ usual; only the language settings are protected.
 
 **Changelog**
 
+*19.0.1.1.2 (25 September 2026)*
+
+- Renamed from *vmk_language_freeze_meta* to *vmk_language_protect_settings*. No change in
+  behaviour. To move an existing database, install the new module, then uninstall the old one;
+  protected languages stay protected.
+
 *19.0.1.1.1 (24 September 2026)*
 
 - Licensed LGPL-3, and credited to Valencia Makers. No change in behaviour.

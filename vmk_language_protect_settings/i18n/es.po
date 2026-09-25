@@ -1,6 +1,6 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-# 	* vmk_language_freeze_meta
+# 	* vmk_language_protect_settings
 #
 # Terms shared with Odoo core reuse core's own Spanish wording.
 #
@@ -18,18 +18,18 @@ msgstr ""
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#. module: vmk_language_freeze_meta
-#: model:ir.model.fields,field_description:vmk_language_freeze_meta.field_res_lang__display_name
+#. module: vmk_language_protect_settings
+#: model:ir.model.fields,field_description:vmk_language_protect_settings.field_res_lang__display_name
 msgid "Display Name"
 msgstr "Nombre para mostrar"
 
-#. module: vmk_language_freeze_meta
-#: model:ir.model.fields,field_description:vmk_language_freeze_meta.field_res_lang__id
+#. module: vmk_language_protect_settings
+#: model:ir.model.fields,field_description:vmk_language_protect_settings.field_res_lang__id
 msgid "ID"
 msgstr "ID"
 
-#. module: vmk_language_freeze_meta
-#: model:ir.model.fields,help:vmk_language_freeze_meta.field_res_lang__protect_from_updates
+#. module: vmk_language_protect_settings
+#: model:ir.model.fields,help:vmk_language_protect_settings.field_res_lang__protect_from_updates
 msgid ""
 "Keep this language's settings when Odoo modules are updated.\n"
 "\n"
@@ -39,22 +39,22 @@ msgstr ""
 "\n"
 "Odoo distribuye los registros de idioma como datos de módulo y los vuelve a aplicar en cada actualización, revirtiendo los cambios en el nombre, el código ISO, los formatos, etc. Esta casilla se marca automáticamente al editar uno de esos campos; desmárquela para que Odoo vuelva a gestionar este idioma."
 
-#. module: vmk_language_freeze_meta
-#: model:ir.model,name:vmk_language_freeze_meta.model_res_lang
+#. module: vmk_language_protect_settings
+#: model:ir.model,name:vmk_language_protect_settings.model_res_lang
 msgid "Languages"
 msgstr "Idiomas"
 
-#. module: vmk_language_freeze_meta
-#: model:ir.model.fields,field_description:vmk_language_freeze_meta.field_res_lang__protect_from_updates
+#. module: vmk_language_protect_settings
+#: model:ir.model.fields,field_description:vmk_language_protect_settings.field_res_lang__protect_from_updates
 msgid "Protect From Updates"
 msgstr "Proteger de las actualizaciones"
 
 #. module: base
-#: model:ir.module.module,shortdesc:base.module_vmk_language_freeze_meta
+#: model:ir.module.module,shortdesc:base.module_vmk_language_protect_settings
 msgid "Protect Language Edits"
 msgstr "Proteger las ediciones de idiomas"
 
 #. module: base
-#: model:ir.module.module,summary:base.module_vmk_language_freeze_meta
+#: model:ir.module.module,summary:base.module_vmk_language_protect_settings
 msgid "Stop Odoo updates from reverting your edits to language settings"
 msgstr "Evita que las actualizaciones de Odoo reviertan tus cambios en la configuración de idioma"

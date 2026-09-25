@@ -5,6 +5,8 @@ from pathlib import Path
 
 from odoo.tests.common import TransactionCase, tagged
 
+from ..hooks import RENAMED_FROM, protect_enabled_languages
+
 
 @tagged("post_install", "-at_install")
 class TestLanguageFreeze(TransactionCase):
@@ -55,6 +57,27 @@ class TestLanguageFreeze(TransactionCase):
         lang._load_records_write({"name": "Whatever Odoo Ships"})
         self.assertFalse(self._noupdate(lang))
 
+    def test_the_install_hook_protects_enabled_languages(self):
+        lang = self._a_disabled_lang()
+        lang.active = True
+        self.assertFalse(self._noupdate(lang))
+        protect_enabled_languages(self.env)
+        self.assertTrue(self._noupdate(lang))
+
+    def test_the_install_hook_leaves_protection_alone_after_the_rename(self):
+        """Installed beside vmk_language_freeze_meta, whose protections are already right.
+
+        A language enabled since that module's install, and never edited, is
+        unprotected on purpose; the new module must not freeze it on its way in.
+        """
+        Module = self.env["ir.module.module"]
+        old = Module.search([("name", "=", RENAMED_FROM)])
+        (old or Module.create({"name": RENAMED_FROM})).state = "installed"
+        lang = self._a_disabled_lang()
+        lang.active = True
+        protect_enabled_languages(self.env)
+        self.assertFalse(self._noupdate(lang))
+
     def test_the_flag_can_be_cleared_to_hand_control_back(self):
         self.assertTrue(self.lang_en.protect_from_updates)
         self.lang_en.protect_from_updates = False
@@ -98,14 +121,14 @@ class TestModuleNameTranslation(TransactionCase):
     )
 
     def test_pot_still_carries_the_hand_added_module_metadata(self):
-        pot = (self.I18N / "vmk_language_freeze_meta.pot").read_text(encoding="utf-8")
+        pot = (self.I18N / "vmk_language_protect_settings.pot").read_text(encoding="utf-8")
         for msgid in self.HAND_MAINTAINED:
             with self.subTest(msgid=msgid):
                 self.assertIn(
                     f'msgid "{msgid}"',
                     pot,
                     "The POT has lost an entry `odoo i18n export` does not generate. If you "
-                    "just re-exported it, re-add the two `base.module_vmk_language_freeze_meta` "
+                    "just re-exported it, re-add the two `base.module_vmk_language_protect_settings` "
                     "blocks by hand -- without them the module name and summary silently stop "
                     "being translated. See the README's Translations section.",
                 )
@@ -127,7 +150,7 @@ class TestModuleNameTranslation(TransactionCase):
         data = self.env["ir.model.data"].search(
             [
                 ("model", "=", "ir.module.module"),
-                ("name", "=", "module_vmk_language_freeze_meta"),
+                ("name", "=", "module_vmk_language_protect_settings"),
             ]
         )
         self.assertEqual(data.module, "base")

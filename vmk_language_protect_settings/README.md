@@ -1,4 +1,4 @@
-# Protect Language Edits (`vmk_language_freeze_meta`)
+# Protect Language Edits (`vmk_language_protect_settings`)
 
 Stop Odoo updates from reverting your edits to language settings. In standard Odoo, every module
 update resets the languages to Odoo's own values, so a renamed language or a changed date format is
@@ -12,13 +12,27 @@ It depends only on `base`. LGPL-3, © 2026 Valencia Makers, SL.
 
 ## For developers
 
+### Renamed from `vmk_language_freeze_meta`
+
+The module was `vmk_language_freeze_meta` until 19.0.1.1.2, renamed on 25 September 2026 before its
+first Apps Store release. Odoo has no module rename, so an existing database moves by installing
+`vmk_language_protect_settings` and then uninstalling `vmk_language_freeze_meta`. Nothing is lost:
+protection is the `noupdate` flag on `base`'s own external ids, which neither module owns, the
+`protect_from_updates` field is computed, and both modules set the same flags, so running them side
+by side for the move is harmless.
+
+One thing had to change for the move: the install hook, which protects every enabled language, skips
+itself when `vmk_language_freeze_meta` is installed. The old module's protections are already right,
+and a language enabled since its install and never edited is unprotected on purpose; a blanket
+protect would freeze it. A test covers the hook both ways.
+
 Odoo ships its languages as module data and re-applies them on every module update, so any edit you
 make to a language is reverted. Rename `English (US)` to `English`, broaden Catalan's ISO code from
 `ca_ES` to `ca`, and the next `-u base` — which is what `-u all` and most update scripts do — puts
 both back.
 
 This module keeps those edits. It freezes the language **record**, not its translations: the two are
-unrelated, and translation updates are unaffected. Hence _freeze_meta_.
+unrelated, and translation updates are unaffected. Hence _protect_settings_.
 
 ### What gets reverted, and why
 
@@ -81,9 +95,9 @@ this module just stops the change being reverted.
 
 ### Translations
 
-The module's own name and summary in `i18n/vmk_language_freeze_meta.pot`, `es.po` and `ca.po` are
-hand-maintained, not exported — `ir.module.module` records belong to `base`'s xmlid namespace, so
-`odoo i18n export` never sees them. See
+The module's own name and summary in `i18n/vmk_language_protect_settings.pot`, `es.po` and `ca.po`
+are hand-maintained, not exported — `ir.module.module` records belong to `base`'s xmlid namespace,
+so `odoo i18n export` never sees them. See
 [`vmk_language_systray`'s README](../vmk_language_systray#the-modules-own-name-and-summary-are-hand-maintained-in-i18n)
 for the full explanation. `tests/test_language_freeze.py::TestModuleNameTranslation` fails loudly if
 re-running the export drops them.
@@ -95,8 +109,8 @@ Odoo 19. Depends only on `base`.
 ### Testing
 
 ```bash
-odoo -d <db> -u vmk_language_freeze_meta --test-enable \
-     --test-tags /vmk_language_freeze_meta --stop-after-init
+odoo -d <db> -u vmk_language_protect_settings --test-enable \
+     --test-tags /vmk_language_protect_settings --stop-after-init
 ```
 
 Verified end to end against `odoo:19`: with Catalan renamed to `Catalan / Català / Valencià` and its

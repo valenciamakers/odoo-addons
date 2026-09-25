@@ -40,9 +40,9 @@ The obvious implementation writes new `sequence` values onto the root menus. It 
 
 Every app's root menu is shipped as module data by that app's own module, so `-u sale` rewrites
 Sales' sequence, and `-u all` rewrites nearly all of them. Keeping written values would mean
-freezing each record's `ir.model.data` row against updates, which is what `vmk_language_freeze_meta`
-exists to do — a lot of machinery, and it would stop those records receiving genuine Odoo
-corrections too.
+freezing each record's `ir.model.data` row against updates, which is what
+`vmk_language_protect_settings` exists to do — a lot of machinery, and it would stop those records
+receiving genuine Odoo corrections too.
 
 Sorting the payload on the way out is stateless. Nothing is written, so there is nothing for a
 module update to undo, and **Settings → Technical → User Interface → Menu Items** keeps showing true
