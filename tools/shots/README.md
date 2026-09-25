@@ -56,7 +56,8 @@ env.cr.commit()
   Catalan, French, German, and Spanish. The Language Sequence recipe sets their order; the Protect
   Language Edits recipe changes Catalan's ISO code to `ca`, which protects it.
 - for Multiple Contact Emails, with the module and CRM installed, a contact named **Rosa Vidal**
-  with two additional addresses, and a lead that arrived by email from one of them. The lead goes
+  with two additional addresses and, as the contact's image, Lucide's `square-user-round` in our
+  purple (`demo/rosa_vidal.png`), and a lead that arrived by email from one of them. The lead goes
   through the mail gateway, so its contact is found the way real mail finds it; the snippet
   recreates both, so it is safe to run again:
 
@@ -69,6 +70,8 @@ rosa.write({"email": "rosa.vidal@example.com", "phone": "+34 600 123 456", "func
     "vmk_email_ids": [(5, 0, 0),
         (0, 0, {"email": "rosa@example.org", "label": "Personal", "sequence": 10}),
         (0, 0, {"email": "rosa.billing@example.com", "label": "Billing", "sequence": 20})]})
+import base64
+rosa.image_1920 = base64.b64encode(open("/mnt/extra-addons/odoo-addons-custom/tools/shots/demo/rosa_vidal.png", "rb").read())
 env["crm.lead"].search([("name", "=", "Laser cutting for a small order")]).unlink()
 lead = env["crm.lead"].browse(env["mail.thread"].message_process("crm.lead", """From: Rosa Vidal <rosa@example.org>
 To: info@example.com

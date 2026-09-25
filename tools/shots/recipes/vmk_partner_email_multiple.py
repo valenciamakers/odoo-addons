@@ -4,8 +4,8 @@
 # ///
 """Multiple Contact Emails: a contact's Additional Emails tab, and a lead matched from one of them.
 
-Writes main_screenshot.png and lead.png to the module, and the cover's cut-outs
-vmk_partner_email_multiple_emails.png and vmk_partner_email_multiple_lead.png to tools/covers/img/.
+Writes main_screenshot.png and lead.png to the module, and the cover's cut-out
+vmk_partner_email_multiple_emails.png to tools/covers/img/.
 The demo data is in tools/shots/README.md.
 """
 import asyncio, sys
@@ -18,6 +18,24 @@ CONTACT = "Rosa Vidal"
 LEAD = "Laser cutting for a small order"
 # capture-only: the form scrolls, and its scrollbar would show at the right edge
 NO_SCROLLBAR = "* { scrollbar-width: none !important; }"
+# capture-only, for the cover: the field groups between the contact's name and the tabs
+COVER_CSS = " .o_form_sheet .o_group { display: none !important; }"
+# capture-only, for the lead: its Notes and Contacts tabs, between the rows and the message, and
+# the empty Properties row under them; and the form's two groups side by side, as above
+# Bootstrap's lg breakpoint, rather than stacked
+LEAD_CSS = """ .o_form_sheet .o_notebook { display: none !important; }
+    .o_form_sheet > .d-flex:has(> .o_field_widget[name=lead_properties]) { display: none !important; }
+    .o_form_sheet .o_group.row > .o_inner_group.col-lg-6 { flex: 0 0 auto !important; width: 50% !important; }"""
+
+
+async def sharp_avatar(page):
+    """Capture-only: the form shows the 128px preview (preview_image: avatar_128 in base's partner
+    form), which a 2x capture scales up and blurs; load the 1024px one in its place."""
+    await page.evaluate("""() => Promise.all([...document.querySelectorAll('.oe_avatar img')].map(img => {
+        if (!img.src.includes('avatar_128')) return;
+        img.src = img.src.replace('avatar_128', 'avatar_1024');
+        return img.decode(); }))""")
+    await page.wait_for_timeout(300)
 
 
 async def main(out, parts):
@@ -29,37 +47,32 @@ async def main(out, parts):
         contact = await shots.record_id(page, "res.partner", CONTACT)
         await shots.open_backend(page, f"/odoo/contacts/{contact}", extra_css=NO_SCROLLBAR)
         await page.locator(".o_notebook .nav-link[name=vmk_additional_emails]").first.click(); await page.wait_for_timeout(700)
+        await sharp_avatar(page)
         await shots.polish(page); await shots.park_mouse(page, 1280, 900)
         sheet = await page.locator(".o_form_sheet").first.bounding_box()
         await page.screenshot(path=out / "main_screenshot.png", clip={"x": 0, "y": 0, "width": 1280, "height": sheet["y"] + sheet["height"] + 5})
-        # cover part: the tabs and the list, narrower so the columns sit close
+        # cover part: the contact's name and primary address above the Additional Emails list,
+        # narrower so the columns sit close, with the field groups between them hidden
         await page._vmk_cdp.send("Emulation.setDeviceMetricsOverride",
                                  {"width": 620, "height": 900, "deviceScaleFactor": 2, "mobile": False})
-        await shots.open_backend(page, f"/odoo/contacts/{contact}", extra_css=NO_SCROLLBAR)
+        await shots.open_backend(page, f"/odoo/contacts/{contact}", extra_css=NO_SCROLLBAR + COVER_CSS)
         await page.locator(".o_notebook .nav-link[name=vmk_additional_emails]").first.click(); await page.wait_for_timeout(700)
+        await sharp_avatar(page)
         await shots.polish(page); await shots.park_mouse(page, 620, 900)
-        nb = await page.locator(".o_notebook").first.bounding_box()
+        sheet = await page.locator(".o_form_sheet").first.bounding_box()
         add = await page.locator(".o_notebook .o_field_x2many_list_row_add").first.bounding_box()
         await page.screenshot(path=parts / "vmk_partner_email_multiple_emails.png", clip={
-            "x": nb["x"], "y": nb["y"], "width": nb["width"], "height": add["y"] + add["height"] - nb["y"] + 1})
-        # the lead, its contact found from the address the mail came from; wide enough for the
-        # chatter to sit beside the form, and down to the end of the message
+            "x": sheet["x"], "y": sheet["y"], "width": sheet["width"], "height": add["y"] + add["height"] - sheet["y"] + 1})
+        # the lead, its contact found from the address the mail came from: narrow enough for the
+        # chatter to fall below the form, with the tabs hidden so the message sits under the rows
         await page._vmk_cdp.send("Emulation.setDeviceMetricsOverride",
-                                 {"width": 1600, "height": 900, "deviceScaleFactor": 2, "mobile": False})
+                                 {"width": 900, "height": 1000, "deviceScaleFactor": 2, "mobile": False})
         lead = await shots.record_id(page, "crm.lead", LEAD)
-        await shots.open_backend(page, f"/odoo/crm/{lead}")
+        await shots.open_backend(page, f"/odoo/crm/{lead}", extra_css=NO_SCROLLBAR + LEAD_CSS)
         await page.wait_for_selector(".o-mail-Message"); await page.wait_for_timeout(500)
-        await shots.polish(page); await shots.park_mouse(page, 1600, 900)
+        await shots.polish(page); await shots.park_mouse(page, 900, 1000)
         message = await page.locator(".o-mail-Message").first.bounding_box()
-        phone = await page.locator(".o_form_sheet .o_field_widget[name=phone]").first.bounding_box()
-        bottom = max(message["y"] + message["height"], phone["y"] + phone["height"]) + 16
-        await page.screenshot(path=out / "lead.png", clip={"x": 0, "y": 0, "width": 1600, "height": bottom})
-        # cover part: the lead's Contact and Email rows
-        contact_row = await page.locator(".o_form_sheet .o_cell:has(> .o_field_widget[name=partner_id]), .o_form_sheet .o_wrap_field:has(.o_field_widget[name=partner_id])").first.bounding_box()
-        email = await page.locator(".o_form_sheet .o_field_widget[name=email_from]").first.bounding_box()
-        x0, y0 = 20 + 8, contact_row["y"] - 12
-        await page.screenshot(path=parts / "vmk_partner_email_multiple_lead.png", clip={
-            "x": x0, "y": y0, "width": email["x"] + email["width"] - x0 + 12, "height": email["y"] + email["height"] - y0 + 10})
+        await page.screenshot(path=out / "lead.png", clip={"x": 0, "y": 0, "width": 900, "height": message["y"] + message["height"] + 16})
     print("wrote", out)
 
 
