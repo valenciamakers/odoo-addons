@@ -23,8 +23,7 @@ import asyncio
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
-COVERS = Path(__file__).resolve().parent / "covers"
+import repos
 
 
 async def render(modules):
@@ -37,11 +36,11 @@ async def render(modules):
             sys.exit("No Chromium for Playwright: run `uv run tools/make_icon.py --install-browser`")
         page = await browser.new_page(viewport={"width": 880, "height": 440}, device_scale_factor=2)
         for module in modules:
-            await page.goto((COVERS / f"{module}.html").as_uri(), wait_until="load")
+            await page.goto(repos.source("covers", f"{module}.html").as_uri(), wait_until="load")
             await page.evaluate("document.fonts.ready")
-            out = ROOT / module / "static" / "description" / "cover.png"
+            out = repos.module_dir(module) / "static" / "description" / "cover.png"
             await page.screenshot(path=out, clip={"x": 0, "y": 0, "width": 880, "height": 440})
-            print(f"rendered {out.relative_to(ROOT)}")
+            print(f"rendered {repos.shown(out)}")
         await browser.close()
 
 
@@ -51,10 +50,10 @@ def main():
     parser.add_argument("--all", action="store_true", help="re-render every module with a cover in tools/covers/")
     args = parser.parse_args()
     if args.all:
-        modules = sorted(p.stem for p in COVERS.glob("vmk_*.html"))
+        modules = [p.stem for p in repos.sources("covers", "vmk_*.html")]
     elif args.module:
-        if not (COVERS / f"{args.module}.html").exists():
-            sys.exit(f"no tools/covers/{args.module}.html")
+        if not repos.source("covers", f"{args.module}.html"):
+            sys.exit(f"no tools/covers/{args.module}.html in either repo")
         modules = [args.module]
     else:
         parser.error("name a module, or pass --all")

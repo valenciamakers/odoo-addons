@@ -31,8 +31,7 @@ from pathlib import Path
 
 from PIL import Image, ImageOps
 
-ROOT = Path(__file__).resolve().parent.parent
-ICONS = Path(__file__).resolve().parent / "icons"
+import repos
 LUCIDE = "https://cdn.jsdelivr.net/npm/lucide-static@1.47.0/icons/{}.svg"
 
 SIZE = 256  # the icon, and the glyph's 24px box; Lucide leaves ~2px of the box empty on each side
@@ -46,9 +45,9 @@ html, body {{ margin: 0; background: transparent; }}
 
 
 def fetch_lucide(module, name):
-    dest = ICONS / f"{module}.svg"
+    dest = repos.tools_dir(module) / "icons" / f"{module}.svg"
     dest.write_bytes(urllib.request.urlopen(LUCIDE.format(name), timeout=30).read())
-    print(f"fetched lucide {name} -> {dest.relative_to(ROOT)}")
+    print(f"fetched lucide {name} -> {repos.shown(dest)}")
 
 
 async def render(modules):
@@ -61,16 +60,16 @@ async def render(modules):
             sys.exit("No Chromium for Playwright: run `uv run tools/make_icon.py --install-browser`")
         page = await browser.new_page(viewport={"width": SIZE, "height": SIZE}, device_scale_factor=1)
         for module in modules:
-            svg = (ICONS / f"{module}.svg").read_text()
+            svg = repos.source("icons", f"{module}.svg").read_text()
             await page.set_content(PAGE.format(size=SIZE, svg=svg))
             with tempfile.NamedTemporaryFile(suffix=".png") as tmp:
                 await page.locator("#tile").screenshot(path=tmp.name)
                 shot = Image.open(tmp.name)
             icon = Image.new("RGBA", shot.size, PURPLE)
             icon.putalpha(ImageOps.invert(shot.convert("L")))
-            out = ROOT / module / "static" / "description" / "icon.png"
+            out = repos.module_dir(module) / "static" / "description" / "icon.png"
             icon.save(out, optimize=True)
-            print(f"rendered {out.relative_to(ROOT)}")
+            print(f"rendered {repos.shown(out)}")
         await browser.close()
 
 
@@ -86,10 +85,9 @@ def main():
         subprocess.run([sys.executable, "-m", "playwright", "install", "chromium"], check=True)
         return
     if args.all:
-        modules = sorted(p.stem for p in ICONS.glob("*.svg"))
+        modules = [p.stem for p in repos.sources("icons", "*.svg")]
     elif args.module:
-        if not (ROOT / args.module / "__manifest__.py").exists():
-            sys.exit(f"{args.module} is not a module in {ROOT}")
+        repos.module_dir(args.module)  # exits if no repo holds it
         if args.lucide:
             fetch_lucide(args.module, args.lucide)
         modules = [args.module]

@@ -122,4 +122,7 @@ def out_dir(module, argv):
     from pathlib import Path
     if "--out" in argv:
         d = Path(argv[argv.index("--out") + 1]); d.mkdir(parents=True, exist_ok=True); return d
-    return Path(__file__).resolve().parent.parent.parent / module / "static" / "description"
+    import sys
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+    import repos
+    return repos.module_dir(module) / "static" / "description"

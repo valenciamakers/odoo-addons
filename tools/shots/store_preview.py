@@ -28,7 +28,9 @@ JS = """([html, keep, imgs]) => {
 
 
 async def main(module, out):
-    desc = Path(__file__).resolve().parent.parent.parent / module / "static" / "description"
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+    import repos
+    desc = repos.module_dir(module) / "static" / "description"
     imgs = {f.name: "data:image/png;base64," + base64.b64encode(f.read_bytes()).decode() for f in desc.glob("*.png")}
     async with async_playwright() as p:
         browser = await p.chromium.launch()

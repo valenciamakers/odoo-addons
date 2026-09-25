@@ -8,6 +8,11 @@ That polish, in `shots.py`, hides the unread-messages counter, paints Odoo's Vio
 the signed-in user's avatar in our purple, and draws a cursor where a recipe needs one. Recipes add
 their own capture-only CSS, such as hiding another module's field.
 
+**The tools serve the Private repo's modules too.** `tools/repos.py` finds a module, and its icon,
+cover, and recipe sources, in this repo or in `../Odoo Addons - Private`, whose `tools/` keeps the
+same layout. Those sources stay there because they describe modules we do not publish; a Private
+recipe imports `shots.py` from here.
+
 ## What the recipes need
 
 **A local Odoo with these modules installed**, from `../Tech Stack/odoo-dev`, serving the scratch
