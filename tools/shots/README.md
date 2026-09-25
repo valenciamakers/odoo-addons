@@ -55,6 +55,36 @@ env.cr.commit()
 - for the language modules, six enabled languages, all on the website: English (UK), English (US),
   Catalan, French, German, and Spanish. The Language Sequence recipe sets their order; the Protect
   Language Edits recipe changes Catalan's ISO code to `ca`, which protects it.
+- for Multiple Contact Emails, with the module and CRM installed, a contact named **Rosa Vidal**
+  with two additional addresses, and a lead that arrived by email from one of them. The lead goes
+  through the mail gateway, so its contact is found the way real mail finds it; the snippet
+  recreates both, so it is safe to run again:
+
+```python
+# ./odev shell
+Partner = env["res.partner"]
+rosa = Partner.search([("name", "=", "Rosa Vidal")], limit=1) or Partner.create({"name": "Rosa Vidal"})
+rosa.write({"email": "rosa.vidal@example.com", "phone": "+34 600 123 456", "function": "Product Designer",
+    "lang": "en_GB", "city": "Valencia", "country_id": env.ref("base.es").id,
+    "vmk_email_ids": [(5, 0, 0),
+        (0, 0, {"email": "rosa@example.org", "label": "Personal", "sequence": 10}),
+        (0, 0, {"email": "rosa.billing@example.com", "label": "Billing", "sequence": 20})]})
+env["crm.lead"].search([("name", "=", "Laser cutting for a small order")]).unlink()
+lead = env["crm.lead"].browse(env["mail.thread"].message_process("crm.lead", """From: Rosa Vidal <rosa@example.org>
+To: info@example.com
+Subject: Laser cutting for a small order
+Message-ID: <rosa-laser-order@example.org>
+Date: Thu, 24 Sep 2026 17:42:00 +0200
+Content-Type: text/html; charset=utf-8
+
+<p>Hi, could you cut 40 coasters in 3mm birch plywood from the attached design?</p><p>Thanks,<br>Rosa</p>
+"""))
+tag = env["crm.tag"].search([("name", "=", "Laser Cutting")], limit=1) or env["crm.tag"].create({"name": "Laser Cutting"})
+lead.write({"expected_revenue": 240, "probability": 40, "user_id": env.ref("base.user_admin").id,
+    "date_deadline": "2026-10-16", "priority": "1", "tag_ids": [(6, 0, tag.ids)]})
+assert rosa.email == "rosa.vidal@example.com" and lead.partner_id == rosa
+env.registry.signal_changes(); env.cr.commit()
+```
 
 Recipes find records by these names, so ids do not matter. The three sort recipes uninstall their
 module over RPC for the "before" captures and install it again for the "after"; `_sorting.py` waits
