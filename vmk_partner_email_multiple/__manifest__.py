@@ -3,7 +3,7 @@
 
 {
     "name": "Multiple Contact Emails",
-    "summary": "Several email addresses per contact, matched by Odoo's own machinery",
+    "summary": "Assign multiple email addresses to a contact, and Odoo matches mail from all of them",
     "version": "19.0.1.2.0",
     "author": "Valencia Makers",
     "license": "LGPL-3",
@@ -20,4 +20,5 @@
     },
     "installable": True,
     "application": False,
+    "images": ["static/description/cover.png"],
 }

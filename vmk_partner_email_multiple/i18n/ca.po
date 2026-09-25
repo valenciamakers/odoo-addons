@@ -181,5 +181,5 @@ msgstr "Diversos correus electrònics per contacte"
 
 #. module: base
 #: model:ir.module.module,summary:base.module_vmk_partner_email_multiple
-msgid "Several email addresses per contact, matched by Odoo's own machinery"
-msgstr "Diverses adreces de correu per contacte, reconegudes pels mecanismes propis d'Odoo"
+msgid "Assign multiple email addresses to a contact, and Odoo matches mail from all of them"
+msgstr "Assigna diverses adreces de correu a un contacte, i Odoo reconeix el correu de totes"

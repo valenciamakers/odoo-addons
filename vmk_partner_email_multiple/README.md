@@ -1,9 +1,23 @@
 # Multiple Contact Emails (`vmk_partner_email_multiple`)
 
-Several email addresses per contact, matched by Odoo's own machinery. Mail arriving from any of a
-contact's addresses lands on that contact instead of minting a duplicate.
+Assign multiple email addresses to a contact, and Odoo matches mail from all of them. In standard
+Odoo, a contact can have only one email address, and mail from another address is treated as a
+unique sender, resulting in duplicate contacts. With this module, mail from any of a contact's
+additional addresses is matched to the same contact record, including mail that creates a lead, an
+applicant, or a ticket.
 
-## The problem
+**How to use it** is in the user documentation, [`doc/index.rst`](doc/index.rst), which the Odoo
+Apps Store also shows on the module's page, together with the changelog.
+
+It depends only on `mail` (_Discuss_), and works on Community and Enterprise alike. LGPL-3, © 2026
+Valencia Makers, SL.
+
+## For developers
+
+What follows is how the module works and why it is built this way: what core does, which of its
+methods this relies on, and the traps found on the way.
+
+### The problem
 
 Odoo has no native support for this. The `email` field accepts a comma-separated list, which looks
 like support and is not:
@@ -16,7 +30,7 @@ like support and is not:
 
 A comma list therefore improves matching not at all, while breaking outbound headers.
 
-## What it does
+### What it does
 
 A child table, `vmk.partner.email`, holds each contact's **additional** addresses, and the three
 methods Odoo matches inbound mail with are widened to consider them.
@@ -29,7 +43,7 @@ valid primary address, and no other module's writes are fought.
 Where an address is held as one contact's primary and another's additional, **the primary wins**.
 Installing this module never re-routes mail that core already matched correctly.
 
-## Promoting an address
+### Promoting an address
 
 The swap button beside each additional address exchanges it with the contact's primary one: the
 promoted address becomes the primary, and the old primary is kept as an additional address so mail
@@ -46,7 +60,7 @@ button somebody presses is the user editing their own contact, with the bookkeep
 `email` carries `tracking=1` (`mail/models/res_partner.py:21`), so the swap appears in the chatter
 by itself.
 
-## The envelope, and why it needs a widget
+### The envelope, and why it needs a widget
 
 Each row carries the same envelope the contact form puts beside the main email address, opening a
 `mailto:` link in whatever mail client the browser hands it to. Nothing is sent through Odoo, so the
@@ -69,7 +83,7 @@ The envelope appears on hover, which is what core's field does too — its `mail
 marker. We reveal ours with `visibility` rather than `display`, because `ms-auto` pushes it to the
 right of the cell and reserving its box means revealing it never reflows the address beside it.
 
-### Both controls take work to be reachable without a mouse
+#### Both controls take work to be reachable without a mouse
 
 The envelope is revealed with `opacity`, not the `display` core uses or the `visibility` this had
 first. Both of those drop the anchor out of the tab order and the accessibility tree, so a keyboard
@@ -85,7 +99,7 @@ DOM at all — `list_renderer.xml:308-318` instantiates `ViewButton` from a fixe
 remaining attributes through. The arch keeps the attribute all the way to the client, which is what
 makes this one hard to spot: it is dropped at render, not at load.
 
-### The cursor rules need `!important`, and not for the usual reason
+#### The cursor rules need `!important`, and not for the usual reason
 
 The list renderer stamps a `cursor-pointer` utility class onto every data cell, and that utility is
 declared `!important`. An ordinary declaration therefore loses to it no matter how specific the
@@ -97,9 +111,9 @@ and only the controls themselves are pointer — not the cells around them. The 
 the label column is a margin rather than padding so that the pointer covers the icon and nothing
 else. The drag handle keeps the grab cursor core gives it.
 
-## Why the non-obvious parts are that way
+### Why the non-obvious parts are that way
 
-### Widening the search is not enough
+#### Widening the search is not enough
 
 This is the trap that makes the module more than a `search()` override.
 `res.partner._find_or_create_from_emails` (`mail/models/res_partner.py:118`) searches
@@ -123,7 +137,7 @@ drops the very partner core just found for us.
 All three route through one resolver, `vmk.partner.email._resolve_partners`, so their behaviour
 cannot drift apart.
 
-### The overrides wrap `super()` rather than reimplementing it
+#### The overrides wrap `super()` rather than reimplementing it
 
 Each one resolves the addresses it can, passes only the rest to `super()`, and splices the two
 result lists back into input order. Per-email resolution cannot cross-contaminate, because core
@@ -133,7 +147,7 @@ Copying `_find_or_create_from_emails` and widening both halves in place would be
 approach and is the wrong one: it would silently stop tracking whatever Odoo changes in that method
 next.
 
-### There is deliberately no unique constraint, on any column
+#### There is deliberately no unique constraint, on any column
 
 The tempting one is `unique(partner_id, email_normalized)`. It is precisely the one that must not
 exist. `_update_foreign_keys_generic` (`base/wizard/base_partner_merge.py:119-181`) re-points every
@@ -152,7 +166,7 @@ instead, which that raw SQL bypasses anyway.
 The same address may still appear on several contacts. Core permits that and the mail helpers have a
 documented tie-break for it, so we add no restriction core does not have.
 
-### The merge keeps addresses that core would drop
+#### The merge keeps addresses that core would drop
 
 Odoo's built-in contact merge is how duplicates actually get cleaned up, so the module has to fit
 that workflow. Most of it is free: `_update_foreign_keys` discovers our `partner_id` column from the
@@ -167,7 +181,7 @@ They have to be captured _before_ `super()`, because the source contacts are unl
 destination cannot be captured that early — when the wizard passes none, core picks it itself at
 `:446-448` — so every candidate's address is captured and the survivor is identified afterwards.
 
-### Searching by dotted path
+#### Searching by dotted path
 
 `_rec_names_search` (`base/models/res_partner.py:189`) does accept dotted paths —
 `_search_display_name` resolves the last field in the chain (`orm/models.py:1462-1473`) — so
@@ -190,7 +204,7 @@ change matching behaviour far outside the search panel.
 The Contacts app's own action points at that same search view (`contacts/views/contacts_views.xml`),
 so one inherited view fixes the search people actually use.
 
-## Known limitation: merging as a non-admin
+### Known limitation: merging as a non-admin
 
 `_merge` refuses when the contacts differ by email (`base/wizard/base_partner_merge.py:439-440`) —
 which is every case this module exists for. Admins are exempted two lines earlier
@@ -201,7 +215,7 @@ This is left alone deliberately. Relaxing it means forcing `extra_checks=False`,
 pre-disable any future check Odoo puts behind that flag. Revisit when someone other than an
 administrator actually needs to do contact cleanup.
 
-## Deliberate non-goals
+### Deliberate non-goals
 
 Each of these keeps reading the primary address only:
 
@@ -214,7 +228,7 @@ Each of these keeps reading the primary address only:
 - **Bounce counters and mail-loop detection**, which query `email_normalized` with raw domains
   (`mail/models/mail_thread.py:814, 955, 998, 1016, 1756`).
 
-## Mailflow
+### Mailflow
 
 `unified_mail_client` used to bypass Odoo's matching entirely — `[('email', '=ilike', addr)]` on the
 raw column, in three places — so this module alone could not stop it creating duplicates. Routing
@@ -239,7 +253,7 @@ additional addresses silently stop matching and Mailflow resumes minting duplica
 error, just wrong contacts. `grep -rn "_partner_find_from_emails\|'email', '=ilike'" models/` over
 the new version answers it in one command.
 
-## CRM, Recruitment, and Helpdesk
+### CRM, Recruitment, and Helpdesk
 
 Three apps keep a record's email and its contact's email in step, and without help each would
 overwrite a contact's primary address with an additional one:
@@ -281,12 +295,12 @@ contact, and typing an additional address into the contact's email field still m
 methods, `install()` logs a warning naming it, and `test_every_installed_app_is_patched` fails on a
 database that has the app.
 
-## Translations
+### Translations
 
-`i18n/` carries the template and a Spanish catalogue; Odoo loads `i18n/*.po` on install with no
-manifest entry. Terms this module shares with core — _Contact_, _Created by_, _Send Email_ — reuse
-core's own Spanish wording rather than a second translation of the same word, so the module reads as
-part of the backend.
+`i18n/` carries the template and Spanish and Catalan catalogues; Odoo loads `i18n/*.po` on install
+with no manifest entry. Terms this module shares with core — _Contact_, _Created by_, _Send Email_ —
+reuse core's own wording in each language rather than a second translation of the same word, so the
+module reads as part of the backend.
 
 Regenerating the template after changing any user-facing string:
 
@@ -314,7 +328,7 @@ silently drop them. See
 [`vmk_language_systray`'s README](../vmk_language_systray#the-modules-own-name-and-summary-are-hand-maintained-in-i18n)
 for the full explanation; `tests/test_model.py::TestModuleNameTranslation` guards it here.
 
-## Testing
+### Testing
 
 Against a local Odoo 19 with this repo on the addons path — Postgres, the `odoo:19` image, and the
 repo root mounted at `/mnt/extra-addons`:
@@ -336,7 +350,7 @@ Core's own suites for all three pass with this module installed.
 Valencia Makers uses a shared harness for this, covered in `CLAUDE.md`; it is not needed to run the
 tests above.
 
-## License
+### License
 
 **LGPL-3**, as the whole repo is. See `LICENSE`, which carries the LGPL-3 text followed by the GPL-3
 it incorporates by reference.

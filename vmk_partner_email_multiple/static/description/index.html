@@ -1,75 +1,69 @@
 <section class="oe_container">
     <div class="oe_row oe_spaced">
-        <h2 class="oe_slogan">Multiple Contact Emails</h2>
-        <h3 class="oe_slogan">One contact, all the addresses they write from</h3>
+        <h2 class="oe_slogan" style="font-family:Lato, 'Open Sans', Helvetica, sans-serif; font-weight:300; text-align:center; margin:32px 0; font-size:40px; line-height:48px; color:light-dark(#531B93, #B794F4);">Multiple Contact Emails</h2>
+        <h3 class="oe_slogan" style="font-family:Lato, 'Open Sans', Helvetica, sans-serif; font-weight:300; text-align:center; margin:32px 0; font-size:26px; line-height:31px; color:light-dark(#333333, #E4E4E4); opacity:0.5;">Match incoming mail to the right contact, without creating duplicate contacts</h3>
         <div class="oe_span12">
-            <p class="oe_mt32">
-                People write to you from more than one address &mdash; a personal account, a work
-                account, the <b>noreply@</b> their shop sends order confirmations from. Odoo matches
-                incoming mail on one address per contact, so every other one quietly creates a
-                duplicate contact.
-            </p>
-            <p>
-                This module gives each contact a list of additional addresses. Mail arriving from any
-                of them lands on the contact you already have.
-            </p>
+            <img class="oe_screenshot" style="max-width:100%;" src="main_screenshot.png" alt="A contact's Additional Emails tab, with a personal and a billing address"/>
         </div>
-    </div>
-</section>
-
-<section class="oe_container oe_dark">
-    <div class="oe_row oe_spaced">
         <div class="oe_span12">
-            <h3 class="oe_slogan">The comma trick does not work</h3>
-            <p>
-                Odoo's email field accepts <b>a@example.com, b@example.com</b> and appears to
-                tolerate it. It does not: only the first address is ever matched against, and the
-                whole list is then used as the sender header on outgoing mail &mdash; which is not a
-                valid address at all.
-            </p>
-            <p>
-                Additional addresses are kept in their own list instead, so the contact's main
-                address stays exactly what it was.
-            </p>
+            <div class="oe_mt32" style="max-width:700px; margin-left:auto; margin-right:auto;">
+                <p style="font-family:-apple-system, system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', Ubuntu, 'Noto Sans', Arial, sans-serif; font-size:14px; font-weight:400; line-height:21px; color:light-dark(#111827, #E4E4E4); margin:0 0 16px;">
+                    In standard Odoo, a contact can have only one email address, and mail from another address is
+                    treated as a unique sender, resulting in duplicate contacts. <b>Multiple Contact Emails</b> lets a
+                    contact have additional email addresses, so mail from any of them is matched to the same contact
+                    record.
+                </p>
+            </div>
         </div>
     </div>
 </section>
 
 <section class="oe_container">
     <div class="oe_row oe_spaced">
+        <h2 class="oe_slogan" style="font-family:Lato, 'Open Sans', Helvetica, sans-serif; font-weight:300; text-align:center; margin:32px 0; font-size:40px; line-height:48px; color:light-dark(#531B93, #B794F4);">Fits right into Odoo</h2>
+        <h3 class="oe_slogan" style="font-family:Lato, 'Open Sans', Helvetica, sans-serif; font-weight:300; text-align:center; margin:32px 0; font-size:26px; line-height:31px; color:light-dark(#333333, #E4E4E4); opacity:0.5;">Mail from an additional email address matches the existing contact</h3>
         <div class="oe_span12">
-            <h3 class="oe_slogan">Merging duplicates keeps their addresses</h3>
-            <p>
-                When you merge two contacts, Odoo keeps one address and discards the other. Here the
-                discarded one is kept as an additional address, so the merged contact still matches
-                mail from either &mdash; which is the whole reason you were merging them.
-            </p>
-            <p>
-                Additional addresses are searchable too: type one into any contact field and the
-                right contact comes up.
-            </p>
-            <p>
-                Picked the wrong one as the primary address? The swap button beside any additional
-                address exchanges the two, and the one it replaces is kept in the list rather than
-                lost.
-            </p>
-            <p>
-                Each address also carries the same envelope the contact form puts beside the main
-                one, so writing to somebody at a particular address is a single click.
-            </p>
+            <div style="max-width:700px; margin:32px auto 0;">
+                <img class="oe_screenshot" style="width:100%;" src="lead.png" alt="A CRM lead created by email from an additional address, with the existing contact filled in"/>
+            </div>
+            <div class="row" style="max-width:800px; margin:40px auto 20px;">
+                <div class="col-md-6" style="margin-bottom:28px;"><div style="display:flex;">
+                    <span class="fa fa-envelope fa-2x fa-fw" style="color:light-dark(#531B93, #B794F4); margin-right:16px;"></span>
+                    <p style="font-family:-apple-system, system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', Ubuntu, 'Noto Sans', Arial, sans-serif; font-size:14px; font-weight:400; line-height:21px; color:light-dark(#111827, #E4E4E4); margin:0;">Add, label, and reorder a contact's email addresses in the new Additional Emails tab.</p>
+                </div></div>
+                <div class="col-md-6" style="margin-bottom:28px;"><div style="display:flex;">
+                    <span class="fa fa-exchange fa-2x fa-fw" style="color:light-dark(#531B93, #B794F4); margin-right:16px;"></span>
+                    <p style="font-family:-apple-system, system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', Ubuntu, 'Noto Sans', Arial, sans-serif; font-size:14px; font-weight:400; line-height:21px; color:light-dark(#111827, #E4E4E4); margin:0;">Swap an additional email address with the primary email in one click.</p>
+                </div></div>
+                <div class="col-md-6" style="margin-bottom:28px;"><div style="display:flex;">
+                    <span class="fa fa-search fa-2x fa-fw" style="color:light-dark(#531B93, #B794F4); margin-right:16px;"></span>
+                    <p style="font-family:-apple-system, system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', Ubuntu, 'Noto Sans', Arial, sans-serif; font-size:14px; font-weight:400; line-height:21px; color:light-dark(#111827, #E4E4E4); margin:0;">Search contacts by any of their addresses, in the search bar and when selecting a contact.</p>
+                </div></div>
+                <div class="col-md-6" style="margin-bottom:28px;"><div style="display:flex;">
+                    <span class="fa fa-compress fa-2x fa-fw" style="color:light-dark(#531B93, #B794F4); margin-right:16px;"></span>
+                    <p style="font-family:-apple-system, system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', Ubuntu, 'Noto Sans', Arial, sans-serif; font-size:14px; font-weight:400; line-height:21px; color:light-dark(#111827, #E4E4E4); margin:0;">Merging two contacts keeps both sets of addresses in the resulting contact.</p>
+                </div></div>
+            </div>
         </div>
     </div>
 </section>
 
-<section class="oe_container oe_dark">
+<section class="oe_container">
     <div class="oe_row oe_spaced">
+        <h2 class="oe_slogan" style="font-family:Lato, 'Open Sans', Helvetica, sans-serif; font-weight:300; text-align:center; margin:32px 0; font-size:40px; line-height:48px; color:light-dark(#531B93, #B794F4);">Small and focused on purpose</h2>
+        <h3 class="oe_slogan" style="font-family:Lato, 'Open Sans', Helvetica, sans-serif; font-weight:300; text-align:center; margin:32px 0; font-size:26px; line-height:31px; color:light-dark(#333333, #E4E4E4); opacity:0.5;">Additional email addresses are for matching, never for sending</h3>
         <div class="oe_span12">
-            <h3 class="oe_slogan">Nothing is ever sent to them</h3>
-            <p>
-                An additional address means <i>we also know them here</i>, never <i>mail them here</i>.
-                Outgoing mail keeps using the contact's main address, unchanged, so nothing about how
-                your database sends email is altered by installing this.
-            </p>
+            <div class="oe_mt32" style="max-width:700px; margin-left:auto; margin-right:auto;">
+                <p style="font-family:-apple-system, system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', Ubuntu, 'Noto Sans', Arial, sans-serif; font-size:14px; font-weight:400; line-height:21px; color:light-dark(#111827, #E4E4E4); margin:0 0 16px;">
+                    Odoo sends mail to the primary address only; additional addresses are used only to recognise
+                    incoming mail. Leads, applicants, and tickets created from an additional email address keep that
+                    address on their records, and the contact's primary address is left as you set it.
+                </p>
+                <p style="font-family:-apple-system, system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', Ubuntu, 'Noto Sans', Arial, sans-serif; font-size:14px; font-weight:400; line-height:21px; color:light-dark(#111827, #E4E4E4); margin:0 0 16px;">
+                    This module only requires Odoo's <b>Discuss</b> module, and works on both Community and
+                    Enterprise.
+                </p>
+            </div>
         </div>
     </div>
 </section>

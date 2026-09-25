@@ -78,7 +78,7 @@ class TestModuleNameTranslation(TransactionCase):
     I18N = Path(__file__).resolve().parent.parent / "i18n"
     HAND_MAINTAINED = (
         "Multiple Contact Emails",
-        "Several email addresses per contact, matched by Odoo's own machinery",
+        "Assign multiple email addresses to a contact, and Odoo matches mail from all of them",
     )
 
     def test_pot_still_carries_the_hand_added_module_metadata(self):
