@@ -21,7 +21,7 @@ KEEP = ["color", "font-family", "font-size", "font-weight", "line-height", "text
         "padding", "padding-left", "padding-right", "padding-top", "padding-bottom", "border"]
 JS = """([html, keep, imgs]) => {
   const host = document.querySelector('.oe_styling_v8'); host.innerHTML = html;
-  host.querySelectorAll('[style]').forEach(e => { const kept = [...e.style].filter(p => keep.includes(p))
+  host.querySelectorAll('[style]').forEach(e => { const kept = [...e.style].filter(p => keep.some(k => p === k || p.startsWith(k + "-")))
     .map(p => p + ':' + e.style.getPropertyValue(p)); e.setAttribute('style', kept.join(';')); });
   host.querySelectorAll('img').forEach(i => { const d = imgs[i.getAttribute('src')]; if (d) i.src = d; });
 }"""
