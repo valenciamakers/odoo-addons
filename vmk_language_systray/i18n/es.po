@@ -55,5 +55,5 @@ msgstr "Idioma: %s"
 
 #. module: base
 #: model:ir.module.module,summary:base.module_vmk_language_systray
-msgid "Switch your own backend language from a systray dropdown"
-msgstr "Cambia tu propio idioma del backend desde un menú de la barra superior"
+msgid "Switch your own backend language from a dropdown in the menu bar"
+msgstr "Cambia tu propio idioma del backend desde un desplegable en la barra de menú"

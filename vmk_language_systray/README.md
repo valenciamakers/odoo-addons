@@ -1,8 +1,9 @@
 # Backend Language Menu (`vmk_language_systray`)
 
-Switch your own backend language from a systray dropdown. In standard Odoo, changing your backend
-language means opening your preferences, finding the language field, and saving. This module adds a
-globe to the top bar: click it, pick a language, and the backend reloads in it.
+Switch your own backend language from a dropdown in the menu bar. In standard Odoo, changing your
+backend language requires opening your preferences, finding the language field, and saving. This
+module adds a globe to the backend menu bar: click it, pick a language, and the backend reloads in
+your new language.
 
 **How to use it** is in the user documentation, [`doc/index.rst`](doc/index.rst), which the Odoo
 Apps Store also shows on the module's page, together with the changelog.

@@ -102,7 +102,7 @@ class TestModuleNameTranslation(TransactionCase):
     I18N = Path(__file__).resolve().parent.parent / "i18n"
     HAND_MAINTAINED = (
         "Backend Language Menu",
-        "Switch your own backend language from a systray dropdown",
+        "Switch your own backend language from a dropdown in the menu bar",
     )
 
     def test_pot_still_carries_the_hand_added_module_metadata(self):

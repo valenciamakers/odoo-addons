@@ -14,7 +14,7 @@ They depend only on Odoo Community modules, so they work on Community and Enterp
 - **[`vmk_language_protect_settings`](vmk_language_protect_settings)** — stop Odoo module updates
   reverting your edits to language records, such as a renamed language or a broadened ISO code.
 - **[`vmk_language_systray`](vmk_language_systray)** — switch your own backend language from a
-  dropdown in the systray, instead of going through your preferences.
+  dropdown in the menu bar, instead of going through your preferences.
 - **[`vmk_apps_menu_sort`](vmk_apps_menu_sort)** — sort the apps on the main menu alphabetically
   rather than by the `sequence` each module picked for itself, keeping Apps and Settings at the end.
 - **[`vmk_apps_page_sort`](vmk_apps_page_sort)** — sort the Apps page by the name on the card, since

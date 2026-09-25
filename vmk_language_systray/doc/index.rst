@@ -1,8 +1,8 @@
-Switch your own backend language from a systray dropdown.
+Switch your own backend language from a dropdown in the menu bar.
 
-In standard Odoo, changing your backend language means opening your preferences, finding the
-language field, and saving. This module adds a globe to the top bar: click it, pick a language, and
-the backend reloads in it.
+In standard Odoo, changing your backend language requires opening your preferences, finding the
+language field, and saving. This module adds a globe to the backend menu bar: click it, pick a
+language, and the backend reloads in your new language.
 
 **Installation**
 
@@ -10,24 +10,25 @@ Install **Backend Language Menu** from the Apps menu. It only requires Odoo's **
 
 **Using it**
 
-There is nothing to configure. The globe appears in the top bar, beside the company switcher, as
+There is nothing to configure. The globe appears in the menu bar, beside the company switcher, as
 soon as more than one language is enabled.
 
-- **Click the globe** to see every enabled language, with a check beside your current one.
-- **Pick a language** to switch to it. Only your own backend language changes; other users and the
+- **Click the globe** to see every enabled language, with your active language clearly marked.
+- **Click a language** to switch to it. Only your own backend language changes; other users and the
   website are unaffected.
 
-Every internal user can use it, with no extra access rights. With **Language Sequence** installed,
-the menu lists languages in the order you set.
+Every backend user can use it, with no extra access rights required. With `Language Sequence
+<https://apps.odoo.com/apps/modules/19.0/vmk_language_sequence>`_ installed, the menu follows your
+custom order.
 
-**To show the language name** beside the globe, turn on developer mode, go to **Settings >
-Technical > System Parameters**, and add *vmk_language_systray.show_name* with the value *True*. It
-applies to every user, on wide screens.
+**To display the language name** beside the globe in the menu bar, enable developer mode, go to
+**Settings > Technical > System Parameters**, and add *vmk_language_systray.show_name* with the
+value *True*. It applies to every user, and only appears on wide screens.
 
 **Limits**
 
-- **The menu hides on phone-width screens**, as the company switcher does. Use your preferences
-  there.
+- **The menu hides on phone-width screens**, just like the company switcher does. Switch languages
+  with the normal method using your preferences.
 
 **Changelog**
 

@@ -3,7 +3,7 @@
 
 {
     "name": "Backend Language Menu",
-    "summary": "Switch your own backend language from a systray dropdown",
+    "summary": "Switch your own backend language from a dropdown in the menu bar",
     "version": "19.0.1.1.1",
     "author": "Valencia Makers",
     "license": "LGPL-3",

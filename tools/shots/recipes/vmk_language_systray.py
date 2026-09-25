@@ -23,7 +23,7 @@ async def main(out):
         await shots.polish(page, _sorting.HIDE)
         await page.locator(".o_vmk_language_systray button").first.click(); await page.wait_for_timeout(700)
         btn = await page.locator(".o_vmk_language_systray button").first.bounding_box()
-        x, y = btn["x"] + btn["width"] - 4, btn["y"] + btn["height"] - 6  # the arrow's tip at the globe's edge
+        x, y = btn["x"] + btn["width"] - 11, btn["y"] + btn["height"] - 10  # the arrow's tip on the globe, as if clicking it
         await page.mouse.move(x, y); await page.wait_for_timeout(300)
         await page.evaluate(shots.CURSOR, [x, y])
         await page.screenshot(path=out / "main_screenshot.png")
