@@ -683,11 +683,15 @@ uv run tools/make_cover.py vmk_foo
 uv run tools/make_cover.py --all
 ```
 
-Put a non-breaking hyphen (`&#8209;`) in a hyphenated name, or the title can wrap inside it. When a
-module's screenshots are too wide to crop into a card, capture the parts the cover needs separately
-into `tools/covers/img/`, so the module does not ship images its page never shows. Every card keeps
-its content 14px from its edges, wrapping a crop in a padded box where the screenshot runs to its
-edge, and stacked cards sit 28px apart.
+Put a non-breaking hyphen (`&#8209;`) in a hyphenated name, or the title can wrap inside it. **Every
+title is the same size**, `cover.css`'s 46px. A long name widens its cover's `.text` box and moves
+the cards right, as Event Registration Deadline's does, rather than shrinking the title. Where a
+name still does not fit, raise it with Felix before reaching for a size override; one is allowed
+when nothing else works, but that cover's 38px turned out unnecessary. When a module's screenshots
+are too wide to crop into a card, capture the parts the cover needs separately into
+`tools/covers/img/`, so the module does not ship images its page never shows. Every card keeps its
+content 14px from its edges, wrapping a crop in a padded box where the screenshot runs to its edge,
+and stacked cards sit 28px apart.
 
 **The store page, `static/description/index.html`, styles its text inline.** The Apps Store and the
 backend's Apps page style Odoo's `oe_*` description classes differently: the store makes body text
