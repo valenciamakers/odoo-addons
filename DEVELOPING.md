@@ -493,13 +493,16 @@ In practice that is four different things, and only one of them saves work:
   the job, use it: those strings then belong to core and never enter our catalogue at all. Copying
   core's _wording_ into our own field is worth doing for the reader, but it costs exactly the same
   to translate — a related field carries core's English and still needs our own `.po` entry.
-- **Never assert a translation for a record we do not own.** Every module that `_inherit`s a model
-  gets its own `ir.model.data` xmlid pointing at the _same_ row, so the exporter writes core's model
-  descriptions and inherited field help into our `.pot` under our namespace. Translating them makes
-  our `.po` claim a value for a shared row. `_load_module_terms` defaults to `overwrite=False`, so
-  the ordinary upgrade is safe — but "Update Translations" and `-l` pass `overwrite=True`, and then
-  we clobber whatever core or the user put there. Leave those `msgstr` empty; the importer skips
-  them.
+- **A record we do not own takes core's exact translation, never our own.** Every module that
+  `_inherit`s a model gets its own `ir.model.data` xmlid pointing at the _same_ row, so the exporter
+  writes core's model descriptions and inherited field help into our `.pot` under our namespace.
+  Fill those `msgstr` with core's wording, verbatim, as core's own modules do: every module
+  extending `res.config.settings` ships "Config Settings" translated, and 2,370 of the 2,405
+  model-name entries across core's Spanish catalogues are filled. `_load_module_terms` loads with
+  `overwrite=False`, so an ordinary upgrade never touches a translation a user edited; "Update
+  Translations" with overwrite, or `-l`, resets it to core's wording, which core's own catalogues
+  would do anyway. A blank entry fails `odev terms`. Decided 28 September 2026, replacing a rule
+  that said to leave these blank, which no module followed.
 - **Copy core's translation, not just core's English.** Where a string of ours says what core says,
   its `msgstr` is core's `msgstr` — looked up in `base/i18n/<lang>.po` or the relevant module's, and
   pasted verbatim. This is not optional polish: the ORM's automatic fields (`create_uid`,
