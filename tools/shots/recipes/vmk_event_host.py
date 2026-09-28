@@ -15,10 +15,13 @@ import shots
 
 EVENT = "Beginner's Bootcamp"
 # capture-only: hide the deadline module's field and the venue's address, and show the read-only
-# Hosts label at full strength
+# Hosts label at full strength. Two selectors per row: 19 pairs a label .o_cell with a value .o_cell
+# as siblings of .o_inner_group directly; 18 wraps each pair together in one .o_wrap_field instead,
+# so .o_cell is no longer .o_inner_group's direct child -- see shots/README.md on porting a recipe.
 FORM_CSS = """
     .o_inner_group > .o_cell:has([name=vmk_deadline_custom]),
-    .o_inner_group > .o_cell:has(+ .o_cell [name=vmk_deadline_custom]) { display: none !important; }
+    .o_inner_group > .o_cell:has(+ .o_cell [name=vmk_deadline_custom]),
+    .o_wrap_field:has([name=vmk_deadline_custom]) { display: none !important; }
     .o_field_widget[name=address_id] .o_field_many2one_extra { display: none !important; }
     label[for^='vmk_host_names'].o_form_label_readonly { opacity: 1 !important; }"""
 LIST_CSS = """
@@ -30,12 +33,12 @@ LIST_CSS = """
     .o_list_view .o_data_cell { max-width: none !important; white-space: nowrap; }"""
 
 
-async def event_form(page, event, width):
+async def event_form(page, event, width, height=920):
     await page._vmk_cdp.send("Emulation.setDeviceMetricsOverride",
-                             {"width": width, "height": 920, "deviceScaleFactor": 2, "mobile": False})
+                             {"width": width, "height": height, "deviceScaleFactor": 2, "mobile": False})
     await shots.open_backend(page, f"/odoo/events/{event}", extra_css=FORM_CSS)
     await page.locator(".o_notebook .nav-link[name=vmk_hosts]").first.click(); await page.wait_for_timeout(700)
-    await shots.polish(page); await shots.park_mouse(page, width, 920)
+    await shots.polish(page); await shots.park_mouse(page, width, height)
 
 
 async def main(out, parts):
@@ -48,13 +51,17 @@ async def main(out, parts):
         add = await page.locator(".o_notebook .o_field_x2many_list_row_add").first.bounding_box()
         await page.screenshot(path=out / "main_screenshot.png", clip={"x": 0, "y": 0, "width": 1280, "height": add["y"] + add["height"] + 14})
         # cover part: the Organizer, Responsible, and Hosts rows
-        org = await page.locator(".o_inner_group .o_cell:has([name=organizer_id])").first.bounding_box()
+        # From the Organizer label, which both series render as label[for=organizer_id_0]; its
+        # value cell sits a different distance from it on 18, whose form wraps label and value.
+        org = await page.locator("label[for^=organizer_id]").first.bounding_box()
         hosts = await page.locator(".o_inner_group .o_cell:has([name=vmk_host_names])").first.bounding_box()
-        x0, y0 = org["x"] - 150, org["y"] - 12
+        x0, y0 = org["x"] - 12, org["y"] - 12
         await page.screenshot(path=parts / "vmk_event_host_summary.png", clip={
             "x": x0, "y": y0, "width": hosts["x"] + hosts["width"] - x0 + 12, "height": hosts["y"] + hosts["height"] - y0 + 6})
         # cover part: the tabs and the Hosts list, narrower so the columns sit close
-        await event_form(page, event, 760)
+        # taller, so the whole list is on screen: a clip cannot capture what the viewport cuts off,
+        # and 18's form puts the list lower than 19's
+        await event_form(page, event, 760, height=1200)
         nb = await page.locator(".o_notebook").first.bounding_box()
         last = await page.locator(".o_notebook .o_data_row").last.bounding_box()
         await page.screenshot(path=parts / "vmk_event_host_list.png", clip={

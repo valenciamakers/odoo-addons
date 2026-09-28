@@ -23,8 +23,13 @@ async def main(out):
         await shots.rpc(page, "res.lang", "write", [ids, {"iso_code": "ca"}])
         await shots.open_backend(page, f"/odoo/action-base.res_lang_act_window/{ids[0]}?debug=1", wait=".o_form_view", extra_css=_sorting.HIDE)
         await shots.park_mouse(page, 1280, 800)
-        sheet = await page.locator(".o_form_sheet").first.bounding_box()
-        await page.screenshot(path=out / "main_screenshot.png", clip={"x": 0, "y": 0, "width": 1280, "height": sheet["y"] + sheet["height"] + 16})
+        # Crop through the First Day of Week field, not the whole form sheet: Odoo 18's res.lang
+        # form still carries a "Legends for supported Date and Time Formats" / "Examples" block
+        # below the fields, removed from core in 19 (base/views/res_lang_views.xml), which would
+        # otherwise tack unrelated content onto the bottom of this capture.
+        last_field = await page.locator("[name=week_start]").first.bounding_box()
+        await page.screenshot(path=out / "main_screenshot.png", clip={
+            "x": 0, "y": 0, "width": 1280, "height": last_field["y"] + last_field["height"] + 40})
         await shots.goto(page, shots.BASE + "/odoo?debug=")
     print("wrote", out)
 
