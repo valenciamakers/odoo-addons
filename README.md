@@ -52,13 +52,8 @@ There is one branch per Odoo series, as Odoo and the OCA do: `19.0` holds the mo
 
 ## Developing
 
-Valencia Makers maintains a shared dev harness at `../Tech Stack/odoo-dev` (private; it mounts Odoo
-Enterprise, which we cannot redistribute). It mounts all three of our module repos at once in
-production's addons order, keeps its databases across a restart, and can restore a neutered copy of
-production data.
-
-Working from a clone of this repo alone, the equivalent is a two-service Compose file — Postgres 17
-and `odoo:19` with the repo root mounted at `/mnt/extra-addons`:
+A two-service Compose file is enough to run these modules — Postgres 17 and `odoo:19` with the repo
+root mounted at `/mnt/extra-addons`:
 
 ```bash
 docker compose up -d db
@@ -77,8 +72,9 @@ Each module's store icon is rendered from an SVG glyph in `tools/icons/` by
 `uv run tools/make_icon.py <module>`; the glyphs are [Lucide](https://lucide.dev/) icons (ISC,
 notice in `tools/icons/LICENSE-lucide`) or drawn to match them.
 
-`.claude/CLAUDE.md` documents the harness's sharp edges, plus a catalogue of Odoo 19 behaviours that
-cost us time — all verified against real Odoo source rather than against documentation.
+[`DEVELOPING.md`](DEVELOPING.md) sets out how the modules are written and tested, plus a catalogue
+of Odoo 19 behaviours that cost us time — all verified against real Odoo source rather than against
+documentation.
 
 ## Contributing
 

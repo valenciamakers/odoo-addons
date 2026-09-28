@@ -347,8 +347,8 @@ docker compose run --rm odoo odoo -d test -u vmk_partner_email_multiple \
 that also has `crm` and `hr_recruitment` installed, plus `helpdesk` where Enterprise is available.
 Core's own suites for all three pass with this module installed.
 
-Valencia Makers uses a shared harness for this, covered in `CLAUDE.md`; it is not needed to run the
-tests above.
+Valencia Makers also runs these on a shared harness of its own; it is not needed to run the tests
+above.
 
 ### License
 

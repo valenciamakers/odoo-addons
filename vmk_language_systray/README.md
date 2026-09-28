@@ -230,8 +230,8 @@ docker compose run --rm odoo odoo -d test -u vmk_language_systray \
 `-u` on a module that is not installed does nothing and reports nothing, so install first and check
 `ir_module_module.state` rather than trusting a clean log.
 
-Valencia Makers uses a shared harness for this, covered in `CLAUDE.md`; it is not needed to run the
-tests above.
+Valencia Makers also runs these on a shared harness of its own; it is not needed to run the tests
+above.
 
 ### License
 
