@@ -33,25 +33,9 @@ their addresses. **Merging two contacts** keeps both sets of addresses in the re
 
 **Changelog**
 
-*19.0.1.2.0 (25 September 2026)*
+*18.0.1.0.0 (28 September 2026)*
 
-- CRM, Recruitment, and Helpdesk no longer overwrite a contact's primary address with the
-  additional address a lead, applicant, or ticket arrived from.
-
-*19.0.1.1.2 (24 September 2026)*
-
-- Credited to Valencia Makers. No change in behaviour.
-
-*19.0.1.1.1 (19 August 2026)*
-
-- Documentation only. No change in behaviour.
-
-*19.0.1.1.0 (19 August 2026)*
-
-- Licensed LGPL-3, from MIT. No change in behaviour.
-
-*19.0.1.0.0 (14 August 2026)*
-
-- First release. Additional email addresses per contact, matched to incoming mail; swapping one
-  with the primary address; searching by any of them; and merging that keeps both contacts'
-  addresses.
+- First release for Odoo 18, ported from 19.0.1.2.0. ``ban_emails``, ``filter_found``,
+  ``no_create``, ``sort_key``, and ``sort_reverse`` are not available on
+  ``_find_or_create_from_emails`` here: Odoo 18's own version of that method does not support
+  them, so this module cannot offer them either.

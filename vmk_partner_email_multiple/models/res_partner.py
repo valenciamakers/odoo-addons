@@ -2,7 +2,7 @@
 # License LGPL-3 (https://www.gnu.org/licenses/lgpl-3.0.html).
 
 from odoo import api, fields, models, tools
-from odoo.fields import Domain
+from odoo.osv import expression
 from odoo.tools import email_normalize
 
 from . import email_sync
@@ -54,22 +54,13 @@ class ResPartner(models.Model):
     # ------------------------------------------------------------
 
     @api.model
-    def _find_or_create_from_emails(
-        self,
-        emails,
-        ban_emails=None,
-        filter_found=None,
-        additional_values=None,
-        no_create=False,
-        sort_key=None,
-        sort_reverse=True,
-    ):
+    def _find_or_create_from_emails(self, emails, additional_values=None):
         """Match additional addresses before core gets a chance to create duplicates.
 
         Widening core's search domain is not enough and this is the trap that makes
         the module non-trivial. ``mail/models/res_partner.py`` searches
-        ``[('email_normalized', 'in', [...])]`` at :175, but then resolves each input
-        address back to a partner at :222-232 by comparing
+        ``[('email_normalized', 'in', [...])]`` at :161, but then resolves each input
+        address back to a partner at :199-208 by comparing
         ``partner.email_normalized == email_normalized``. Satisfy the domain through
         this module's child table and that final step still hands back an empty
         recordset.
@@ -79,25 +70,22 @@ class ResPartner(models.Model):
         addresses we can here, pass only the rest to ``super()``, and splice the two
         result lists back into input order. Per-email resolution cannot cross-contaminate, because
         core matches each input against its own normalized value.
+
+        On 18 core's own signature is just ``(self, emails, additional_values=None)``
+        -- ``ban_emails``, ``filter_found``, ``no_create``, ``sort_key`` and
+        ``sort_reverse`` do not exist here (they were added to core in a later
+        series). None of that filtering can be offered honestly through this
+        override either: an unresolved address still falls through to
+        ``super()``, which always creates, so a caller expecting ``no_create=True``
+        to hold everywhere would be misled. Dropped, along with the tests that
+        exercised them -- see README.md.
         """
         name_emails = [tools.parse_contact_from_email(email) for email in emails]
         resolved = self.env["vmk.partner.email"]._resolve_partners(
-            [normalized for _name, normalized in name_emails],
-            ban_emails=ban_emails,
-            filter_found=filter_found,
-            sort_key=sort_key,
-            sort_reverse=sort_reverse,
+            [normalized for _name, normalized in name_emails]
         )
         if not resolved:
-            return super()._find_or_create_from_emails(
-                emails,
-                ban_emails=ban_emails,
-                filter_found=filter_found,
-                additional_values=additional_values,
-                no_create=no_create,
-                sort_key=sort_key,
-                sort_reverse=sort_reverse,
-            )
+            return super()._find_or_create_from_emails(emails, additional_values=additional_values)
 
         remaining = [
             email
@@ -105,15 +93,7 @@ class ResPartner(models.Model):
             if normalized not in resolved
         ]
         fallback = (
-            super()._find_or_create_from_emails(
-                remaining,
-                ban_emails=ban_emails,
-                filter_found=filter_found,
-                additional_values=additional_values,
-                no_create=no_create,
-                sort_key=sort_key,
-                sort_reverse=sort_reverse,
-            )
+            super()._find_or_create_from_emails(remaining, additional_values=additional_values)
             if remaining
             else []
         )
@@ -125,7 +105,7 @@ class ResPartner(models.Model):
 
     @api.model
     def find_or_create(self, email, assert_valid_email=False):
-        """Legacy single-address path, which searches separately (:96-107)."""
+        """Legacy single-address path, which searches separately (:98-109)."""
         if email:
             _parsed_name, parsed_email_normalized = tools.parse_contact_from_email(email)
             if parsed_email_normalized:
@@ -144,20 +124,23 @@ class ResPartner(models.Model):
     def _search_display_name(self, operator, value):
         """Let the contacts autocomplete find additional addresses too.
 
-        ``_rec_names_search`` (base/models/res_partner.py:189) does accept dotted
-        paths -- ``orm/models.py:1462-1473`` resolves the last field in the chain --
+        ``_rec_names_search`` (base/models/res_partner.py:198) does accept dotted
+        paths -- ``models.py:1843-1850`` resolves the last field in the chain --
         so ``vmk_email_ids.email`` would work as an entry. But appending to a class
         attribute means restating core's whole list and silently losing whatever
-        Odoo adds to it later, so combine the domains instead. The aggregator
-        follows core's own choice at :1460.
+        Odoo adds to it later, so combine the domains instead. On 18 there is no
+        ``odoo.fields.Domain`` class (added in 19): core's own
+        ``_search_display_name`` (``models.py:1823``) builds plain list domains and
+        combines them with ``odoo.osv.expression.AND``/``OR``, which is what this
+        does too, following its own choice of aggregator at ``models.py:1841``.
         """
         domain = super()._search_display_name(operator, value)
         if not operator.endswith("like") or not value or not isinstance(value, str):
             return domain
-        extra = Domain("vmk_email_ids.email", operator, value)
-        if operator in Domain.NEGATIVE_OPERATORS:
-            return domain & extra
-        return domain | extra
+        extra = [("vmk_email_ids.email", operator, value)]
+        if operator in expression.NEGATIVE_TERM_OPERATORS:
+            return expression.AND([domain, extra])
+        return expression.OR([domain, extra])
 
     # ------------------------------------------------------------
     # Merge
@@ -170,7 +153,7 @@ class ResPartner(models.Model):
         too: they will never match anything, but the alternative is destroying a
         contact's address during a merge, and core itself stores unparseable
         addresses deliberately so a typo can be corrected later
-        (mail/models/res_partner.py:130-132).
+        (mail/models/res_partner.py:184-193).
         """
         self.ensure_one()
         # _update_foreign_keys moved the source contacts' rows here in raw SQL,
@@ -191,3 +174,31 @@ class ResPartner(models.Model):
         if to_create:
             self.env["vmk.partner.email"].create(to_create)
         return self.vmk_email_ids
+
+    def _vmk_dedupe_emails(self):
+        """Remove any additional-address row this contact ends up holding twice.
+
+        The merge wizard's raw-SQL foreign-key migration
+        (``base/wizard/base_partner_merge.py``, ``_update_foreign_keys_generic``)
+        re-points every source contact's ``vmk_email_ids`` rows with a single bulk
+        ``UPDATE`` and no per-value comparison -- see README.md. Two source
+        contacts that each held the same address, or one that duplicated the
+        destination's own primary or additional address, land here as two rows for
+        one value; the ORM-level ``_check_email_unique`` constraint that would
+        normally refuse that never runs, because raw SQL bypasses it. Called after
+        the wizard, so it sees the migrated rows.
+        """
+        self.ensure_one()
+        self.invalidate_recordset(["vmk_email_ids"])
+
+        primary = self.email_normalized
+        to_remove = self.env["vmk.partner.email"]
+        seen = set()
+        for row in self.vmk_email_ids.sorted("id"):
+            key = row.email_normalized or f"\0{(row.email or '').strip().lower()}"
+            if (row.email_normalized and row.email_normalized == primary) or key in seen:
+                to_remove |= row
+            else:
+                seen.add(key)
+        if to_remove:
+            to_remove.unlink()

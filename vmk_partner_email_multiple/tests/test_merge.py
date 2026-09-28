@@ -1,6 +1,7 @@
 # Copyright 2026 Valencia Makers, SL
 # License LGPL-3 (https://www.gnu.org/licenses/lgpl-3.0.html).
 
+from odoo.exceptions import ValidationError
 from odoo.tests import tagged
 
 from .common import PartnerEmailCase
@@ -77,3 +78,63 @@ class TestPartnerEmailMerge(PartnerEmailCase):
         found = self.Partner._find_or_create_from_emails(["alice.personal@example.com"])
         self.assertEqual(found, [self.alice])
         self.assertEqual(self.Partner.search_count([]), before)
+
+    def test_merge_deduplicates_an_address_shared_by_two_source_contacts(self):
+        """The raw-SQL FK migration has no per-value comparison -- see README.md.
+
+        _update_foreign_keys_generic re-points vmk_email_ids with a single bulk
+        UPDATE (base/wizard/base_partner_merge.py:150-159); it never asks whether
+        the destination already has that value, so two source contacts holding the
+        same address land as two rows for one value on the survivor unless
+        something deduplicates afterwards. That something is
+        ResPartner._vmk_dedupe_emails, called unconditionally at the end of this
+        module's _merge override.
+        """
+        second = self.Partner.create(
+            {
+                "name": "Alice Duplicate",
+                "email": "alice.duplicate@example.com",
+                "vmk_email_ids": [(0, 0, {"email": "shared@example.com"})],
+            }
+        )
+        third = self.Partner.create(
+            {
+                "name": "Alice Triplicate",
+                "email": "alice.triplicate@example.com",
+                "vmk_email_ids": [(0, 0, {"email": "shared@example.com"})],
+            }
+        )
+        self.Wizard._merge([self.alice.id, second.id, third.id], dst_partner=self.alice)
+
+        self.assertFalse(second.exists())
+        self.assertFalse(third.exists())
+        shared_rows = self.alice.vmk_email_ids.filtered(
+            lambda row: row.email_normalized == "shared@example.com"
+        )
+        self.assertEqual(len(shared_rows), 1, "no address was lost, and none is duplicated")
+        for other in ("alice.duplicate@example.com", "alice.triplicate@example.com"):
+            self.assertIn(other, self.alice.vmk_email_ids.mapped("email"))
+        # _check_email_unique would refuse this outright if raw SQL had left a
+        # genuine duplicate row behind; recreating the row from the wizard's own
+        # capture would trip it if _vmk_dedupe_emails had not already cleared it.
+        with self.assertRaises(ValidationError):
+            self.PartnerEmail.create({"partner_id": self.alice.id, "email": "shared@example.com"})
+
+    def test_merge_deduplicates_a_source_address_equal_to_the_survivors_primary(self):
+        """The migration does not know the destination's own primary either."""
+        duplicate = self.Partner.create(
+            {
+                "name": "Alice Example",
+                "email": "alice.other@example.com",
+                "vmk_email_ids": [(0, 0, {"email": "alice@example.com"})],  # == alice's primary
+            }
+        )
+        self.Wizard._merge([self.alice.id, duplicate.id], dst_partner=self.alice)
+
+        self.assertFalse(
+            self.alice.vmk_email_ids.filtered(
+                lambda row: row.email_normalized == "alice@example.com"
+            ),
+            "the primary is not also kept as an additional address",
+        )
+        self.assertIn("alice.other@example.com", self.alice.vmk_email_ids.mapped("email"))

@@ -57,7 +57,7 @@ button does not do.
 This is the one place the module writes to `res.partner.email`, and it does not contradict the rule
 above. The rule is that the module never writes there on its _own_ initiative, behind your back; a
 button somebody presses is the user editing their own contact, with the bookkeeping done for them.
-`email` carries `tracking=1` (`mail/models/res_partner.py:21`), so the swap appears in the chatter
+`email` carries `tracking=1` (`mail/models/res_partner.py:20`), so the swap appears in the chatter
 by itself.
 
 ### The envelope, and why it needs a widget
@@ -116,26 +116,54 @@ else. The drag handle keeps the grab cursor core gives it.
 #### Widening the search is not enough
 
 This is the trap that makes the module more than a `search()` override.
-`res.partner._find_or_create_from_emails` (`mail/models/res_partner.py:118`) searches
-`[('email_normalized', 'in', [...])]` at `:175` — but then, at `:222-232`, resolves each input
+`res.partner._find_or_create_from_emails` (`mail/models/res_partner.py:112`) searches
+`[('email_normalized', 'in', [...])]` at `:161` — but then, at `:199-208`, resolves each input
 address back to a partner by comparing `partner.email_normalized == email_normalized`. Satisfy the
 domain through the child table and that final step **still hands back an empty recordset**. Both
 halves need dealing with, in all three entry points:
 
 | Method                           | Where                             | What it needs                        |
 | -------------------------------- | --------------------------------- | ------------------------------------ |
-| `_find_or_create_from_emails`    | `mail/models/res_partner.py:118`  | both halves; the real implementation |
-| `find_or_create`                 | `mail/models/res_partner.py:96`   | legacy path, searches separately     |
-| `_mail_find_partner_from_emails` | `mail/models/mail_thread.py:2145` | the resolution half only — see below |
+| `_find_or_create_from_emails`    | `mail/models/res_partner.py:112`  | both halves; the real implementation |
+| `find_or_create`                 | `mail/models/res_partner.py:89`   | legacy path, searches separately     |
+| `_mail_find_partner_from_emails` | `mail/models/mail_thread.py:2041` | both halves too — see below          |
 
-The third one needs less than it looks. In 19 it delegates its search to `_partner_find_from_emails`
-(`:2156-2165`), which funnels everything through `_find_or_create_from_emails` at `:2094` — so the
-mail gateway, author resolution, and recipient resolution are all covered by the first override.
-What it still does on its own is re-resolve by `p.email_normalized == email_key` at `:2173`, which
-drops the very partner core just found for us.
+**The third one is different on 18, and worse than it looks.** On 19 this method delegates its
+search to `_partner_find_from_emails`, which funnels everything through
+`_find_or_create_from_emails` — so widening the first override was enough to cover the mail gateway,
+author resolution, and recipient resolution together, and only the resolution half needed patching.
+**On 18 there is no such delegation.** `_mail_find_partner_from_emails` has its own three-step
+search — followers, then `_mail_search_on_user` (users, matched on `res.users.email`, which is
+`related='partner_id.email'`, so an additional address never appears there either), then
+`_mail_search_on_partner`, a plain `[('email_normalized', 'in', [...])]` domain (`:1986-1990`) — and
+none of it touches `_find_or_create_from_emails`.
+
+Widening `_mail_search_on_partner` alone still is not enough, and this is where 18 gets a second
+trap on top of the first: the method's own final step (`:2108-2116`) re-matches every candidate it
+collected by `partner.email_normalized == normalized_email` — the _partner's own_ normalized
+address, not whatever got it into the candidate list. A partner found only because one of their
+additional addresses matched fails that comparison and is dropped again, on the way out of the very
+method that just found them — confirmed in the harness with `_mail_search_on_partner` overridden and
+nothing else: the internal search returned the contact, and `_mail_find_partner_from_emails` still
+returned an empty recordset. Worse, with `force_create=True` (what the gateway passes for an
+unrecognised sender) that same final step then creates a **second, duplicate** contact, because its
+own `partner` variable is still empty when it checks whether to create one.
+
+So this override resolves what it can itself, _before_ calling `super()` at all, and hands only the
+rest on — with the original `records`, `force_create`, and `extra_domain` untouched for that
+remainder. The same shape as `_find_or_create_from_emails`, for the same reason: patching the result
+of `super()` cannot fix a bug in how that method builds its own result.
 
 All three route through one resolver, `vmk.partner.email._resolve_partners`, so their behaviour
 cannot drift apart.
+
+**Also 18-specific: `_find_or_create_from_emails` takes fewer arguments here.** `ban_emails`,
+`filter_found`, `no_create`, `sort_key`, and `sort_reverse` were added to core's version of the
+method after 18, so 18's signature is just `(self, emails, additional_values=None)`. None of that
+filtering can be offered honestly through this override either — an address this module cannot
+resolve still falls through to `super()`, which always creates, so a caller expecting
+`no_create=True` to hold everywhere would be misled. Dropped, along with the tests that exercised
+them.
 
 #### The overrides wrap `super()` rather than reimplementing it
 
@@ -150,18 +178,34 @@ next.
 #### There is deliberately no unique constraint, on any column
 
 The tempting one is `unique(partner_id, email_normalized)`. It is precisely the one that must not
-exist. `_update_foreign_keys_generic` (`base/wizard/base_partner_merge.py:119-181`) re-points every
-foreign key to `res_partner` in raw SQL, and at `:167` asks `_has_check_or_unique_constraint()`
-whether any CHECK or UNIQUE constraint touches the column it is about to update — `partner_id`. If
-one does, the `UPDATE` runs inside a savepoint whose `except psycopg2.Error` handler falls back to:
+exist, though the reason is different on 18 than the mechanism this argument used on 19.
+
+`_update_foreign_keys_generic` (`base/wizard/base_partner_merge.py:103-159`) re-points every foreign
+key to `res_partner` in raw SQL. On 18 **it never asks whether a constraint exists** — that check
+was added later. Instead, at `:120-129`, it counts the table's columns other than the one being
+re-pointed. With only one, it takes a per-record `UPDATE` guarded by `NOT EXISTS` (`:135-149`); with
+more than one — this table has nine (`email`, `email_normalized`, `label`, `sequence`, `id`, and the
+four ORM housekeeping columns) — it always takes the branch at `:150-159`: a single bulk
 
 ```sql
-DELETE FROM vmk_partner_email WHERE partner_id IN <every source id>
+UPDATE vmk_partner_email SET partner_id = %s WHERE partner_id IN %s
 ```
 
-One colliding address during a contact merge would therefore destroy **every** additional address of
-**every** source contact, not just the conflicting row. Uniqueness lives in `_check_email_unique`
-instead, which that raw SQL bypasses anyway.
+wrapped in a savepoint whose `except psycopg2.Error` falls back to
+`DELETE FROM vmk_partner_email WHERE partner_id IN <every source id>` (`:158`). Our table always
+takes this branch — the column count makes that certain, whatever we do to the schema. What we
+control is whether the `UPDATE` can fail at all: with no unique or check constraint on `partner_id`,
+there is nothing for it to violate, so it never raises `psycopg2.Error` for this table, and the
+`DELETE` fallback is never reached. **No address is ever deleted by a merge on 18** — but for a
+different reason than on 19, where staying constraint-free kept the branch itself from being chosen.
+Here the branch is chosen regardless; staying constraint-free is what keeps it harmless.
+
+What a constraint-free bulk `UPDATE` does **not** do is deduplicate. It has no per-value comparison,
+so two source contacts that each hold the same address — or one that duplicates the destination's
+own primary or additional address — leave the survivor holding two rows for one value, silently: the
+ORM-level `_check_email_unique` constraint that would normally refuse that never runs, because raw
+SQL bypasses it. See _The merge keeps addresses that core would drop_ below for how this module
+closes that gap.
 
 The same address may still appear on several contacts. Core permits that and the mail helpers have a
 documented tie-break for it, so we add no restriction core does not have.
@@ -172,23 +216,36 @@ Odoo's built-in contact merge is how duplicates actually get cleaned up, so the 
 that workflow. Most of it is free: `_update_foreign_keys` discovers our `partner_id` column from the
 schema, so child rows follow the surviving contact with no code from us.
 
-The gap is `_update_values` (`:341-392`), which skips o2m/m2m and computed fields and, for plain
+The gap is `_update_values` (`:314-364`), which skips o2m/m2m and computed fields and, for plain
 fields, takes the last truthy value with the destination last — so the destination's `email` wins
 and every merged-away address is simply lost. **That single gap is the feature**: `_merge` is
 overridden to capture the addresses first and re-create them as additional ones afterwards.
 
-They have to be captured _before_ `super()`, because the source contacts are unlinked at `:471`. The
+They have to be captured _before_ `super()`, because the source contacts are unlinked at `:444`. The
 destination cannot be captured that early — when the wizard passes none, core picks it itself at
-`:446-448` — so every candidate's address is captured and the survivor is identified afterwards.
+`:415-421` — so every candidate's address is captured and the survivor is identified afterwards.
+
+**A second gap, found while porting to 18 but just as present on 19: the migration can leave a
+genuine duplicate.** `_update_foreign_keys_generic`'s bulk `UPDATE` (previous section) has no
+per-value comparison, so two source contacts holding the same additional address, or one duplicating
+the destination's own address, land as two rows for one value on the survivor —
+`_check_email_unique` never gets a chance to refuse it, because raw SQL bypasses the ORM entirely.
+`_merge` now also calls `ResPartner._vmk_dedupe_emails()` on the survivor after every successful
+merge of two or more contacts, not only when there was a primary address to absorb: it drops any row
+that duplicates the contact's own primary, and any but the first of several rows sharing a
+normalized address. `tests/test_merge.py` proves both the migration (no address lost) and the dedupe
+(no address kept twice).
 
 #### Searching by dotted path
 
-`_rec_names_search` (`base/models/res_partner.py:189`) does accept dotted paths —
-`_search_display_name` resolves the last field in the chain (`orm/models.py:1462-1473`) — so
+`_rec_names_search` (`base/models/res_partner.py:198`) does accept dotted paths —
+`_search_display_name` resolves the last field in the chain (`models.py:1843-1850`) — so
 `vmk_email_ids.email` works as an entry and no helper field is needed. But _appending_ to a class
 attribute means restating core's whole list and silently losing whatever Odoo adds to it later, so
 `_search_display_name` is overridden and the domains combined instead, with the same aggregator core
-chooses at `:1460`.
+chooses at `:1841`. On 18 there is no `odoo.fields.Domain` class — it was added in 19 — so both
+core's own method and this override build plain list domains and combine them with
+`odoo.osv.expression.AND` / `OR`.
 
 That covers the autocomplete and the search panel's **Name** entry, which filters on `display_name`.
 It does not cover its **Email** entry, which is a separate mechanism: `base.view_res_partner_filter`
@@ -206,8 +263,8 @@ so one inherited view fixes the search people actually use.
 
 ### Known limitation: merging as a non-admin
 
-`_merge` refuses when the contacts differ by email (`base/wizard/base_partner_merge.py:439-440`) —
-which is every case this module exists for. Admins are exempted two lines earlier
+`_merge` refuses when the contacts differ by email (`base/wizard/base_partner_merge.py:413`) — which
+is every case this module exists for. Admins are exempted at `:390-391`
 (`if self.env.is_admin(): extra_checks = False`), so it does not bite an administrator, but a
 non-admin staff member cannot merge two contacts into one and keep both addresses.
 
@@ -226,32 +283,7 @@ Each of these keeps reading the primary address only:
   way. An additional address could be blacklisted while `partner.is_blacklisted` still reads false.
   Revisit if we ever send marketing mail, where GDPR obliges honouring opt-outs.
 - **Bounce counters and mail-loop detection**, which query `email_normalized` with raw domains
-  (`mail/models/mail_thread.py:814, 955, 998, 1016, 1756`).
-
-### Mailflow
-
-`unified_mail_client` used to bypass Odoo's matching entirely — `[('email', '=ilike', addr)]` on the
-raw column, in three places — so this module alone could not stop it creating duplicates. Routing
-all three through the core helper was accepted upstream and shipped in **19.0.2.15.0**. No bridge
-module is needed: Mailflow's lookups now funnel through `_find_or_create_from_emails`, which this
-module already overrides.
-
-Verified 2026-08-18 with both modules installed in one database. An additional address resolves to
-the right contact through the inbound sync (`_match_partner`), the To/Cc contact cards
-(`resolve_contact`), and recipient matching on send (`_match_recipient_partners`), while an unknown
-address still misses and no contact is created along the way. Both test suites pass together — 427
-tests, the single failure being one of Mailflow's own inline-image tests, which fails identically
-without this module installed.
-
-The contact backfill added in the same release calls `_match_partner`, so running it links historic
-mail that arrived before an additional address was recorded.
-
-**Re-check this on every Mailflow upgrade.** The coupling is that its three lookups call
-`_partner_find_from_emails_single` / `_mail_find_partner_from_emails` rather than querying `email`
-themselves, and nothing enforces that from this side. If a future version reverts to a raw domain,
-additional addresses silently stop matching and Mailflow resumes minting duplicate contacts — no
-error, just wrong contacts. `grep -rn "_partner_find_from_emails\|'email', '=ilike'" models/` over
-the new version answers it in one command.
+  (`mail/models/mail_thread.py:776, 917, 978, 1697, 2028, 2035`).
 
 ### CRM, Recruitment, and Helpdesk
 
@@ -261,8 +293,16 @@ overwrite a contact's primary address with an additional one:
 | App         | Edition    | The sync                                                                         |
 | ----------- | ---------- | -------------------------------------------------------------------------------- |
 | CRM         | Community  | `crm.lead._inverse_email_from`, decided by `_get_partner_email_update`           |
-| Recruitment | Community  | `hr.applicant._inverse_partner_email`, which decides inline                      |
+| Recruitment | Community  | `hr.candidate._inverse_partner_email`, which decides inline                      |
 | Helpdesk    | Enterprise | `helpdesk.ticket._inverse_partner_email`, decided by `_get_partner_email_update` |
+
+**Recruitment's patch target is 18-specific.** On 19 an applicant's own `email_from`,
+`partner_phone`, and `name` decide the sync inline, in `hr.applicant._inverse_partner_email`. On 18
+those fields are `related` to a separate `hr.candidate` record
+(`hr_recruitment/models/hr_applicant.py:43-51`) — 19 merged the two models back into one — and it is
+`hr.candidate._inverse_partner_email` (`hr_recruitment/models/hr_candidate.py:112-132`) that
+actually writes the contact's email. The applicant model still exists and still works the same way
+from a user's chair; only the class carrying the method this module patches moved.
 
 When the record's email differs from the contact's, the record's is written onto the contact. In
 core the two only differ when someone edits one of them, because core matches mail on the primary
@@ -302,20 +342,22 @@ with no manifest entry. Terms this module shares with core — _Contact_, _Creat
 reuse core's own wording in each language rather than a second translation of the same word, so the
 module reads as part of the backend.
 
-Regenerating the template after changing any user-facing string:
+Regenerating the template after changing any user-facing string. Odoo 18 has no `i18n export`
+subcommand — that arrived later — so the flag is `--i18n-export` on the ordinary server command:
 
 ```bash
 # Run from the directory holding your Compose file; REPO is the path to this repo.
 REPO=/path/to/odoo-addons
 docker compose run --rm -e PGHOST=db -e PGUSER=odoo -e PGPASSWORD=odoo \
     -v "$REPO/vmk_partner_email_multiple/i18n:/mnt/out" --entrypoint odoo odoo \
-    i18n export -d test -o /mnt/out/vmk_partner_email_multiple.pot vmk_partner_email_multiple
+    -d test --i18n-export=/mnt/out/vmk_partner_email_multiple.pot \
+    --modules=vmk_partner_email_multiple --stop-after-init
 ```
 
 Two details are doing work in that command. `--entrypoint odoo` is required because the image's
-entrypoint translates `HOST`/`USER`/`PASSWORD` into `--db_host` and friends, which the `i18n`
-subcommand rejects outright — hence passing the connection as libpq's `PG*` variables instead. And
-`-o` is required because the export otherwise writes into each module's own `i18n/` folder, which
+entrypoint translates `HOST`/`USER`/`PASSWORD` into `--db_host` and friends, which `--i18n-export`
+rejects outright — hence passing the connection as libpq's `PG*` variables instead. And the output
+path is required because the export otherwise writes into each module's own `i18n/` folder, which
 the harness mounts read-only.
 
 Upgrade the module with the database's language loaded to see a change take effect; `-u` alone
@@ -330,7 +372,7 @@ for the full explanation; `tests/test_model.py::TestModuleNameTranslation` guard
 
 ### Testing
 
-Against a local Odoo 19 with this repo on the addons path — Postgres, the `odoo:19` image, and the
+Against a local Odoo 18 with this repo on the addons path — Postgres, the `odoo:18.0` image, and the
 repo root mounted at `/mnt/extra-addons`:
 
 ```bash

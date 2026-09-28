@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 19.0-20260810\n"
+"Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-14 13:07+0000\n"
-"PO-Revision-Date: 2026-08-14 13:07+0000\n"
+"POT-Creation-Date: 2026-09-28 19:01+0000\n"
+"PO-Revision-Date: 2026-09-28 19:01+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -61,9 +61,6 @@ msgid "Created on"
 msgstr ""
 
 #. module: vmk_partner_email_multiple
-#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_base_partner_merge_automatic_wizard__display_name
-#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_mail_thread__display_name
-#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_res_partner__display_name
 #: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_vmk_partner_email__display_name
 msgid "Display Name"
 msgstr ""
@@ -84,9 +81,6 @@ msgid "Free-text note about this address, e.g. billing, personal, noreply."
 msgstr ""
 
 #. module: vmk_partner_email_multiple
-#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_base_partner_merge_automatic_wizard__id
-#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_mail_thread__id
-#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_res_partner__id
 #: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_vmk_partner_email__id
 msgid "ID"
 msgstr ""

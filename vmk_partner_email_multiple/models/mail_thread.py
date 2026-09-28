@@ -2,6 +2,7 @@
 # License LGPL-3 (https://www.gnu.org/licenses/lgpl-3.0.html).
 
 from odoo import models
+from odoo.osv import expression
 from odoo.tools import email_normalize
 
 
@@ -11,37 +12,60 @@ class MailThread(models.AbstractModel):
     def _mail_find_partner_from_emails(
         self, emails, records=None, force_create=False, extra_domain=False
     ):
-        """Repair the resolution step, which repeats core's filter independently.
+        """Resolve additional addresses ourselves, before core's own search runs.
 
-        The *search* half needs nothing here: in 19 this method delegates to
-        ``_partner_find_from_emails`` (mail_thread.py:2156-2165), which funnels
-        everything through ``res.partner._find_or_create_from_emails`` at :2094 --
-        already overridden. What it then does on its own is resolve each input back
-        to a partner by ``p.email_normalized == email_key or p.email == email_key``
-        (:2173), which no additional address can satisfy. So the right partner is
-        found, ends up in ``all_partners``, and is dropped on the way out.
-
-        Patching the empties after ``super()`` is enough, and cannot resurrect a
-        partner core deliberately excluded: an address banned as an alias, or
-        filtered out by ``filter_found``, is rejected by the resolver too.
+        On 18 this method does not delegate to ``_find_or_create_from_emails``,
+        as it does on 19: it searches followers, users, then partners by a plain
+        ``email_normalized`` domain (``mail_thread.py:1986-1990``). And its final
+        step (``:2108-2116``) re-matches every candidate by the partner's *own*
+        ``email_normalized``, so a partner found by an additional address is
+        dropped on the way out, and with ``force_create=True`` a duplicate
+        contact is created in its place. Patching the result afterwards cannot
+        undo that. So the addresses this module can resolve are resolved here,
+        within ``extra_domain``, and only the rest go to ``super()``. An address
+        a primary holder owns is never resolved here, so core's own tie-break
+        still decides those.
         """
-        results = super()._mail_find_partner_from_emails(
-            emails, records=records, force_create=force_create, extra_domain=extra_domain
-        )
-        pending = []
-        for index, (email_input, partner) in enumerate(zip(emails, results)):
-            if partner:
-                continue
-            normalized = email_normalize(email_input)
-            if normalized:
-                pending.append((index, normalized))
-        if not pending:
-            return results
-
+        normalized_inputs = [email_normalize(email, strict=False) for email in emails]
         resolved = self.env["vmk.partner.email"]._resolve_partners(
-            [normalized for _index, normalized in pending]
+            [normalized for normalized in normalized_inputs if normalized]
         )
-        for index, normalized in pending:
-            if normalized in resolved:
-                results[index] = resolved[normalized]
-        return results
+        if extra_domain and resolved:
+            # Reproduce core's own domain, which it ANDs onto each internal search,
+            # rather than handing back a partner that domain would have excluded.
+            visible_ids = set(
+                self.env["res.partner"]
+                .search(
+                    expression.AND(
+                        [[("id", "in", [partner.id for partner in resolved.values()])], extra_domain]
+                    )
+                )
+                .ids
+            )
+            resolved = {
+                normalized: partner
+                for normalized, partner in resolved.items()
+                if partner.id in visible_ids
+            }
+        if not resolved:
+            return super()._mail_find_partner_from_emails(
+                emails, records=records, force_create=force_create, extra_domain=extra_domain
+            )
+
+        remaining = [
+            email
+            for normalized, email in zip(normalized_inputs, emails)
+            if normalized not in resolved
+        ]
+        fallback = (
+            super()._mail_find_partner_from_emails(
+                remaining, records=records, force_create=force_create, extra_domain=extra_domain
+            )
+            if remaining
+            else []
+        )
+        fallback = iter(fallback)
+        return [
+            resolved[normalized] if normalized in resolved else next(fallback)
+            for normalized in normalized_inputs
+        ]

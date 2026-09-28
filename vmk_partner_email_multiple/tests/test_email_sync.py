@@ -96,11 +96,21 @@ class TestEmailSync(PartnerEmailCase):
         self.assertEqual(self.alice.email, "alice@example.com")
 
     def test_an_application_still_syncs_the_phone(self):
+        """candidate_id is required on 18, so the candidate has to exist first.
+
+        On 19, where applicant and candidate are one model, a single create()
+        with partner_name and no partner_id would auto-create the contact. On
+        18, hr.applicant.candidate_id is a plain required Many2one with no
+        default -- create({'partner_name': ...}) alone fails on core itself,
+        unrelated to this module. Give the candidate its partner_id directly.
+        """
         self._require("hr.applicant")
+        candidate = self.env["hr.candidate"].create(
+            {"partner_name": "Alice Example", "partner_id": self.alice.id}
+        )
         self.env["hr.applicant"].create(
             {
-                "partner_name": "Alice Example",
-                "partner_id": self.alice.id,
+                "candidate_id": candidate.id,
                 "email_from": "alice.work@example.com",
                 "partner_phone": "+34 600 000 002",
             }
@@ -110,12 +120,11 @@ class TestEmailSync(PartnerEmailCase):
 
     def test_an_application_with_a_new_address_still_updates_the_contact(self):
         self._require("hr.applicant")
+        candidate = self.env["hr.candidate"].create(
+            {"partner_name": "Alice Example", "partner_id": self.alice.id}
+        )
         self.env["hr.applicant"].create(
-            {
-                "partner_name": "Alice Example",
-                "partner_id": self.alice.id,
-                "email_from": "alice.new@example.com",
-            }
+            {"candidate_id": candidate.id, "email_from": "alice.new@example.com"}
         )
         self.assertEqual(self.alice.email, "alice.new@example.com")
 

@@ -43,14 +43,27 @@ class VmkPartnerEmail(models.Model):
     sequence = fields.Integer(default=10)
 
     # There is deliberately NO database-level unique constraint here, on any column.
-    # base/wizard/base_partner_merge.py:167 asks _has_check_or_unique_constraint()
-    # whether any CHECK or UNIQUE constraint touches the foreign key column it is
-    # about to re-point -- partner_id. If one does, the UPDATE runs inside a
-    # savepoint whose `except psycopg2.Error` handler falls back to
-    # `DELETE FROM vmk_partner_email WHERE partner_id IN <every source id>` (:179).
-    # A single colliding address during a contact merge would therefore destroy
-    # every additional address of every source contact. Uniqueness lives in
-    # _check_email_unique() below, which that raw SQL bypasses anyway.
+    #
+    # On 18, _update_foreign_keys_generic (base/wizard/base_partner_merge.py:103-159)
+    # does not ask whether a constraint touches partner_id -- that check does not
+    # exist yet. It instead counts this table's OTHER columns (:123-126): with only
+    # one, it takes a per-record UPDATE guarded by NOT EXISTS; with more than one --
+    # this table has nine (email, email_normalized, label, sequence, id, and the four
+    # ORM housekeeping columns) -- it always takes the savepoint branch at :150-159,
+    # a single bulk `UPDATE vmk_partner_email SET partner_id = %s WHERE partner_id IN
+    # %s`, whose `except psycopg2.Error` falls back to
+    # `DELETE FROM vmk_partner_email WHERE partner_id IN <every source id>` (:158).
+    # That branch is chosen unconditionally for this table, regardless of whether a
+    # constraint exists -- so, unlike 19, staying constraint-free does not route us
+    # to a safer branch. What it does instead is remove anything for the UPDATE to
+    # violate: with no unique or check constraint on partner_id, the bulk UPDATE
+    # cannot raise psycopg2.Error for this table, so the DELETE fallback is never
+    # reached and no address is ever deleted by a merge. See README.md and
+    # ResPartner._vmk_dedupe_emails for what the bulk UPDATE does NOT do, which is
+    # deduplicate: two source contacts sharing an address can still leave the
+    # survivor holding it twice, since the plain UPDATE has no per-value comparison
+    # to skip one. Uniqueness lives in _check_email_unique() below (which that raw
+    # SQL bypasses) and in the post-merge dedupe pass, not in the database.
 
     @api.depends("email")
     def _compute_email_normalized(self):
@@ -108,7 +121,7 @@ class VmkPartnerEmail(models.Model):
         module never writes there on its *own* initiative, behind the user's back;
         a button somebody presses is the user editing their own contact, with the
         bookkeeping done for them. ``email`` carries ``tracking=1``
-        (mail/models/res_partner.py:21), so the swap lands in the chatter by itself.
+        (mail/models/res_partner.py:20), so the swap lands in the chatter by itself.
         """
         self.ensure_one()
         partner = self.partner_id
@@ -135,28 +148,24 @@ class VmkPartnerEmail(models.Model):
     # ------------------------------------------------------------
 
     @api.model
-    def _resolve_partners(
-        self,
-        emails_normalized,
-        ban_emails=None,
-        filter_found=None,
-        sort_key=None,
-        sort_reverse=True,
-    ):
+    def _resolve_partners(self, emails_normalized):
         """Map normalized addresses to the contact holding them as an additional one.
 
-        The single resolver behind all three matching overrides, so their behaviour
-        cannot drift apart. Arguments mirror
-        ``res.partner._find_or_create_from_emails`` and are applied the same way.
+        The single resolver behind all four matching overrides (``res.partner``'s
+        ``_find_or_create_from_emails`` and ``find_or_create``, and
+        ``mail.thread``'s ``_mail_search_on_partner``), so their behaviour cannot
+        drift apart.
+
+        No ``ban_emails``, ``filter_found``, ``sort_key`` or ``sort_reverse`` here:
+        those were core 19 additions to ``_find_or_create_from_emails`` that 18's
+        version of the method does not have, so there is nothing for this resolver
+        to mirror them onto. See ``res.partner._find_or_create_from_emails`` and
+        README.md.
 
         :return: ``{normalized email: partner}``, omitting anything unmatched.
         :rtype: dict
         """
-        wanted = {
-            normalized
-            for normalized in emails_normalized
-            if normalized and normalized not in (ban_emails or [])
-        }
+        wanted = {normalized for normalized in emails_normalized if normalized}
         if not wanted:
             return {}
 
@@ -192,13 +201,8 @@ class VmkPartnerEmail(models.Model):
 
         resolved = {}
         for normalized, partner_ids in candidate_ids.items():
-            # sorted() reproduces the 'id ASC' core searches with; sort_key then
-            # re-orders exactly as _find_or_create_from_emails does.
+            # sorted() reproduces the 'id ASC' order core's own search uses.
             partners = Partner.browse(sorted(partner_ids))
-            if filter_found:
-                partners = partners.filtered(filter_found)
-            if sort_key and len(partners) > 1:
-                partners = partners.sorted(key=sort_key, reverse=sort_reverse)
             if partners:
                 resolved[normalized] = partners[0]
         return resolved

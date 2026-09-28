@@ -57,9 +57,14 @@ def _no_update_for_additional(email_field):
 def _keep_primary():
     """Wrap an inverse that writes the contact's email inline, with no decision method.
 
-    Recruitment's ``_inverse_partner_email`` syncs name, email, and phone in one loop.
-    Run under :data:`KEEP_PRIMARY`, ``res.partner.write`` drops only the email, and
-    only when it is one of that contact's additional addresses.
+    Recruitment's ``_inverse_partner_email`` syncs name, phone, and email inline.
+    On 18 it lives on **``hr.candidate``**, not ``hr.applicant`` -- 18 keeps a
+    candidate as its own model that an applicant's own email/phone/name fields
+    are merely ``related`` to (``hr_recruitment/models/hr_applicant.py:43-51``);
+    19 merged the two back together, which is where the method name this module
+    used to patch came from. Run under :data:`KEEP_PRIMARY`, ``res.partner.write``
+    drops only the email, and only when it is one of that contact's additional
+    addresses.
     """
 
     def _inverse_partner_email(self, *args, **kwargs):
@@ -76,7 +81,7 @@ PATCHES = {
     "helpdesk.ticket": {
         "_get_partner_email_update": lambda: _no_update_for_additional("partner_email")
     },
-    "hr.applicant": {"_inverse_partner_email": _keep_primary},
+    "hr.candidate": {"_inverse_partner_email": _keep_primary},
 }
 
 

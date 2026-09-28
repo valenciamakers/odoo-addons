@@ -42,15 +42,6 @@ class TestPartnerEmailMatching(PartnerEmailCase):
         self.assertEqual(found[2], self.alice)
         self.assertEqual(found[3], self.alice)
 
-    def test_no_create_still_matches_additional_addresses(self):
-        before = self.Partner.search_count([])
-        found = self.Partner._find_or_create_from_emails(
-            ["alice.work@example.com", "stranger@example.com"], no_create=True
-        )
-        self.assertEqual(found[0], self.alice)
-        self.assertFalse(found[1])
-        self.assertEqual(self.Partner.search_count([]), before)
-
     def test_a_primary_holder_wins_over_an_additional_one(self):
         """Installing this module must never re-route mail core already matched."""
         carol = self.Partner.create({"name": "Carol Example", "email": "shared@example.com"})
@@ -58,27 +49,13 @@ class TestPartnerEmailMatching(PartnerEmailCase):
         found = self.Partner._find_or_create_from_emails(["shared@example.com"])
         self.assertEqual(found, [carol])
 
-    def test_banned_addresses_are_not_resolved(self):
-        found = self.Partner._find_or_create_from_emails(
-            ["alice.work@example.com"],
-            ban_emails=["alice.work@example.com"],
-            no_create=True,
-        )
-        self.assertFalse(found[0], "a banned address must not reach a contact by the side door")
-
-    def test_filter_found_is_honoured(self):
-        found = self.Partner._find_or_create_from_emails(
-            ["alice.work@example.com"], filter_found=lambda p: p.user_ids, no_create=True
-        )
-        self.assertFalse(found[0], "alice has no user, so the filter should reject her")
-
     def test_archived_contacts_are_skipped(self):
         """Core's own search would not find an archived contact either."""
         self.alice.active = False
-        found = self.Partner._find_or_create_from_emails(
-            ["alice.work@example.com"], no_create=True
-        )
-        self.assertFalse(found[0])
+        before = self.Partner.search_count([])
+        found = self.Partner._find_or_create_from_emails(["alice.work@example.com"])
+        self.assertNotEqual(found[0], self.alice)
+        self.assertEqual(self.Partner.search_count([]), before + 1, "a new contact was created")
 
     # ------------------------------------------------------------
     # The other two entry points
@@ -90,7 +67,7 @@ class TestPartnerEmailMatching(PartnerEmailCase):
         self.assertEqual(self.Partner.search_count([]), before)
 
     def test_mail_find_partner_from_emails(self):
-        """Core finds the right contact here and then drops it on the way out."""
+        """See mail_thread.py for why this needs a full override, not a patch over super()."""
         found = self.env["mail.thread"]._mail_find_partner_from_emails(
             ["alice.work@example.com"]
         )
@@ -103,6 +80,23 @@ class TestPartnerEmailMatching(PartnerEmailCase):
         self.assertEqual(found[0], self.alice)
         self.assertFalse(found[1])
         self.assertEqual(found[2], self.alice)
+
+    def test_mail_find_partner_from_emails_avoids_creating_a_duplicate(self):
+        """The point of the override.
+
+        force_create=True is what the mail gateway passes for an unrecognised
+        sender (mail_thread.py:2114). Resolving additional addresses before
+        calling super() at all -- rather than patching its result -- is what
+        keeps 18's own force_create fallback from ever seeing an empty slot for
+        this address and minting a second contact for someone we already know
+        under their other address.
+        """
+        before = self.Partner.search_count([])
+        found = self.env["mail.thread"]._mail_find_partner_from_emails(
+            ["alice.work@example.com"], force_create=True
+        )
+        self.assertEqual(found, [self.alice])
+        self.assertEqual(self.Partner.search_count([]), before, "no duplicate was created")
 
     # ------------------------------------------------------------
     # Search

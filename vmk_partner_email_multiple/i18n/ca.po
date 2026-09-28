@@ -3,16 +3,16 @@
 # 	* vmk_partner_email_multiple
 #
 # Terms shared with Odoo core reuse core's own Catalan wording, so the module
-# reads as part of the backend rather than beside it. Odoo 19 ships no Valencian
+# reads as part of the backend rather than beside it. Odoo 18 ships no Valencian
 # variant -- ca_ES is the only Catalan locale -- so this is what a Valencian
 # speaker selects.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 19.0\n"
+"Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-14 12:51+0000\n"
-"PO-Revision-Date: 2026-08-14 12:51+0000\n"
+"POT-Creation-Date: 2026-09-28 19:01+0000\n"
+"PO-Revision-Date: 2026-09-28 19:01+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ca\n"
@@ -67,9 +67,6 @@ msgid "Created on"
 msgstr "Creat el"
 
 #. module: vmk_partner_email_multiple
-#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_base_partner_merge_automatic_wizard__display_name
-#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_mail_thread__display_name
-#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_res_partner__display_name
 #: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_vmk_partner_email__display_name
 msgid "Display Name"
 msgstr "Nom mostrat"
@@ -92,9 +89,6 @@ msgstr ""
 "noreply."
 
 #. module: vmk_partner_email_multiple
-#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_base_partner_merge_automatic_wizard__id
-#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_mail_thread__id
-#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_res_partner__id
 #: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_vmk_partner_email__id
 msgid "ID"
 msgstr "ID"
@@ -129,8 +123,7 @@ msgid ""
 "Mail arriving from any of these addresses is matched to this contact.\n"
 "                        Nothing is ever sent to them."
 msgstr ""
-"El correu que arriba des de qualsevol d'aquestes adreces s'associa a aquest "
-"contacte.\n"
+"El correu que arriba des de qualsevol d'aquestes adreces s'associa a aquest contacte.\n"
 "                        Mai no s'hi envia res."
 
 #. module: vmk_partner_email_multiple
@@ -150,8 +143,9 @@ msgid ""
 "Other addresses this contact writes from. Mail arriving from any of them is "
 "matched to this contact. Nothing is ever sent to them."
 msgstr ""
-"Altres adreces des de les quals escriu aquest contacte. El correu que arriba "
-"des de qualsevol d'elles s'associa a aquest contacte. Mai no s'hi envia res."
+"Altres adreces des de les quals escriu aquest contacte. El correu que arriba"
+" des de qualsevol d'elles s'associa a aquest contacte. Mai no s'hi envia "
+"res."
 
 #. module: vmk_partner_email_multiple
 #. odoo-javascript

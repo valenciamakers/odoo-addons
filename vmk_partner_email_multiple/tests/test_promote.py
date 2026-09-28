@@ -31,7 +31,7 @@ class TestPromoteToPrimary(PartnerEmailCase):
         row.action_promote_to_primary()
 
         found = self.Partner._find_or_create_from_emails(
-            ["alice@example.com", "alice.work@example.com"], no_create=True
+            ["alice@example.com", "alice.work@example.com"]
         )
         self.assertEqual(found, [self.alice, self.alice])
 
