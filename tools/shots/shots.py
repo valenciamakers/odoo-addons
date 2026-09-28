@@ -19,6 +19,7 @@ POLISH = r"""async (extraCss) => {
   const style = document.createElement('style');
   style.textContent = `
     .o-mail-MessagingMenu-counter { display: none !important; }
+    .o_tour_pointer { display: none !important; }  /* an onboarding tour's bouncing pointer */
     .o_calendar_color_11, .o_calendar_renderer .o_calendar_color_11 {
       --o-event-bg: #531B93 !important; --fc-event-bg-color: rgb(178,152,206) !important;
       --o-event-bg--subtle-rgb: 178,152,206 !important; }
