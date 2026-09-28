@@ -62,6 +62,8 @@ async def backend_tab(p, width=1280, height=800, scale=2):
         page = await ctx.new_page()
         await page.goto(BASE + "/odoo")
         await page.evaluate(f"window.name = '{MARK}'")
+    await color_scheme(page, "light")  # store screenshots are always light
+    await page.reload()
     cdp = await ctx.new_cdp_session(page)  # the override lasts while this session does
     await cdp.send("Emulation.setDeviceMetricsOverride",
                    {"width": width, "height": height, "deviceScaleFactor": scale, "mobile": False})
@@ -99,6 +101,15 @@ def day_cell(page, day):
     return page.locator(".o_calendar_sidebar .o_date_item_cell").filter(has_text=re.compile(rf"^\s*{day}\s*$")).first
 
 
+
+
+async def color_scheme(page, scheme):
+    """Set Enterprise's colour scheme for the stack at BASE, `light` or `dark`.
+
+    Odoo 18 reads it only from a `color_scheme` cookie, and cookies ignore the port, so a `dark`
+    left by the dark check on one stack turned every capture on the other dark too. 19 also resets
+    the cookie from the user's own setting, which is light in the demo data."""
+    await page.context.add_cookies([{"name": "color_scheme", "value": scheme, "url": BASE}])
 
 async def goto(page, url):
     """Navigate, then let the page settle: `load`, and network idle for up to five seconds.
