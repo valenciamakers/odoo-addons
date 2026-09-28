@@ -250,6 +250,8 @@ checked there yet.
 - `models.Constraint()` replaces `_sql_constraints`. On 18: not yet introduced — use
   `_sql_constraints` directly, a list of `(name, definition, message)` tuples, as core's own event
   models do (e.g. `event.registration`'s `barcode_event_uniq`).
+- **`odoo.fields.Domain` is new in 19.** On 18, combine plain list domains with
+  `odoo.osv.expression.AND` and `OR`, as 18's own `_search_display_name` does.
 - **Odoo creates every database with `LC_COLLATE 'C'`** — `service/db.py` passes it whenever the
   template is `template0`, which is the normal path. So any SQL `ORDER BY` on text is byte order:
   capitals sort before lowercase (`CRM` before `Calendar`) and accented initials land after `Z`.
@@ -453,7 +455,11 @@ checked there yet.
   through `_partner_find_from_emails` to `res.partner._find_or_create_from_emails`, so widening that
   one method covers the mail gateway, author resolution, and recipient resolution together. What it
   then does alone is re-resolve by `p.email_normalized == email_key or p.email == email_key`, which
-  drops the very partner the delegation just found.
+  drops the very partner the delegation just found. **On 18 it delegates nothing**: it searches
+  followers, users, and partners by plain domains (`mail/models/mail_thread.py`,
+  `_mail_find_partner_from_emails`), then re-matches every candidate by its own `email_normalized`,
+  dropping a partner found any other way and, with `force_create`, creating a duplicate. Resolve
+  your addresses before `super()` and pass it only the rest.
 - **The merge wizard re-points foreign keys in raw SQL, and deletes on conflict.**
   `_update_foreign_keys` (`base/wizard/base_partner_merge.py`) finds every FK to `res_partner` from
   the schema, so a child table's rows follow the surviving contact for free. But where the table
@@ -464,7 +470,10 @@ checked there yet.
   whether a constraint touches **the foreign key column being re-pointed**, so the obvious
   `unique(partner_id, <something>)` is precisely the one that arms this; a constraint naming neither
   the FK column nor anything else it updates is invisible to the check and blows the transaction up
-  instead.
+  instead. **On 18 there is no `_has_check_or_unique_constraint`**: a table with more than one other
+  column always takes the savepoint branch, and stays safe only because an unconstrained `UPDATE`
+  cannot fail. On both, the bulk `UPDATE` compares no values, so a row two merged contacts shared
+  arrives twice on the survivor; clean up after the merge.
 - `_update_values` in the same wizard skips o2m/m2m and computed fields, and for plain fields takes
   the last truthy value with the destination last — so the destination wins and the merged-away
   values are simply dropped. It also refuses outright when contacts differ by email, except for
@@ -479,7 +488,11 @@ checked there yet.
   two differ. Core never notices, because it matches mail on the primary address only. Match on
   anything more and a lead arrives with an email that differs from its contact's, and the sync
   overwrites the contact's primary address. Found by `vmk_partner_email_multiple` on 25 September
-  2026; its `models/email_sync.py` guards all three.
+  2026; its `models/email_sync.py` guards all three. **On 18 Recruitment's is
+  `hr.candidate._inverse_partner_email`**: the email lives on a separate `hr.candidate` that
+  `hr.applicant`'s fields are related to, which 19 merged back into the applicant.
+  `hr.applicant.candidate_id` is required there, so create the candidate first, or go through
+  `message_process`.
 
 **Overriding a model you do not depend on**
 
