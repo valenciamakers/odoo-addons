@@ -25,31 +25,17 @@ Once the deadline passes, the event's website page shows **Registrations Closed*
 **Tickets with their own Registration End keep it**; the deadline applies only to tickets without
 one.
 
-**On events with multiple slots**, registration closes the same amount of time before each slot
-starts.
-
 **Limits**
 
 - **Only online registration closes.** The deadline governs the event's website page; your team can
   still add attendees from the backend.
 - **A deadline cannot reopen registrations.** It only ever closes them earlier than Odoo would.
+- **No per-slot deadline on Odoo 18.** Multi-slot events are new in Odoo 19, so this build applies
+  the rule to a single event's own start only.
 
 **Changelog**
 
-*19.0.1.0.3 (24 September 2026)*
+*18.0.1.0.0 (28 September 2026)*
 
-- The setting's help reads "Allow registration only until an event starts", since a free event has
-  registrations but no tickets. No change in behaviour.
-
-*19.0.1.0.2 (24 September 2026)*
-
-- Licensed LGPL-3, and credited to Valencia Makers. No change in behaviour.
-
-*19.0.1.0.1 (22 September 2026)*
-
-- The module's name and summary are translated into Spanish and Catalan.
-
-*19.0.1.0.0 (22 September 2026)*
-
-- First release. A global registration deadline in the Events settings, a per-event override,
-  and the same rule applied to each slot of a multi-slot event.
+- First release for Odoo 18, ported from 19.0.1.0.3. Odoo 18 has no multi-slot events, so this
+  build has no per-slot deadline: only the global setting and the per-event override.

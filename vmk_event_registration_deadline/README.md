@@ -52,37 +52,35 @@ turning the feature off stops it applying everywhere it was implicit, and nowher
 `end_sale_datetime` is blank, so blank is the case this module is for. A date somebody typed is a
 deliberate choice to allow late registration, and it wins.
 
-**Multi-slot events, at the event level.** Their `date_begin` is the earliest slot's start, so
-closing the event there would stop selling every later slot too. Core handles those per slot — and
-so does this module, by extending `_filter_open_slots`.
+### What Odoo 18 does not have
 
-### Slots get the same rule
+**No per-slot deadline.** `event.slot` and multi-slot events (`is_multi_slots`) are new in Odoo 19;
+Odoo 18 has neither, so there is nothing to apply the rule to beyond a single event's own
+`date_begin`. The 19 module also tightens `website_event`'s `_filter_open_slots` for exactly this
+reason; that half does not exist here, and neither does `models/event_slot.py`. **This 18.0 port is
+event-level only.**
 
-`website_event` retires a slot whose `start_datetime` has passed
-(`website_event/models/event_slot.py`, `_filter_open_slots`), with **no lead time**. Left alone, the
-policy would apply to single events and not to cohorts: sales stopping ninety minutes early for one
-and exactly on the hour for the other. This module tightens that filter with the same deadline.
-
-It only ever tightens. A ticket's Registration End overrides the rule on a single event but not
-here: it cannot loosen a deadline core itself applies, and on a multi-slot event a ticket says
-nothing about which slot it belongs to.
-
-**This is why the module depends on `website_event` rather than `event`** — half the rule lives in a
-method that module defines.
+**Why the module still depends on `website_event` rather than `event`.** `event_registrations_open`
+is a plain `event` field — `event/models/event_event.py`, `_compute_event_registrations_open` — but
+the only place it visibly does anything is `website_event`'s registration templates
+(`event_templates_page_registration.xml` and the event list/page templates), which show
+**Registrations Closed** and hide the **Register** button once it is false. Without `website_event`
+installed, closing the field changes nothing a user can see.
 
 ### What it does not depend on
 
-Nothing about sessions. The rule reads `date_begin` for an event and `slot.start_datetime` for a
-slot. Where a module makes an event's dates follow a series of sessions — `vmk_event_sessions` does
-— `date_begin` is already the first session's start, so a series gets the right behaviour here
-without this module knowing sessions exist.
+Nothing about sessions. The rule reads `date_begin` for an event. Where a module makes an event's
+dates follow a series of sessions — `vmk_event_sessions` does, on Odoo 19 — `date_begin` is already
+the first session's start, so a series gets the right behaviour here without this module knowing
+sessions exist.
 
 ### Translations
 
 `i18n/` carries `es` and `ca`, and `./odev terms vmk_event_registration_deadline` reports both clean
-against core. Shared terms — _Event_, _Config Settings_, _Display Name_ — take core's own `msgstr`
-rather than a fresh translation. _Event Slot_ is core's row and core's Catalan leaves it
-untranslated, so ours stays empty rather than asserting a value on a record we do not own.
+against core. Shared terms — _Event_ and _Config Settings_ — take core's own `msgstr` rather than a
+fresh translation. (The 19.0 module's catalogue also carries _Display Name_, _ID_, and _Event Slot_;
+Odoo 18's exporter no longer attributes `display_name`/`id` to an inheriting module, and this port
+has no `event.slot` model, so all three entries are gone here.)
 
 **The module's own name and summary are hand-maintained**, in the POT as well as both PO files.
 `ir_module.py` registers every module record as `base.module_<name>`, so `odoo i18n export` never
@@ -107,13 +105,8 @@ cd ../../Tech\ Stack/odoo-dev
 ```
 
 Nine tests: the default, the per-event override, an override of zero, a ticket's Registration End
-winning, a ticket without one not winning, a multi-slot event being left to its slots, and a slot
-retired by the deadline rather than merely by its start.
-
-**A trap for anyone writing more of them.** `start_hour` on a slot is a clock time in the event's
-timezone, not an offset — a literal `10.0` in a test built from `now` lands wherever it lands, and
-the first draft of these put slots outside their own events. `_slot()` in the test file converts a
-moment into the date and hours core wants.
+winning, and a ticket without one not winning. The 19.0 module's two slot tests are gone with
+`event_slot.py` — see [What Odoo 18 does not have](#what-odoo-18-does-not-have).
 
 ### Licence
 

@@ -51,21 +51,20 @@ class EventEvent(models.Model):
         adds the rule rather than replacing anything — core decides first, and
         this can only ever close what core left open.
 
-        Two cases are deliberately left alone:
+        One case is deliberately left alone: **a ticket with its own
+        Registration End.** Core's `is_expired` is False whenever
+        `end_sale_datetime` is blank, so blank is what this rule is for; a
+        date somebody typed is a deliberate choice to allow late
+        registration, and it wins.
 
-        * **A ticket with its own Registration End.** Core's `is_expired` is
-          False whenever `end_sale_datetime` is blank, so blank is what this
-          rule is for; a date somebody typed is a deliberate choice to allow
-          late registration, and it wins.
-        * **Multi-slot events.** Their `date_begin` is the earliest slot's
-          start, so closing the event there would stop selling every later
-          slot too. Core handles those per slot, and so does this module —
-          see `event_slot.py`.
+        Odoo 18 has no `event.slot` model — slots and `is_multi_slots` are new
+        in 19 — so there is no multi-slot case to leave alone here, and no
+        `event_slot.py` in this port.
         """
         super()._compute_event_registrations_open()
         now = fields.Datetime.now()
         for event in self:
-            if not event.event_registrations_open or event.is_multi_slots:
+            if not event.event_registrations_open:
                 continue
             if any(ticket.end_sale_datetime for ticket in event.event_ticket_ids):
                 continue

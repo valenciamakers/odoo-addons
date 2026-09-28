@@ -3,8 +3,6 @@
 
 from datetime import timedelta
 
-import pytz
-
 from odoo import fields
 from odoo.tests import TransactionCase, tagged
 
@@ -42,25 +40,6 @@ class TestRegistrationDeadline(TransactionCase):
                 },
                 **extra,
             )
-        )
-
-    def _slot(self, event, when):
-        """A slot at a given moment, as the date and local hours core wants.
-
-        `start_hour` is a clock time in the event's timezone, not an offset,
-        so a literal like 10.0 lands wherever it lands relative to an event
-        built from `now` — which is how the first draft of these tests put
-        slots outside their own event.
-        """
-        local = pytz.utc.localize(when).astimezone(pytz.timezone(event.date_tz))
-        hour = local.hour + local.minute / 60.0
-        return self.env["event.slot"].create(
-            {
-                "event_id": event.id,
-                "date": local.date(),
-                "start_hour": hour,
-                "end_hour": min(hour + 1.0, 23.99),
-            }
         )
 
     def _set_default(self, hours):
@@ -124,19 +103,3 @@ class TestRegistrationDeadline(TransactionCase):
         self.env["event.event.ticket"].create({"name": "Standard", "event_id": event.id})
         event.invalidate_recordset()
         self.assertFalse(event.event_registrations_open)
-
-    def test_a_multi_slot_event_is_left_to_its_slots(self):
-        """Closing the event would stop selling every later slot too."""
-        event = self._event(starts_in_hours=-1, length_hours=24 * 10, is_multi_slots=True)
-        self._slot(event, self.now + timedelta(days=2))
-        event.invalidate_recordset()
-        self.assertTrue(event.event_registrations_open)
-
-    def test_a_slot_is_retired_by_the_deadline_not_just_its_start(self):
-        self._set_default(24)
-        event = self._event(starts_in_hours=-1, length_hours=24 * 10, is_multi_slots=True)
-        soon = self._slot(event, self.now + timedelta(hours=2))
-        later = self._slot(event, self.now + timedelta(days=5))
-        open_slots = (soon | later)._filter_open_slots()
-        self.assertNotIn(soon, open_slots, "within the 24 hour deadline")
-        self.assertIn(later, open_slots, "still five days away")

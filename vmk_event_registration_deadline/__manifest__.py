@@ -8,8 +8,9 @@
     "author": "Valencia Makers",
     "license": "LGPL-3",
     "category": "Marketing/Events",
-    # website_event, not event: half the rule lives in `_filter_open_slots`,
-    # which that module defines. See README.md.
+    # website_event, not event: `event_registrations_open` is a plain `event`
+    # field, but the only place it visibly does anything is the website's
+    # registration templates. See README.md.
     "depends": ["website_event"],
     "data": [
         "views/res_config_settings_views.xml",
