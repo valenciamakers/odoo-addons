@@ -181,6 +181,13 @@ They have to be captured _before_ `super()`, because the source contacts are unl
 destination cannot be captured that early — when the wizard passes none, core picks it itself at
 `:446-448` — so every candidate's address is captured and the survivor is identified afterwards.
 
+**The migration can duplicate an address, though.** For a table with no constraint on the foreign
+key, `_update_foreign_keys_generic` (`:119`) re-points the rows with one bulk `UPDATE`, which
+compares no values and bypasses `_check_email_unique`. Two merged contacts sharing an extra address,
+or one listing the survivor's own primary, left the survivor holding it twice until 19.0.1.2.1. So
+every merge now ends with `_vmk_dedupe_emails`, which keeps the first row for each address and drops
+any that repeats the primary; `tests/test_merge.py` merges three contacts to prove it.
+
 #### Searching by dotted path
 
 `_rec_names_search` (`base/models/res_partner.py:189`) does accept dotted paths —

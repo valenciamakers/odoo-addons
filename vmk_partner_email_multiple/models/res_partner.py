@@ -191,3 +191,31 @@ class ResPartner(models.Model):
         if to_create:
             self.env["vmk.partner.email"].create(to_create)
         return self.vmk_email_ids
+
+    def _vmk_dedupe_emails(self):
+        """Remove any additional-address row this contact ends up holding twice.
+
+        The merge wizard's raw-SQL foreign-key migration
+        (``base/wizard/base_partner_merge.py``, ``_update_foreign_keys_generic``)
+        re-points every source contact's ``vmk_email_ids`` rows with a single bulk
+        ``UPDATE`` and no per-value comparison -- see README.md. Two source
+        contacts that each held the same address, or one that duplicated the
+        destination's own primary or additional address, land here as two rows for
+        one value; the ORM-level ``_check_email_unique`` constraint that would
+        normally refuse that never runs, because raw SQL bypasses it. Called after
+        the wizard, so it sees the migrated rows.
+        """
+        self.ensure_one()
+        self.invalidate_recordset(["vmk_email_ids"])
+
+        primary = self.email_normalized
+        to_remove = self.env["vmk.partner.email"]
+        seen = set()
+        for row in self.vmk_email_ids.sorted("id"):
+            key = row.email_normalized or f"\0{(row.email or '').strip().lower()}"
+            if (row.email_normalized and row.email_normalized == primary) or key in seen:
+                to_remove |= row
+            else:
+                seen.add(key)
+        if to_remove:
+            to_remove.unlink()

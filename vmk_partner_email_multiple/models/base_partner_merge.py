@@ -25,6 +25,10 @@ class BasePartnerMergeAutomaticWizard(models.TransientModel):
         early: when the wizard passes none, core picks it itself at :446-448. So
         capture every candidate's address, then ask which record survived.
 
+        The migration can also leave a duplicate behind: it re-points our rows
+        with a bulk UPDATE that compares no values. So every successful merge is
+        followed by ``_vmk_dedupe_emails``, not only one with an address to absorb.
+
         The same-email guard at :439-440 is deliberately left alone. It refuses a
         merge when the contacts differ by email -- which is every case this module
         exists for -- but admins are exempted two lines earlier, so it does not
@@ -36,8 +40,10 @@ class BasePartnerMergeAutomaticWizard(models.TransientModel):
         result = super()._merge(partner_ids, dst_partner=dst_partner, extra_checks=extra_checks)
 
         survivor = partners.exists()
-        if len(survivor) != 1 or not absorbed:
-            # Core bailed out (fewer than two contacts), or there was nothing to keep.
+        if len(survivor) != 1:
+            # Core bailed out (fewer than two contacts).
             return result
-        survivor._vmk_absorb_emails(absorbed)
+        if absorbed:
+            survivor._vmk_absorb_emails(absorbed)
+        survivor._vmk_dedupe_emails()
         return result

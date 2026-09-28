@@ -452,7 +452,9 @@ in `web/static/src/**`, not in Python. Half the surprises below live there.
   whether a constraint touches **the foreign key column being re-pointed**, so the obvious
   `unique(partner_id, <something>)` is precisely the one that arms this; a constraint naming neither
   the FK column nor anything else it updates is invisible to the check and blows the transaction up
-  instead.
+  instead. And where no constraint arms it, the bulk `UPDATE` compares no values: a row two merged
+  contacts shared arrives twice on the survivor, unseen by any `@api.constrains`. Clean up after the
+  merge.
 - `_update_values` in the same wizard skips o2m/m2m and computed fields, and for plain fields takes
   the last truthy value with the destination last — so the destination wins and the merged-away
   values are simply dropped. It also refuses outright when contacts differ by email, except for

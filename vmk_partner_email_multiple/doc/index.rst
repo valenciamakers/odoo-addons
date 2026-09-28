@@ -33,6 +33,11 @@ their addresses. **Merging two contacts** keeps both sets of addresses in the re
 
 **Changelog**
 
+*19.0.1.2.1 (28 September 2026)*
+
+- Merging contacts no longer leaves the surviving contact with the same address twice, when two
+  merged contacts shared one or one listed the survivor's own address.
+
 *19.0.1.2.0 (25 September 2026)*
 
 - CRM, Recruitment, and Helpdesk no longer overwrite a contact's primary address with the
