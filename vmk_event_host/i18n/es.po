@@ -7,12 +7,17 @@
 # `base.module_vmk_event_host` entries are the module's own name and summary,
 # which `i18n export` never emits (see the POT).
 #
+# Departure: "Host" keeps "Anfitrión" (no trailing space). Core's only Spanish
+# "Host" is Enterprise's frontdesk app -- an unrelated concept, a visitor's
+# contact rather than an event's -- and its own catalogue reads "Anfitrión "
+# with a stray trailing space (18.0, 28 September 2026).
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 19.0+e-20260817\n"
+"Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-20 13:15+0000\n"
-"PO-Revision-Date: 2026-09-20 13:15+0000\n"
+"POT-Creation-Date: 2026-09-28 17:53+0000\n"
+"PO-Revision-Date: 2026-09-28 17:53+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es\n"
@@ -63,7 +68,6 @@ msgid "Created on"
 msgstr "Creado el"
 
 #. module: vmk_event_host
-#: model:ir.model.fields,field_description:vmk_event_host.field_event_event__display_name
 #: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__display_name
 msgid "Display Name"
 msgstr "Nombre para mostrar"
@@ -108,7 +112,6 @@ msgid "Hosts"
 msgstr "Anfitriones"
 
 #. module: vmk_event_host
-#: model:ir.model.fields,field_description:vmk_event_host.field_event_event__id
 #: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__id
 msgid "ID"
 msgstr "ID"

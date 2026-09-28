@@ -59,8 +59,11 @@ registry.category("fields").add("vmk_host_summary", {
             help: _t("Name of the notebook page this summary opens."),
         },
     ],
-    extractProps: ({ options, placeholder }) => ({
+    extractProps: ({ attrs, options }) => ({
         page: options.page,
-        placeholder,
+        // Odoo 18's Field component has no fallback logic resolving a
+        // placeholder itself (added in 19's field.js); read it straight off
+        // the arch's own attribute instead.
+        placeholder: attrs.placeholder,
     }),
 });

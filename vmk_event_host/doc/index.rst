@@ -34,16 +34,6 @@ changes to the Responsible and Organizer fields.
 
 **Changelog**
 
-*19.0.1.0.2 (24 September 2026)*
+*18.0.1.0.0 (28 September 2026)*
 
-- Licensed LGPL-3, and credited to Valencia Makers. No change in behaviour.
-
-*19.0.1.0.1 (22 September 2026)*
-
-- A test now keeps the module's name and summary translated in Spanish and Catalan. No change in
-  behaviour.
-
-*19.0.1.0.0 (20 September 2026)*
-
-- First release. Hosts on events as ordered contacts with roles; a summary on the event form that
-  opens the Hosts tab; and searching, grouping, and tracking by host.
+- First release for Odoo 18, ported from 19.0.1.0.2. No change in behaviour.

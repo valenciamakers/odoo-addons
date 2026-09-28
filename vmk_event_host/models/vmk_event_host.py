@@ -37,10 +37,13 @@ class VmkEventHost(models.Model):
         index=True,
     )
 
-    _partner_event_uniq = models.Constraint(
-        "unique(event_id, partner_id)",
-        "A contact can only be listed once as a host of an event.",
-    )
+    _sql_constraints = [
+        (
+            "partner_event_uniq",
+            "unique(event_id, partner_id)",
+            "A contact can only be listed once as a host of an event.",
+        )
+    ]
 
     @api.depends("partner_id", "role")
     def _compute_display_name(self):

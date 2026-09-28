@@ -244,7 +244,9 @@ checked there yet.
 
 - An inherit-only module needs **no `security/ir.model.access.csv`** — ACLs are per model, and
   adding a field to an existing model inherits them. Generators emit one anyway; delete it.
-- `models.Constraint()` replaces `_sql_constraints`.
+- `models.Constraint()` replaces `_sql_constraints`. On 18: not yet introduced — use
+  `_sql_constraints` directly, a list of `(name, definition, message)` tuples, as core's own event
+  models do (e.g. `event.registration`'s `barcode_event_uniq`).
 - **Odoo creates every database with `LC_COLLATE 'C'`** — `service/db.py` passes it whenever the
   template is `template0`, which is the normal path. So any SQL `ORDER BY` on text is byte order:
   capitals sort before lowercase (`CRM` before `Calendar`) and accented initials land after `Z`.
