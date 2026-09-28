@@ -96,6 +96,9 @@ These are properties of Odoo, not of any one harness.
   into CLI flags. Either pass `--db_host=db --db_user=odoo --db_password=odoo` to anything run that
   way, or put those settings in the config file at `$ODOO_RC` (`/etc/odoo/odoo.conf` in the official
   image), which Odoo reads for itself.
+- **On 18, `MockRequest` lives in `odoo.addons.website.tools`**, not 19's
+  `odoo.addons.http_routing.tests.common`, which does not exist on 18. The wrong import fails the
+  whole test file at collection, so none of its tests run, not just the one that needed it.
 - **A fixture created and then modified inside one flush cycle produces no tracked change.**
   Tracking compares against the values at the last flush, so a `TransactionCase` that creates a
   record in `setUpClass` and writes to it in the test sees an empty chatter and looks like a
@@ -379,10 +382,14 @@ checked there yet.
 
 - Odoo caches by **name**: `'default'`, `'stable'`, and others. `Registry.clear_cache(*names)`
   clears whole groups, and the per-method `ormcache.clear_cache()` of older versions **is gone in
-  19** — there is no narrow invalidation.
+  19** — there is no narrow invalidation. On 18 it survives only as a deprecated alias for clearing
+  every cache (`odoo/tools/cache.py`, `ormcache.clear`).
 - So prefer reading values from a cache that core already invalidates over clearing a broad one
   yourself. `res.lang.write()` clears `'stable'`; sorting on values from there avoided clearing
-  `'default'` — every compiled QWeb template on the site — on each reorder.
+  `'default'` — every compiled QWeb template on the site — on each reorder. On 18 there is **no
+  `'stable'` group** (`_REGISTRY_CACHES`, `odoo/modules/registry.py`), and naming one raises
+  `KeyError`; `res.lang`'s own writes clear `'default'` on every change there, so a reorder pays
+  that cost whatever a module does.
 - **`_order` is not the last word on ordering.** Core routinely sorts explicitly past it:
   `res.lang.get_installed()` goes through `search_fetch(..., order='name')` and
   `website._get_frontend()` uses `language_ids.sorted('name')`. Grep for the _consumers_ of an
