@@ -4,9 +4,10 @@ How the images on each module's Apps Store page are made, so any of them can be 
 rendered separately, by `tools/make_cover.py`, from these screenshots.
 
 Everything here changes the page in the browser for the capture only; no module ships any of it.
-That polish, in `shots.py`, hides the unread-messages counter, paints Odoo's Violet slot colour and
-the signed-in user's avatar in our purple, and draws a cursor where a recipe needs one. Recipes add
-their own capture-only CSS, such as hiding another module's field.
+That polish, in `shots.py`, hides the unread-messages counter and any onboarding tour's pointer,
+paints Odoo's Violet slot colour and the signed-in user's avatar in our purple, and draws a cursor
+where a recipe needs one. Recipes add their own capture-only CSS, such as hiding another module's
+field.
 
 **The tools serve the Private repo's modules too.** `tools/repos.py` finds a module, and its icon,
 cover, and recipe sources, in this repo or in `../Odoo Addons - Private`, whose `tools/` keeps the
