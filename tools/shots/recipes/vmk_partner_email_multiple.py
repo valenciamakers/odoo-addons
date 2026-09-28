@@ -41,7 +41,7 @@ async def sharp_avatar(page):
 async def main(out, parts):
     async with async_playwright() as p:
         page = await shots.backend_tab(p, width=1280, height=900)
-        await page.goto(shots.BASE + "/odoo", wait_until="networkidle")
+        await shots.goto(page, shots.BASE + "/odoo")
         await page.wait_for_selector(".o_home_menu, .o_main_navbar")
         # the contact, on the Additional Emails tab, down to the end of the form sheet
         contact = await shots.record_id(page, "res.partner", CONTACT)

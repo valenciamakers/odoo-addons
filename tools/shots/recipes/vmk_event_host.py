@@ -41,7 +41,7 @@ async def event_form(page, event, width):
 async def main(out, parts):
     async with async_playwright() as p:
         page = await shots.backend_tab(p, width=1280, height=920)
-        await page.goto(shots.BASE + "/odoo", wait_until="networkidle")
+        await shots.goto(page, shots.BASE + "/odoo")
         event = await shots.record_id(page, "event.event", EVENT)
         # the form, down to the Hosts tab's "Add a line"
         await event_form(page, event, 1280)

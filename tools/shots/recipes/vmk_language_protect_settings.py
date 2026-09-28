@@ -25,7 +25,7 @@ async def main(out):
         await shots.park_mouse(page, 1280, 800)
         sheet = await page.locator(".o_form_sheet").first.bounding_box()
         await page.screenshot(path=out / "main_screenshot.png", clip={"x": 0, "y": 0, "width": 1280, "height": sheet["y"] + sheet["height"] + 16})
-        await page.goto(shots.BASE + "/odoo?debug=", wait_until="networkidle")
+        await shots.goto(page, shots.BASE + "/odoo?debug=")
     print("wrote", out)
 
 

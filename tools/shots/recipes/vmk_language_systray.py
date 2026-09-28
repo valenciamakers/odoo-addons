@@ -18,7 +18,7 @@ async def main(out):
     async with async_playwright() as p:
         page = await shots.backend_tab(p, width=1280, height=800)
         await _sorting.ready(page)
-        await page.goto(shots.BASE + "/odoo?debug=", wait_until="networkidle")
+        await shots.goto(page, shots.BASE + "/odoo?debug=")
         await page.wait_for_selector(".o_home_menu .o_app"); await page.wait_for_timeout(800)
         await shots.polish(page, _sorting.HIDE)
         await page.locator(".o_vmk_language_systray button").first.click(); await page.wait_for_timeout(700)

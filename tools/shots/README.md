@@ -107,6 +107,12 @@ uv run tools/shots/recipes/vmk_event_host.py --out /tmp/trial    # a trial run, 
 uv run tools/make_cover.py vmk_event_host                        # then re-render the cover
 ```
 
+For another Odoo series, point the tools at that stack and run them from its checkout — for 18,
+`ODOO_URL=http://localhost:8169`, from `Odoo Addons - Custom (18.0)` — so a recipe writes into the
+18.0 worktree and finds the private repo's 18.0 worktree beside it. Navigation waits for the page to
+load and then up to five seconds of network quiet (`shots.goto`), since Odoo 18's backend never goes
+quiet at all.
+
 Each recipe's docstring lists what it writes. Run against the current demo data they reproduce the
 published images, to within a pixel of cropping.
 

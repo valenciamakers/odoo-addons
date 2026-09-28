@@ -22,7 +22,7 @@ PAD = 12
 async def selector(p, out, name):
     """The website header's language dropdown, open, cropped to it."""
     pub = await shots.public_page(p)
-    await pub.goto(shots.BASE + "/", wait_until="networkidle")
+    await shots.goto(pub, shots.BASE + "/")
     await pub.locator("header .js_language_selector .dropdown-toggle").first.click(); await pub.wait_for_timeout(600)
     t = await pub.locator("header .js_language_selector .dropdown-toggle").first.bounding_box()
     m = await pub.locator("header .js_language_selector .dropdown-menu").first.bounding_box()
@@ -44,13 +44,13 @@ async def main(out):
             ids = await shots.rpc(page, "res.lang", "search", [[["code", "=", code]]])
             await shots.rpc(page, "res.lang", "write", [ids, {"sequence": seq}])
         await selector(p, out, "selector_after.png")
-        await page.goto(shots.BASE + "/odoo/action-base.res_lang_act_window?debug=1", wait_until="networkidle")
+        await shots.goto(page, shots.BASE + "/odoo/action-base.res_lang_act_window?debug=1")
         await page.wait_for_selector(".o_list_view .o_data_row"); await page.wait_for_timeout(800)
         await shots.polish(page, _sorting.HIDE); await shots.park_mouse(page, 1280, 800)
         # the enabled languages sort first; crop just below the last of them
         last = await page.locator(".o_list_view .o_data_row").nth(len(ORDER) - 1).bounding_box()
         await page.screenshot(path=out / "main_screenshot.png", clip={"x": 0, "y": 0, "width": 1280, "height": last["y"] + last["height"] + 1})
-        await page.goto(shots.BASE + "/odoo?debug=", wait_until="networkidle")
+        await shots.goto(page, shots.BASE + "/odoo?debug=")
     print("wrote", out)
 
 

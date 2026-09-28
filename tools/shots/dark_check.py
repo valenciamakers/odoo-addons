@@ -20,10 +20,10 @@ async def main(module, out, scheme):
     async with async_playwright() as p:
         page = await shots.backend_tab(p, width=1280, height=900, scale=1)
         await page.emulate_media(color_scheme=scheme)
-        await page.goto(shots.BASE + "/odoo", wait_until="networkidle"); await page.wait_for_timeout(1500)
+        await shots.goto(page, shots.BASE + "/odoo"); await page.wait_for_timeout(1500)
         mod = (await shots.rpc(page, "ir.module.module", "search", [[["name", "=", module]]]))[0]
         url = f"{shots.BASE}/odoo/action-base.open_module_tree/{mod}"
-        await page.goto(url, wait_until="networkidle"); await page.wait_for_selector(".oe_styling_v8")
+        await shots.goto(page, url); await page.wait_for_selector(".oe_styling_v8")
         h = await page.evaluate("document.querySelector('.o_form_sheet').scrollHeight + 200")
         await page._vmk_cdp.send("Emulation.setDeviceMetricsOverride",
                                  {"width": 1280, "height": int(h), "deviceScaleFactor": 1, "mobile": False})
