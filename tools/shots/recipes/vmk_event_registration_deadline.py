@@ -26,7 +26,7 @@ FORM_CSS = """
 async def main(out):
     async with async_playwright() as p:
         page = await shots.backend_tab(p, width=1280, height=900)
-        await page.goto(shots.BASE + "/odoo", wait_until="networkidle")
+        await shots.goto(page, shots.BASE + "/odoo")
         closed = await shots.record_id(page, "event.event", CLOSED_EVENT)
         own = await shots.record_id(page, "event.event", OWN_DEADLINE)
         url = (await shots.rpc(page, "event.event", "read", [[closed], ["website_url"]]))[0]["website_url"]
@@ -45,7 +45,7 @@ async def main(out):
             "x": grp["x"] + 2, "y": grp["y"] - 13, "width": 429, "height": grp["height"] + 16})
         # the public page, closed: space above the breadcrumb, and no rule under the calendar buttons
         pub = await shots.public_page(p, height=900)
-        await pub.goto(shots.BASE + url, wait_until="networkidle")
+        await shots.goto(pub, shots.BASE + url)
         await pub.add_style_tag(content=".o_wevent_bordered_block { border-bottom: 0 !important; }")
         await pub.wait_for_timeout(500)
         await pub.screenshot(path=out / "main_screenshot.png", clip={"x": 70, "y": 63, "width": 1140, "height": 407})

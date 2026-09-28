@@ -19,7 +19,7 @@ EVENT = "Beginner's Bootcamp"
 async def main(out):
     async with async_playwright() as p:
         page = await shots.backend_tab(p)
-        await page.goto(shots.BASE + "/odoo", wait_until="networkidle")
+        await shots.goto(page, shots.BASE + "/odoo")
         event = await shots.record_id(page, "event.event", EVENT)
         slot = (await shots.rpc(page, "event.slot", "search_read", [[["event_id", "=", event]]],
                                 {"fields": ["id", "date"], "order": "start_datetime", "limit": 1}))[0]

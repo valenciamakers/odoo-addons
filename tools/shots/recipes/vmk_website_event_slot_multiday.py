@@ -24,11 +24,11 @@ PACK = """
 async def main(out):
     async with async_playwright() as p:
         tab = await shots.backend_tab(p, scale=1)
-        await tab.goto(shots.BASE + "/odoo", wait_until="networkidle")
+        await shots.goto(tab, shots.BASE + "/odoo")
         event = await shots.record_id(tab, "event.event", EVENT)
         url = (await shots.rpc(tab, "event.event", "read", [[event], ["website_url"]]))[0]["website_url"]
         page = await shots.public_page(p)
-        await page.goto(shots.BASE + url.rstrip("/") + "/register", wait_until="networkidle")
+        await shots.goto(page, shots.BASE + url.rstrip("/") + "/register")
         await page.locator("button[data-bs-target='#modal_slot_registration']:visible").first.click()
         await page.wait_for_selector("#modal_slot_registration .o_wevent_slot_btn", state="visible")
         await page.wait_for_timeout(800)

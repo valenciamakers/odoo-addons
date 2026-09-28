@@ -83,7 +83,7 @@ async def polish(page, extra_css=""):
 
 async def open_backend(page, path, wait=".o_form_view, .o_list_view, .o_calendar_view, .o_setting_container",
                        extra_css=""):
-    await page.goto(BASE + path, wait_until="networkidle")
+    await goto(page, BASE + path)
     await page.wait_for_selector(wait)
     await page.wait_for_timeout(800)
     await polish(page, extra_css)
@@ -98,6 +98,18 @@ def day_cell(page, day):
     """The calendar sidebar's cell for day-of-month `day`, matched exactly (9 must not match 29)."""
     return page.locator(".o_calendar_sidebar .o_date_item_cell").filter(has_text=re.compile(rf"^\s*{day}\s*$")).first
 
+
+
+async def goto(page, url):
+    """Navigate, then let the page settle: `load`, and network idle for up to five seconds.
+
+    Waiting on network idle alone hangs on Odoo 18, whose backend never goes idle; 19's does, and
+    settles here exactly as it did."""
+    await page.goto(url, wait_until="load")
+    try:
+        await page.wait_for_load_state("networkidle", timeout=5000)
+    except Exception:
+        pass
 
 async def rpc(page, model, method, args, kwargs=None):
     """Call the ORM as the tab's logged-in user, to find demo records by name rather than by id.

@@ -20,7 +20,7 @@ PAD = 16
 
 async def grid(page, out, phase):
     """The app grid, cropped to its icons."""
-    await page.goto(shots.BASE + "/odoo?debug=", wait_until="networkidle")
+    await shots.goto(page, shots.BASE + "/odoo?debug=")
     await page.wait_for_selector(".o_home_menu .o_app"); await page.wait_for_timeout(1000)
     await shots.polish(page, HIDE); await shots.park_mouse(page, 1280, 800)
     if phase == "after":
@@ -46,7 +46,7 @@ async def apps(page, out, phase):
 
 async def settings(page, out, phase):
     """The Settings window with the Technical menu open, in developer mode, and the two lists alone."""
-    await page.goto(shots.BASE + "/odoo/settings?debug=1", wait_until="networkidle")
+    await shots.goto(page, shots.BASE + "/odoo/settings?debug=1")
     await page.wait_for_selector(".settings_tab"); await page.wait_for_timeout(800)
     await shots.polish(page, HIDE)
     side = await page.locator(".settings_tab").bounding_box()
@@ -68,7 +68,7 @@ async def ready(page):
     for _attempt in range(15):
         await page.wait_for_timeout(1500)
         try:
-            await page.goto(shots.BASE + "/odoo", wait_until="networkidle")
+            await shots.goto(page, shots.BASE + "/odoo")
             await page.wait_for_selector(".o_home_menu, .o_main_navbar", timeout=10000)
             await shots.rpc(page, "res.users", "search_count", [[]])
             return
@@ -88,5 +88,5 @@ async def run(module, views, argv):
             await ready(page)
             for view in views:
                 await view(page, out, phase)
-        await page.goto(shots.BASE + "/odoo?debug=", wait_until="networkidle")
+        await shots.goto(page, shots.BASE + "/odoo?debug=")
     print("wrote", out)
