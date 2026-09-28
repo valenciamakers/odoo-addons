@@ -2,17 +2,22 @@
 # This file contains the translation of the following modules:
 # 	* vmk_language_systray
 #
-# Terms shared with Odoo core reuse core's own Spanish wording. "Display Name",
-# "HTTP Routing" and "ID" are core's, attributed here only because the module
-# inherits ir.http; the two the module actually authors are "Language" and
-# "Language: %s", and base already translates "Language" as "Idioma".
+# Terms shared with Odoo core reuse core's own Spanish wording. "HTTP Routing"
+# is core's, attributed here only because the module inherits ir.http; the two
+# the module actually authors are "Language" and "Language: %s", and base
+# already translates "Language" as "Idioma".
+#
+# Departure: "HTTP Routing" keeps "Enrutamiento HTTP" (no trailing space).
+# Core 18's own Spanish catalogue reads "Enrutamiento HTTP " with a stray
+# trailing space -- fixed in core 19 -- so we take core's wording, not its
+# typography (28 September 2026).
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 19.0\n"
+"Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-15 13:39+0000\n"
-"PO-Revision-Date: 2026-08-15 13:39+0000\n"
+"POT-Creation-Date: 2026-09-28 18:15+0000\n"
+"PO-Revision-Date: 2026-09-28 18:15+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es\n"
@@ -27,19 +32,9 @@ msgid "Backend Language Menu"
 msgstr "Menú de idioma del backend"
 
 #. module: vmk_language_systray
-#: model:ir.model.fields,field_description:vmk_language_systray.field_ir_http__display_name
-msgid "Display Name"
-msgstr "Nombre para mostrar"
-
-#. module: vmk_language_systray
 #: model:ir.model,name:vmk_language_systray.model_ir_http
 msgid "HTTP Routing"
 msgstr "Enrutamiento HTTP"
-
-#. module: vmk_language_systray
-#: model:ir.model.fields,field_description:vmk_language_systray.field_ir_http__id
-msgid "ID"
-msgstr "ID"
 
 #. module: vmk_language_systray
 #. odoo-javascript

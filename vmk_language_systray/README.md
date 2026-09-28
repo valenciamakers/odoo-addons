@@ -49,7 +49,7 @@ there is nothing for a Python model to add:
 
 - `res.lang.get_installed()` is `@api.model`, and `base.group_user` has read access on `res.lang`
   (`base/security/ir.model.access.csv`), so a plain internal user can call it directly.
-- `lang` is in `res.users.SELF_WRITEABLE_FIELDS` (`base/models/res_users.py:189-193`), and
+- `lang` is in `res.users.SELF_WRITEABLE_FIELDS` (`base/models/res_users.py:356-360`), and
   `res.users.write()` sudo's the record when every key in `vals` is self-writeable (`:605-615`). Any
   internal user can therefore set their own `lang` with no extra rights.
 
@@ -137,7 +137,9 @@ edge to a button barely wider than the globe in it. The result was a fixed-width
 left-aligned text stopped well short of its right edge, reading as though the menu had come detached
 from the control that opened it. `language_systray.scss` clears the floor with
 `--dropdown-min-width: unset`, which is core's own escape hatch for the same problem in
-`web/static/src/core/time_picker/time_picker.scss`.
+`html_editor/static/src/main/font/font_selector.scss` (`--dropdown-min-width: none`, on the
+font-family dropdown). Odoo 19 carries the same escape hatch on `time_picker.scss` instead; that
+file does not exist on 18.
 
 `unset` rather than a width of our own, because the content is language names and their length is
 not ours to predict. Measured after the change: the menu is 124px against a longest-item content
@@ -170,10 +172,18 @@ no accessible name at all in that case, since the visible span is `t-if`'d out t
 ### Translations
 
 Two authored terms, both in `language_systray.js`: `Language` and `Language: %s`. Everything else on
-screen is a language's own name, which is data rather than a term to translate. The catalogues also
-carry `Display Name`, `HTTP Routing` and `ID`, which are not ours — inheriting `ir.http` attributes
-that model's name and its `display_name`/`id` fields to this module in the export — so they take
-core's wording verbatim.
+screen is a language's own name, which is data rather than a term to translate. The catalogue also
+carries `HTTP Routing`, which is not ours — inheriting `ir.http` attributes that model's own name to
+this module in the export — so it takes core's wording verbatim. On 18, inheriting a model no longer
+attributes its `display_name` and `id` fields to the inheriting module the way 19 does, so
+`Display Name` and `ID` — both present in the 19 catalogue — drop out of this one entirely; nothing
+to translate, nothing lost.
+
+**Departure:** Spanish keeps `HTTP Routing` as `Enrutamiento HTTP`, with no trailing space. Core
+18's own Spanish catalogue (`base/i18n/es.po`, shared across every module inheriting `ir.http`)
+reads `Enrutamiento HTTP ` with a stray trailing space; core 19 removed it. We take core's wording,
+not its typography (28 September 2026). Catalan already matches core exactly (`Enrutament HTTP`, no
+departure needed).
 
 ### The module's own name and summary are hand-maintained in `i18n/`
 
@@ -217,7 +227,7 @@ needed.
 
 ### Testing
 
-Against a local Odoo 19 with this repo on the addons path — Postgres, the `odoo:19` image, and the
+Against a local Odoo 18 with this repo on the addons path — Postgres, the `odoo:18.0` image, and the
 repo root mounted at `/mnt/extra-addons`:
 
 ```bash

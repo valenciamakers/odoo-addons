@@ -18,7 +18,7 @@ soon as more than one language is enabled.
   website are unaffected.
 
 Every backend user can use it, with no extra access rights required. With `Language Sequence
-<https://apps.odoo.com/apps/modules/19.0/vmk_language_sequence>`_ installed, the menu follows your
+<https://apps.odoo.com/apps/modules/18.0/vmk_language_sequence>`_ installed, the menu follows your
 custom order.
 
 **To display the language name** beside the globe in the menu bar, enable developer mode, go to
@@ -32,14 +32,6 @@ value *True*. It applies to every user, and only appears on wide screens.
 
 **Changelog**
 
-*19.0.1.1.1 (24 September 2026)*
+*18.0.1.0.0 (28 September 2026)*
 
-- Licensed LGPL-3, and credited to Valencia Makers. No change in behaviour.
-
-*19.0.1.1.0 (19 August 2026)*
-
-- Licensed AGPL-3, from MIT. No change in behaviour.
-
-*19.0.1.0.0 (15 August 2026)*
-
-- First release. A globe in the backend's top bar switches the current user's language.
+- First release for Odoo 18, ported from 19.0.1.1.1. No change in behaviour.
