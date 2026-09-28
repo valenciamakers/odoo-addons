@@ -36,6 +36,10 @@ starts.
 
 **Changelog**
 
+*19.0.1.0.4 (28 September 2026)*
+
+- Catalan: *Config Settings* reads as Odoo's own base module has it. No change in behaviour.
+
 *19.0.1.0.3 (24 September 2026)*
 
 - The setting's help reads "Allow registration only until an event starts", since a free event has

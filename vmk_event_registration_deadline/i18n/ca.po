@@ -44,7 +44,7 @@ msgstr "abans de l'inici"
 #. module: vmk_event_registration_deadline
 #: model:ir.model,name:vmk_event_registration_deadline.model_res_config_settings
 msgid "Config Settings"
-msgstr "Ajustos de configuració"
+msgstr "Paràmetres de configuració"
 
 #. module: vmk_event_registration_deadline
 #: model:ir.model.fields,field_description:vmk_event_registration_deadline.field_event_event__display_name
