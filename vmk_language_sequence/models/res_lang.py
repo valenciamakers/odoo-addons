@@ -67,7 +67,7 @@ class ResLang(models.Model):
             for code, data in self._get_active_by("code").items()
         }
 
-    @tools.ormcache("field", cache="stable")
+    @tools.ormcache("field")
     def _get_active_by(self, field: str) -> LangDataDict:
         # Core builds this with ``search_fetch(..., order='name')``, a hardcoded
         # order that ``_order`` cannot influence. It is the single chokepoint
@@ -76,7 +76,8 @@ class ResLang(models.Model):
         # covers both at once.
         #
         # Cached in turn because ``_get_data`` reaches this on every date and
-        # number format, far too often to re-sort each time.
+        # number format, far too often to re-sort each time. On 'default', as
+        # core's own decorator is: Odoo 18 has no 'stable' cache group.
         return self._sorted_by_sequence(super()._get_active_by(field))
 
     def _get_frontend(self) -> LangDataDict:
@@ -86,11 +87,8 @@ class ResLang(models.Model):
         # render over a handful of entries.
         #
         # The sequences are read from ``_get_active_by`` rather than from the data
-        # ``super()`` returns. That cache lives on 'default', which nothing
-        # invalidates when a sequence changes, so trusting its values would mean
-        # clearing the whole default cache -- every compiled template and view
-        # lookup on the site -- on each reorder. ``_get_active_by`` is on 'stable',
-        # which core's own ``res.lang.write()`` already clears.
+        # ``super()`` returns. Both are cached on 'default', which core's own
+        # ``res.lang.write()`` clears on every write, so a reorder reaches both.
         langs = self._sorted_by_sequence(super()._get_frontend(), self._live_sequences())
         return self._hreflang_in_order(langs)
 
@@ -169,6 +167,5 @@ class ResLang(models.Model):
         res = super().write(vals)
         if changing_state:
             changing_state._park_in_active_block()
-        # No cache clearing of our own: ``super().write()`` clears 'stable', and
-        # ``_get_frontend`` deliberately reads its sequences from there.
+        # No cache clearing of our own: ``super().write()`` clears 'default'.
         return res

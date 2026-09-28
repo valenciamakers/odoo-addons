@@ -3,8 +3,8 @@
 
 from pathlib import Path
 
-from odoo.addons.http_routing.tests.common import MockRequest
 from odoo.addons.vmk_language_sequence.hooks import seed_language_sequence
+from odoo.addons.website.tools import MockRequest
 from odoo.fields import Command
 from odoo.tests.common import TransactionCase, tagged
 

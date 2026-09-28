@@ -69,21 +69,15 @@ generic. `TestHreflang` covers the same ground in our order, including the `es_4
 
 ### Why no cache invalidation of our own
 
-`_get_frontend()` reads its sequence values from `_get_active_by()` rather than from the data
-`super()` hands back, and that is the whole reason `write()` needs no `registry.clear_cache()`.
-
-`website._get_frontend` is cached on the `'default'` cache, which nothing invalidates when a
-sequence changes. Sorting on the values baked into _that_ cache would mean clearing all of it on
-every reorder — every compiled QWeb template and view lookup on the site — to shift four languages.
-`_get_active_by` is on `'stable'`, which core's own `res.lang.write()` already clears, so reading
-the sequences from there makes a drag invalidate only the language data. Odoo 19 offers no narrower
-option: `Registry.clear_cache()` takes cache _names_, and the old per-method
-`ormcache.clear_cache()` is gone.
-
-One trap worth knowing if you touch this. `_live_sequences()` deliberately builds a plain `dict`,
-because `LangDataDict.__getitem__` returns a dummy entry for unknown keys rather than raising — and
-`Mapping.__contains__` is implemented on top of `__getitem__`, so `code in some_lang_data_dict` is
-**always true** and cannot detect a missing language.
+Core's `res.lang.create()`, `write()`, and `unlink()` each call `registry.clear_cache()` with no
+arguments (`odoo/addons/base/models/res_lang.py:328,370,385`), which clears the `'default'` group on
+every write to a language. Both caches this module reads live there: core's `_get_active_by()`
+(`@tools.ormcache('field')`, line 299), which our override matches, and `website._get_frontend()`.
+So a reorder reaches both without our clearing anything. Odoo 18 has no narrower `'stable'` group to
+cache in (`_REGISTRY_CACHES`, `odoo/modules/registry.py:45-53`), and naming one raises `KeyError`.
+`_get_frontend()` reads its sequences from `_get_active_by()` rather than from the data `super()`
+returns; with both on `'default'` that is no longer needed for correctness, but it costs one cached
+call and keeps the two in step by construction.
 
 ### `_order`, and what actually orders the Languages list
 
@@ -160,7 +154,7 @@ if re-running the export drops them.
 
 ### Requirements
 
-Odoo 19. Depends on `website`, which supplies the `_get_frontend()` override point that makes the
+Odoo 18. Depends on `website`, which supplies the `_get_frontend()` override point that makes the
 site selector follow the order. On a database without `website`, split this into a `base`-only
 module plus an `auto_install` bridge carrying override 3.
 
@@ -172,5 +166,10 @@ odoo -d <db> -u vmk_language_sequence --test-enable --test-tags /vmk_language_se
      --stop-after-init
 ```
 
-Verified against `odoo:19` with English, Spanish, French, and Catalan enabled: reordering in the
-backend reordered the site selector live, without a server restart.
+`TestHreflang` needs `MockRequest`, which on 18 lives in `odoo.addons.website.tools`
+(`addons/website/tools.py:18`) rather than `odoo.addons.http_routing.tests.common` — that module
+does not exist on this series, and importing it fails the whole test file at collection time, not
+just the one test that needs it.
+
+On 18, verified by the tests above, 22 of ours and `website`'s suite alongside, on 28
+September 2026.

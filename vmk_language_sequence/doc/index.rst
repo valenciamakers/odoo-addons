@@ -30,21 +30,6 @@ New languages you enable are added to the end of the list, and can be dragged in
 
 **Changelog**
 
-*19.0.1.2.0 (25 September 2026)*
+*18.0.1.0.0 (28 September 2026)*
 
-- With two variants of one language enabled, search engines are told to use the first language in
-  your custom order as the generic version, rather than the first alphabetically. Latin American
-  Spanish stays the generic Spanish whenever it is enabled, as it does in standard Odoo.
-
-*19.0.1.1.1 (24 September 2026)*
-
-- Licensed LGPL-3, and credited to Valencia Makers. No change in behaviour.
-
-*19.0.1.1.0 (19 August 2026)*
-
-- Licensed AGPL-3, from MIT. No change in behaviour.
-
-*19.0.1.0.0 (13 August 2026)*
-
-- First release. Enabled languages can be ordered by hand, and the website selector and language
-  dropdowns follow that order.
+- First release for Odoo 18, ported from 19.0.1.2.0. No change in behaviour.
