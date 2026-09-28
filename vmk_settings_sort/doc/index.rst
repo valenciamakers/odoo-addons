@@ -29,14 +29,6 @@ the original orders return.
 
 **Changelog**
 
-*19.0.1.1.1 (24 September 2026)*
+*18.0.1.0.0 (28 September 2026)*
 
-- Licensed LGPL-3, and credited to Valencia Makers. No change in behaviour.
-
-*19.0.1.1.0 (19 August 2026)*
-
-- Licensed AGPL-3, from MIT. No change in behaviour.
-
-*19.0.1.0.0 (13 August 2026)*
-
-- First release. The Settings sidebar and the Technical menu's groups are sorted alphabetically.
+- First release for Odoo 18, ported from 19.0.1.1.1.

@@ -62,8 +62,11 @@ break by `id`, which is install order. That is why the list looks arbitrary and 
 between databases.
 
 Sorting happens in the `load_menus` payload, on the immediate children of `base.menu_custom`.
-Targeting the **xmlid** is deliberate: `mail` ships a second menu also called "Technical", under
-Discuss, and matching on the name would reorder that one too.
+Targeting the **xmlid** is deliberate: on Odoo 19, `mail` ships a second menu also called
+"Technical", under Discuss, and matching on the name would reorder that one too. That particular
+collision does not exist on 18 — `mail`'s own Discuss-side submenu is named "Discuss" here, nested
+inside this menu instead — but xmlid resolution stays the robust choice regardless of what a future
+module names its menu.
 
 Only the immediate children are touched. What sits inside each grouping is a deliberate arrangement,
 and alphabetising it would be a loss.
@@ -108,13 +111,15 @@ odoo -d <db> -u vmk_settings_sort --test-enable --test-tags /vmk_settings_sort -
 
 The module's own name and summary in `i18n/vmk_settings_sort.pot`, `es.po` and `ca.po` are
 hand-maintained, not exported — `ir.module.module` records belong to `base`'s xmlid namespace, so
-`odoo i18n export` never sees them. The module's own extracted terms (Config Settings, Display Name,
-ID, Menu) all belong to core and are deliberately left untranslated, so that is the whole of this
-catalogue. See
+`odoo i18n export` never sees them. The module's own extracted terms (Config Settings, Menu) belong
+to core and take core's own wording rather than a fresh translation. On 18.0, unlike 19.0, the
+`display_name` and `id` fields `_inherit` adds to `res.config.settings` and `ir.ui.menu` stay
+attributed to `base`'s own `ir.model.data` entries and never appear in this module's export at all —
+so that is the whole of this catalogue. See
 [`vmk_language_systray`'s README](../vmk_language_systray#the-modules-own-name-and-summary-are-hand-maintained-in-i18n)
 for the full explanation. `tests/test_settings_sort.py::TestModuleNameTranslation` fails loudly if
 re-running the export drops them.
 
 ### Requirements
 
-Odoo 19. Depends on `base` only.
+Odoo 18. Depends on `base` only.

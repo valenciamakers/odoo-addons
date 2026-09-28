@@ -5,9 +5,12 @@ from odoo import api, models
 
 from .sort_key import sorted_children
 
-# Settings -> Technical. Resolved by xmlid on purpose: `mail` ships a second
-# menu called "Technical" under Discuss, so matching on the name would reorder
-# the wrong one as well.
+# Settings -> Technical. Resolved by xmlid, not by name. On 19.0, `mail` ships
+# a second menu also called "Technical" (a submenu of Discuss), so matching by
+# name would reorder that one too. On 18.0 that particular collision does not
+# exist -- mail's Discuss-side submenu is named "Discuss" here, nested inside
+# this very menu -- but xmlid resolution is still the robust choice, immune to
+# whatever a future module happens to name its own menu.
 TECHNICAL_MENU = "base.menu_custom"
 
 
