@@ -29,19 +29,6 @@ several hundred technical modules in among them.
 
 **Changelog**
 
-*19.0.1.2.0 (24 September 2026)*
+*18.0.1.0.0 (28 September 2026)*
 
-- Names are compared alphabetically rather than in the database's byte order, so *CRM* sorts
-  after *Calendar* and *Contacts*, and accented names sort beside their letter.
-
-*19.0.1.1.1 (24 September 2026)*
-
-- Licensed LGPL-3, and credited to Valencia Makers. No change in behaviour.
-
-*19.0.1.1.0 (19 August 2026)*
-
-- Licensed AGPL-3, from MIT. No change in behaviour.
-
-*19.0.1.0.0 (13 August 2026)*
-
-- First release. The Apps page's card and list views are ordered by the name on the card.
+- First release for Odoo 18, ported from 19.0.1.2.0.

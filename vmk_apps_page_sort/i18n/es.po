@@ -2,18 +2,19 @@
 # This file contains the translation of the following modules:
 # 	* vmk_apps_page_sort
 #
-# This module extends only core models and authors no strings of its own, so
-# `i18n export` finds nothing to translate. The two entries below are the
-# module's own name and summary, attributed to base rather than this module
-# (see README.md) and hand-maintained here because the exporter cannot see
-# them.
+# The module extends only core models and authors no strings of its own. On
+# 18 the export still yields one core term, "Module", the ir.model name of
+# ir.module.module, which takes core 18's own wording, as the other modules'
+# inherited model names do. The two entries below are the module's own name
+# and summary, attributed to base rather than this module (see README.md) and
+# hand-maintained here because the exporter cannot see them.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 19.0\n"
+"Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-15 14:10+0000\n"
-"PO-Revision-Date: 2026-08-15 14:10+0000\n"
+"POT-Creation-Date: 2026-09-28 18:17+0000\n"
+"PO-Revision-Date: 2026-09-28 18:17+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es\n"
@@ -21,6 +22,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: vmk_apps_page_sort
+#: model:ir.model,name:vmk_apps_page_sort.model_ir_module_module
+msgid "Module"
+msgstr "Módulo"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_vmk_apps_page_sort

@@ -32,11 +32,22 @@ class IrModuleModule(models.Model):
         modules by it, so this reaches the two Apps views this module orders and
         nothing else. Without ICU it falls back to ``lower()``, which fixes case
         but not accents.
+
+        The ``if query.groupby`` line mirrors what core's own
+        ``_order_field_to_sql`` does for a many2one or a boolean field
+        (``odoo/models.py``): extend the query's ``GROUP BY`` with the plain
+        field expression so a later ``ORDER BY`` decorating it (here, with
+        ``COLLATE`` or ``lower()``) stays valid under PostgreSQL's rule that an
+        ungrouped expression must be a function of a grouped column. On 18,
+        ``Query.groupby`` (``odoo/tools/query.py``) is a single SQL expression,
+        not the list ``odoo/orm/query.py`` grew in 19 -- extending it means
+        reassigning it, not appending.
         """
         if field_name != "shortdesc":
             return super()._order_field_to_sql(alias, field_name, direction, nulls, query)
         sql_field = self._field_to_sql(alias, field_name, query)
-        query._order_groupby.append(sql_field)
+        if query.groupby:
+            query.groupby = SQL("%s, %s", query.groupby, sql_field)
         collation = self._vmk_name_collation()
         if collation:
             key = SQL("%s COLLATE %s", sql_field, SQL.identifier(collation))

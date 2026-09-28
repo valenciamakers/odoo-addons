@@ -7,6 +7,7 @@ from unittest.mock import patch
 from lxml import etree
 
 from odoo.tests.common import TransactionCase, tagged
+from odoo.tools import SQL
 
 EXPECTED_ORDER = "application desc, shortdesc"
 
@@ -111,6 +112,56 @@ class TestAlphabeticalOrder(TransactionCase):
             [("name", "in", list(self.NAMES))], order="name"
         )
         self.assertEqual(modules.mapped("name"), sorted(self.NAMES))
+
+
+@tagged("post_install", "-at_install")
+class TestOrderingWithinAGroupedQuery(TransactionCase):
+    """Ordering by ``shortdesc`` must not break when the query is grouped.
+
+    Nothing the Apps page itself reaches this on 18: the web client only ever
+    asks ``web_read_group`` to order groups by the groupby field itself,
+    ``__count``, or an aggregatable field (``relational_model.js``'s
+    ``orderBy`` filter), and ``shortdesc`` is none of those. But
+    ``_order_field_to_sql`` is called with a grouped ``query`` whenever
+    ``_read_group`` orders by a many2one groupby term (``odoo/models.py``,
+    ``_read_group_orderby``), and the override is a general extension point
+    on any grouped query, not just the paths the Apps page happens to use
+    today. 19's ``query._order_groupby.append(sql_field)`` raised
+    ``AttributeError`` unconditionally on 18: ``Query.groupby``
+    (``odoo/tools/query.py``) is a single ``SQL | None`` expression, not the
+    list ``odoo/orm/query.py`` grew for 19, so extending it means
+    reassigning it rather than appending.
+    """
+
+    def test_ordering_by_shortdesc_extends_an_existing_group_by(self):
+        Module = self.env["ir.module.module"]
+        query = Module._search([])
+        query.groupby = SQL("1")  # stands in for a prior GROUP BY term
+
+        term = Module._order_to_sql("shortdesc", query)
+
+        self.assertTrue(term)
+        self.assertTrue(query.groupby.code.startswith("1, "))
+
+    def test_ordering_descending_still_extends_the_group_by(self):
+        Module = self.env["ir.module.module"]
+        query = Module._search([])
+        query.groupby = SQL("1")
+
+        term = Module._order_to_sql("shortdesc desc", query)
+
+        self.assertIn("DESC", term.code)
+        self.assertTrue(query.groupby.code.startswith("1, "))
+
+    def test_an_ungrouped_query_is_left_alone(self):
+        """The guard is ``if query.groupby``, so a plain search never touches it."""
+        Module = self.env["ir.module.module"]
+        query = Module._search([])
+        self.assertIsNone(query.groupby)
+
+        Module._order_to_sql("shortdesc", query)
+
+        self.assertIsNone(query.groupby)
 
 
 @tagged("post_install", "-at_install")

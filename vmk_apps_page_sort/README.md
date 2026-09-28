@@ -55,8 +55,9 @@ instead of writing `sequence` values — order the presentation, leave the data 
 ### Why both records anchor on the root tag
 
 This repo's conventions warn against anchoring an inherit on a view's root tag, because core renamed
-`<tree>` to `<list>` in 18 while keeping the old view record ids. There is no way to follow that
-here: `default_order` is an attribute of the root element, so setting it means naming that element.
+`<tree>` to `<list>` in 18 while keeping the old view record ids — `base.module_tree` still names a
+`<list>` on this branch. There is no way to follow that convention here regardless: `default_order`
+is an attribute of the root element, so setting it means naming that element.
 
 The tests compensate. They read the **processed** arch back through `get_view` and assert the
 attribute arrived, so an anchor that stops matching fails loudly. Without that, the failure is
@@ -72,12 +73,12 @@ template is `template0`, which is the normal path — and `C` means byte order. 
 `ORDER BY shortdesc` is therefore not alphabetical in the way a person means it: `CRM` sorts before
 `Calendar`, because `R` (82) precedes `a` (97), and accented initials sort after `Z`. The app grid,
 sorted by [`vmk_apps_menu_sort`](../vmk_apps_menu_sort) in Python with case and accents folded,
-disagreed with this page until 19.0.1.2.0.
+would disagree with this page without the fix below.
 
 **So the module also decides how `shortdesc` is compared.** `default_order` takes field names and
 cannot wrap one in a function, but the ORM builds each ORDER BY term in
-`BaseModel._order_field_to_sql` (`odoo/orm/models.py`), and `models/ir_module_module.py` overrides
-it on `ir.module.module` for `shortdesc` alone:
+`BaseModel._order_field_to_sql` (`odoo/models.py`, ~5650), and `models/ir_module_module.py`
+overrides it on `ir.module.module` for `shortdesc` alone:
 
 - **With ICU**, it orders by `shortdesc COLLATE "und-x-icu"`, ICU's root collation: case does not
   decide the order, and accented letters sit beside their base letter, so `Éxito` follows `Exit`
@@ -87,8 +88,14 @@ it on `ir.module.module` for `shortdesc` alone:
 
 It reaches nothing else. Core never orders modules by `shortdesc` — its `_order` uses the technical
 `name` — so the override changes only the two Apps views that ask for it, keeping the reasoning of
-the section above. It is the same term core would build, with the collation added: the field
-expression is still added to the query's `_order_groupby`, and direction and `NULLS` pass through.
+the section above. It is the same term core would build, with the collation added.
+
+**On 18, a grouped query's `GROUP BY` is extended by reassignment.** Core's `_order_field_to_sql`
+adds the plain field expression to a grouped query's `GROUP BY` before decorating it, so the
+decorated `ORDER BY` stays valid (`odoo/models.py`, ~5682 and ~5712); the override does the same.
+18's `Query.groupby` is a single SQL expression rather than 19's `_order_groupby` list, so the 19
+code, appending to that list, raises `AttributeError` here. The Apps page never orders a grouped
+query by `shortdesc` today, so `TestOrderingWithinAGroupedQuery` calls the override directly.
 
 A stored, normalised sort key was the alternative: a column, a compute, and a recompute on every
 Apps-list update, and a key per language, since `shortdesc` is translated. Ordering in the query
@@ -106,15 +113,18 @@ needs none of that.
 
 The module's own name and summary in `i18n/vmk_apps_page_sort.pot`, `es.po` and `ca.po` are
 hand-maintained, not exported — `ir.module.module` records belong to `base`'s xmlid namespace, so
-`odoo i18n export` never sees them. The module's own view attributes generate no other translatable
-terms, so that is the whole of this catalogue. See
+`odoo i18n export` never sees them. See
 [`vmk_language_systray`'s README](../vmk_language_systray#the-modules-own-name-and-summary-are-hand-maintained-in-i18n)
 for the full explanation. `tests/test_apps_page_sort.py::TestModuleNameTranslation` fails loudly if
 re-running the export drops them.
 
+**On 18, the export also yields one core term**, `"Module"`, the `ir.model` name of
+`ir.module.module`, attributed to us because inheriting a model gives us an xmlid for its row. It
+takes core 18's own `Módulo` and `Mòdul`, as the other modules' inherited model names do.
+
 ### Requirements
 
-Odoo 19. Depends on `base` only. The Python is the one `_order_field_to_sql` override above.
+Odoo 18. Depends on `base` only. The Python is the one `_order_field_to_sql` override above.
 
 ### Testing
 
