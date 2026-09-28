@@ -5,7 +5,7 @@ from pathlib import Path
 
 from odoo.tests.common import TransactionCase, tagged
 
-from ..hooks import RENAMED_FROM, protect_enabled_languages
+from ..hooks import protect_enabled_languages
 
 
 @tagged("post_install", "-at_install")
@@ -45,6 +45,12 @@ class TestLanguageFreeze(TransactionCase):
         lang.iso_code = "xx"
         self.assertTrue(self._noupdate(lang))
 
+    def test_editing_the_short_time_format_protects_the_language(self):
+        """18-only field: base/data/res.lang.csv carries it, so it resets like the rest."""
+        lang = self._a_disabled_lang()
+        lang.short_time_format = "%I:%M"
+        self.assertTrue(self._noupdate(lang))
+
     def test_enabling_a_language_does_not_protect_it(self):
         """Activating is not a customisation; it must not freeze the record."""
         lang = self._a_disabled_lang()
@@ -63,20 +69,6 @@ class TestLanguageFreeze(TransactionCase):
         self.assertFalse(self._noupdate(lang))
         protect_enabled_languages(self.env)
         self.assertTrue(self._noupdate(lang))
-
-    def test_the_install_hook_leaves_protection_alone_after_the_rename(self):
-        """Installed beside vmk_language_freeze_meta, whose protections are already right.
-
-        A language enabled since that module's install, and never edited, is
-        unprotected on purpose; the new module must not freeze it on its way in.
-        """
-        Module = self.env["ir.module.module"]
-        old = Module.search([("name", "=", RENAMED_FROM)])
-        (old or Module.create({"name": RENAMED_FROM})).state = "installed"
-        lang = self._a_disabled_lang()
-        lang.active = True
-        protect_enabled_languages(self.env)
-        self.assertFalse(self._noupdate(lang))
 
     def test_the_flag_can_be_cleared_to_hand_control_back(self):
         self.assertTrue(self.lang_en.protect_from_updates)

@@ -8,6 +8,7 @@ from odoo import api, fields, models
 # `noupdate` block. Editing any of them by hand is what this module protects.
 # `active` and `sequence` are deliberately absent -- enabling a language, or
 # dragging it into order, is not a customisation worth freezing the record for.
+# `short_time_format` is Odoo 18's own column of the CSV; 19 dropped the field.
 PROTECTED_FIELDS = frozenset(
     {
         "name",
@@ -20,6 +21,7 @@ PROTECTED_FIELDS = frozenset(
         "thousands_sep",
         "date_format",
         "time_format",
+        "short_time_format",
         "week_start",
         "flag_image",
     }

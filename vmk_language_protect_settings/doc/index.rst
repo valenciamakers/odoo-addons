@@ -32,21 +32,7 @@ usual; only the language settings are protected.
 
 **Changelog**
 
-*19.0.1.1.2 (25 September 2026)*
+*18.0.1.0.0 (28 September 2026)*
 
-- Renamed from *vmk_language_freeze_meta* to *vmk_language_protect_settings*. No change in
-  behaviour. To move an existing database, install the new module, then uninstall the old one;
-  protected languages stay protected.
-
-*19.0.1.1.1 (24 September 2026)*
-
-- Licensed LGPL-3, and credited to Valencia Makers. No change in behaviour.
-
-*19.0.1.1.0 (19 August 2026)*
-
-- Licensed AGPL-3, from MIT. No change in behaviour.
-
-*19.0.1.0.0 (13 August 2026)*
-
-- First release. Enabled languages are protected on install, and a language is protected when you
-  edit it, with a switch on the language form.
+- First release for Odoo 18, ported from *19.0.1.1.2*. Also protects the **Short Time Format**
+  field, which Odoo 18 carries and 19 does not.

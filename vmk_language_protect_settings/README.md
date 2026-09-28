@@ -12,20 +12,6 @@ It depends only on `base`. LGPL-3, © 2026 Valencia Makers, SL.
 
 ## For developers
 
-### Renamed from `vmk_language_freeze_meta`
-
-The module was `vmk_language_freeze_meta` until 19.0.1.1.2, renamed on 25 September 2026 before its
-first Apps Store release. Odoo has no module rename, so an existing database moves by installing
-`vmk_language_protect_settings` and then uninstalling `vmk_language_freeze_meta`. Nothing is lost:
-protection is the `noupdate` flag on `base`'s own external ids, which neither module owns, the
-`protect_from_updates` field is computed, and both modules set the same flags, so running them side
-by side for the move is harmless.
-
-One thing had to change for the move: the install hook, which protects every enabled language, skips
-itself when `vmk_language_freeze_meta` is installed. The old module's protections are already right,
-and a language enabled since its install and never edited is unprotected on purpose; a blanket
-protect would freeze it. A test covers the hook both ways.
-
 Odoo ships its languages as module data and re-applies them on every module update, so any edit you
 make to a language is reverted. Rename `English (US)` to `English`, broaden Catalan's ISO code from
 `ca_ES` to `ca`, and the next `-u base` — which is what `-u all` and most update scripts do — puts
@@ -41,15 +27,19 @@ have no `noupdate` mechanism — unlike XML, which can wrap records in `<data no
 every row loads with `noupdate = False` and is re-applied on each update. The columns it resets:
 
 `name`, `code`, `iso_code`, `direction`, `grouping`, `decimal_point`, `thousands_sep`,
-`date_format`, `time_format`, `week_start`
+`date_format`, `time_format`, `short_time_format`, `week_start`
+
+`short_time_format` is Odoo 18's own field (`odoo/addons/base/models/res_lang.py:68`, "Time Format
+without seconds") — Odoo 19 dropped it. It is a CSV column like the rest, so this module protects it
+too.
 
 `base/data/res_lang_data.xml` additionally sets `url_code` and `flag_image` for a handful of
 languages, some of it outside its `noupdate` block.
 
 ### How it protects them
 
-By setting `noupdate` on the language's external id. `_load_records` in `odoo/orm/models.py` decides
-what to re-apply with:
+By setting `noupdate` on the language's external id. `_load_records` in `odoo/models.py` decides
+what to re-apply with (`odoo/models.py:5510`):
 
 ```python
 if not (update and d_noupdate):
@@ -57,9 +47,9 @@ if not (update and d_noupdate):
 ```
 
 so a flagged record is skipped while updating a module, but still created on a fresh install. The
-flag is durable: the xmlid upsert in `ir.model.data._build_update_xmlids_query` only ever writes
-`(model, res_id, write_date)`, never `noupdate`, so the data file that created the row cannot clear
-it later.
+flag is durable: the xmlid upsert in `ir.model.data._build_update_xmlids_query`
+(`odoo/addons/base/models/ir_model.py:2441`) only ever writes `(model, res_id, write_date)`, never
+`noupdate`, so the data file that created the row cannot clear it later.
 
 Protection is per record and all-or-nothing — there is no per-field granularity. A protected
 language also stops receiving genuine Odoo corrections to its date formats or week start. That is
@@ -87,24 +77,26 @@ nothing to protect. The toggle stays off for them, correctly.
 
 ### A note on `iso_code`
 
-Its help text — _"This ISO code is the name of po files to use for translations"_ — is stale in 19.
-`_load_module_terms` passes the language **`code`** to `get_po_paths`, and `get_base_langs('ca_ES')`
-returns `['ca', 'ca_ES']`, so `ca.po` is found whatever `iso_code` says. What `iso_code` still
-drives is `num2words`, for amounts in words (`res_currency.py`). Changing it is safe either way;
-this module just stops the change being reverted.
+Its help text — _"This ISO code is the name of po files to use for translations"_ — is stale. Term
+loading (`_update_translations` in `odoo/addons/base/models/ir_module.py:876`) filters by
+`res.lang.get_installed()`, which returns each language's **`code`**, and `get_po_paths`
+(`odoo/tools/translate.py:1777`) derives its PO filenames straight from that — `ca.po` is found for
+`ca_ES` because `lang.split('_', 1)[0]` is `ca`, whatever `iso_code` says. What `iso_code` still
+drives is `num2words`, for amounts in words (`odoo/addons/base/models/res_currency.py`, around line
+195). Changing it is safe either way; this module just stops the change being reverted.
 
 ### Translations
 
 The module's own name and summary in `i18n/vmk_language_protect_settings.pot`, `es.po` and `ca.po`
 are hand-maintained, not exported — `ir.module.module` records belong to `base`'s xmlid namespace,
-so `odoo i18n export` never sees them. See
+so `odoo`'s `--i18n-export` never sees them. See
 [`vmk_language_systray`'s README](../vmk_language_systray#the-modules-own-name-and-summary-are-hand-maintained-in-i18n)
 for the full explanation. `tests/test_language_freeze.py::TestModuleNameTranslation` fails loudly if
 re-running the export drops them.
 
 ### Requirements
 
-Odoo 19. Depends only on `base`.
+Odoo 18. Depends only on `base`.
 
 ### Testing
 
@@ -113,7 +105,7 @@ odoo -d <db> -u vmk_language_protect_settings --test-enable \
      --test-tags /vmk_language_protect_settings --stop-after-init
 ```
 
-Verified end to end against `odoo:19`: with Catalan renamed to `Catalan / Català / Valencià` and its
-ISO code broadened to `ca`, and `English (US)` renamed to `English`, a full `-u base` left both
-untouched — while an unprotected control language, edited the same way, reverted to
-`French / Français`.
+Ported from the Odoo 19 module of the same name (19.0.1.1.2), which was itself renamed from
+`vmk_language_freeze_meta` on 25 September 2026 — see that module's history on the `19.0` branch.
+This is a first release for Odoo 18: no 18 database has ever run under the old name, so the 19
+module's migration handling for it does not apply here and was not ported.
