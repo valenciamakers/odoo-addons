@@ -2,15 +2,23 @@
 # This file contains the translation of the following modules:
 # 	* vmk_apps_menu_sort
 #
-# Terms shared with Odoo core reuse core's own Catalan wording. Odoo 19 ships no
-# Valencian variant -- ca_ES is the only Catalan locale.
+# Terms shared with Odoo core reuse core's own Catalan wording. Odoo ships no
+# Valencian variant -- ca_ES is the only Catalan locale. The two
+# `base.module_vmk_apps_menu_sort` entries are the module's own name and
+# summary, which `i18n export` never emits (see the POT).
+#
+# Departure: "User Settings" keeps "Arranjament d'usuari" (no space after the
+# apostrophe). Core's own Catalan carries a stray space, "Arranjament d'
+# usuari", in twelve modules including base; we take core's wording, not its
+# typography. Decided 22 September 2026, verified to still hold on 18.0's
+# catalogues.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 19.0\n"
+"Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-14 12:55+0000\n"
-"PO-Revision-Date: 2026-08-14 12:55+0000\n"
+"POT-Creation-Date: 2026-09-28 18:04+0000\n"
+"PO-Revision-Date: 2026-09-28 18:04+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ca\n"
@@ -19,17 +27,15 @@ msgstr ""
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#. module: vmk_apps_menu_sort
-#: model:ir.model.fields,field_description:vmk_apps_menu_sort.field_ir_ui_menu__display_name
-#: model:ir.model.fields,field_description:vmk_apps_menu_sort.field_res_users_settings__display_name
-msgid "Display Name"
-msgstr "Nom mostrat"
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_vmk_apps_menu_sort
+msgid "Apps Menu Sort"
+msgstr "Ordre del menú d'aplicacions"
 
-#. module: vmk_apps_menu_sort
-#: model:ir.model.fields,field_description:vmk_apps_menu_sort.field_ir_ui_menu__id
-#: model:ir.model.fields,field_description:vmk_apps_menu_sort.field_res_users_settings__id
-msgid "ID"
-msgstr "ID"
+#. module: base
+#: model:ir.module.module,summary:base.module_vmk_apps_menu_sort
+msgid "Alphabetical order for the apps menu, with Apps and Settings at the end"
+msgstr "Ordre alfabètic per al menú d'aplicacions, amb Aplicacions i Configuració al final"
 
 #. module: vmk_apps_menu_sort
 #: model:ir.model,name:vmk_apps_menu_sort.model_ir_ui_menu
@@ -59,13 +65,3 @@ msgstr "S'ha restablert l'ordre de la graella d'aplicacions de %s usuari(s)."
 #: model:ir.model,name:vmk_apps_menu_sort.model_res_users_settings
 msgid "User Settings"
 msgstr "Arranjament d'usuari"
-
-#. module: base
-#: model:ir.module.module,shortdesc:base.module_vmk_apps_menu_sort
-msgid "Apps Menu Sort"
-msgstr "Ordre del menú d'aplicacions"
-
-#. module: base
-#: model:ir.module.module,summary:base.module_vmk_apps_menu_sort
-msgid "Alphabetical order for the apps menu, with Apps and Settings at the end"
-msgstr "Ordre alfabètic per al menú d'aplicacions, amb Aplicacions i Configuració al final"

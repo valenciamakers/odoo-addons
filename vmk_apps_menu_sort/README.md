@@ -69,7 +69,7 @@ works on both beats two that each work on one.
 
 ### Why the result is copied rather than sorted in place
 
-`ir.ui.menu.load_menus` is `@ormcache('self.env.uid', 'debug', 'self.env.lang')`, so the dict
+`ir.ui.menu.load_menus` is `@ormcache_context('self._uid', 'debug', keys=('lang',))`, so the dict
 `super()` returns is shared between requests. Sorting `root['children']` in place would appear to
 work — sorting an already-sorted list is idempotent — while writing into a live cache entry that
 other overrides also read. Core itself treats that return value as immutable: `load_web_menus`
@@ -184,11 +184,12 @@ re-running the export drops them.
 `Arranjament d' usuari` — with a space after the apostrophe — in twelve modules including `base`.
 This module writes `Arranjament d'usuari`. Taking core's wording is the rule here; taking its
 typography is not. `./odev terms vmk_apps_menu_sort` therefore reports one divergence by design, and
-carries it as a declared exception so the check still ends clean. Decided 22 September 2026.
+carries it as a declared exception so the check still ends clean. Decided 22 September 2026, and
+still the only divergence on 18.0's catalogues.
 
 ### Requirements
 
-Odoo 19. Depends on `base` only. Both overridden methods are defined there, and `res.users.settings`
+Odoo 18. Depends on `base` only. Both overridden methods are defined there, and `res.users.settings`
 is a `base` model too — the Enterprise-only `homemenu_config` field is detected at runtime, so the
 reset action degrades to a no-op on Community rather than needing a dependency.
 
@@ -202,7 +203,7 @@ The tests assert relative order rather than a fixed list of apps, so they hold o
 reset-action test covers whichever branch the database supports: the Community no-op, or the real
 clearing path on Enterprise, rolled back with the test transaction.
 
-Verified against `odoo:19` Community for the ordering itself, and on an Odoo 19 **Enterprise**
-instance on 2026-08-13 for the two things Community cannot exercise: the app grid on `/odoo` follows
-this module's order, and running the reset returned a grid whose owner had dragged icons around back
-to it.
+On 18, verified with the 16 tests above on 28 September 2026, on a minimal install in which
+Enterprise's `web_enterprise` is present, so the reset test took its real clearing path. The grid on
+`/odoo` itself was verified live on Odoo 19 Enterprise on 2026-08-13; on 18 its code
+(`home_menu_service.js`, `reorderApps`, `homemenu_config`) was checked against source.
