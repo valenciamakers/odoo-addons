@@ -9,7 +9,7 @@ store fills a 2:1 frame with it, so each cover is laid out at 880x440 CSS px on 
 tools/covers/cover.css and rendered at 2x, 1760x880. Covers reference the module's own screenshots
 and icon by relative path, so re-rendering after a new screenshot picks it up.
 
-    uv run tools/make_cover.py vmk_event_slot_multiday
+    uv run tools/make_cover.py vmk_event_host
     uv run tools/make_cover.py --all
     uv run tools/make_icon.py --install-browser     # once, if Playwright's Chromium is missing
 
@@ -46,7 +46,7 @@ async def render(modules):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("module", nargs="?", help="technical name, e.g. vmk_event_slot_multiday")
+    parser.add_argument("module", nargs="?", help="technical name, e.g. vmk_event_host")
     parser.add_argument("--all", action="store_true", help="re-render every module with a cover in tools/covers/")
     args = parser.parse_args()
     if args.all:

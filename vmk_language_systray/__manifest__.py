@@ -4,7 +4,7 @@
 {
     "name": "Backend Language Menu",
     "summary": "Switch your own backend language from a dropdown in the menu bar",
-    "version": "19.0.1.1.1",
+    "version": "18.0.1.0.0",
     "author": "Valencia Makers",
     "license": "LGPL-3",
     "category": "Technical",

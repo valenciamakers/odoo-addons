@@ -1,8 +1,8 @@
 # Developing these modules
 
-How the Odoo 19 modules in this repository are written and tested, and the Odoo 19 behaviour we
+How the Odoo 18 modules in this repository are written and tested, and the Odoo behaviour we
 verified along the way. The modules are LGPL-3, as Odoo itself is, and depend only on Community
-modules, though we run them on Odoo 19 Enterprise too. Everything here is our own code; third-party
+modules, and are tested on Odoo 18 Enterprise too. Everything here is our own code; third-party
 modules never enter this repository.
 
 This file describes one Odoo series. Each series branch carries its own copy, so a trap listed here
@@ -20,9 +20,6 @@ was verified against the series of the branch you are reading.
 - **`vmk_event_host`** — who runs an event, as contacts; several per event.
 - **`vmk_event_registration_deadline`** — stop selling registrations when an event starts, or a set
   time before; per-event override, and the same rule applied to slots.
-- **`vmk_event_slot_multiday`** — an end date on event slots, so a slot can span several days.
-- **`vmk_website_event_slot_multiday`** — both days of a multi-day slot in the website's
-  registration modal; `auto_install`.
 - **`vmk_partner_email_multiple`** — several email addresses per contact, matched by Odoo's own
   machinery, and kept rather than dropped when contacts are merged.
 - **`tools/`** — not a module. `make_icon.py` renders each module's store icon from the glyphs in
@@ -36,12 +33,14 @@ of the traps below in context.
 This repository follows Odoo's and the OCA's convention: **a branch per Odoo series, named for it**,
 and no `main`. `19.0` holds the Odoo 19 modules and is the default branch; it replaced `main` on 24
 September 2026, with the same commits. The Apps Store reads a repository by its series branches.
-Another series starts as a branch of `19.0`, which then carries fixes for Odoo 19 installs only.
+This branch, `18.0`, holds the Odoo 18 versions, branched from `19.0` on 28 September 2026 without
+the modules built on event slots, which Odoo 18 does not have. A fix lands on `19.0` first and is
+carried here where it applies, with a version bump of its own.
 
 ## Testing locally
 
-Modules here install by name against a local Odoo 19 with this repo on the addons path. A
-two-service Compose file is enough — Postgres 17 and `odoo:19` with the repo root mounted at
+Modules here install by name against a local Odoo 18 with this repo on the addons path. A
+two-service Compose file is enough — Postgres 17 and `odoo:18.0` with the repo root mounted at
 `/mnt/extra-addons`:
 
 ```bash
@@ -129,13 +128,13 @@ written only during an install or upgrade.
 
 ## Verify against source, not memory
 
-Read the real 19.0 source before building on any claim about what Odoo does. It is right there in
+Read the real 18.0 source before building on any claim about what Odoo does. It is right there in
 the image:
 
 ```bash
-docker run --rm odoo:19 bash -c "grep -rn 'def _get_frontend(' /usr/lib/python3/dist-packages/odoo/"
-docker create --name odoo19src odoo:19
-docker cp odoo19src:/usr/lib/python3/dist-packages/odoo/addons/base/models/res_lang.py .
+docker run --rm odoo:18.0 bash -c "grep -rn 'def _get_frontend(' /usr/lib/python3/dist-packages/odoo/"
+docker create --name odoo18src odoo:18.0
+docker cp odoo18src:/usr/lib/python3/dist-packages/odoo/addons/base/models/res_lang.py .
 ```
 
 Documentation and tutorials written for earlier series are a starting point, never an authority:
@@ -144,7 +143,11 @@ much of what circulates still documents `<tree>`, for one.
 **Read the JavaScript too.** Ordering, drag behaviour, and view composition are frequently decided
 in `web/static/src/**`, not in Python. Half the surprises below live there.
 
-## Odoo 19 traps, verified
+## Odoo traps, verified
+
+This catalogue was built on Odoo 19. Each entry is re-verified against 18.0 as the modules that rely
+on it are ported, and one that differs on 18 says so; an entry saying nothing about 18 has not been
+checked there yet.
 
 **Views**
 
@@ -248,7 +251,7 @@ in `web/static/src/**`, not in Python. Half the surprises below live there.
   Neither `_order` nor a view's `default_order` can fix it, both taking bare field names with no
   room for `lower()`. Sort in Python, or override `_order_field_to_sql` on the model for that one
   field and add `COLLATE "und-x-icu"`, falling back to `lower()` where `pg_collation` lacks it, as
-  `vmk_apps_page_sort` does (19.0.1.2.0).
+  `vmk_apps_page_sort` does.
 - `post_init_hook(env)` takes the environment, and runs on **install only** — never on upgrade. If a
   hook seeds data, an upgrade will not re-seed it; apply it by hand when testing on an existing
   database.
@@ -563,8 +566,8 @@ publishers using `vmk_`, and only a full technical name actually collides. The A
 each module at a predictable URL, so a direct request is the test:
 
 ```bash
-curl -s -o /dev/null -w '%{http_code}\n' https://apps.odoo.com/apps/modules/19.0/kw_mock_mail_server
-curl -s -o /dev/null -w '%{http_code}\n' https://apps.odoo.com/apps/modules/19.0/vmk_your_new_module
+curl -s -o /dev/null -w '%{http_code}\n' https://apps.odoo.com/apps/modules/18.0/kw_mock_mail_server
+curl -s -o /dev/null -w '%{http_code}\n' https://apps.odoo.com/apps/modules/18.0/vmk_your_new_module
 ```
 
 **Probe a name known to exist first**, as the first line does. If the URL pattern ever changes,
@@ -579,7 +582,7 @@ publish the same name between our checking it and our publishing, though with a 
 is unlikely. And it only covers the Apps Store; a module distributed purely through GitHub would not
 show up at all.
 
-Manifest: `"version": "19.0.1.1.0"` (Odoo series first), `"author": "Valencia Makers"` — **no
+Manifest: `"version": "18.0.1.1.0"` (Odoo series first), `"author": "Valencia Makers"` — **no
 comma**. `author` is a comma-separated list of authors, which is how the OCA is credited beside a
 company, so the Apps Store listed "Valencia Makers, SL" as two authors, "Valencia Makers" and "SL",
 each linked to a search. The legal name stays in the copyright lines. Fixed 24 September 2026. Keep
@@ -671,7 +674,7 @@ with the screenshots, so a later retake is one command.
 headings at 53px, 42px, and 31px against 16px text, and pure RST cannot set a size; top-level
 sections are always its `h2`. So there is no title (the page already names the module), section
 names are bold paragraphs — **Installation**, **Using it**, **Limits**, **Changelog** — and each
-changelog version is an italic line, `*19.0.1.0.1 (24 September 2026)*`, over a bullet list, newest
+changelog version is an italic line, `*18.0.1.0.1 (24 September 2026)*`, over a bullet list, newest
 first. A mention of the other module where the reader should install it instead links to its store
 page. Check that it parses with docutils before committing.
 
@@ -692,7 +695,7 @@ laptop. Added 2026-09-20.
 Odoo prefixes its own series, leaving three digits that we use as plain semver:
 
 ```
-19.0  .  1  .  1  .  1
+18.0  .  1  .  1  .  1
 └──┬─┘    │    │    └── patch
 Odoo      │    └─────── minor
 series    └──────────── major

@@ -9,7 +9,7 @@ drawing on Lucide's 24px grid. The icon is the glyph alone, in our purple on a t
 background, filling a 256px square and rendered at its final size so nothing is resampled. The Apps
 Store frames an icon in its own white box, and Odoo's own app icons have no tile either.
 
-    uv run tools/make_icon.py vmk_event_slot_multiday          # render from tools/icons/
+    uv run tools/make_icon.py vmk_event_host          # render from tools/icons/
     uv run tools/make_icon.py vmk_foo --lucide calendar-range   # fetch a Lucide glyph first
     uv run tools/make_icon.py --all                             # re-render every module
     uv run tools/make_icon.py --install-browser                 # once: Playwright's Chromium
@@ -75,7 +75,7 @@ async def render(modules):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("module", nargs="?", help="technical name, e.g. vmk_event_slot_multiday")
+    parser.add_argument("module", nargs="?", help="technical name, e.g. vmk_event_host")
     parser.add_argument("--lucide", metavar="NAME", help="fetch this Lucide icon as the module's glyph first")
     parser.add_argument("--all", action="store_true", help="re-render every module with a glyph in tools/icons/")
     parser.add_argument("--install-browser", action="store_true", help="download Playwright's Chromium")

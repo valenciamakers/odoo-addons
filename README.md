@@ -1,6 +1,6 @@
 # Odoo Addons
 
-Odoo 19 modules written and maintained by Valencia Makers, SL — a digital-fabrication education,
+Odoo 18 modules written and maintained by Valencia Makers, SL — a digital-fabrication education,
 makerspace, and retail business in Valencia, Spain. Each one is small, solves a problem we hit
 running our own instance, and is licensed LGPL-3, as Odoo itself is.
 
@@ -29,12 +29,6 @@ They depend only on Odoo Community modules, so they work on Community and Enterp
 - **[`vmk_event_registration_deadline`](vmk_event_registration_deadline)** — stop selling tickets
   when an event starts, or a set time before it, instead of when it ends as Odoo does. A default in
   the Event settings, an override per event, and the same rule for each slot.
-- **[`vmk_event_slot_multiday`](vmk_event_slot_multiday)** — let an event slot end on a later day
-  than it starts, such as Friday evening to Sunday afternoon. Everything that reads the slot's end
-  follows: the calendar, the attendee's registration, and scheduled mail.
-- **[`vmk_website_event_slot_multiday`](vmk_website_event_slot_multiday)** — show both days of a
-  multi-day slot to a visitor picking it on the event page. Installs itself alongside Website
-  Events.
 
 Each module's own `README.md` explains why it is built the way it is — which core method fights you,
 and where. That is usually the interesting part.
@@ -44,16 +38,18 @@ and where. That is usually the interesting part.
 Clone onto your Odoo addons path, update the apps list, and install by name:
 
 ```bash
-git clone -b 19.0 https://github.com/valenciamakers/odoo-addons.git
+git clone -b 18.0 https://github.com/valenciamakers/odoo-addons.git
 odoo --addons-path=/path/to/odoo-addons,... -d <db> -i vmk_language_sequence
 ```
 
-There is one branch per Odoo series, as Odoo and the OCA do: `19.0` holds the modules for Odoo 19.
+There is one branch per Odoo series, as Odoo and the OCA do: this one, `18.0`, holds the modules for
+Odoo 18, and `19.0` those for Odoo 19. Event slots are new in Odoo 19, so the modules built on them
+exist only there.
 
 ## Developing
 
-A two-service Compose file is enough to run these modules — Postgres 17 and `odoo:19` with the repo
-root mounted at `/mnt/extra-addons`:
+A two-service Compose file is enough to run these modules — Postgres 17 and `odoo:18.0` with the
+repo root mounted at `/mnt/extra-addons`:
 
 ```bash
 docker compose up -d db
@@ -73,7 +69,7 @@ Each module's store icon is rendered from an SVG glyph in `tools/icons/` by
 notice in `tools/icons/LICENSE-lucide`) or drawn to match them.
 
 [`DEVELOPING.md`](DEVELOPING.md) sets out how the modules are written and tested, plus a catalogue
-of Odoo 19 behaviours that cost us time — all verified against real Odoo source rather than against
+of Odoo behaviours that cost us time — all verified against real Odoo source rather than against
 documentation.
 
 ## Contributing
