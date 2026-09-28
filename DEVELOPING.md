@@ -827,7 +827,9 @@ attributes that model's name and its `display_name`/`id` fields to your module i
 POT can be entirely `Display Name`, `ID`, `Menu`, `Config Settings` — every one a record core
 already translates. `vmk_settings_sort` was exactly that case and `vmk_apps_page_sort` exports
 nothing whatsoever. But both still appeared in the Apps list under an English name in a Spanish
-database, which is the thing a catalogue exists to prevent. Both now carry one.
+database, which is the thing a catalogue exists to prevent. Both now carry one. On 18, extending a
+core model does not attribute its `display_name` and `id` to your module, so those entries drop out
+of a re-export; `vmk_event_host` and `vmk_language_protect_settings` both lost them.
 
 What survives of the old rule: when a module's POT does carry core-owned terms, translate them with
 core's own wording rather than afresh — and `vmk_apps_page_sort` shows the floor, a catalogue whose
