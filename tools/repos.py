@@ -12,7 +12,9 @@ A cover in the Private repo takes the shared stylesheet from here, by relative p
 from pathlib import Path
 
 PUBLIC = Path(__file__).resolve().parent.parent
-PRIVATE = PUBLIC.parent / "Odoo Addons - Private"
+# The same checkout series as this one: "Odoo Addons - Custom (18.0)" pairs with
+# "Odoo Addons - Private (18.0)", the plain names with each other.
+PRIVATE = PUBLIC.parent / PUBLIC.name.replace("Custom", "Private", 1)
 REPOS = [repo for repo in (PUBLIC, PRIVATE) if repo.is_dir()]
 
 
