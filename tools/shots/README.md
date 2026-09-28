@@ -30,69 +30,49 @@ The tools connect to `127.0.0.1:9222`, so only one Chrome may hold that port: a 
 with the flag binds only the IPv6 half and is never reached. If a capture hangs or the backend tab
 shows Odoo's "Offline" page, quit every Chrome and start this one again.
 
-**The demo data**, in English (UK), which gives 24-hour times and day-first dates:
+**The demo data**, in English (UK), which gives 24-hour times and day-first dates, is created by
+`demo/seed.py`, idempotently — safe to re-run, finding each record by name rather than duplicating
+it:
+
+```bash
+DB=shots ../Tech\ Stack/odoo-dev/odev shell < tools/shots/demo/seed.py   # from the repo root; SERIES=18.0 for 18
+```
+
+It works on both Odoo 18 and 19, branching on `odoo.release.series` where they differ — see the
+script's own docstring. Odoo 18 has no `event.slot` model and neither series' harness loads demo
+data (`without_demo`/`with_demo` off), so on 18 the script also creates Marc Demo and Edith Sanchez
+itself, with the same avatars Odoo's own demo data uses, and Beginner's Bootcamp becomes one
+ordinary event rather than a multi-slot one. What it makes:
 
 - the admin user named **Mitchell Admin**, as in Odoo's own demo data, with English (UK) as their
   language and the website's default;
 - **Beginner's Bootcamp**, with Multiple Slots, three slots in Violet (the first from Friday evening
   to Sunday afternoon), a venue, and hosts **Marc Demo** (Lead Instructor) and **Edith Sanchez**
-  (Assistant);
+  (Assistant). **On Odoo 18**, which has no `event.slot` model, it is instead one ordinary event
+  dated a Friday evening to Sunday afternoon;
 - three more events with hosts, for the grouped list: **Weekend Festival**, **Design Workshop**, and
   **Back to Basics**, the last with its own 02:00 registration deadline and an Admission ticket;
 - the Registration Deadline setting on, at 01:30;
 - for the deadline's public page, a published event named **Open Studio Evening** starting within
-  the deadline. It is temporary by nature; recreate it just before capturing:
+  the deadline. It is temporary by nature, so `seed.py` does not create it: call its
+  `open_studio_evening(env)` on its own, right before capturing —
 
-```python
-# ./odev shell
-from datetime import datetime, timedelta
-start = (datetime.now() + timedelta(hours=1)).replace(minute=0, second=0, microsecond=0)
-env['event.event'].create({'name': 'Open Studio Evening', 'date_begin': start,
-    'date_end': start + timedelta(hours=3), 'date_tz': 'Europe/Madrid', 'website_published': True,
-    'description': '<p>A drop-in evening in the studio: bring a project, use the printers, and get help from the team.</p>',
-    'event_ticket_ids': [(0, 0, {'name': 'Admission'})]})
-env.cr.commit()
+```bash
+(cat tools/shots/demo/seed.py; echo "open_studio_evening(env)") | \
+    DB=shots ../Tech\ Stack/odoo-dev/odev shell
 ```
 
 - for the sort modules, a spread of Odoo's own apps: CRM, Sales, Invoicing, Inventory, Purchase,
   Project, Employees, Time Off, Calendar, Contacts, Manufacturing, Point of Sale, and Helpdesk, with
-  the company's country set to Spain.
+  the company's country set to Spain. `seed.py` does not install these — see "Running" below.
 - for the language modules, six enabled languages, all on the website: English (UK), English (US),
   Catalan, French, German, and Spanish. The Language Sequence recipe sets their order; the Protect
   Language Edits recipe changes Catalan's ISO code to `ca`, which protects it.
 - for Multiple Contact Emails, with the module and CRM installed, a contact named **Rosa Vidal**
   with two additional addresses and, as the contact's image, Lucide's `square-user-round` in our
   purple (`demo/rosa_vidal.png`), and a lead that arrived by email from one of them. The lead goes
-  through the mail gateway, so its contact is found the way real mail finds it; the snippet
-  recreates both, so it is safe to run again:
-
-```python
-# ./odev shell
-Partner = env["res.partner"]
-rosa = Partner.search([("name", "=", "Rosa Vidal")], limit=1) or Partner.create({"name": "Rosa Vidal"})
-rosa.write({"email": "rosa.vidal@example.com", "phone": "+34 600 123 456", "function": "Product Designer",
-    "lang": "en_GB", "city": "Valencia", "country_id": env.ref("base.es").id,
-    "vmk_email_ids": [(5, 0, 0),
-        (0, 0, {"email": "rosa@example.org", "label": "Personal", "sequence": 10}),
-        (0, 0, {"email": "rosa.billing@example.com", "label": "Billing", "sequence": 20})]})
-import base64
-rosa.image_1920 = base64.b64encode(open("/mnt/extra-addons/odoo-addons-custom/tools/shots/demo/rosa_vidal.png", "rb").read())
-env["crm.lead"].search([("name", "=", "Laser cutting for a small order")]).unlink()
-lead = env["crm.lead"].browse(env["mail.thread"].message_process("crm.lead", """From: Rosa Vidal <rosa@example.org>
-To: info@example.com
-Subject: Laser cutting for a small order
-Message-ID: <rosa-laser-order@example.org>
-Date: Thu, 24 Sep 2026 17:42:00 +0200
-Content-Type: text/html; charset=utf-8
-
-<p>Hi, could you cut 40 coasters in 3mm birch plywood from the attached design?</p><p>Thanks,<br>Rosa</p>
-"""))
-tag = env["crm.tag"].search([("name", "=", "Laser Cutting")], limit=1) or env["crm.tag"].create({"name": "Laser Cutting"})
-lead.write({"expected_revenue": 240, "probability": 40, "user_id": env.ref("base.user_admin").id,
-    "date_deadline": "2026-10-16", "priority": "1", "tag_ids": [(6, 0, tag.ids)]})
-assert rosa.email == "rosa.vidal@example.com" and lead.partner_id == rosa
-env.registry.signal_changes(); env.cr.commit()
-```
+  through the mail gateway, so its contact is found the way real mail finds it; `seed.py` recreates
+  the lead on every run, so it stays matched to Rosa even after an unrelated re-seed.
 
 Recipes find records by these names, so ids do not matter. The three sort recipes uninstall their
 module over RPC for the "before" captures and install it again for the "after"; `_sorting.py` waits

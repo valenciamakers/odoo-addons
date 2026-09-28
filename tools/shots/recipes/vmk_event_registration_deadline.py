@@ -16,9 +16,13 @@ import shots
 
 CLOSED_EVENT = "Open Studio Evening"   # published, starting within the deadline
 OWN_DEADLINE = "Back to Basics"        # has its own 02:00 deadline and an Admission ticket
+# Two selectors per row: 19 pairs a label .o_cell with a value .o_cell as siblings of
+# .o_inner_group directly; 18 wraps each pair together in one .o_wrap_field instead, so .o_cell is
+# no longer .o_inner_group's direct child -- see shots/README.md on porting a recipe.
 FORM_CSS = """
     .o_inner_group > .o_cell:has([name=vmk_host_names]),
-    .o_inner_group > .o_cell:has(+ .o_cell [name=vmk_host_names]) { display: none !important; }
+    .o_inner_group > .o_cell:has(+ .o_cell [name=vmk_host_names]),
+    .o_wrap_field:has([name=vmk_host_names]) { display: none !important; }
     .o_field_widget[name=address_id] .o_field_many2one_extra { display: none !important; }
     .o_notebook .nav-item:has(.nav-link[name=vmk_hosts]) { display: none !important; }"""
 
