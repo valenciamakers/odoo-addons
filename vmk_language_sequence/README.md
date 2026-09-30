@@ -26,24 +26,47 @@ The chosen order drives:
 ### Why it needs more than a `sequence` field
 
 The obvious implementation — add `sequence`, override `_order` — reorders the Languages list and
-nothing else. Three separate code paths produce language lists, and none of them consults `_order`:
+nothing else. Odoo 20 made `res.lang` a `models.CachedModel`, which keeps the active languages' data
+on the `'stable'` cache, and every list of languages core builds starts from that cache and sorts it
+by name itself:
 
-| Consumer                             | Path                                   | Stock ordering                    |
-| ------------------------------------ | -------------------------------------- | --------------------------------- |
-| Language dropdowns (users, contacts) | `get_installed()` → `_get_active_by()` | `search_fetch(..., order='name')` |
-| Portal selector (no website)         | `http_routing`'s `_get_frontend()`     | same, via `_get_active_by()`      |
-| Website language selector            | `website`'s `_get_frontend()`          | `language_ids.sorted('name')`     |
+| Consumer                             | Path                                                         | Stock ordering                       |
+| ------------------------------------ | ------------------------------------------------------------ | ------------------------------------ |
+| Language dropdowns (users, contacts) | `get_installed()`                                            | `_get_active_langs().sorted('name')` |
+| Portal selector (no website)         | `http_routing`'s `_get_frontend()`, `_get_active_by('code')` | `_get_active_langs()`, id order      |
+| Website language selector            | `website`'s `_get_frontend()`                                | `language_ids.sorted('name')`        |
 
-So `models/res_lang.py` does three things beyond declaring the field:
+So `models/res_lang.py` does four things beyond declaring the field:
 
-1. **`CACHED_FIELDS`** gains `sequence`, so the cached language data carries it and the two sorting
-   overrides below never need a query of their own.
-2. **`_get_active_by()`** re-sorts by `(sequence, name)`. It is the single chokepoint behind both
-   the backend dropdowns and the portal selector, so one override covers both. It keeps its own
-   `ormcache` because `_get_data()` reaches it on every date and number format.
-3. **`_get_frontend()`** re-sorts, undoing `website`'s `.sorted('name')`. No cache of its own —
-   `super()` is already cached, and this runs once per page render over a handful of entries. It
-   then re-assigns the hreflang codes, below.
+1. **`_cached_data_fields`** gains `sequence`. Two effects in one line: the cached language data
+   carries it, so no ordering code needs a query of its own, and `CachedModel`'s
+   `_clear_cache_on_fields` is derived from the same attribute, so writing a sequence clears the
+   `'stable'` cache. It is a property that appends to `super()`'s tuple rather than a copy of it, so
+   a field core adds later is not dropped.
+2. **`_get_active_langs()`** returns the languages sorted by `(sequence, name)`. `_get_active_by()`
+   builds its `LangDataDict` from it, so `_get_data()`, the portal selector, and every keyed view of
+   the cache (`code`, `id`, `url_code`) follow the order with no override of their own — and stay
+   cached by core, which matters because `_get_data()` is reached on every date and number format.
+3. **`get_installed()`** is overridden, because core sorts its result by name after asking for the
+   languages, which would undo point 2. It is the source of every language dropdown on users,
+   contacts, mail templates, events, payments and more, and of the systray menu.
+4. **`_get_frontend()`** re-sorts `website`'s result, undoing its `.sorted('name')`. No cache of its
+   own — `super()` is already cached, and this runs once per page render over a handful of entries.
+   It then re-assigns the hreflang codes, below.
+
+### What the order does not reach
+
+Three places in core 20 sort `_get_active_langs()` by name themselves, in their own code, and this
+module leaves them alone: the **translation dialog** (`web/controllers/webclient.py`), Studio's XML
+resource editor, and the **Point of Sale self-order kiosk's** default languages
+(`pos_self_order/models/pos_config.py`). The first two are for staff translating content, where
+alphabetical is as good as any order. The kiosk is customer-facing, so it may be worth a patch if
+you run it, but it is one more copy of core to keep in step and nobody asked for it.
+
+Two consumers take the first language in our order as a default rather than listing them:
+`get_installed()[0]` picks the language of a new survey, and `http_routing`'s `_get_default_lang`
+falls back to the first active language when no default contact language is set. Both were true on
+Odoo 19 too, and both are harmless while English or the company's language leads the order.
 
 ### hreflang follows the order too
 
@@ -56,8 +79,9 @@ not their codes, so English (UK) stayed the generic English wherever it was drag
 `_hreflang_in_order()` therefore runs core's loop again, over our order: the first variant in the
 chosen order is generic. It keeps core's one exception, that `es_419` takes `es` whenever it is
 enabled, because core treats Latin American Spanish as the generic Spanish. It is a copy of core's
-rule, so re-check it against that method on a major upgrade. Outside a website request the data
-carries no hreflang, and passes through untouched.
+rule, so re-check it against that method on a major upgrade. Without a current website — Odoo 19
+keyed this on the request, 20 keys it on `env.website` — the data carries no hreflang, and passes
+through untouched.
 
 The consequence is that dragging a language now changes a search-engine signal, which is the point —
 someone who puts English (UK) first means it — but worth knowing before reordering for looks.
@@ -69,21 +93,26 @@ generic. `TestHreflang` covers the same ground in our order, including the `es_4
 
 ### Why no cache invalidation of our own
 
-`_get_frontend()` reads its sequence values from `_get_active_by()` rather than from the data
-`super()` hands back, and that is the whole reason `write()` needs no `registry.clear_cache()`.
+`_get_frontend()` takes its order from `_get_active_by('code')` rather than from the `sequence`
+inside the data `super()` hands back, and that is the whole reason `write()` needs no cache
+clearing.
 
 `website._get_frontend` is cached on the `'default'` cache, which nothing invalidates when a
 sequence changes. Sorting on the values baked into _that_ cache would mean clearing all of it on
 every reorder — every compiled QWeb template and view lookup on the site — to shift four languages.
-`_get_active_by` is on `'stable'`, which core's own `res.lang.write()` already clears, so reading
-the sequences from there makes a drag invalidate only the language data. Odoo 19 offers no narrower
-option: `Registry.clear_cache()` takes cache _names_, and the old per-method
-`ormcache.clear_cache()` is gone.
+`_get_active_by` is on `'stable'`, and `CachedModel.write` clears `'stable'` when a written field is
+in `_clear_cache_on_fields`, which is why `sequence` has to be in `_cached_data_fields`: Odoo 19
+cleared it on every write to `res.lang`, but 20 clears it only for those fields (`orm/models.py`,
+`write`). Without that, a drag would leave the dropdowns and the site selector stale.
+`env.invalidate_ormcache(name)` is what 20 has in place of `Registry.clear_cache()`, and it too
+takes a cache _name_, so there is no narrower option.
 
-One trap worth knowing if you touch this. `_live_sequences()` deliberately builds a plain `dict`,
-because `LangDataDict.__getitem__` returns a dummy entry for unknown keys rather than raising — and
-`Mapping.__contains__` is implemented on top of `__getitem__`, so `code in some_lang_data_dict` is
-**always true** and cannot detect a missing language.
+One consequence: the `sequence` inside `website._get_frontend`'s own data can be stale, and nothing
+reads it.
+
+`LangDataDict` and `LangData` are `Mapping`s in 20, with a real `__contains__`, so
+`"es_419" in langs` now answers honestly; `.get()` still returns the dummy entry for any key, since
+it is built on `__getitem__`. Odoo 19's trap, that `in` was always true, is gone.
 
 ### `_order`, and what actually orders the Languages list
 
@@ -151,18 +180,18 @@ failing to the head of the disabled languages is much better than wedging in amo
 
 ### Translations
 
-The module's own name and summary in `i18n/vmk_language_sequence.pot`, `es.po` and `ca.po` are
-hand-maintained, not exported — `ir.module.module` records belong to `base`'s xmlid namespace, so
-`odoo i18n export` never sees them. See
-[`vmk_language_systray`'s README](../vmk_language_systray#the-modules-own-name-and-summary-are-hand-maintained-in-i18n)
+The module's own name and summary are in `i18n/vmk_language_sequence.pot`, `es.po` and `ca.po`. Odoo
+20's `i18n export` writes them, under the module itself, beside a `description` entry holding the
+whole of this README, which we delete from the POT and the POs: nothing displays it. See
+[`vmk_language_systray`'s README](../vmk_language_systray#the-modules-own-name-and-summary-in-i18n)
 for the full explanation. `tests/test_language_sequence.py::TestModuleNameTranslation` fails loudly
-if re-running the export drops them.
+if a re-export drops them.
 
 ### Requirements
 
-Odoo 19. Depends on `website`, which supplies the `_get_frontend()` override point that makes the
+Odoo 20. Depends on `website`, which supplies the `_get_frontend()` override point that makes the
 site selector follow the order. On a database without `website`, split this into a `base`-only
-module plus an `auto_install` bridge carrying override 3.
+module plus an `auto_install` bridge carrying override 4.
 
 ### Testing
 
@@ -171,6 +200,3 @@ module plus an `auto_install` bridge carrying override 3.
 odoo -d <db> -u vmk_language_sequence --test-enable --test-tags /vmk_language_sequence \
      --stop-after-init
 ```
-
-Verified against `odoo:19` with English, Spanish, French, and Catalan enabled: reordering in the
-backend reordered the site selector live, without a server restart.

@@ -30,6 +30,14 @@ New languages you enable are added to the end of the list, and can be dragged in
 
 **Changelog**
 
+*20.0.1.0.0 (30 September 2026)*
+
+- First release for Odoo 20, ported from 19.0.1.2.0. The order now also reaches Odoo 20's own
+  language lists, which it builds differently: the dropdowns, the portal selector, and the website
+  selector all follow it, and a drag shows at once.
+- The translation dialog and the Point of Sale self-order kiosk still list languages
+  alphabetically.
+
 *19.0.1.2.0 (25 September 2026)*
 
 - With two variants of one language enabled, search engines are told to use the first language in

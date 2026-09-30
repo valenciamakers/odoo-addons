@@ -74,6 +74,14 @@ class TestLanguageSequence(TransactionCase):
         codes = self._installed_codes()
         self.assertLess(codes.index("es_ES"), codes.index("en_US"))
 
+    def test_the_contact_language_selection_follows_sequence(self):
+        """The dropdown on a contact's form is built from ``get_installed()``."""
+        self.lang_en.sequence = 20
+        self.lang_es.sequence = 10
+        selection = self.env["res.partner"]._fields["lang"]._description_selection(self.env)
+        codes = [code for code, _name in selection]
+        self.assertLess(codes.index("es_ES"), codes.index("en_US"))
+
     def test_resequencing_invalidates_the_cache(self):
         """``get_installed`` is served from an ormcache; it must not go stale."""
         self.lang_en.sequence = 20
@@ -156,10 +164,60 @@ class TestLanguageSequence(TransactionCase):
         self.assertGreater(default, max(enabled.mapped("sequence")))
 
     def test_sequence_is_cached_alongside_the_other_language_data(self):
-        """Both ordering overrides read ``sequence`` off the cache, not the DB."""
-        self.assertIn("sequence", self.ResLang.CACHED_FIELDS)
+        """The ordering reads ``sequence`` off the cache, not the DB."""
+        self.assertIn("sequence", self.ResLang._cached_data_fields)
+        self.assertIn("name", self.ResLang._cached_data_fields, "core's own fields are kept")
         self.lang_es.sequence = 42
         self.assertEqual(self.ResLang._get_data(code="es_ES").sequence, 42)
+
+    def test_writing_a_sequence_clears_the_language_cache(self):
+        """Core clears 'stable' only for ``_clear_cache_on_fields``; ours must be in it."""
+        self.assertIn("sequence", self.ResLang._clear_cache_on_fields)
+        self.lang_en.sequence = 20
+        self.lang_es.sequence = 10
+        codes = list(self.ResLang._get_active_by("code"))
+        self.assertLess(codes.index("es_ES"), codes.index("en_US"))
+        self.lang_en.sequence = 5
+        codes = list(self.ResLang._get_active_by("code"))
+        self.assertLess(codes.index("en_US"), codes.index("es_ES"))
+
+    def test_every_keyed_view_of_the_cache_follows_sequence(self):
+        """``_get_active_by`` is keyed by code, id or URL code, all in our order."""
+        self.lang_en.sequence = 20
+        self.lang_es.sequence = 10
+        for field in ("code", "id", "url_code"):
+            with self.subTest(field=field):
+                keys = list(self.ResLang._get_active_by(field))
+                es, en = (
+                    getattr(self.lang_es, field),
+                    getattr(self.lang_en, field),
+                )
+                self.assertLess(keys.index(es), keys.index(en))
+
+    def test_active_langs_follow_sequence(self):
+        self.lang_en.sequence = 20
+        self.lang_es.sequence = 10
+        langs = self.ResLang._get_active_langs()
+        self.assertLess(langs.ids.index(self.lang_es.id), langs.ids.index(self.lang_en.id))
+        self.assertEqual(set(langs.ids), set(self.ResLang.get_all().ids))
+
+    def test_the_sequence_reaches_a_language_without_a_cached_entry(self):
+        """A disabled language is not in the cache; reading it falls through to the DB."""
+        disabled = self.ResLang.with_context(active_test=False).search(
+            [("active", "=", False)], limit=1
+        )
+        disabled.sequence = 4242
+        self.assertEqual(disabled.sequence, 4242)
+
+    def test_unknown_language_data_is_still_a_dummy(self):
+        """Core's dummy entry for a missing key, which ``_get_frontend`` does not rely on."""
+        self.assertFalse(self.ResLang._get_data(code="xx_XX"))
+
+    def test_disabling_a_language_drops_it_from_the_dropdowns(self):
+        lang_fr = self.ResLang._activate_lang("fr_FR")
+        self.assertIn("fr_FR", self._installed_codes())
+        lang_fr.active = False
+        self.assertNotIn("fr_FR", self._installed_codes())
 
 
 @tagged("post_install", "-at_install")
@@ -173,7 +231,7 @@ class TestHreflang(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.website = cls.env["website"].get_current_website() or cls.env["website"].browse(1)
+        cls.website = cls.env.ref("base.default_website")
         cls.ResLang = cls.env["res.lang"].with_context(website_id=cls.website.id)
         cls.lang_us = cls.ResLang._activate_lang("en_US")
         cls.lang_uk = cls.ResLang._activate_lang("en_GB")
@@ -182,6 +240,16 @@ class TestHreflang(TransactionCase):
         self.website.language_ids = [Command.set(langs.ids)]
         with MockRequest(self.env, website=self.website):
             return {code: data.hreflang for code, data in self.ResLang._get_frontend().items()}
+
+    def test_the_site_selector_follows_sequence_for_the_current_website(self):
+        """``website``'s own branch, which sorts by name, is reordered and stays fresh."""
+        lang_es = self.ResLang._activate_lang("es_ES")
+        langs = self.lang_us + self.lang_uk + lang_es
+        self.lang_us.sequence, self.lang_uk.sequence, lang_es.sequence = 10, 20, 30
+        self.assertEqual(list(self._hreflangs(langs)), ["en_US", "en_GB", "es_ES"])
+        # By name the order would be en_GB, en_US, es_ES; a later drag must show at once.
+        lang_es.sequence, self.lang_uk.sequence = 5, 25
+        self.assertEqual(list(self._hreflangs(langs)), ["es_ES", "en_US", "en_GB"])
 
     def test_the_first_variant_in_your_order_is_generic(self):
         langs = self.lang_us + self.lang_uk
@@ -199,24 +267,27 @@ class TestHreflang(TransactionCase):
         self.assertEqual(hreflangs["es_419"], "es")
         self.assertEqual(hreflangs["es_ES"], "es-es")
 
-    def test_outside_a_website_request_no_hreflang_is_added(self):
-        for data in self.ResLang._get_frontend().values():
+    def test_without_a_current_website_no_hreflang_is_added(self):
+        """Odoo 19 keyed this on the request; 20 keys it on ``env.website``."""
+        self.assertFalse(self.env["res.lang"].env.website)
+        for data in self.env["res.lang"]._get_frontend().values():
             self.assertNotIn("hreflang", data)
 
 
 @tagged("post_install", "-at_install")
 class TestModuleNameTranslation(TransactionCase):
-    """Guard the two catalogue entries `i18n export` will never regenerate.
+    """Guard the two catalogue entries for the module's own name and summary.
 
-    The module's own name and summary live on `ir.module.module` records whose
-    `ir.model.data` row belongs to **base** (`ir_module.py` creates them as
-    `base.module_<name>`), so the exporter attributes them to base and omits
-    them from our POT. They are in `i18n/` by hand.
+    They live on `ir.module.module` records whose `ir.model.data` row belongs to
+    **base** (`ir_module.py` creates them as `base.module_<name>`). Odoo 19's
+    exporter attributed them to base and omitted them from our POT, so they were
+    in `i18n/` by hand; Odoo 20's exporter emits them itself. The guard stays,
+    since the reader's merge against the POT is what makes a missing entry
+    vanish in silence.
 
     That matters because `PoFileReader` merges each PO against its module's
     POT and skips anything the merge marks obsolete -- so an entry missing
-    from the POT is discarded in silence, translations and all. Re-running
-    `i18n export` overwrites the POT and would do exactly that. This test is
+    from the POT is discarded in silence, translations and all. This test is
     what turns that into a failure instead of a quiet regression.
     """
 
@@ -233,9 +304,9 @@ class TestModuleNameTranslation(TransactionCase):
                 self.assertIn(
                     f'msgid "{msgid}"',
                     pot,
-                    "The POT has lost an entry `odoo i18n export` does not generate. If you "
-                    "just re-exported it, re-add the two `base.module_vmk_language_sequence` "
-                    "blocks by hand -- without them the module name and summary silently stop "
+                    "The POT has lost an entry for the module's name or summary. If you "
+                    "just re-exported it, check the two `base.module_vmk_language_sequence` "
+                    "blocks survived -- without them the module name and summary silently stop "
                     "being translated. See the README's Translations section.",
                 )
 
@@ -250,8 +321,7 @@ class TestModuleNameTranslation(TransactionCase):
         """The premise the POT entries encode: the xmlid is base's, not ours.
 
         If Odoo ever attributes these records to the module itself, the
-        exporter would start emitting them and the hand-maintenance above
-        becomes not just unnecessary but actively wrong.
+        entries' `base.module_*` references would stop matching.
         """
         data = self.env["ir.model.data"].search(
             [("model", "=", "ir.module.module"), ("name", "=", "module_vmk_language_sequence")]

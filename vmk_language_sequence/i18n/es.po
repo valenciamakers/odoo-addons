@@ -4,6 +4,11 @@
 #
 # Terms shared with Odoo core reuse core's own Spanish wording.
 #
+# The two `base.module_` entries are the module's own name and summary. Odoo
+# 20's `i18n export` writes them, beside a `description` entry holding the
+# whole README, which we leave out: nothing displays it. Keep them in all three
+# files, since a PO entry with no POT counterpart is dropped in silence.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0\n"
@@ -30,8 +35,13 @@ msgstr "ID"
 
 #. module: vmk_language_sequence
 #: model:ir.model,name:vmk_language_sequence.model_res_lang
-msgid "Languages"
-msgstr "Idiomas"
+msgid "Language"
+msgstr "Idioma"
+
+#. module: vmk_language_sequence
+#: model:ir.module.module,shortdesc:base.module_vmk_language_sequence
+msgid "Language Sequence"
+msgstr "Secuencia de idiomas"
 
 #. module: vmk_language_sequence
 #: model:ir.model.fields,help:vmk_language_sequence.field_res_lang__sequence
@@ -44,16 +54,11 @@ msgstr ""
 "usuarios y contactos."
 
 #. module: vmk_language_sequence
-#: model:ir.model.fields,field_description:vmk_language_sequence.field_res_lang__sequence
-msgid "Sequence"
-msgstr "Secuencia"
-
-#. module: base
-#: model:ir.module.module,shortdesc:base.module_vmk_language_sequence
-msgid "Language Sequence"
-msgstr "Secuencia de idiomas"
-
-#. module: base
 #: model:ir.module.module,summary:base.module_vmk_language_sequence
 msgid "Reorder languages manually instead of alphabetically"
 msgstr "Reordena los idiomas manualmente en lugar de alfabéticamente"
+
+#. module: vmk_language_sequence
+#: model:ir.model.fields,field_description:vmk_language_sequence.field_res_lang__sequence
+msgid "Sequence"
+msgstr "Secuencia"

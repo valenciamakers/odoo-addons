@@ -2,8 +2,13 @@
 # This file contains the translation of the following modules:
 # 	* vmk_language_sequence
 #
-# Terms shared with Odoo core reuse core's own Catalan wording. Odoo 19 ships no
+# Terms shared with Odoo core reuse core's own Catalan wording. Odoo 20 ships no
 # Valencian variant -- ca_ES is the only Catalan locale.
+#
+# The two `base.module_` entries are the module's own name and summary. Odoo
+# 20's `i18n export` writes them, beside a `description` entry holding the
+# whole README, which we leave out: nothing displays it. Keep them in all three
+# files, since a PO entry with no POT counterpart is dropped in silence.
 #
 msgid ""
 msgstr ""
@@ -31,8 +36,13 @@ msgstr "ID"
 
 #. module: vmk_language_sequence
 #: model:ir.model,name:vmk_language_sequence.model_res_lang
-msgid "Languages"
-msgstr "Idiomes"
+msgid "Language"
+msgstr "Idioma"
+
+#. module: vmk_language_sequence
+#: model:ir.module.module,shortdesc:base.module_vmk_language_sequence
+msgid "Language Sequence"
+msgstr "Seqüència d'idiomes"
 
 #. module: vmk_language_sequence
 #: model:ir.model.fields,help:vmk_language_sequence.field_res_lang__sequence
@@ -40,21 +50,16 @@ msgid ""
 "Order in which enabled languages are offered, lowest first: in the website "
 "language selector, and in the language dropdowns of users and contacts."
 msgstr ""
-"Ordre en què s'ofereixen els idiomes activats, de menor a major: al selector "
-"d'idioma del lloc web i a les llistes desplegables d'idioma d'usuaris i "
+"Ordre en què s'ofereixen els idiomes activats, de menor a major: al selector"
+" d'idioma del lloc web i a les llistes desplegables d'idioma d'usuaris i "
 "contactes."
+
+#. module: vmk_language_sequence
+#: model:ir.module.module,summary:base.module_vmk_language_sequence
+msgid "Reorder languages manually instead of alphabetically"
+msgstr "Reordena els idiomes manualment en lloc d'alfabèticament"
 
 #. module: vmk_language_sequence
 #: model:ir.model.fields,field_description:vmk_language_sequence.field_res_lang__sequence
 msgid "Sequence"
 msgstr "Seqüència"
-
-#. module: base
-#: model:ir.module.module,shortdesc:base.module_vmk_language_sequence
-msgid "Language Sequence"
-msgstr "Seqüència d'idiomes"
-
-#. module: base
-#: model:ir.module.module,summary:base.module_vmk_language_sequence
-msgid "Reorder languages manually instead of alphabetically"
-msgstr "Reordena els idiomes manualment en lloc d'alfabèticament"

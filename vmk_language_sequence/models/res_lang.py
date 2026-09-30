@@ -1,9 +1,8 @@
 # Copyright 2026 Valencia Makers, SL
 # License LGPL-3 (https://www.gnu.org/licenses/lgpl-3.0.html).
 
-from odoo import api, fields, models, tools
+from odoo import api, fields, models
 from odoo.addons.base.models.res_lang import LangData, LangDataDict
-from odoo.tools import OrderedSet
 
 # Disabled languages are parked above this, keeping the enabled ones -- the only
 # ones this module exists to order -- together at the top of the Languages list.
@@ -34,65 +33,60 @@ class ResLang(models.Model):
     )
 
     @property
-    def CACHED_FIELDS(self) -> OrderedSet:
-        # Carrying ``sequence`` in the cached language data lets the ordering
-        # overrides below sort without a query of their own.
-        return OrderedSet([*super().CACHED_FIELDS, "sequence"])
+    def _cached_data_fields(self) -> tuple:
+        # ``res.lang`` is a ``CachedModel``: it keeps these fields of the active
+        # languages on the 'stable' cache, and clears that cache when a write
+        # touches one of them (``_clear_cache_on_fields`` is derived from this).
+        # Adding ``sequence`` does two things at once: the ordering below sorts
+        # without a query of its own, and dragging a language invalidates
+        # exactly the language data and nothing wider. A property rather than a
+        # literal tuple so that a field core adds later is not silently dropped.
+        return (*super()._cached_data_fields, "sequence")
 
-    def _sorted_by_sequence(
-        self, langs: LangDataDict, sequences: dict | None = None
-    ) -> LangDataDict:
-        """Re-order a LangDataDict by ``sequence``, falling back to name.
-
-        ``sequences`` supplies values read from somewhere fresher than ``langs``,
-        for callers whose data comes from a cache this module does not invalidate.
-        """
-
-        def sort_key(item):
-            code, data = item
-            sequence = data.sequence if sequences is None else sequences.get(code, data.sequence)
-            return (sequence, data.name)
-
-        return LangDataDict(dict(sorted(langs.items(), key=sort_key)))
-
-    def _live_sequences(self) -> dict:
-        """Map language code to its current sequence.
-
-        Built as a plain dict on purpose: ``LangDataDict`` returns a dummy entry
-        for unknown keys instead of raising, so ``in`` and ``.get()`` on it are
-        always truthy and cannot be used to tell a missing language apart.
-        """
-        return {
-            code: data.sequence
-            for code, data in self._get_active_by("code").items()
-        }
-
-    @tools.ormcache("field", cache="stable")
-    def _get_active_by(self, field: str) -> LangDataDict:
-        # Core builds this with ``search_fetch(..., order='name')``, a hardcoded
-        # order that ``_order`` cannot influence. It is the single chokepoint
-        # behind both ``get_installed()`` (the language dropdowns on users and
-        # contacts) and ``http_routing``'s frontend selector, so re-sorting here
-        # covers both at once.
+    @api.model
+    def _get_active_langs(self):
+        # Core's version is ``get_all()``, the cached records in id order. Every
+        # list of languages core builds from the cache starts here:
+        # ``_get_active_by()`` (so ``_get_data()``, and ``http_routing``'s
+        # frontend selector) and ``get_installed()`` below. Sorting here puts
+        # them all in our order, and ``_get_active_by()`` stays cached by core.
         #
-        # Cached in turn because ``_get_data`` reaches this on every date and
-        # number format, far too often to re-sort each time.
-        return self._sorted_by_sequence(super()._get_active_by(field))
+        # Consumers that sort ``_get_active_langs()`` themselves, by name, are
+        # out of reach and stay alphabetical; see the README.
+        return super()._get_active_langs().sorted(lambda lang: (lang.sequence, lang.name))
+
+    @api.model
+    @api.readonly
+    def get_installed(self) -> list[tuple[str, str]]:
+        """Return installed languages' (code, name) pairs, in our order.
+
+        Core sorts by name after asking ``_get_active_langs()``, so the order
+        above would not reach this, the source of every language dropdown.
+        """
+        return [(lang.code, lang.name) for lang in self.sudo()._get_active_langs()]
 
     def _get_frontend(self) -> LangDataDict:
         # ``website`` builds the site language selector from
-        # ``language_ids.sorted('name')``, bypassing ``_order`` again. No cache of
-        # our own here: ``super()`` is already cached, and this runs once per page
-        # render over a handful of entries.
+        # ``language_ids.sorted('name')``, bypassing ``_get_active_langs`` again.
+        # No cache of our own here: ``super()`` is already cached, and this runs
+        # once per page render over a handful of entries.
         #
-        # The sequences are read from ``_get_active_by`` rather than from the data
-        # ``super()`` returns. That cache lives on 'default', which nothing
-        # invalidates when a sequence changes, so trusting its values would mean
-        # clearing the whole default cache -- every compiled template and view
-        # lookup on the site -- on each reorder. ``_get_active_by`` is on 'stable',
-        # which core's own ``res.lang.write()`` already clears.
-        langs = self._sorted_by_sequence(super()._get_frontend(), self._live_sequences())
-        return self._hreflang_in_order(langs)
+        # The order is taken from ``_get_active_by('code')`` rather than from
+        # the ``sequence`` inside the data ``super()`` returns. That cache lives
+        # on 'default', which nothing invalidates when a sequence changes, so
+        # trusting its values would mean clearing the whole default cache --
+        # every compiled template and view lookup on the site -- on each reorder.
+        # ``_get_active_by`` is on 'stable', which ``write()`` of a cached field
+        # already clears.
+        langs = super()._get_frontend()
+        position = {code: index for index, code in enumerate(self._get_active_by("code"))}
+        # A plain dict: ``LangDataDict`` answers every key, with a dummy entry
+        # for a missing one, so ``.get()`` on it cannot say a language is absent.
+        last = len(position)
+        ordered = LangDataDict(
+            dict(sorted(langs.items(), key=lambda item: position.get(item[0], last)))
+        )
+        return self._hreflang_in_order(ordered)
 
     @staticmethod
     def _hreflang_in_order(langs: LangDataDict) -> LangDataDict:
@@ -108,8 +102,7 @@ class ResLang(models.Model):
         """
         if not any("hreflang" in data for data in langs.values()):
             return langs
-        # Not ``"es_419" in langs``: a LangDataDict answers every key.
-        es_419_exists = any(code == "es_419" for code in langs)
+        es_419_exists = "es_419" in langs
         shortened = set()
         result = {}
         for code, data in langs.items():
@@ -169,6 +162,7 @@ class ResLang(models.Model):
         res = super().write(vals)
         if changing_state:
             changing_state._park_in_active_block()
-        # No cache clearing of our own: ``super().write()`` clears 'stable', and
-        # ``_get_frontend`` deliberately reads its sequences from there.
+        # No cache clearing of our own: ``sequence`` is one of ``_cached_data_fields``,
+        # so ``super().write()`` clears 'stable', and ``_get_frontend`` deliberately
+        # reads its order from there.
         return res
