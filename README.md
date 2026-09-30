@@ -1,6 +1,6 @@
 # Odoo Addons
 
-Odoo 19 modules written and maintained by Valencia Makers, SL — a digital-fabrication education,
+Odoo 20 modules written and maintained by Valencia Makers, SL — a digital-fabrication education,
 makerspace, and retail business in Valencia, Spain. Each one is small, solves a problem we hit
 running our own instance, and is licensed LGPL-3, as Odoo itself is.
 
@@ -44,16 +44,17 @@ and where. That is usually the interesting part.
 Clone onto your Odoo addons path, update the apps list, and install by name:
 
 ```bash
-git clone -b 19.0 https://github.com/valenciamakers/odoo-addons.git
+git clone -b 20.0 https://github.com/valenciamakers/odoo-addons.git
 odoo --addons-path=/path/to/odoo-addons,... -d <db> -i vmk_language_sequence
 ```
 
-There is one branch per Odoo series, as Odoo and the OCA do: `19.0` holds the modules for Odoo 19.
+There is one branch per Odoo series, as Odoo and the OCA do: this one, `20.0`, holds the modules for
+Odoo 20, and `19.0` and `18.0` those for Odoo 19 and 18.
 
 ## Developing
 
-A two-service Compose file is enough to run these modules — Postgres 17 and `odoo:19` with the repo
-root mounted at `/mnt/extra-addons`:
+A two-service Compose file is enough to run these modules — Postgres 17 and `odoo:20.0` with the
+repo root mounted at `/mnt/extra-addons`:
 
 ```bash
 docker compose up -d db
@@ -73,7 +74,7 @@ Each module's store icon is rendered from an SVG glyph in `tools/icons/` by
 notice in `tools/icons/LICENSE-lucide`) or drawn to match them.
 
 [`DEVELOPING.md`](DEVELOPING.md) sets out how the modules are written and tested, plus a catalogue
-of Odoo 19 behaviours that cost us time — all verified against real Odoo source rather than against
+of Odoo behaviours that cost us time — all verified against real Odoo source rather than against
 documentation.
 
 ## Contributing

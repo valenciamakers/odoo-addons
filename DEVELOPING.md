@@ -1,8 +1,8 @@
 # Developing these modules
 
-How the Odoo 19 modules in this repository are written and tested, and the Odoo 19 behaviour we
+How the Odoo 20 modules in this repository are written and tested, and the Odoo behaviour we
 verified along the way. The modules are LGPL-3, as Odoo itself is, and depend only on Community
-modules, though we run them on Odoo 19 Enterprise too. Everything here is our own code; third-party
+modules, and are tested on Odoo 20 Enterprise too. Everything here is our own code; third-party
 modules never enter this repository.
 
 This file describes one Odoo series. Each series branch carries its own copy, so a trap listed here
@@ -36,12 +36,13 @@ of the traps below in context.
 This repository follows Odoo's and the OCA's convention: **a branch per Odoo series, named for it**,
 and no `main`. `19.0` holds the Odoo 19 modules and is the default branch; it replaced `main` on 24
 September 2026, with the same commits. The Apps Store reads a repository by its series branches.
-Another series starts as a branch of `19.0`, which then carries fixes for Odoo 19 installs only.
+This branch, `20.0`, holds the Odoo 20 versions, branched from `19.0` on 30 September 2026. A fix
+lands on `19.0` first and is carried here where it applies, with a version bump of its own.
 
 ## Testing locally
 
-Modules here install by name against a local Odoo 19 with this repo on the addons path. A
-two-service Compose file is enough — Postgres 17 and `odoo:19` with the repo root mounted at
+Modules here install by name against a local Odoo 20 with this repo on the addons path. A
+two-service Compose file is enough — Postgres 17 and `odoo:20.0` with the repo root mounted at
 `/mnt/extra-addons`:
 
 ```bash
@@ -129,13 +130,13 @@ written only during an install or upgrade.
 
 ## Verify against source, not memory
 
-Read the real 19.0 source before building on any claim about what Odoo does. It is right there in
+Read the real 20.0 source before building on any claim about what Odoo does. It is right there in
 the image:
 
 ```bash
-docker run --rm odoo:19 bash -c "grep -rn 'def _get_frontend(' /usr/lib/python3/dist-packages/odoo/"
-docker create --name odoo19src odoo:19
-docker cp odoo19src:/usr/lib/python3/dist-packages/odoo/addons/base/models/res_lang.py .
+docker run --rm odoo:20.0 bash -c "grep -rn 'def _get_frontend(' /usr/lib/python3/dist-packages/odoo/"
+docker create --name odoo20src odoo:20.0
+docker cp odoo20src:/usr/lib/python3/dist-packages/odoo/addons/base/models/res_lang.py .
 ```
 
 Documentation and tutorials written for earlier series are a starting point, never an authority:
@@ -144,7 +145,47 @@ much of what circulates still documents `<tree>`, for one.
 **Read the JavaScript too.** Ordering, drag behaviour, and view composition are frequently decided
 in `web/static/src/**`, not in Python. Half the surprises below live there.
 
-## Odoo 19 traps, verified
+## What changed in Odoo 20
+
+Read from the 20.0 source on 30 September 2026, before any module was ported; each is confirmed or
+corrected as the modules meeting it are ported. These are the changes that touch our modules, not a
+changelog of Odoo 20.
+
+- **Owl 3** (`web/static/lib/owl`, `3.0.0-alpha.49`). A component declaring `static props` or
+  `defaultProps` throws in its constructor (`web/static/src/owl2/owl3_compatibility_layer.js`);
+  props are declared with `props = useProps({...})` and `t.*` types. Templates reach every component
+  member through `this.` (`t-out="this.props.value"`), `useRef` gives way to `signal.ref()`, and
+  `t-esc` still works but warns. Odoo ships `odoo upgrade_code` with an `owl3-migration` script that
+  does most of this.
+- **`ir.access` replaces `ir.model.access` and `ir.rule`** (`base/models/ir_access.py`). A module
+  ships `security/ir.access.csv` instead, and public and portal users are one group,
+  `base.group_everyone`. `upgrade_code`'s `19.4-00-ir-access` converts the old files.
+- **`ir.config_parameter` is typed.** `get_param` and `set_param` are gone; read and write with
+  `get_bool`, `get_int`, `get_float`, `get_str`, and their `set_*` counterparts.
+- **Font Awesome is no longer loaded in the backend.** Core's icons are `oi` with `data-icon`
+  (Material Symbols), and a view button's `icon` names a Material Symbols glyph. An `fa` class in a
+  backend template renders nothing. The website still uses Font Awesome.
+- **pytz is gone from core** in favour of `zoneinfo`, and from `requirements.txt`.
+- **`Registry.clear_cache` and `Registry.signal_changes` are gone.** Invalidation is
+  `env.invalidate_ormcache(name)`, and a commit signals other workers by itself
+  (`orm/environments.py`, `committing`), from a shell as much as from a request. `tools.ormcache`
+  still works but warns; use `api.ormcache`.
+- **`res.lang` is a `models.CachedModel`.** Its cached fields are the class attribute
+  `_cached_data_fields`, and `write()` clears the cache only for fields in `_clear_cache_on_fields`.
+  `get_installed()` no longer goes through `_get_active_by`.
+- **`_order_field_to_sql` takes `(table, field_expr, direction, nulls)`**, a `TableSQL` in place of
+  the alias and query.
+- **`odoo/http.py` is a package**, and session functions such as
+  `authenticate(session, env, credential)` are module functions in `odoo.http.session`, not methods
+  on the session.
+- **`http_interface` defaults to `127.0.0.1`**, not every interface. Set it to `0.0.0.0` in a
+  container's config, or the published port reaches nothing.
+
+## Odoo traps, verified
+
+This catalogue was built on Odoo 19. Each entry is re-verified against 20.0 as the modules that rely
+on it are ported, and one that differs on 20 says so; an entry saying nothing about 20 has not been
+checked there yet.
 
 **Views**
 
@@ -248,7 +289,7 @@ in `web/static/src/**`, not in Python. Half the surprises below live there.
   Neither `_order` nor a view's `default_order` can fix it, both taking bare field names with no
   room for `lower()`. Sort in Python, or override `_order_field_to_sql` on the model for that one
   field and add `COLLATE "und-x-icu"`, falling back to `lower()` where `pg_collation` lacks it, as
-  `vmk_apps_page_sort` does (19.0.1.2.0).
+  `vmk_apps_page_sort` does.
 - `post_init_hook(env)` takes the environment, and runs on **install only** — never on upgrade. If a
   hook seeds data, an upgrade will not re-seed it; apply it by hand when testing on an existing
   database.
@@ -568,8 +609,8 @@ publishers using `vmk_`, and only a full technical name actually collides. The A
 each module at a predictable URL, so a direct request is the test:
 
 ```bash
-curl -s -o /dev/null -w '%{http_code}\n' https://apps.odoo.com/apps/modules/19.0/kw_mock_mail_server
-curl -s -o /dev/null -w '%{http_code}\n' https://apps.odoo.com/apps/modules/19.0/vmk_your_new_module
+curl -s -o /dev/null -w '%{http_code}\n' https://apps.odoo.com/apps/modules/20.0/kw_mock_mail_server
+curl -s -o /dev/null -w '%{http_code}\n' https://apps.odoo.com/apps/modules/20.0/vmk_your_new_module
 ```
 
 **Probe a name known to exist first**, as the first line does. If the URL pattern ever changes,
@@ -584,7 +625,7 @@ publish the same name between our checking it and our publishing, though with a 
 is unlikely. And it only covers the Apps Store; a module distributed purely through GitHub would not
 show up at all.
 
-Manifest: `"version": "19.0.1.1.0"` (Odoo series first), `"author": "Valencia Makers"` — **no
+Manifest: `"version": "20.0.1.1.0"` (Odoo series first), `"author": "Valencia Makers"` — **no
 comma**. `author` is a comma-separated list of authors, which is how the OCA is credited beside a
 company, so the Apps Store listed "Valencia Makers, SL" as two authors, "Valencia Makers" and "SL",
 each linked to a search. The legal name stays in the copyright lines. Fixed 24 September 2026. Keep
@@ -676,7 +717,7 @@ with the screenshots, so a later retake is one command.
 headings at 53px, 42px, and 31px against 16px text, and pure RST cannot set a size; top-level
 sections are always its `h2`. So there is no title (the page already names the module), section
 names are bold paragraphs — **Installation**, **Using it**, **Limits**, **Changelog** — and each
-changelog version is an italic line, `*19.0.1.0.1 (24 September 2026)*`, over a bullet list, newest
+changelog version is an italic line, `*20.0.1.0.1 (24 September 2026)*`, over a bullet list, newest
 first. A mention of the other module where the reader should install it instead links to its store
 page. Check that it parses with docutils before committing.
 
@@ -697,7 +738,7 @@ laptop. Added 2026-09-20.
 Odoo prefixes its own series, leaving three digits that we use as plain semver:
 
 ```
-19.0  .  1  .  1  .  1
+20.0  .  1  .  1  .  1
 └──┬─┘    │    │    └── patch
 Odoo      │    └─────── minor
 series    └──────────── major
