@@ -6,7 +6,7 @@ See README.md for what the recipes expect to find in the database.
 import os
 import re
 
-# The harness serves each Odoo series on its own port (8069 for 19, 8169 for 18); ODOO_URL picks one.
+# The harness serves each Odoo series on its own port (8069 for 19, 8169 for 18, 8269 for 20); ODOO_URL picks one.
 BASE = os.environ.get("ODOO_URL", "http://localhost:8069")
 MARK = "vmk-shots"  # window.name of the one backend tab the recipes reuse
 

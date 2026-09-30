@@ -4,7 +4,8 @@
 
 Idempotent: every record is found by name before it is created, so running this twice leaves the
 same state as running it once. Works on both Odoo 18 and 19 -- the two differ in one place, event
-slots, handled below by branching on ``odoo.release.series``.
+slots, handled below by branching on ``odoo.release.series``. For 20, ``commit()`` allows for the
+one difference known so far; it has not been run there yet.
 
     cd "Odoo Addons - Custom (18.0)"                     # or the 19.0 checkout
     SERIES=18.0 DB=shots ../../Tech\\ Stack/odoo-dev/odev shell < tools/shots/demo/seed.py
@@ -27,6 +28,18 @@ from datetime import datetime, timedelta
 import odoo.tools as tools
 
 IS_18 = odoo.release.series == "18.0"
+
+
+def commit(env):
+    """Commit, telling the running server to drop its caches.
+
+    18 and 19 need ``signal_changes()`` first, since the shell has no RPC hook to call it. 20 signals
+    at commit by itself and dropped the method.
+    """
+    if hasattr(env.registry, "signal_changes"):
+        env.registry.signal_changes()
+    env.cr.commit()
+
 
 print(f"seeding demo data for Odoo {odoo.release.series} ...")
 
@@ -238,8 +251,7 @@ lead.write(
 )
 assert rosa.email == "rosa.vidal@example.com" and lead.partner_id == rosa
 
-env.registry.signal_changes()
-env.cr.commit()
+commit(env)
 print("done.")
 
 
@@ -264,7 +276,6 @@ def open_studio_evening(env):
             "event_ticket_ids": [(0, 0, {"name": "Admission"})],
         }
     )
-    env.registry.signal_changes()
-    env.cr.commit()
+    commit(env)
     print("Open Studio Evening recreated, starting", start)
     return event
