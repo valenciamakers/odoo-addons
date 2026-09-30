@@ -18,6 +18,9 @@
         "web.assets_frontend": [
             "vmk_website_event_slot_multiday/static/src/interactions/*.js",
         ],
+        "web.assets_tests": [
+            "vmk_website_event_slot_multiday/static/tests/tours/**/*",
+        ],
     },
     "images": ["static/description/cover.png"],
     "installable": True,
