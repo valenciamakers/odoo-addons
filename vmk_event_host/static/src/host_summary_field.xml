@@ -8,11 +8,11 @@
          field's own label activate it: `web.FormLabel` renders
          `for="props.id"`, and a button is a labelable element. -->
     <t t-name="vmk_event_host.HostSummaryField">
-        <button type="button" t-ref="root" t-att-id="props.id" t-on-click="showPage"
+        <button type="button" t-custom-ref="root" t-att-id="this.props.id" t-on-click="this.showPage"
                 class="vmk_field_as_text o_field_char text-reset text-start align-baseline p-0 border-0 bg-transparent"
-                t-att-aria-label="label">
-            <span t-if="value" t-esc="value"/>
-            <span t-else="" class="text-muted" t-esc="props.placeholder"/>
+                t-att-aria-label="this.label">
+            <span t-if="this.value" t-esc="this.value"/>
+            <span t-else="" class="text-muted" t-esc="this.props.placeholder"/>
         </button>
     </t>
 

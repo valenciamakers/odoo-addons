@@ -2,9 +2,10 @@
 // Copyright 2026 Valencia Makers, SL
 // License LGPL-3 (https://www.gnu.org/licenses/lgpl-3.0.html).
 
-import { Component, useRef } from "@odoo/owl";
+import { Component } from "@odoo/owl";
 import { _t } from "@web/core/l10n/translation";
 import { registry } from "@web/core/registry";
+import { useRef } from "@web/owl2/utils";
 import { standardFieldProps } from "@web/views/fields/standard_field_props";
 
 /**

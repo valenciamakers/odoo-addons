@@ -43,7 +43,7 @@ const SLOT_FIELDS = [
 ];
 
 export class EventSlotDateRangeField extends Component {
-    static template = xml`<DateTimeField t-props="dateTimeFieldProps"/>`;
+    static template = xml`<DateTimeField t-props="this.dateTimeFieldProps"/>`;
     static components = { DateTimeField };
     static props = { ...DateTimeField.props, tzField: String };
 

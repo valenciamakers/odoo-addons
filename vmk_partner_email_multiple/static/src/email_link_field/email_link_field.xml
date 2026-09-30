@@ -17,7 +17,7 @@
     >
         <xpath expr="//t[@t-if='props.readonly']/div" position="replace">
             <div class="d-flex w-100 align-items-center">
-                <span class="o_text_overflow" t-esc="props.record.data[props.name] || ''" />
+                <span class="o_text_overflow" t-out="props.record.data[props.name] || ''" />
                 <!--
                     ms-auto right-aligns it; the gap is a margin rather than
                     padding so the pointer cursor covers the icon itself and not
