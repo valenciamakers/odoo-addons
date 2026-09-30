@@ -13,6 +13,9 @@
         "web.assets_backend": [
             "vmk_language_systray/static/src/**/*",
         ],
+        "web.assets_tests": [
+            "vmk_language_systray/static/tests/tours/**/*",
+        ],
     },
     "images": ["static/description/cover.png"],
     "installable": True,
