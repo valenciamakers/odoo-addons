@@ -59,16 +59,32 @@ so does this module, by extending `_filter_open_slots`.
 ### Slots get the same rule
 
 `website_event` retires a slot whose `start_datetime` has passed
-(`website_event/models/event_slot.py`, `_filter_open_slots`), with **no lead time**. Left alone, the
-policy would apply to single events and not to cohorts: sales stopping ninety minutes early for one
-and exactly on the hour for the other. This module tightens that filter with the same deadline.
+(`website_event/models/event_slot.py:9`, `_filter_open_slots`), with **no lead time**. Left alone,
+the policy would apply to single events and not to cohorts: sales stopping ninety minutes early for
+one and exactly on the hour for the other. This module tightens that filter with the same deadline.
 
 It only ever tightens. A ticket's Registration End overrides the rule on a single event but not
 here: it cannot loosen a deadline core itself applies, and on a multi-slot event a ticket says
 nothing about which slot it belongs to.
 
 **This is why the module depends on `website_event` rather than `event`** — half the rule lives in a
-method that module defines.
+method that module defines. On 20 the website templates call it directly
+(`website_event/views/event_templates_page_registration.xml:218` and `:686`), so the override
+reaches both the preview and the registration modal.
+
+### What changed on Odoo 20
+
+- **`ir.config_parameter` is typed.** `get_param` and `set_param` are gone
+  (`base/models/ir_config_parameter.py`), so `_vmk_deadline_hours` reads the switch with `get_bool`
+  and the duration with `get_float`. The settings form needs no change: a `config_parameter` boolean
+  is stored by `set_bool` and a float by `set_float` (`base/models/res_config.py:322-345`), which
+  write `True` and `1.5` as text exactly as 19 did, so a database upgraded from 19 keeps its values.
+- **pytz is gone**, so the tests build a slot's local date and hour with `zoneinfo`.
+- The `_compute_event_registrations_open` override, the `seats_limited` anchor on the event form and
+  the `registration_setting_container` block in Settings are unchanged
+  (`event/models/event_event.py:298`, `event/views/event_event_views.xml:86`,
+  `event/views/res_config_settings_views.xml:37`). Core relabelled the seat limit "Limit
+  Registrations"; nothing of ours copies that wording.
 
 ### What it does not depend on
 
@@ -84,10 +100,12 @@ against core. Shared terms — _Event_, _Config Settings_, _Display Name_ — ta
 rather than a fresh translation. _Event Slot_ is core's row and core's Catalan leaves it
 untranslated, so ours stays empty rather than asserting a value on a record we do not own.
 
-**The module's own name and summary are hand-maintained**, in the POT as well as both PO files.
-`ir_module.py` registers every module record as `base.module_<name>`, so `odoo i18n export` never
-emits them — and `PoFileReader` merges each PO against its POT and drops whatever the merge marks
-obsolete, so a PO entry with no POT counterpart disappears in silence and the module keeps its
+**The module's own name and summary** are in the POT as well as both PO files. `ir_module.py`
+registers every module record as `base.module_<name>`, so 19's `odoo i18n export` never emitted them
+and they were kept by hand. Odoo 20's exporter writes them, under this module, beside a
+`description` entry holding the whole README, which we leave out: the store page is `index.html`,
+and nothing displays it. `PoFileReader` merges each PO against its POT and drops whatever the merge
+marks obsolete, so a PO entry with no POT counterpart disappears in silence and the module keeps its
 English name in a Spanish database. `tests/test_translations.py::TestModuleNameTranslation` fails
 loudly if a re-export drops them.
 
@@ -106,7 +124,7 @@ cd ../../Tech\ Stack/odoo-dev
 ./odev test vmk_event_registration_deadline
 ```
 
-Nine tests: the default, the per-event override, an override of zero, a ticket's Registration End
+Eleven tests: the default, the per-event override, an override of zero, a ticket's Registration End
 winning, a ticket without one not winning, a multi-slot event being left to its slots, and a slot
 retired by the deadline rather than merely by its start.
 

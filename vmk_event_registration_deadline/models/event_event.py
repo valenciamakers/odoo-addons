@@ -37,9 +37,9 @@ class EventEvent(models.Model):
         if self.vmk_deadline_custom:
             return self.vmk_deadline_hours
         config = self.env["ir.config_parameter"].sudo()
-        if config.get_param(ENABLED_PARAM) not in ("True", "true", "1"):
+        if not config.get_bool(ENABLED_PARAM):
             return None
-        return float(config.get_param(DEADLINE_PARAM) or 0.0)
+        return config.get_float(DEADLINE_PARAM)
 
     @api.depends("date_begin", "vmk_deadline_custom", "vmk_deadline_hours")
     def _compute_event_registrations_open(self):

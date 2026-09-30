@@ -36,6 +36,10 @@ starts.
 
 **Changelog**
 
+*20.0.1.0.0 (30 September 2026)*
+
+- First release for Odoo 20, ported from 19.0.1.0.4. No change in behaviour.
+
 *19.0.1.0.4 (28 September 2026)*
 
 - Catalan: *Config Settings* reads as Odoo's own base module has it. No change in behaviour.

@@ -1,9 +1,8 @@
 # Copyright 2026 Valencia Makers, SL
 # License LGPL-3 (https://www.gnu.org/licenses/lgpl-3.0.html).
 
-from datetime import timedelta
-
-import pytz
+from datetime import timedelta, timezone
+from zoneinfo import ZoneInfo
 
 from odoo import fields
 from odoo.tests import TransactionCase, tagged
@@ -28,7 +27,7 @@ class TestRegistrationDeadline(TransactionCase):
 
     @staticmethod
     def _enable(env, on=True):
-        env["ir.config_parameter"].sudo().set_param(ENABLED_PARAM, "True" if on else "False")
+        env["ir.config_parameter"].sudo().set_bool(ENABLED_PARAM, on)
 
     def _event(self, starts_in_hours, length_hours=8, **extra):
         begin = self.now + timedelta(hours=starts_in_hours)
@@ -52,7 +51,7 @@ class TestRegistrationDeadline(TransactionCase):
         built from `now` — which is how the first draft of these tests put
         slots outside their own event.
         """
-        local = pytz.utc.localize(when).astimezone(pytz.timezone(event.date_tz))
+        local = when.replace(tzinfo=timezone.utc).astimezone(ZoneInfo(event.date_tz))
         hour = local.hour + local.minute / 60.0
         return self.env["event.slot"].create(
             {
@@ -64,7 +63,7 @@ class TestRegistrationDeadline(TransactionCase):
         )
 
     def _set_default(self, hours):
-        self.env["ir.config_parameter"].sudo().set_param(DEADLINE_PARAM, hours)
+        self.env["ir.config_parameter"].sudo().set_float(DEADLINE_PARAM, hours)
 
     def test_the_feature_is_off_until_enabled(self):
         """Installing the module must not change how anything sells."""
