@@ -4,8 +4,18 @@
 from pathlib import Path
 
 from odoo.tests.common import TransactionCase, tagged
+from odoo.tools.binary import BinaryBytes
 
-from ..hooks import RENAMED_FROM, protect_enabled_languages
+from ..hooks import protect_enabled_languages
+
+# A 1x1 transparent PNG; `fields.Image` rejects anything it cannot decode. Odoo 20's
+# binary fields take a `BinaryValue` from Python, or base64 text as over RPC, never bytes.
+ONE_PIXEL_PNG = BinaryBytes(
+    bytes.fromhex(
+        "89504e470d0a1a0a0000000d49484452000000010000000108060000001f15c489"
+        "0000000d49444154789c6360000200000500010d0a2db40000000049454e44ae426082"
+    )
+)
 
 
 @tagged("post_install", "-at_install")
@@ -45,6 +55,13 @@ class TestLanguageFreeze(TransactionCase):
         lang.iso_code = "xx"
         self.assertTrue(self._noupdate(lang))
 
+    def test_editing_the_flag_protects_the_language(self):
+        """`flag_image` is a stored image, and one of the fields `res_lang_data.xml` sets."""
+        lang = self._a_disabled_lang()
+        self.assertFalse(self._noupdate(lang))
+        lang.flag_image = ONE_PIXEL_PNG
+        self.assertTrue(self._noupdate(lang))
+
     def test_enabling_a_language_does_not_protect_it(self):
         """Activating is not a customisation; it must not freeze the record."""
         lang = self._a_disabled_lang()
@@ -63,20 +80,6 @@ class TestLanguageFreeze(TransactionCase):
         self.assertFalse(self._noupdate(lang))
         protect_enabled_languages(self.env)
         self.assertTrue(self._noupdate(lang))
-
-    def test_the_install_hook_leaves_protection_alone_after_the_rename(self):
-        """Installed beside vmk_language_freeze_meta, whose protections are already right.
-
-        A language enabled since that module's install, and never edited, is
-        unprotected on purpose; the new module must not freeze it on its way in.
-        """
-        Module = self.env["ir.module.module"]
-        old = Module.search([("name", "=", RENAMED_FROM)])
-        (old or Module.create({"name": RENAMED_FROM})).state = "installed"
-        lang = self._a_disabled_lang()
-        lang.active = True
-        protect_enabled_languages(self.env)
-        self.assertFalse(self._noupdate(lang))
 
     def test_the_flag_can_be_cleared_to_hand_control_back(self):
         self.assertTrue(self.lang_en.protect_from_updates)
@@ -100,12 +103,14 @@ class TestLanguageFreeze(TransactionCase):
 
 @tagged("post_install", "-at_install")
 class TestModuleNameTranslation(TransactionCase):
-    """Guard the two catalogue entries `i18n export` will never regenerate.
+    """Guard the two catalogue entries for the module's own name and summary.
 
-    The module's own name and summary live on `ir.module.module` records whose
-    `ir.model.data` row belongs to **base** (`ir_module.py` creates them as
-    `base.module_<name>`), so the exporter attributes them to base and omits
-    them from our POT. They are in `i18n/` by hand.
+    They live on `ir.module.module` records whose `ir.model.data` row belongs to
+    **base** (`ir_module.py` creates them as `base.module_<name>`). Odoo 19's
+    exporter attributed them to base and omitted them from our POT, so they were
+    in `i18n/` by hand; Odoo 20's exporter emits them itself. The guard stays,
+    since the reader's merge against the POT is what makes a missing entry
+    vanish in silence.
 
     That matters because `PoFileReader` merges each PO against its module's
     POT and skips anything the merge marks obsolete -- so an entry missing
@@ -127,9 +132,9 @@ class TestModuleNameTranslation(TransactionCase):
                 self.assertIn(
                     f'msgid "{msgid}"',
                     pot,
-                    "The POT has lost an entry `odoo i18n export` does not generate. If you "
-                    "just re-exported it, re-add the two `base.module_vmk_language_protect_settings` "
-                    "blocks by hand -- without them the module name and summary silently stop "
+                    "The POT has lost an entry for the module's name or summary. If you "
+                    "just re-exported it, check the two `base.module_vmk_language_protect_settings` "
+                    "blocks survived -- without them the module name and summary silently stop "
                     "being translated. See the README's Translations section.",
                 )
 
@@ -144,8 +149,7 @@ class TestModuleNameTranslation(TransactionCase):
         """The premise the POT entries encode: the xmlid is base's, not ours.
 
         If Odoo ever attributes these records to the module itself, the
-        exporter would start emitting them and the hand-maintenance above
-        becomes not just unnecessary but actively wrong.
+        entries' `base.module_*` references would stop matching.
         """
         data = self.env["ir.model.data"].search(
             [

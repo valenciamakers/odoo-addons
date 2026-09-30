@@ -2,8 +2,13 @@
 # This file contains the translation of the following modules:
 # 	* vmk_language_protect_settings
 #
-# Terms shared with Odoo core reuse core's own Catalan wording. Odoo 19 ships no
+# Terms shared with Odoo core reuse core's own Catalan wording. Odoo 20 ships no
 # Valencian variant -- ca_ES is the only Catalan locale.
+#
+# The two `base.module_` entries are the module's own name and summary. Odoo
+# 20's `i18n export` writes them, beside a `description` entry holding the
+# whole README, which we leave out: nothing displays it. Keep them in all three
+# files, since a PO entry with no POT counterpart is dropped in silence.
 #
 msgid ""
 msgstr ""
@@ -42,20 +47,20 @@ msgstr ""
 
 #. module: vmk_language_protect_settings
 #: model:ir.model,name:vmk_language_protect_settings.model_res_lang
-msgid "Languages"
-msgstr "Idiomes"
+msgid "Language"
+msgstr "Idioma"
 
 #. module: vmk_language_protect_settings
 #: model:ir.model.fields,field_description:vmk_language_protect_settings.field_res_lang__protect_from_updates
 msgid "Protect From Updates"
 msgstr "Protegir de les actualitzacions"
 
-#. module: base
+#. module: vmk_language_protect_settings
 #: model:ir.module.module,shortdesc:base.module_vmk_language_protect_settings
 msgid "Protect Language Edits"
 msgstr "Protegir les edicions dels idiomes"
 
-#. module: base
+#. module: vmk_language_protect_settings
 #: model:ir.module.module,summary:base.module_vmk_language_protect_settings
 msgid "Stop Odoo updates from reverting your edits to language settings"
 msgstr "Evita que les actualitzacions d'Odoo reverteixin els teus canvis a la configuració d'idioma"
