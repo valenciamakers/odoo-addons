@@ -17,6 +17,9 @@
         "web.assets_backend": [
             "vmk_partner_email_multiple/static/src/**/*",
         ],
+        "web.assets_tests": [
+            "vmk_partner_email_multiple/static/tests/tours/**/*",
+        ],
     },
     "installable": True,
     "application": False,

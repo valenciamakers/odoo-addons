@@ -384,3 +384,13 @@ here too.
 The OCA makes the same distinction, using LGPL-3 where modules are expected to be extended.
 `web_chatter_position` from `OCA/web`, vendored in `../Odoo Addons - External`, is one of theirs
 under LGPL-3 for this reason.
+
+### Browser tests
+
+`tests/test_tours.py` drives the contact form, list, and autocomplete in a real browser
+(`HttpCase.start_tour`), with the tours in `static/tests/tours/vmk_partner_email_multiple_tour.js`.
+They cover adding an additional address, the swap button (including its accessible name), the
+`vmk_email_link` envelope (a `mailto:` link, hidden until the row is focused), finding a contact by
+an additional address in the list search, and in a many2one autocomplete. Where a tour changes data,
+the test checks the records in Python. They need a browser, so they run in the harness image:
+`SERIES=20.0 ./odev test vmk_partner_email_multiple`; a passing tour logs `tour succeeded`.
