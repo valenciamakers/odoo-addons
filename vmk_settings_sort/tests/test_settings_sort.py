@@ -80,9 +80,9 @@ class TestSettingsSort(TransactionCase):
         self.assertEqual([child.get("name") for child in form], ["only"])
 
     def test_the_live_settings_sidebar_is_sorted(self):
-        # Odoo 20's minimal install contributes a single block, General Settings, where 19's
-        # contributed several, so bring two of our own, in the wrong order, rather than count
-        # on whatever else the database happens to have installed.
+        # A minimal install contributes a single block, General Settings, so bring two of our
+        # own, in the wrong order, rather than count on whatever else the database happens to
+        # have installed.
         self.env["ir.ui.view"].create(
             {
                 "name": "vmk_settings_sort test blocks",

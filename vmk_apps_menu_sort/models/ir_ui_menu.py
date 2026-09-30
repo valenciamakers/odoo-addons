@@ -102,7 +102,7 @@ class IrUiMenu(models.Model):
         sort_key = self._root_menu_sort_key()
         # These entries come from `read()` and carry no `xmlid`, unlike the ones
         # in `load_menus` -- which is why the pinned menus are identified by id
-        # through `env.ref` rather than by the xmlid the other payload supplies.
+        # by `_xmlid_to_res_id` rather than by the xmlid the other payload supplies.
         return {
             **root,
             "children": sorted(
