@@ -1,5 +1,5 @@
 {
-  "_comment": "Font Awesome glyph -> the Lucide icon (or material:<name>) that replaces it on store pages, reviewed by Felix on 30 September 2026. `modules` overrides the default for one module where its sentence needs another glyph. Used by tools/feature_icons.py.",
+  "_comment": "Font Awesome glyph -> the Lucide icon (or material:<name>) that replaces it on store pages, reviewed by Felix on 30 September 2026. `modules` overrides the default for one module where its sentence needs another glyph. Used by tools/feature_icons.py. On 18 and 19 the two language pages keep Font Awesome's globe (fa:globe), the one the systray draws there; 20.0's mapping gives them Material's public, the one it draws on 20.",
   "default": {
     "arrows": "move",
     "arrows-h": "move-horizontal",
@@ -69,10 +69,10 @@
       "hand-pointer-o": "mouse-pointer-click"
     },
     "vmk_language_sequence": {
-      "globe": "material:public"
+      "globe": "fa:globe"
     },
     "vmk_language_systray": {
-      "globe": "material:public",
+      "globe": "fa:globe",
       "sort-amount-asc": "list-ordered"
     },
     "vmk_settings_sort": {
