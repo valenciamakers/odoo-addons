@@ -3,3 +3,4 @@
 
 from . import test_slot_multiday
 from . import test_translations
+from . import test_tours

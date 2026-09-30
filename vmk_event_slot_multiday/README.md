@@ -189,12 +189,39 @@ cd "../Tech Stack/odoo-dev"
 ./odev test event --test-tags /event,/vmk_event_slot_multiday
 ```
 
-Sixteen tests on the model and form arch, three on translations. The names are checked by formatting
-the expected dates with the same helpers, so the tests pass in any language's date format.
+Sixteen tests on the model and form arch, three on translations, three tours. The names are checked
+by formatting the expected dates with the same helpers, so the tests pass in any language's date
+format.
 
-**The widget needs a browser**, which the `odoo:20` image has not, so on 19 it was checked by hand
-in Chrome with the event in `America/New_York` and the browser in `Europe/Madrid`: the range showed
-event time, and editing, moving, and creating a slot through it stored the right date, hours and day
-count. Core's `event` and `website_event` suites were run with the module installed on two fresh
-databases: one with only core's event modules, and one with our `vmk_event_sessions` and
+### Browser tests
+
+**The widget needs a browser**, and `tests/test_tours.py` drives one: three tours in
+`static/tests/tours/vmk_event_slot_multiday_tour.js`, each followed by assertions on the records in
+Python. The event is in `America/New_York` and the test browser in UTC, so a widget showing the
+viewer's time instead of the event's would store the wrong hours.
+
+- **`vmk_event_slot_multiday_edit_range`** opens a one-day slot's form, sets the range through the
+  picker to end two days later at 13:00, and saves; the date, hours, day count, and UTC datetimes
+  are checked.
+- **`vmk_event_slot_multiday_calendar_new`** opens the slot calendar from the event, clicks New, and
+  picks a three-day range with times in the dialog's picker; the created slot is checked the same
+  way.
+- **`vmk_event_slot_multiday_calendar_multi_create`** selects two days in the calendar (Ctrl held
+  for the second), clicks Add, sets the hours in the popover, and creates; one single-day slot per
+  day is checked.
+
+Two quirks of core 20's UI, both handled in the tours. A picker opened from inside a dialog sits in
+an overlay the tour runner cannot tell from one behind the dialog, and it refuses to click there; a
+selector starting with `body` skips that check. And the selection box's "N selected" counts the
+_slots_ under the selection, so two empty days read "0 selected": the tour checks the highlighted
+days instead.
+
+```bash
+cd "../Tech Stack/odoo-dev"
+./odev test vmk_event_slot_multiday
+```
+
+The `odoo:20` image carries a browser, so this needs nothing more than an installed module. Core's
+`event` and `website_event` suites were also run with the module installed on two fresh databases:
+one with only core's event modules, and one with our `vmk_event_sessions` and
 `vmk_website_event_sessions` as well.
