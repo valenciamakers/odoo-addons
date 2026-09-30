@@ -612,17 +612,26 @@ paints the exact colours through those as masks.
 
 **The feature icons inside `index.html` are Lucide too**, as SVG files in
 `static/description/icons/`, shown with `<img src="icons/<name>.svg">`: Lucide's own SVG with a
-`<style>` setting `color` to `#531B93`, and `#9B69F4` under `prefers-color-scheme: dark`. They
-replaced Font Awesome on 30 September 2026, when Odoo 20 stopped loading it in the backend, so an
-`fa` icon on the Apps page there renders nothing; the store still has its own copy, but one family
-across every series and both surfaces is the point. Two things rule out the obvious alternatives.
-Inline `<svg>` does not survive: `html_sanitize`, which the backend runs over every `index.html`,
-keeps the `<svg>` tag but strips its `<path>` children and lowercases `viewBox` (checked on 19 and
-20). And an `<img>` cannot take the page's `light-dark()` colours; but an SVG image's
-`prefers-color-scheme` follows the color scheme of the page embedding it, not the system's, so the
-icon switches with Odoo's dark mode and stays purple on the always-light store, even for a visitor
-whose system is dark (checked in Chromium: backend light and dark, and each page scheme on each
-system scheme). `vmk_event_host` was the first.
+`<style>` fixing `color` at `#9B69F4`, whatever the colour scheme. They replaced Font Awesome on 30
+September 2026, when Odoo 20 stopped loading it in the backend, so an `fa` icon on the Apps page
+there renders nothing; the store still has its own copy, but one family across every series and both
+surfaces is the point.
+
+**One fixed purple, because an icon cannot follow the page.** An SVG shown through `<img>` is a
+sealed document: its CSS sees nothing of the page around it, and the only thing that crosses is the
+colour scheme, as `prefers-color-scheme`. That is the page's declared scheme when it declares one,
+as Odoo's backend does in dark mode, and the visitor's system setting when it does not, as on the
+store. So a switching icon showed the dark-mode purple on the store's white page for every visitor
+on a dark system (checked on the live store, 30 September 2026). Nothing can fix that from our side:
+both sanitizers strip `<style>`, and an inline `color-scheme` on the `<img>` would override Odoo's
+dark mode in the backend. `#9B69F4` is the purple readable on both backgrounds, 3.67:1 on white and
+3.90:1 on the dark theme's `#262A36`, where no single colour can beat 3.78:1 on both; it clears the
+3:1 minimum for icons, not the 4.5:1 text needs, which is why text keeps `light-dark()`. It reads
+lighter than `#531B93` headings on a white page, a known compromise.
+
+**Inline `<svg>` does not survive either.** `html_sanitize`, which the backend runs over every
+`index.html`, keeps the `<svg>` tag but strips its `<path>` children and lowercases `viewBox`
+(checked on 19 and 20). `vmk_event_host` was the first module converted.
 
 **No tile behind the glyph.** The first icons were a white glyph on a purple rounded tile;
 published, the store framed that tile inside its own white icon box, so the glyph now sits on a
@@ -678,12 +687,12 @@ in a dark stylesheet and sets `color-scheme: dark` on the web client, but inline
 so near-black text vanished on its `#262A36` background. Odoo's light mode sets the invalid
 `color-scheme: bright`, which browsers read as light. So: body text `light-dark(#111827, #E4E4E4)`,
 subtitles `light-dark(#333333, #E4E4E4)` at 50% opacity, and headings and links
-`light-dark(#531B93, #9B69F4)`, the pair the feature icons carry in their own `<style>`; `#E4E4E4`
-is the dark theme's own text colour, and `#531B93` is unreadable on its background. `#9B69F4`
-replaced `#B794F4` as the dark purple on 30 September 2026; a page still carrying the old value
-switches when its module is next updated, not in a pass of its own. Screenshots stay light in both
-modes. Screenshots are taken at 2x in English (UK), with any polish (colours, widths, a drawn
-cursor) injected as CSS during capture only, never shipped. Each module's captures are a recipe in
+`light-dark(#531B93, #9B69F4)`, the dark one also the feature icons' fixed colour; `#E4E4E4` is the
+dark theme's own text colour, and `#531B93` is unreadable on its background. `#9B69F4` replaced
+`#B794F4` as the dark purple on 30 September 2026; a page still carrying the old value switches when
+its module is next updated, not in a pass of its own. Screenshots stay light in both modes.
+Screenshots are taken at 2x in English (UK), with any polish (colours, widths, a drawn cursor)
+injected as CSS during capture only, never shipped. Each module's captures are a recipe in
 `tools/shots/recipes/`, which also holds a store preview and a dark-mode check; its README lists the
 demo data they expect. Write the recipe with the screenshots, so a later retake is one command.
 
