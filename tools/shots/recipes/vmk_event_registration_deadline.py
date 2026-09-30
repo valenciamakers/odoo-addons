@@ -20,11 +20,6 @@ OWN_DEADLINE = "Back to Basics"        # has its own 02:00 deadline and an Admis
 # .o_inner_group directly; 18 wraps each pair together in one .o_wrap_field instead, so .o_cell is
 # no longer .o_inner_group's direct child -- see shots/README.md on porting a recipe.
 FORM_CSS = """
-    /* 20 adds a Published toggle and a Publish on row to the group; neither was in the 19 framing */
-    .o_inner_group > .o_cell:has([name=website_published]),
-    .o_inner_group > .o_cell:has(+ .o_cell [name=website_published]),
-    .o_inner_group > .o_cell:has(label[for^=publish_on]),
-    .o_inner_group > .o_cell:has(label[for^=publish_on]) + .o_cell { display: none !important; }
     .o_inner_group > .o_cell:has([name=vmk_host_names]),
     .o_inner_group > .o_cell:has(+ .o_cell [name=vmk_host_names]),
     .o_wrap_field:has([name=vmk_host_names]) { display: none !important; }

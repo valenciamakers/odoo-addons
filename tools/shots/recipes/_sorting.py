@@ -37,6 +37,8 @@ async def apps(page, out, phase):
     await page.click(".o_searchview_dropdown_toggler"); await page.wait_for_timeout(500)
     await page.locator(".o_filter_menu .o-dropdown-item, .o_filter_menu .dropdown-item", has_text="Installed").first.click()
     await page.wait_for_timeout(1200); await page.keyboard.press("Escape"); await page.wait_for_timeout(500)
+    # the filter's toggle keeps focus, and 20 draws a green ring around it
+    await page.evaluate("document.activeElement && document.activeElement.blur()")
     await shots.polish(page, HIDE); await shots.park_mouse(page, 1280, 800)
     if phase == "after":
         await page.screenshot(path=out / "main_screenshot.png")
