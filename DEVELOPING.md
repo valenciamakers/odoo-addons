@@ -631,8 +631,48 @@ Two things the first attempts got wrong, and the tool exists to avoid. Drawing a
 Pillow and scaling it down left the edges fuzzy and aliased, so the icon is rendered at its final
 size by a browser. And colours drawn in the page came out shifted, `#531B93` as `#4C1F8D`, because a
 screenshot passes through colour management; so the page draws only black on white, and Pillow
-paints the exact colours through those as masks. Font Awesome 4.7 stays the right choice for the
-small `fa` icons _inside_ `index.html`, since the Apps Store renders those with its own copy.
+paints the exact colours through those as masks.
+
+**The feature icons inside `index.html` are Lucide too**, as SVG files in
+`static/description/icons/`, shown with `<img src="icons/<name>.svg">`: Lucide's own SVG with a
+`<style>` fixing `color` at `#9B69F4`, whatever the colour scheme. They replaced Font Awesome on 30
+September 2026, when Odoo 20 stopped loading it in the backend, so an `fa` icon on the Apps page
+there renders nothing; the store still has its own copy, but one family across every series and both
+surfaces is the point.
+
+**`tools/feature_icons.py` does the swap, and places every icon.** Which icon stands for which idea
+is `tools/icons/feature_icons.json`: a default per Font Awesome glyph, and per-module overrides
+where a sentence needs another, as reviewed on 30 September 2026. To add a feature to a page, write
+the `fa` span as before and run the tool on the module, or place an `<img>` by hand and run it to
+fetch the file. It writes the SVGs, ships the licence of each family used (`LICENSE-lucide`, and
+`LICENSE-material-symbols` where needed), and removes icons the page no longer names. `--check`
+lists pages still carrying Font Awesome.
+
+```bash
+uv run tools/feature_icons.py vmk_foo
+uv run tools/feature_icons.py --all
+```
+
+**One exception to Lucide: Odoo's own globe.** The Backend Language Menu draws Material Symbols'
+`public` in the systray on 20, since `language` is not in Odoo's font subset, so the two language
+pages show that glyph, as `material:public` in the mapping, where they refer to the systray's globe.
+It is filled where Lucide is outlined, by design: it has to be recognisably the same icon.
+
+**One fixed purple, because an icon cannot follow the page.** An SVG shown through `<img>` is a
+sealed document: its CSS sees nothing of the page around it, and the only thing that crosses is the
+colour scheme, as `prefers-color-scheme`. That is the page's declared scheme when it declares one,
+as Odoo's backend does in dark mode, and the visitor's system setting when it does not, as on the
+store. So a switching icon showed the dark-mode purple on the store's white page for every visitor
+on a dark system (checked on the live store, 30 September 2026). Nothing can fix that from our side:
+both sanitizers strip `<style>`, and an inline `color-scheme` on the `<img>` would override Odoo's
+dark mode in the backend. `#9B69F4` is the purple readable on both backgrounds, 3.67:1 on white and
+3.90:1 on the dark theme's `#262A36`, where no single colour can beat 3.78:1 on both; it clears the
+3:1 minimum for icons, not the 4.5:1 text needs, which is why text keeps `light-dark()`. It reads
+lighter than `#531B93` headings on a white page, a known compromise.
+
+**Inline `<svg>` does not survive either.** `html_sanitize`, which the backend runs over every
+`index.html`, keeps the `<svg>` tag but strips its `<path>` children and lowercases `viewBox`
+(checked on 19 and 20). `vmk_event_host` was the first module converted.
 
 **No tile behind the glyph.** The first icons were a white glyph on a purple rounded tile;
 published, the store framed that tile inside its own white icon box, so the glyph now sits on a
@@ -687,13 +727,15 @@ published pages lost both: the grid fell to one column and the icons touched the
 in a dark stylesheet and sets `color-scheme: dark` on the web client, but inline colours stay put,
 so near-black text vanished on its `#262A36` background. Odoo's light mode sets the invalid
 `color-scheme: bright`, which browsers read as light. So: body text `light-dark(#111827, #E4E4E4)`,
-subtitles `light-dark(#333333, #E4E4E4)` at 50% opacity, and headings, links, and icons
-`light-dark(#531B93, #B794F4)`; `#E4E4E4` is the dark theme's own text colour, and `#531B93` is
-unreadable on its background. Screenshots stay light in both modes. Screenshots are taken at 2x in
-English (UK), with any polish (colours, widths, a drawn cursor) injected as CSS during capture only,
-never shipped. Each module's captures are a recipe in `tools/shots/recipes/`, which also holds a
-store preview and a dark-mode check; its README lists the demo data they expect. Write the recipe
-with the screenshots, so a later retake is one command.
+subtitles `light-dark(#333333, #E4E4E4)` at 50% opacity, and headings and links
+`light-dark(#531B93, #9B69F4)`, the dark one also the feature icons' fixed colour; `#E4E4E4` is the
+dark theme's own text colour, and `#531B93` is unreadable on its background. `#9B69F4` replaced
+`#B794F4` as the dark purple on 30 September 2026; a page still carrying the old value switches when
+its module is next updated, not in a pass of its own. Screenshots stay light in both modes.
+Screenshots are taken at 2x in English (UK), with any polish (colours, widths, a drawn cursor)
+injected as CSS during capture only, never shipped. Each module's captures are a recipe in
+`tools/shots/recipes/`, which also holds a store preview and a dark-mode check; its README lists the
+demo data they expect. Write the recipe with the screenshots, so a later retake is one command.
 
 **The manual, `doc/index.rst`, has no RST headings.** The store shows it in a Documentation tab with
 headings at 53px, 42px, and 31px against 16px text, and pure RST cannot set a size; top-level
