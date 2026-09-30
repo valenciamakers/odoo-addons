@@ -1,0 +1,86 @@
+{
+  "_comment": "Font Awesome glyph -> the Lucide icon (or material:<name>) that replaces it on store pages, reviewed by Felix on 30 September 2026. `modules` overrides the default for one module where its sentence needs another glyph. Used by tools/feature_icons.py. On 18 and 19 the two language pages keep Font Awesome's globe (fa:globe), the one the systray draws there; 20.0's mapping gives them Material's public, the one it draws on 20.",
+  "default": {
+    "address-book": "book-user",
+    "arrows": "move",
+    "arrows-h": "move-horizontal",
+    "arrows-v": "arrow-up-down",
+    "building-o": "building-2",
+    "calendar": "calendar-days",
+    "calendar-check-o": "calendar-check",
+    "calendar-o": "calendar",
+    "calendar-plus-o": "calendar-plus",
+    "check": "check",
+    "check-circle": "circle-check",
+    "check-circle-o": "circle-check-big",
+    "check-square-o": "square-check",
+    "clock-o": "clock",
+    "clone": "copy",
+    "code": "code",
+    "cog": "settings",
+    "columns": "columns-2",
+    "compress": "merge",
+    "envelope": "mail",
+    "exchange": "arrow-left-right",
+    "eye": "eye",
+    "filter": "funnel",
+    "forward": "fast-forward",
+    "globe": "globe",
+    "hand-grab-o": "grab",
+    "hand-pointer-o": "pointer",
+    "history": "history",
+    "info-circle": "info",
+    "language": "languages",
+    "list": "list",
+    "list-ul": "list",
+    "lock": "lock",
+    "map-marker": "map-pin",
+    "microphone": "mic",
+    "pencil": "pencil",
+    "plus-square": "square-plus",
+    "puzzle-piece": "puzzle",
+    "refresh": "refresh-cw",
+    "repeat": "repeat",
+    "search": "search",
+    "shield": "shield",
+    "sort-alpha-asc": "arrow-down-a-z",
+    "sort-amount-asc": "arrow-down-wide-narrow",
+    "sort-numeric-asc": "arrow-down-0-1",
+    "th": "layout-grid",
+    "th-large": "grid-2x2",
+    "thumb-tack": "pin",
+    "ticket": "ticket",
+    "toggle-on": "toggle-right",
+    "undo": "undo-2",
+    "user": "user",
+    "users": "users"
+  },
+  "modules": {
+    "vmk_apps_menu_lock": {
+      "hand-grab-o": "pointer"
+    },
+    "vmk_apps_page_sort": {
+      "th-large": "layout-grid"
+    },
+    "vmk_event_sessions": {
+      "hand-pointer-o": "mouse-pointer-click",
+      "sort-numeric-asc": "list-ordered"
+    },
+    "vmk_event_sessions_mail": {
+      "hand-pointer-o": "mouse-pointer-click"
+    },
+    "vmk_language_sequence": {
+      "globe": "material:public"
+    },
+    "vmk_language_systray": {
+      "globe": "material:public",
+      "sort-amount-asc": "list-ordered"
+    },
+    "vmk_settings_sort": {
+      "list": "panel-left"
+    },
+    "vmk_website_event_slot_multiday": {
+      "calendar": "calendar-range"
+    }
+  }
+}
