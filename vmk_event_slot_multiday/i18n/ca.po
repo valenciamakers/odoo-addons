@@ -5,16 +5,19 @@
 # Terms this module shares with core take core's own wording, out of base and
 # event's catalogues, so the module reads as part of the backend. Where core's
 # Catalan leaves a slot term empty, or says `Ranura` (a groove), a slot is a
-# `franja horària`, as in vmk_event_sessions. The two
-# `base.module_vmk_event_slot_multiday` entries are the module's own name and
-# summary, which `i18n export` never emits (see the POT).
+# `franja horària`, as in vmk_event_sessions.
+#
+# The two `base.module_` entries are the module's own name and summary. Odoo
+# 20's `i18n export` writes them, beside a `description` entry holding the
+# whole README, which we leave out: nothing displays it. Keep them in all three
+# files, since a PO entry with no POT counterpart is dropped in silence.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 19.0+e-20260908\n"
+"Project-Id-Version: Odoo Server 20.0+e-20260926\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-24 11:08+0000\n"
-"PO-Revision-Date: 2026-09-24 11:08+0000\n"
+"POT-Creation-Date: 2026-09-30 18:50+0000\n"
+"PO-Revision-Date: 2026-09-30 18:50+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ca\n"
@@ -23,22 +26,13 @@ msgstr ""
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#. module: base
-#: model:ir.module.module,shortdesc:base.module_vmk_event_slot_multiday
-msgid "Multi-Day Event Slots"
-msgstr "Franges horàries d'esdeveniment de diversos dies"
-
-#. module: base
-#: model:ir.module.module,summary:base.module_vmk_event_slot_multiday
-msgid "Allow event slots to span multiple days"
-msgstr "Permetre que les franges horàries d'esdeveniment abastin diversos dies"
-
 #. module: vmk_event_slot_multiday
 #. odoo-python
 #: code:addons/vmk_event_slot_multiday/models/event_slot.py:0
 msgid "A slot cannot end before it starts: %(slot)s ends on %(end)s."
 msgstr ""
-"Una franja horària no pot acabar abans de començar: %(slot)s acaba el %(end)s."
+"Una franja horària no pot acabar abans de començar: %(slot)s acaba el "
+"%(end)s."
 
 #. module: vmk_event_slot_multiday
 #. odoo-python
@@ -53,7 +47,15 @@ msgid ""
 "A slot's end date and its number of days disagree: it ends on %(end)s, which"
 " is %(offset)s days after its date, not %(given)s."
 msgstr ""
-"La data de finalització d'una franja horària i el seu nombre de dies no coincideixen: acaba el %(end)s, %(offset)s dies després de la seva data, no %(given)s."
+"La data de finalització d'una franja horària i el seu nombre de dies no "
+"coincideixen: acaba el %(end)s, %(offset)s dies després de la seva data, no "
+"%(given)s."
+
+#. module: vmk_event_slot_multiday
+#: model:ir.module.module,summary:base.module_vmk_event_slot_multiday
+msgid "Allow event slots to span multiple days"
+msgstr ""
+"Permetre que les franges horàries d'esdeveniment abastin diversos dies"
 
 #. module: vmk_event_slot_multiday
 #: model_terms:ir.ui.view,arch_db:vmk_event_slot_multiday.view_event_slot_form_multiday
@@ -90,12 +92,18 @@ msgstr "Expressat en la zona horària de l'esdeveniment."
 msgid ""
 "How many days after its date the slot ends. 0 for a slot within one day."
 msgstr ""
-"Quants dies després de la seva data acaba la franja horària. 0 en una franja d'un sol dia."
+"Quants dies després de la seva data acaba la franja horària. 0 en una franja"
+" d'un sol dia."
 
 #. module: vmk_event_slot_multiday
 #: model:ir.model.fields,field_description:vmk_event_slot_multiday.field_event_slot__id
 msgid "ID"
 msgstr "ID"
+
+#. module: vmk_event_slot_multiday
+#: model:ir.module.module,shortdesc:base.module_vmk_event_slot_multiday
+msgid "Multi-Day Event Slots"
+msgstr "Franges horàries d'esdeveniment de diversos dies"
 
 #. module: vmk_event_slot_multiday
 #. odoo-javascript
@@ -107,4 +115,5 @@ msgstr "Interval de dates de la franja horària"
 #: model:ir.model.fields,help:vmk_event_slot_multiday.field_event_slot__vmk_end_date
 msgid "The day the slot ends. The same as its date for a slot within one day."
 msgstr ""
-"El dia en què acaba la franja horària. El mateix que la seva data en una franja d'un sol dia."
+"El dia en què acaba la franja horària. El mateix que la seva data en una "
+"franja d'un sol dia."

@@ -1,9 +1,8 @@
 # Copyright 2026 Valencia Makers, SL
 # License LGPL-3 (https://www.gnu.org/licenses/lgpl-3.0.html).
 
-from datetime import datetime, timedelta
-
-import pytz
+from datetime import UTC, datetime, timedelta
+from zoneinfo import ZoneInfo
 
 from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
@@ -111,10 +110,9 @@ class EventSlot(models.Model):
         complete = self - incomplete
         super(EventSlot, complete)._compute_datetimes()
         for slot in complete.filtered(lambda slot: slot._vmk_is_multiday()):
-            timezone = pytz.timezone(slot.date_tz)
             local_end = datetime.combine(slot.vmk_end_date, float_to_time(slot.end_hour))
             slot.end_datetime = (
-                timezone.localize(local_end).astimezone(pytz.UTC).replace(tzinfo=None)
+                local_end.replace(tzinfo=ZoneInfo(slot.date_tz)).astimezone(UTC).replace(tzinfo=None)
             )
 
     @api.constrains("start_hour", "end_hour", "vmk_end_day_offset")

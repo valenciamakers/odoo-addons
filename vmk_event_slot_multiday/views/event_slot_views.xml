@@ -7,9 +7,8 @@
         <field name="inherit_id" ref="event.view_event_slot_form"/>
         <field name="arch" type="xml">
             <!-- One range of start and end, as the event form has, in place
-                 of core's "Hour range". Core's slot form has no date at all:
-                 a slot is created by clicking a day in the slot calendar, and
-                 a slot that may end on another day needs both days shown.
+                 of core's "Hour range" and its separate "Date": a slot that
+                 may end on another day needs both days shown together.
                  Shown in the event's timezone, as core shows a slot
                  everywhere else; the help is core's own, from the hours.
                  Core computes both datetimes; the widget saves the slot's
@@ -20,7 +19,12 @@
                        options="{'end_date_field': 'end_datetime', 'tz_field': 'date_tz'}"
                        readonly="0" help="Expressed in the event timezone."/>
             </label>
-            <!-- Hidden, not removed: other modules anchor on these. -->
+            <!-- Hidden, not removed: other modules anchor on these. Core 20
+                 shows the date on its own row; the range already carries it,
+                 and the widget writes it. -->
+            <field name="date" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
             <label for="start_hour" position="attributes">
                 <attribute name="invisible">1</attribute>
             </label>

@@ -1,10 +1,15 @@
 // Copyright 2026 Valencia Makers, SL
 // License LGPL-3 (https://www.gnu.org/licenses/lgpl-3.0.html).
 
-import { Component, xml } from "@odoo/owl";
+import { Component, t, useProps, xml } from "@odoo/owl";
 import { _t } from "@web/core/l10n/translation";
 import { registry } from "@web/core/registry";
-import { DateTimeField, dateRangeField } from "@web/views/fields/datetime/datetime_field";
+import { Operation } from "@web/model/relational_model/operation";
+import {
+    DateTimeField,
+    dateRangeField,
+    dateTimeFieldProps,
+} from "@web/views/fields/datetime/datetime_field";
 
 /**
  * A slot's start and end as one range, the way the event form shows its
@@ -16,7 +21,7 @@ import { DateTimeField, dateRangeField } from "@web/views/fields/datetime/dateti
  * disagree with all three for anyone editing from another timezone.
  *
  * So this does what core's slot calendar does
- * (`event/static/src/views/event_slot_calendar/event_slot_calendar_model.js`):
+ * (`event/static/src/views/event_slot/calendar/event_slot_calendar_model.js`):
  * - to show a slot, `normalizeRecord` converts its datetimes to the event's
  *   zone and relabels them local, keeping the wall-clock time;
  * - to save one, `buildRawRecord` writes `date`, `start_hour` and `end_hour`
@@ -45,7 +50,9 @@ const SLOT_FIELDS = [
 export class EventSlotDateRangeField extends Component {
     static template = xml`<DateTimeField t-props="this.dateTimeFieldProps"/>`;
     static components = { DateTimeField };
-    static props = { ...DateTimeField.props, tzField: String };
+    // Owl 3 refuses `static props`; core's field declares its schema with
+    // `useProps` and exports it, so this one extends that.
+    props = useProps({ ...dateTimeFieldProps, tzField: t.string() });
 
     get dateTimeFieldProps() {
         const { tzField, ...props } = this.props;
@@ -56,22 +63,26 @@ export class EventSlotDateRangeField extends Component {
             get: (target, key) =>
                 key === startName || key === endName ? toEventTime(target[key], tz) : target[key],
         });
-        const update = (changes, options) => {
-            const start = changes[startName] || data[startName];
-            const end = changes[endName] || data[endName];
+        // The field may hand over an `Operation` ("+=1d" typed into an
+        // input) for core to compute against the current value; here that is
+        // the value as event time.
+        const resolve = (changes, name) =>
+            changes[name] instanceof Operation
+                ? changes[name].compute(data[name])
+                : changes[name] || data[name];
+        const update = (changes) => {
+            const start = resolve(changes, startName);
+            const end = resolve(changes, endName);
             if (!start || !end) {
                 return;
             }
             const [startDay, endDay] = [start.startOf("day"), end.startOf("day")];
-            return record.update(
-                {
-                    date: startDay,
-                    start_hour: hourOf(start),
-                    end_hour: hourOf(end),
-                    vmk_end_day_offset: Math.round(endDay.diff(startDay, "days").days),
-                },
-                options
-            );
+            return record.update({
+                date: startDay,
+                start_hour: hourOf(start),
+                end_hour: hourOf(end),
+                vmk_end_day_offset: Math.round(endDay.diff(startDay, "days").days),
+            });
         };
         return {
             ...props,

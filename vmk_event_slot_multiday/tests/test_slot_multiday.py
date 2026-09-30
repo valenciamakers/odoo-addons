@@ -3,6 +3,8 @@
 
 from datetime import timedelta
 
+from lxml import etree
+
 from odoo import fields
 from odoo.exceptions import ValidationError
 from odoo.tests import TransactionCase, tagged
@@ -148,3 +150,14 @@ class TestSlotMultiday(TransactionCase):
         self.assertIn('widget="vmk_event_slot_daterange"', arch)
         self.assertIn("'end_date_field': 'end_datetime'", arch)
         self.assertIn('name="start_hour"', arch)
+
+    def test_the_date_is_shown_once(self):
+        """Core 20 gives its slot form a `Date` row of its own. The range
+        already carries the date, so core's is hidden, not removed: the form
+        would otherwise show the date twice, and other modules anchor on it."""
+        arch = self.env["event.slot"].get_view(
+            view_id=self.env.ref("event.view_event_slot_form").id
+        )["arch"]
+        dates = etree.fromstring(arch).xpath("//field[@name='date']")
+        self.assertEqual(len(dates), 1)
+        self.assertEqual(dates[0].get("invisible"), "1")

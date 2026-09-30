@@ -28,9 +28,11 @@ event's timezone (`event/models/event_slot.py`). `_compute_datetimes` builds `st
 than the start hour. So a core slot can never leave its day: a weekend retreat, an overnight
 hackathon, or a two-day course offered on several dates cannot be a slot.
 
-Core's slot form shows only an _Hour range_ — no date at all, since a slot is created by clicking a
-day in the slot calendar — and core shows a slot in the **event's** timezone everywhere: the hours
-on the form, the slot calendar (`event_slot_calendar_model.js`, `normalizeRecord`), and the name.
+Core's slot form shows an _Hour range_ and, since Odoo 20, a separate _Date_ row; 19's had no date
+at all, a slot being created by clicking a day in the slot calendar. Core shows a slot in the
+**event's** timezone everywhere: the hours on the form, the slot calendar
+(`event/static/src/views/event_slot/calendar/event_slot_calendar_model.js`, `normalizeRecord`), and
+the name.
 
 ### What this changes
 
@@ -84,10 +86,13 @@ slot in use and replacing the whole name loses nothing.
 
 ### The slot form: one range, in the event's timezone
 
-**One _Date_ row, start to end**, in place of core's _Hour range_:
-`Oct 9, 6:00 PM → Oct 11, 1:00 PM`, the same shape as the event form's own dates. Core's hour row is
-hidden rather than removed, because other modules anchor on it. The slot list gains an optional End
-Date column.
+**One _Date_ row, start to end**, in place of core's _Hour range_ and its _Date_:
+`Oct 9, 6:00 PM → Oct 11, 1:00 PM`, the same shape as the event form's own dates. Core's hour row
+and, on Odoo 20, its own `date` field are hidden rather than removed, because other modules anchor
+on them; left showing, the form would carry the date twice, and the range already writes it. The
+slot list gains an optional End Date column after core's Date. Odoo 20's list is no longer editable
+in place: its `event_slot_list` controller opens core's form in a dialog to create a slot, which is
+this form, widget and all.
 
 **Shown in the event's timezone, not the viewer's.** A datetime field shows the viewer's own time,
 which for anyone editing from another timezone would disagree with the slot calendar, the slot's
@@ -100,6 +105,18 @@ wall-clock time (`normalizeRecord`). To save one, it writes `date`, `start_hour`
 that wall-clock time, never the datetimes (`buildRawRecord`). The widget does both around core's own
 `DateTimeField`, which it uses unchanged: it hands the field a view of the record in which the range
 reads as event time, and in which updating the range writes the slot's date, hours and day count.
+
+**On Odoo 20 it is an Owl 3 component.** Owl 3 refuses `static props`, so it declares
+`props = useProps({ ...dateTimeFieldProps, tzField: t.string() })`, extending the schema core's
+`datetime_field.js` now exports, and it keeps `static components` and its inline `xml` template,
+which reaches the wrapper's props through `this.`. The record view is a `Proxy` as before, and still
+right under Owl 3: core's field reads `record.data[...]` inside an `effect`, through our `data`
+proxy onto the record's own reactive object, so the reads are tracked and an edit or an onchange
+redraws the range. Two things changed in `record.update`. It takes no options argument any more, so
+ours forwards none. And it may now be handed an `Operation` for a field, which core's
+`onWillParseValues` does when someone types `+=1d` into an input; core resolves it against the
+stored value in `_applyChanges`, which here would be the UTC one, so the widget resolves it first,
+against the event-time value, and only then writes the date, hours and day count.
 
 **The widget declares those four fields itself, flagged for onchange.** The server marks a field for
 onchange only where a view's arch declares it, and it is the onchange that recomputes the datetimes
@@ -120,10 +137,11 @@ datetimes, so core never meets that; ours shows them, so the override leaves suc
 empty instead.
 
 **This leans on core's web client internals.** The widget relies on `DateTimeField` reading the
-record through `record.data` and writing through `record.update`, and on `dateRangeField`'s
-`extractProps` and `fieldDependencies`, all in
-`web/static/src/views/fields/datetime/ datetime_field.js`. A change there breaks the widget loudly
-rather than quietly — the form fails to render — but re-check it on any major upgrade.
+record through `record.data` and writing through `record.update`, on `dateRangeField`'s
+`extractProps` and `fieldDependencies`, and on the exported `dateTimeFieldProps`, all in
+`web/static/src/views/fields/datetime/datetime_field.js`, and on `Operation` in
+`web/static/src/model/relational_model/operation.js`. A change there breaks the widget loudly rather
+than quietly — the form fails to render — but re-check it on any major upgrade.
 
 ### What it does not do
 
@@ -142,16 +160,18 @@ event's dates to cover the slots first; core refuses a slot that falls outside t
 ### Translations
 
 `i18n/` carries `es` and `ca`, and `./odev terms vmk_event_slot_multiday` reports both clean against
-core. _Date_, _End Date_, _Event Slot_, _Display Name_ and core's timezone help take core's own
+core 20. _Date_, _End Date_, _Event Slot_, _Display Name_ and core's timezone help take core's own
 `msgstr`, so the new row reads as part of core's form. Catalan's core catalogue leaves the timezone
 help empty, so that one is ours.
 
-**The module's own name and summary are hand-maintained**, in the POT as well as both PO files.
-`ir_module.py` registers every module record as `base.module_<name>`, so the exporter attributes
-them to `base` and omits them from our catalogue — and `PoFileReader` merges each PO against its POT
-and drops whatever the merge marks obsolete, so a PO entry with no POT counterpart disappears in
-silence. `tests/test_translations.py::TestModuleNameTranslation` fails loudly if a re-export drops
-them. Those entries are kept on one line each, because the test reads them that way.
+**The module's own name and summary** are entries of the POT and both PO files, referenced as
+`base.module_vmk_event_slot_multiday` because `ir_module.py` registers every module record under
+`base`. Odoo 20's exporter writes them itself, where 19's left them to be kept by hand. It writes a
+`description` entry beside them, holding this whole README, which we delete from every catalogue:
+nothing displays it. `PoFileReader` still merges each PO against its POT and drops whatever the
+merge marks obsolete, so a PO entry with no POT counterpart disappears in silence.
+`tests/test_translations.py::TestModuleNameTranslation` fails loudly if either is missing, and also
+asserts the premise the references rest on: that the xmlid still belongs to `base`.
 
 ### Licence: LGPL-3
 
@@ -166,14 +186,14 @@ It is also plainly a gap in core that other modules may want to build on.
 ```bash
 cd "../Tech Stack/odoo-dev"
 ./odev install vmk_event_slot_multiday
-./odev test vmk_event_slot_multiday
+./odev test event --test-tags /event,/vmk_event_slot_multiday
 ```
 
-Fifteen tests on the model and form arch, three on translations. The names are checked by formatting
+Sixteen tests on the model and form arch, three on translations. The names are checked by formatting
 the expected dates with the same helpers, so the tests pass in any language's date format.
 
-**The widget needs a browser**, which the `odoo:19` image has not, so it was checked by hand in
-Chrome with the event in `America/New_York` and the browser in `Europe/Madrid`: the range showed
+**The widget needs a browser**, which the `odoo:20` image has not, so on 19 it was checked by hand
+in Chrome with the event in `America/New_York` and the browser in `Europe/Madrid`: the range showed
 event time, and editing, moving, and creating a slot through it stored the right date, hours and day
 count. Core's `event` and `website_event` suites were run with the module installed on two fresh
 databases: one with only core's event modules, and one with our `vmk_event_sessions` and
