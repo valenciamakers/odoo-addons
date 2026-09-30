@@ -29,6 +29,10 @@ several hundred technical modules in among them.
 
 **Changelog**
 
+*20.0.1.0.0 (30 September 2026)*
+
+- First release for Odoo 20, ported from 19.0.1.2.0.
+
 *19.0.1.2.0 (24 September 2026)*
 
 - Names are compared alphabetically rather than in the database's byte order, so *CRM* sorts

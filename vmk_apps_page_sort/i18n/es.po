@@ -2,18 +2,19 @@
 # This file contains the translation of the following modules:
 # 	* vmk_apps_page_sort
 #
-# This module extends only core models and authors no strings of its own, so
-# `i18n export` finds nothing to translate. The two entries below are the
-# module's own name and summary, attributed to base rather than this module
-# (see README.md) and hand-maintained here because the exporter cannot see
-# them.
+# Terms shared with core take core's own wording.
+#
+# The two `base.module_` entries are the module's own name and summary. Odoo
+# 20's `i18n export` writes them, beside a `description` entry holding the
+# whole README, which we leave out: nothing displays it. Keep them in all three
+# files, since a PO entry with no POT counterpart is dropped in silence.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 19.0\n"
+"Project-Id-Version: Odoo Server 20.0+e-20260926\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-15 14:10+0000\n"
-"PO-Revision-Date: 2026-08-15 14:10+0000\n"
+"POT-Creation-Date: 2026-09-30 15:39+0000\n"
+"PO-Revision-Date: 2026-09-30 15:39+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es\n"
@@ -22,12 +23,30 @@ msgstr ""
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#. module: base
+#. module: vmk_apps_page_sort
+#: model:ir.module.module,summary:base.module_vmk_apps_page_sort
+msgid ""
+"Alphabetical order on the Apps page, sorted by the name shown on the card"
+msgstr ""
+"Orden alfabético en la página de Aplicaciones, por el nombre que se muestra "
+"en la tarjeta"
+
+#. module: vmk_apps_page_sort
 #: model:ir.module.module,shortdesc:base.module_vmk_apps_page_sort
 msgid "Apps Page Sort"
 msgstr "Orden de la página de Aplicaciones"
 
-#. module: base
-#: model:ir.module.module,summary:base.module_vmk_apps_page_sort
-msgid "Alphabetical order on the Apps page, sorted by the name shown on the card"
-msgstr "Orden alfabético en la página de Aplicaciones, por el nombre que se muestra en la tarjeta"
+#. module: vmk_apps_page_sort
+#: model:ir.model.fields,field_description:vmk_apps_page_sort.field_ir_module_module__display_name
+msgid "Display Name"
+msgstr "Nombre para mostrar"
+
+#. module: vmk_apps_page_sort
+#: model:ir.model.fields,field_description:vmk_apps_page_sort.field_ir_module_module__id
+msgid "ID"
+msgstr "ID"
+
+#. module: vmk_apps_page_sort
+#: model:ir.model,name:vmk_apps_page_sort.model_ir_module_module
+msgid "Module"
+msgstr "Módulo"

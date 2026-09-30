@@ -67,7 +67,7 @@ original order.
 
 `shortdesc` is `translate=True`, so the order follows each user's own language.
 
-**Odoo creates every database with `LC_COLLATE 'C'`** — `service/db.py` passes it whenever the
+**Odoo creates every database with `LC_COLLATE 'C'`** — `modules/db.py:356` passes it whenever the
 template is `template0`, which is the normal path — and `C` means byte order. A plain
 `ORDER BY shortdesc` is therefore not alphabetical in the way a person means it: `CRM` sorts before
 `Calendar`, because `R` (82) precedes `a` (97), and accented initials sort after `Z`. The app grid,
@@ -76,8 +76,8 @@ disagreed with this page until 19.0.1.2.0.
 
 **So the module also decides how `shortdesc` is compared.** `default_order` takes field names and
 cannot wrap one in a function, but the ORM builds each ORDER BY term in
-`BaseModel._order_field_to_sql` (`odoo/orm/models.py`), and `models/ir_module_module.py` overrides
-it on `ir.module.module` for `shortdesc` alone:
+`BaseModel._order_field_to_sql` (`odoo/orm/models.py:4778`), and `models/ir_module_module.py`
+overrides it on `ir.module.module` for `shortdesc` alone:
 
 - **With ICU**, it orders by `shortdesc COLLATE "und-x-icu"`, ICU's root collation: case does not
   decide the order, and accented letters sit beside their base letter, so `Éxito` follows `Exit`
@@ -89,6 +89,13 @@ It reaches nothing else. Core never orders modules by `shortdesc` — its `_orde
 `name` — so the override changes only the two Apps views that ask for it, keeping the reasoning of
 the section above. It is the same term core would build, with the collation added: the field
 expression is still added to the query's `_order_groupby`, and direction and `NULLS` pass through.
+
+**Odoo 20 changed the method's signature**, from `(alias, field_name, direction, nulls, query)` to
+`(table, field_expr, direction, nulls)`. The alias and the query are now one `TableSQL`: the column
+is `table[field_expr]`, and the query, for `_order_groupby`, is `table._query`. An override still
+written for 19 raises a `TypeError` on every ordering of the model, which here means the Apps page
+does not open. `addons/mass_mailing/models/mailing.py:250` is the pattern followed. The per-registry
+check for ICU moved from `tools.ormcache`, deprecated in 20, to `api.ormcache`.
 
 A stored, normalised sort key was the alternative: a column, a compute, and a recompute on every
 Apps-list update, and a key per language, since `shortdesc` is translated. Ordering in the query
@@ -104,17 +111,28 @@ needs none of that.
 
 ### Translations
 
-The module's own name and summary in `i18n/vmk_apps_page_sort.pot`, `es.po` and `ca.po` are
-hand-maintained, not exported — `ir.module.module` records belong to `base`'s xmlid namespace, so
-`odoo i18n export` never sees them. The module's own view attributes generate no other translatable
-terms, so that is the whole of this catalogue. See
-[`vmk_language_systray`'s README](../vmk_language_systray#the-modules-own-name-and-summary-are-hand-maintained-in-i18n)
-for the full explanation. `tests/test_apps_page_sort.py::TestModuleNameTranslation` fails loudly if
-re-running the export drops them.
+The module's own name and summary are `ir.module.module` records, whose xmlid belongs to `base`
+(`base.module_vmk_apps_page_sort`). On Odoo 19 that made `odoo i18n export` skip them, so they were
+kept in the catalogues by hand. **On Odoo 20 the exporter writes them itself**
+(`odoo/tools/translate.py:1978`, `TranslationModuleReader._export_translatable_records`, selects the
+`base.module_<name>` row of each exported module), and adds the module's description, which is the
+whole `README.md`, since a manifest without a `description` defaults to it
+(`odoo/modules/module.py:207`). The description is left out of the catalogues: the Apps page shows
+`static/description/index.html`, not that field, and nothing else displays it. The rest of the
+catalogue is the three core-owned terms the export finds on the extended model, _Display Name_,
+_ID_, and _Module_, which carry core's own translations.
+
+Odoo 20 also reads the name and summary straight from a module's `.po` by their `#:` reference
+(`Manifest.get_translations`, `odoo/modules/module.py:236`), so a module that is not installed yet
+shows them translated in a translated database. That makes the reference lines load-bearing, and the
+POT still has to carry each entry, because `PoFileReader` merges every PO against it and drops what
+the merge marks obsolete once the module is installed.
+`tests/test_apps_page_sort.py::TestModuleNameTranslation` fails loudly if either goes missing.
+Re-run the export after any change to `README.md`, or the description entry goes stale.
 
 ### Requirements
 
-Odoo 19. Depends on `base` only. The Python is the one `_order_field_to_sql` override above.
+Odoo 20. Depends on `base` only. The Python is the one `_order_field_to_sql` override above.
 
 ### Testing
 
