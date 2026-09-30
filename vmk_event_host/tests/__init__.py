@@ -3,3 +3,4 @@
 
 from . import test_event_host
 from . import test_translations
+from . import test_tours

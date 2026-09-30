@@ -156,3 +156,12 @@ cd "../Tech Stack/odoo-dev"
 
 The access tests act as a registration-desk user, as event users and managers, and as a manager of
 another company, since a test run as the superuser never meets `security/ir.access.csv`.
+
+### Browser tests
+
+`tests/test_tours.py` drives the event form and list in a real browser (`HttpCase.start_tour`), with
+the tours in `static/tests/tours/vmk_event_host_tour.js`. They cover the summary button (hosts in
+their own order, its accessible name, and that clicking it opens the Hosts tab), adding a host line
+with a role, reordering lines by dragging the handle, and searching and grouping the event list by
+host. Each test checks the resulting records in Python. They need a browser, so they run in the
+harness image: `SERIES=20.0 ./odev test vmk_event_host`; a passing tour logs `tour succeeded`.

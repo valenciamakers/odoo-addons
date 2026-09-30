@@ -17,6 +17,9 @@
         "web.assets_backend": [
             "vmk_event_host/static/src/**/*",
         ],
+        "web.assets_tests": [
+            "vmk_event_host/static/tests/tours/**/*",
+        ],
     },
     "images": ["static/description/cover.png"],
     "installable": True,
