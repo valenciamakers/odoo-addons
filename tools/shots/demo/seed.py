@@ -11,8 +11,8 @@ slots, handled below by branching on ``odoo.release.series``.
 
 Odoo 18 has no ``event.slot`` model and no demo contacts (``without_demo = all`` in both series'
 harness config), so this script creates Marc Demo and Edith Sanchez itself, with the same avatars
-Odoo's own demo data uses (``base/static/img/user_demo-image.png`` and
-``base/static/img/res_partner_address_14.jpg``), and Beginner's Bootcamp becomes one ordinary event
+Odoo's own demo data uses (``base/static/img/user_demo-image`` and
+``base/static/img/res_partner_address_14``, PNG and JPEG through 19, WebP on 20), and Beginner's Bootcamp becomes one ordinary event
 (a Friday evening to Sunday afternoon) rather than a multi-slot one.
 
 ``open_studio_evening(env)`` is deliberately not called by this script: it makes a published event
@@ -75,9 +75,16 @@ website.write({"language_ids": [(6, 0, langs.ids)], "default_lang_id": en_gb.id}
 Partner = env["res.partner"]
 
 
-def avatar(path):
-    with tools.file_open(path, mode="rb") as f:
-        return base64.b64encode(f.read())
+def avatar(stem):
+    """Core's demo image at `stem`, in whichever format this series ships: PNG or JPEG through 19,
+    WebP on 20."""
+    for ext in (".png", ".jpg", ".webp"):
+        try:
+            with tools.file_open(stem + ext, mode="rb") as f:
+                return base64.b64encode(f.read()).decode()  # text: 20 refuses bytes
+        except FileNotFoundError:
+            continue
+    raise FileNotFoundError(stem)
 
 
 def find_or_create_partner(name, **vals):
@@ -87,9 +94,9 @@ def find_or_create_partner(name, **vals):
     return partner
 
 
-marc = find_or_create_partner("Marc Demo", image_1920=avatar("base/static/img/user_demo-image.png"))
+marc = find_or_create_partner("Marc Demo", image_1920=avatar("base/static/img/user_demo-image"))
 edith = find_or_create_partner(
-    "Edith Sanchez", image_1920=avatar("base/static/img/res_partner_address_14.jpg")
+    "Edith Sanchez", image_1920=avatar("base/static/img/res_partner_address_14")
 )
 
 
@@ -206,13 +213,12 @@ rosa.write(
 with open(
     "/mnt/extra-addons/odoo-addons-custom/tools/shots/demo/rosa_vidal.png", "rb"
 ) as f:
-    rosa.image_1920 = base64.b64encode(f.read())
+    rosa.image_1920 = base64.b64encode(f.read()).decode()
 
 env["crm.lead"].search([("name", "=", "Laser cutting for a small order")]).unlink()
-lead = env["crm.lead"].browse(
-    env["mail.thread"].message_process(
-        "crm.lead",
-        """From: Rosa Vidal <rosa@example.org>
+lead = env["mail.thread"].message_process(
+    "crm.lead",
+    """From: Rosa Vidal <rosa@example.org>
 To: info@example.com
 Subject: Laser cutting for a small order
 Message-ID: <rosa-laser-order@example.org>
@@ -221,8 +227,9 @@ Content-Type: text/html; charset=utf-8
 
 <p>Hi, could you cut 40 coasters in 3mm birch plywood from the attached design?</p><p>Thanks,<br>Rosa</p>
 """,
-    )
 )
+if not hasattr(lead, "_name"):  # through 19 message_process returns the id; 20 returns the record
+    lead = env["crm.lead"].browse(lead)
 tag = env["crm.tag"].search([("name", "=", "Laser Cutting")], limit=1) or env["crm.tag"].create(
     {"name": "Laser Cutting"}
 )
