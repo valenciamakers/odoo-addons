@@ -9,7 +9,7 @@ day, the registration modal shows both dates.
 **How to use it** is in the user documentation, [`doc/index.rst`](doc/index.rst), which the Odoo
 Apps Store also shows on the module's page, together with the changelog.
 
-It requires the Events app, which in Odoo 19 is `website_event`. From the Apps Store this is the
+It requires the Events app, which in Odoo 20 is `website_event`. From the Apps Store this is the
 module website users download: it depends on `vmk_event_slot_multiday`, so the store includes both.
 LGPL-3, © 2026 Valencia Makers, SL.
 
@@ -53,7 +53,9 @@ someone needs it.
 When Odoo renames `SlotDetails`, moves its file, or renames `_onSlotSelected` or
 `selectedSlotDatetime`, the patch either fails to load (a renamed import breaks the frontend bundle
 loudly) or stops applying with nothing raised, and the modal returns to core's one-day line.
-Re-check the three names above on any major upgrade.
+Re-check the three names above on any major upgrade. Odoo 20's `website_event_slot_details.js`, its
+`SlotDetails` interaction, and the `data-slot-start`, `data-slot-end`, and `data-event-tz`
+attributes on each slot button are byte for byte those of 19, so the patch needed no change.
 
 ### Translations
 
@@ -70,9 +72,9 @@ LGPL-3, as `vmk_event_slot_multiday` is; see its README.
 ```bash
 cd "../Tech Stack/odoo-dev"
 ./odev install vmk_website_event_slot_multiday
-./odev test vmk_website_event_slot_multiday
+./odev test event --test-tags /event,/website_event,/vmk_event_slot_multiday,/vmk_website_event_slot_multiday
 ```
 
-The tests cover the translations only. The patch itself needs a browser, which the `odoo:19` image
-has not, so it was checked by hand in Chrome against a Friday-to-Sunday slot and a one-day slot on
-the same event.
+The tests cover the translations only. The patch itself needs a browser, which the `odoo:20` image
+has not, so on 19 it was checked by hand in Chrome against a Friday-to-Sunday slot and a one-day
+slot on the same event.

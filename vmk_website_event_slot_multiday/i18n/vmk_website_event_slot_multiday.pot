@@ -3,16 +3,19 @@
 # 	* vmk_website_event_slot_multiday
 #
 # The module has no strings of its own: it patches one line of core's
-# registration modal. These are its name and summary, which `i18n export`
-# never emits, kept by hand because a PO entry with no POT counterpart is
-# dropped on load.
+# registration modal.
+#
+# The two `base.module_` entries are the module's own name and summary. Odoo
+# 20's `i18n export` writes them, beside a `description` entry holding the
+# whole README, which we leave out: nothing displays it. Keep them in all three
+# files, since a PO entry with no POT counterpart is dropped in silence.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 19.0+e-20260908\n"
+"Project-Id-Version: Odoo Server 20.0+e-20260926\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-24 09:53+0000\n"
-"PO-Revision-Date: 2026-09-24 09:53+0000\n"
+"POT-Creation-Date: 2026-09-30 18:51+0000\n"
+"PO-Revision-Date: 2026-09-30 18:51+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -20,12 +23,12 @@ msgstr ""
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
 
-#. module: base
-#: model:ir.module.module,shortdesc:base.module_vmk_website_event_slot_multiday
-msgid "Multi-Day Event Slots (Website)"
-msgstr ""
-
-#. module: base
+#. module: vmk_website_event_slot_multiday
 #: model:ir.module.module,summary:base.module_vmk_website_event_slot_multiday
 msgid "Allow event slots to span multiple days, displayed on the website too"
+msgstr ""
+
+#. module: vmk_website_event_slot_multiday
+#: model:ir.module.module,shortdesc:base.module_vmk_website_event_slot_multiday
+msgid "Multi-Day Event Slots (Website)"
 msgstr ""
