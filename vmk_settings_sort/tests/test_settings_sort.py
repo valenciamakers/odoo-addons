@@ -80,12 +80,28 @@ class TestSettingsSort(TransactionCase):
         self.assertEqual([child.get("name") for child in form], ["only"])
 
     def test_the_live_settings_sidebar_is_sorted(self):
+        # Odoo 20's minimal install contributes a single block, General Settings, where 19's
+        # contributed several, so bring two of our own, in the wrong order, rather than count
+        # on whatever else the database happens to have installed.
+        self.env["ir.ui.view"].create(
+            {
+                "name": "vmk_settings_sort test blocks",
+                "model": "res.config.settings",
+                "inherit_id": self.env.ref("base.res_config_settings_view_form").id,
+                "arch": """<xpath expr="//form" position="inside">
+                    <app string="Zulu" name="vmk_test_zulu"/>
+                    <app string="Álpha" name="vmk_test_alpha"/>
+                </xpath>""",
+            }
+        )
         arch, _view = self.env["res.config.settings"]._get_view()
         apps = arch.findall("./app")
         self.assertGreater(len(apps), 1, "expected several settings blocks")
         self.assertEqual(apps[0].get("name"), "general_settings")
         keys = [folded_label(app.get("string")) for app in apps[1:]]
         self.assertEqual(keys, sorted(keys))
+        names = [app.get("name") for app in apps]
+        self.assertLess(names.index("vmk_test_alpha"), names.index("vmk_test_zulu"))
 
     # --- the Technical groupings -----------------------------------------
 
@@ -156,20 +172,18 @@ class TestSettingsSort(TransactionCase):
 
 @tagged("post_install", "-at_install")
 class TestModuleNameTranslation(TransactionCase):
-    """Guard the two catalogue entries `i18n export` will never regenerate.
+    """Guard the two catalogue entries for the module's own name and summary.
 
-    The module's own name and summary live on `ir.module.module` records whose
-    `ir.model.data` row belongs to **base** (`ir_module.py` creates them as
-    `base.module_<name>`), so the exporter attributes them to base and omits
-    them from our POT. They are in `i18n/` by hand -- the module's own
-    extracted terms (Config Settings, Display Name, ID, Menu) all belong to
-    core and are deliberately left untranslated here, so this catalogue exists
-    for nothing else.
+    They live on `ir.module.module` records whose `ir.model.data` row belongs to
+    **base** (`ir_module.py` creates them as `base.module_<name>`). Odoo 19's
+    exporter attributed them to base and omitted them from our POT, so they were
+    in `i18n/` by hand; Odoo 20's exporter emits them itself. The rest of the
+    catalogue (Config Settings, Display Name, ID, Menu) is core's own wording.
 
     That matters because `PoFileReader` merges each PO against its module's
     POT and skips anything the merge marks obsolete -- so an entry missing
     from the POT is discarded in silence, translations and all. Re-running
-    `i18n export` overwrites the POT and would do exactly that. This test is
+    a re-export overwrites the POT and could do exactly that. This test is
     what turns that into a failure instead of a quiet regression.
     """
 
@@ -186,9 +200,9 @@ class TestModuleNameTranslation(TransactionCase):
                 self.assertIn(
                     f'msgid "{msgid}"',
                     pot,
-                    "The POT has lost an entry `odoo i18n export` does not generate. If you "
-                    "just re-exported it, re-add the two `base.module_vmk_settings_sort` "
-                    "blocks by hand -- without them the module name and summary silently stop "
+                    "The POT has lost an entry for the module's name or summary. If you "
+                    "just re-exported it, check the two `base.module_vmk_settings_sort` "
+                    "blocks survived -- without them the module name and summary silently stop "
                     "being translated. See the README's Translations section.",
                 )
 
@@ -203,8 +217,7 @@ class TestModuleNameTranslation(TransactionCase):
         """The premise the POT entries encode: the xmlid is base's, not ours.
 
         If Odoo ever attributes these records to the module itself, the
-        exporter would start emitting them and the hand-maintenance above
-        becomes not just unnecessary but actively wrong.
+        entries' `base.module_*` references would stop matching.
         """
         data = self.env["ir.model.data"].search(
             [("model", "=", "ir.module.module"), ("name", "=", "module_vmk_settings_sort")]

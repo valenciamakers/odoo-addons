@@ -7,10 +7,10 @@
 # res.config.settings and ir.ui.menu attributes those models' names and their
 # display_name/id fields to this module in the export.
 #
-# The two "module: base" blocks are hand-maintained: `ir.module.module` records
-# are registered as base.module_<name>, so `i18n export` never emits them here.
-# They must stay in the .pot as well, or PoFileReader's merge silently discards
-# them. See vmk_language_systray/README.md for the full explanation.
+# The two `base.module_` entries are the module's own name and summary. Odoo
+# 20's `i18n export` writes them, beside a `description` entry holding the
+# whole README, which we leave out: nothing displays it. Keep them in all three
+# files, since a PO entry with no POT counterpart is dropped in silence.
 #
 msgid ""
 msgstr ""
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#. module: base
+#. module: vmk_settings_sort
 #: model:ir.module.module,summary:base.module_vmk_settings_sort
 msgid "Alphabetical order for the Settings sidebar and Technical menu groups"
 msgstr "Orden alfabético para la barra lateral de Ajustes y los grupos del menú Técnico"
@@ -53,7 +53,7 @@ msgstr "ID"
 msgid "Menu"
 msgstr "Menú"
 
-#. module: base
+#. module: vmk_settings_sort
 #: model:ir.module.module,shortdesc:base.module_vmk_settings_sort
 msgid "Settings Sort"
 msgstr "Orden de los ajustes"

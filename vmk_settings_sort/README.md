@@ -29,16 +29,20 @@ way out, so nothing is left behind if the module is removed.
 ### The settings sidebar
 
 The sidebar is drawn in arch order. `settings_form_compiler.js` walks `{selector: "app"}` in
-document order, and `settings_page.js` sorts nothing at all. Each module contributes its section
-with `<xpath expr="//form" position="inside">`, so the order you see is the order the inheriting
-views happened to be applied in — and **General Settings is only first because `base_setup` sets its
-view's `priority` to `0`**. Nothing marks it as the header, so this module pins it deliberately.
+document order (line 9, with `compileApp` at line 44), and `settings_page.js` sorts nothing at all —
+its `t-foreach` over `props.modules` in `settings_page.xml` (lines 28 and 57) draws them as given,
+once as the dropdown Odoo 20 shows on small screens and once as the sidebar. Each module contributes
+its section with `<xpath expr="//form" position="inside">`, so the order you see is the order the
+inheriting views happened to be applied in — and **General Settings is only first because
+`base_setup` sets its view's `priority` to `0`**. Nothing marks it as the header, so this module
+pins it deliberately.
 
 It is pinned by `name="general_settings"`, never by label: in Spanish the label is _Opciones
 generales_, so a label match would unpin it for anyone not working in English.
 
-`_get_view` is the override point, and sorting **after** `super()` is what makes it safe. The arch
-is fully combined by then, so every third-party xpath has already matched — including
+`_get_view` (`odoo/addons/base/models/ir_ui_view.py:3037`, unchanged in signature and in returning
+`(arch, view)`) is the override point, and sorting **after** `super()` is what makes it safe. The
+arch is fully combined by then, so every third-party xpath has already matched — including
 `sale_management` flipping `sale`'s block to `notApp="0"` — and reordering afterwards cannot break
 any of them.
 
@@ -57,20 +61,24 @@ those fields to the end.
 
 ### The Technical groupings
 
-Their sequences collide in stock — three sit on `10`, two on `3`, two on `5`, two on `30` — so ties
-break by `id`, which is install order. That is why the list looks arbitrary and why it differs
-between databases.
+Their sequences collide in stock — on Odoo 19 three sat on `10`, two on `3`, two on `5`, two on
+`30`; a bare Odoo 20 install still has three on `10` (User Interface, Database Structure,
+Automation) and two on `5` (Actions, IAP) — so ties break by `id`, which is install order. That is
+why the list looks arbitrary and why it differs between databases.
 
 Sorting happens in the `load_menus` payload, on the immediate children of `base.menu_custom`.
 Targeting the **xmlid** is deliberate: `mail` ships a second menu also called "Technical", under
-Discuss, and matching on the name would reorder that one too.
+Discuss (`mail.mail_menu_technical`, `addons/mail/views/mail_menus.xml:130`), and matching on the
+name would reorder that one too.
 
 Only the immediate children are touched. What sits inside each grouping is a deliberate arrangement,
 and alphabetising it would be a loss.
 
 This part only ever applies in **developer mode**. Technical carries `groups="base.group_no_one"`,
 so it is absent from the payload entirely otherwise, and the override hands it straight back
-unchanged.
+unchanged. Odoo 20 tightens that further: `_visible_menu_ids` drops `group_no_one` unless the user
+is regular as well (`user._is_regular()`, `odoo/addons/base/models/ir_ui_menu.py:75`), so a light
+user never sees Technical even in debug.
 
 ### Testing, and why it is shaped this way
 
@@ -78,15 +86,18 @@ Neither sort can be proved against live data:
 
 - The live arch cannot show that a block landed in the **slot** it should have, only that the blocks
   came out in some order.
-- The live menu payload cannot show the Technical ordering **at all**. `_filter_visible_menus` reads
-  `request.session.debug` rather than the `debug` argument `load_menus` was given — that argument
-  only feeds the ormcache key — so a `group_no_one` menu is filtered out of any payload fetched
-  without an HTTP request, and a `TransactionCase` has none.
+- The live menu payload cannot show the Technical ordering **at all**. `_filter_visible_menus`
+  (`ir_ui_menu.py:134`) reads `request.session.debug` rather than the `debug` argument `load_menus`
+  was given — that argument only feeds the ormcache key — so a `group_no_one` menu is filtered out
+  of any payload fetched without an HTTP request, and a `TransactionCase` has none.
 
 So both orderings are tested against fixtures built in the test file, where every element is known,
-and the live checks confirm only that the overrides are wired in. The Technical path was then
-verified by hand over an authenticated HTTP session in developer mode, which is the one way to
-exercise it end to end.
+and the live checks confirm only that the overrides are wired in. The live sidebar check adds two
+`<app>` blocks of its own in the wrong order, because a minimal Odoo 20 install (`base` and `web`,
+with `base_setup`) contributes only General Settings, and a count of whatever happens to be
+installed would fail on a fresh database. The Technical path was then verified by hand on Odoo 19
+over an authenticated HTTP session in developer mode, which is the one way to exercise it end to
+end; that check is still to repeat on 20.
 
 ```bash
 odoo -d <db> -u vmk_settings_sort --test-enable --test-tags /vmk_settings_sort --stop-after-init
@@ -106,15 +117,16 @@ odoo -d <db> -u vmk_settings_sort --test-enable --test-tags /vmk_settings_sort -
 
 ### Translations
 
-The module's own name and summary in `i18n/vmk_settings_sort.pot`, `es.po` and `ca.po` are
-hand-maintained, not exported — `ir.module.module` records belong to `base`'s xmlid namespace, so
-`odoo i18n export` never sees them. The module's own extracted terms (Config Settings, Display Name,
-ID, Menu) all belong to core and are deliberately left untranslated, so that is the whole of this
-catalogue. See
+The module's own name and summary in `i18n/vmk_settings_sort.pot`, `es.po` and `ca.po` were
+hand-maintained until Odoo 19, since `ir.module.module` records belong to `base`'s xmlid namespace
+and the exporter never saw them. Odoo 20's exporter emits them under this module's name, and also
+dumps the whole README as the module's `description`, which the catalogues leave out. The other
+entries (Config Settings, Display Name, ID, Menu) belong to core and carry core's own translation.
+See
 [`vmk_language_systray`'s README](../vmk_language_systray#the-modules-own-name-and-summary-are-hand-maintained-in-i18n)
 for the full explanation. `tests/test_settings_sort.py::TestModuleNameTranslation` fails loudly if
 re-running the export drops them.
 
 ### Requirements
 
-Odoo 19. Depends on `base` only.
+Odoo 20. Depends on `base` only.
