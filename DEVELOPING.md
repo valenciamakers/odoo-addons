@@ -617,6 +617,24 @@ September 2026, when Odoo 20 stopped loading it in the backend, so an `fa` icon 
 there renders nothing; the store still has its own copy, but one family across every series and both
 surfaces is the point.
 
+**`tools/feature_icons.py` does the swap, and places every icon.** Which icon stands for which idea
+is `tools/icons/feature_icons.json`: a default per Font Awesome glyph, and per-module overrides
+where a sentence needs another, as reviewed on 30 September 2026. To add a feature to a page, write
+the `fa` span as before and run the tool on the module, or place an `<img>` by hand and run it to
+fetch the file. It writes the SVGs, ships the licence of each family used (`LICENSE-lucide`, and
+`LICENSE-material-symbols` where needed), and removes icons the page no longer names. `--check`
+lists pages still carrying Font Awesome.
+
+```bash
+uv run tools/feature_icons.py vmk_foo
+uv run tools/feature_icons.py --all
+```
+
+**One exception to Lucide: Odoo's own globe.** The Backend Language Menu draws Material Symbols'
+`public` in the systray on 20, since `language` is not in Odoo's font subset, so the two language
+pages show that glyph, as `material:public` in the mapping, where they refer to the systray's globe.
+It is filled where Lucide is outlined, by design: it has to be recognisably the same icon.
+
 **One fixed purple, because an icon cannot follow the page.** An SVG shown through `<img>` is a
 sealed document: its CSS sees nothing of the page around it, and the only thing that crosses is the
 colour scheme, as `prefers-color-scheme`. That is the page's declared scheme when it declares one,
