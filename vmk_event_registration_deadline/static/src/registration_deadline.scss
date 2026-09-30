@@ -9,5 +9,6 @@
         field-sizing: content;
         width: auto !important;
         min-width: 2ch;
+        margin-inline-end: 1em;  // the same space before "Before Start" as the checkbox leaves before it
     }
 }
