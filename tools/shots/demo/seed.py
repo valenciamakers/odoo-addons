@@ -155,13 +155,45 @@ def dt(year, month, day, hour, minute=0):
     return datetime(year, month, day, hour, minute)
 
 
-bootcamp = find_or_create_event(
-    "Beginner's Bootcamp",
-    date_begin=dt(2026, 10, 2, 18, 0),
-    date_end=dt(2026, 10, 4, 14, 0),
-    address_id=company.partner_id.id,
-    website_published=True,
-)
+if IS_18:
+    bootcamp = find_or_create_event(
+        "Beginner's Bootcamp",
+        date_begin=dt(2026, 10, 2, 18, 0),
+        date_end=dt(2026, 10, 4, 14, 0),
+        address_id=company.partner_id.id,
+        website_published=True,
+    )
+else:
+    # Multiple Slots, as the published screenshots show it: three Violet slots in October, the
+    # first and last a Friday evening to Sunday afternoon (which needs vmk_event_slot_multiday),
+    # the second one Saturday. The event's own dates must cover them all, so they are set first.
+    # Slot hours are in the event's timezone; event dates are UTC.
+    bootcamp = find_or_create_event(
+        "Beginner's Bootcamp",
+        date_begin=dt(2026, 10, 2, 6, 0),
+        date_end=dt(2026, 10, 31, 20, 0),
+        address_id=company.partner_id.id,
+        website_published=True,
+        is_multi_slots=True,
+        seats_limited=True,
+        seats_max=8,
+    )
+    multiday = "vmk_end_day_offset" in env["event.slot"]._fields
+    slots = [("2026-10-09", 18.0, 13.0, 2), ("2026-10-17", 10.0, 14.0, 0), ("2026-10-23", 18.0, 13.0, 2)]
+    bootcamp.event_slot_ids.unlink()
+    for day, start, end, offset in slots:
+        if offset and not multiday:
+            continue  # a slot ending on another day needs the module; install it and re-run
+        env["event.slot"].create(
+            {
+                "event_id": bootcamp.id,
+                "date": day,
+                "start_hour": start,
+                "end_hour": end,
+                "color": 11,
+                **({"vmk_end_day_offset": offset} if multiday else {}),
+            }
+        )
 set_hosts(bootcamp, [(marc, "Lead Instructor", 10), (edith, "Assistant", 20)])
 
 festival = find_or_create_event(
