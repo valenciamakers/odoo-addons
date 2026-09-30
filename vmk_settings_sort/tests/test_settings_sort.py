@@ -80,12 +80,28 @@ class TestSettingsSort(TransactionCase):
         self.assertEqual([child.get("name") for child in form], ["only"])
 
     def test_the_live_settings_sidebar_is_sorted(self):
+        # A minimal install contributes a single block, General Settings, so bring two of our
+        # own, in the wrong order, rather than count on whatever else the database happens to
+        # have installed.
+        self.env["ir.ui.view"].create(
+            {
+                "name": "vmk_settings_sort test blocks",
+                "model": "res.config.settings",
+                "inherit_id": self.env.ref("base.res_config_settings_view_form").id,
+                "arch": """<xpath expr="//form" position="inside">
+                    <app string="Zulu" name="vmk_test_zulu"/>
+                    <app string="Álpha" name="vmk_test_alpha"/>
+                </xpath>""",
+            }
+        )
         arch, _view = self.env["res.config.settings"]._get_view()
         apps = arch.findall("./app")
         self.assertGreater(len(apps), 1, "expected several settings blocks")
         self.assertEqual(apps[0].get("name"), "general_settings")
         keys = [folded_label(app.get("string")) for app in apps[1:]]
         self.assertEqual(keys, sorted(keys))
+        names = [app.get("name") for app in apps]
+        self.assertLess(names.index("vmk_test_alpha"), names.index("vmk_test_zulu"))
 
     # --- the Technical groupings -----------------------------------------
 
