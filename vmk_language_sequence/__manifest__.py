@@ -10,6 +10,11 @@
     "category": "Website/Website",
     "depends": ["website"],
     "data": ["views/res_lang_views.xml"],
+    "assets": {
+        "web.assets_tests": [
+            "vmk_language_sequence/static/tests/tours/**/*",
+        ],
+    },
     "post_init_hook": "seed_language_sequence",
     "images": ["static/description/cover.png"],
     "installable": True,
