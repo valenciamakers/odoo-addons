@@ -262,7 +262,17 @@ checked there yet.
   dependency to `readonly: true`, which keeps it out of the save. Declare them
   `{ ..., readonly: false, onChange: true }`, as core's `project_task_kanban_model.js` does with
   `makeActiveField({ onChange: true })`. Found only on a database without a sibling module that
-  happened to put the same field in the arch. Added 2026-09-24.
+  happened to put the same field in the arch. Added 2026-09-24. Unchanged on 20.
+- **On 20 a datetime field is a button that opens a picker, not a text input.** The picker is a
+  calendar with Date and Range modes, a time box per end, and Apply; in Range mode a click on a day
+  starts a new range and a second click ends it. A browser test clicks days and types times, never
+  fills an input. `DateTimeField` declares `props = useProps(dateTimeFieldProps)` and exports that
+  schema, so a wrapper spreads it; `record.update(changes)` takes no options; and a date input can
+  hand a `DateTimeOperation` (`+=1d`, `model/relational_model/operation.js`) for core to apply to
+  the stored value, which a wrapper converting timezones must resolve first. Verified on 20 with
+  `vmk_event_slot_multiday`.
+- **Core 20's slot form shows a Date row of its own** (`event/views/event_slot_views.xml`). An
+  extension replacing how the slot's date is edited hides it rather than removing it.
 - **Extension views apply in priority-then-id order, so two modules' extensions of one view apply in
   whichever order they were installed.** An extension anchoring on an element another module's
   extension adds works on a fresh install and fails on a database where ours is older:
@@ -280,10 +290,11 @@ checked there yet.
 - **Datetimes render in the browser's timezone, not the user's preference and not the record's.**
   Nothing in `web` sets luxon's `Settings.defaultZone`, so it is the system zone. Core's slot
   calendar shows slots in the event's timezone by converting and relabelling
-  (`event_slot_calendar_model.js`, `normalizeRecord`:
-  `setZone(tz).setZone("local", { keepLocalTime: true })`), and writes the slot's date and hours
-  back from that wall-clock time (`buildRawRecord`). `vmk_event_slot_multiday`'s range widget does
-  the same around core's own `DateTimeField`, through a proxy of the record. Added 2026-09-24.
+  (`event_slot_calendar_model.js`, in `event/static/src/views/event_slot/calendar/` on 20,
+  `normalizeRecord`: `setZone(tz).setZone("local", { keepLocalTime: true })`), and writes the slot's
+  date and hours back from that wall-clock time (`buildRawRecord`). `vmk_event_slot_multiday`'s
+  range widget does the same around core's own `DateTimeField`, through a proxy of the record. Added
+  2026-09-24. Still so on 20: checked with the event in New York and the browser in Madrid.
 - **The calendar view only drags a record whose start field is writable** (`calendar_model.js`,
   `canEdit`), so a computed start without an inverse makes a calendar read-only for moves. And a
   refused drag stays drawn where it was dropped: `updateRecord` does not reload on failure, so
