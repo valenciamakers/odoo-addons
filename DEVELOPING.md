@@ -79,10 +79,11 @@ These are properties of Odoo, not of any one harness.
   module you passed to `--init`.
 - **There is no `--uninstall` flag.** Use `button_immediate_uninstall()` on the `ir.module.module`
   record from a shell, with the server stopped.
-- **`odoo shell` does not signal cache invalidation to the running server.** `service/model.py`
-  calls `registry.signal_changes()` after each RPC; the shell has no such hook, so a write there
-  leaves other workers stale. Call `env.registry.signal_changes()` **before** `env.cr.commit()`, or
-  restart the server. Getting this backwards looks exactly like a caching bug in your module.
+- **On 20, a commit from `odoo shell` signals the running server by itself.** Through 19 the shell
+  had to call `env.registry.signal_changes()` before `env.cr.commit()`, or other workers stayed
+  stale; 20 removed that method and signals from the commit (`orm/environments.py`, `committing`).
+  Code meant to run on several series checks for the method first, as `tools/shots/demo/seed.py`
+  does.
 - **The running server holds the Python it started with**, unless `--dev=reload` is on and the
   watcher saw the change. Restart after editing code, or you are testing the previous version — and
   restart regardless after changing a `__manifest__.py` or an asset bundle.
@@ -161,10 +162,14 @@ changelog of Odoo 20.
   ships `security/ir.access.csv` instead, and public and portal users are one group,
   `base.group_everyone`. `upgrade_code`'s `19.4-00-ir-access` converts the old files.
 - **`ir.config_parameter` is typed.** `get_param` and `set_param` are gone; read and write with
-  `get_bool`, `get_int`, `get_float`, `get_str`, and their `set_*` counterparts.
+  `get_bool`, `get_int`, `get_float`, `get_str`, and their `set_*` counterparts. A
+  `res.config.settings` field with `config_parameter=` needs no change: `res_config.py` reads and
+  writes it with the typed methods, storing the same text as 19, so an upgraded database keeps its
+  values. Verified on 20.
 - **Font Awesome is no longer loaded in the backend.** Core's icons are `oi` with `data-icon`
   (Material Symbols), and a view button's `icon` names a Material Symbols glyph. An `fa` class in a
-  backend template renders nothing. The website still uses Font Awesome.
+  backend template renders nothing, including the feature icons of a module's `index.html` on the
+  backend's Apps page (seen on 20: no glyph, zero width). The website still uses Font Awesome.
 - **pytz is gone from core** in favour of `zoneinfo`, and from `requirements.txt`.
 - **`Registry.clear_cache` and `Registry.signal_changes` are gone.** Invalidation is
   `env.invalidate_ormcache(name)`, and a commit signals other workers by itself
@@ -178,6 +183,11 @@ changelog of Odoo 20.
 - **`odoo/http.py` is a package**, and session functions such as
   `authenticate(session, env, credential)` are module functions in `odoo.http.session`, not methods
   on the session.
+- **A binary field refuses `bytes`** (`orm/fields_binary.py`): write a `BinaryValue` such as
+  `BinaryBytes`, or base64 text. `fields.Image` too. Found on 20 in a test writing a flag.
+- **`float_time` displays a duration**, `1h 30m`, where 19 showed `01:30`. Every one of core's 124
+  uses takes the new look, and `options="{'numeric': true}"` would bring the old one back. Help text
+  saying "set to 00:00" is now wrong.
 - **`http_interface` defaults to `127.0.0.1`**, not every interface. Set it to `0.0.0.0` in a
   container's config, or the published port reaches nothing.
 
@@ -283,13 +293,15 @@ checked there yet.
 - An inherit-only module needs **no `security/ir.model.access.csv`** — ACLs are per model, and
   adding a field to an existing model inherits them. Generators emit one anyway; delete it.
 - `models.Constraint()` replaces `_sql_constraints`.
-- **Odoo creates every database with `LC_COLLATE 'C'`** — `service/db.py` passes it whenever the
-  template is `template0`, which is the normal path. So any SQL `ORDER BY` on text is byte order:
-  capitals sort before lowercase (`CRM` before `Calendar`) and accented initials land after `Z`.
-  Neither `_order` nor a view's `default_order` can fix it, both taking bare field names with no
-  room for `lower()`. Sort in Python, or override `_order_field_to_sql` on the model for that one
-  field and add `COLLATE "und-x-icu"`, falling back to `lower()` where `pg_collation` lacks it, as
-  `vmk_apps_page_sort` does.
+- **Odoo creates every database with `LC_COLLATE 'C'`** — `modules/db.py` on 20 (`service/db.py`
+  through 19) passes it whenever the template is `template0`, which is the normal path. So any SQL
+  `ORDER BY` on text is byte order: capitals sort before lowercase (`CRM` before `Calendar`) and
+  accented initials land after `Z`. Neither `_order` nor a view's `default_order` can fix it, both
+  taking bare field names with no room for `lower()`. Sort in Python, or override
+  `_order_field_to_sql` on the model for that one field and add `COLLATE "und-x-icu"`, falling back
+  to `lower()` where `pg_collation` lacks it, as `vmk_apps_page_sort` does. On 20 the override
+  receives a `TableSQL`: the column is `table[field_expr]` and the query `table._query`, as in
+  core's `mass_mailing/models/mailing.py`. Verified on 20.
 - `post_init_hook(env)` takes the environment, and runs on **install only** — never on upgrade. If a
   hook seeds data, an upgrade will not re-seed it; apply it by hand when testing on an existing
   database.
@@ -439,8 +451,17 @@ checked there yet.
   `load_menus_root` feeds `website`'s "Go to your Odoo Apps" dropdown, rendered server-side through
   a `t-foreach` that applies no sort. Only `load_menus` entries carry an `xmlid` — `load_menus_root`
   builds its children with `read()`.
-- Menu `create`/`write`/`unlink` each call a bare `registry.clear_cache()`, which covers `'default'`
-  where all three menu caches live. Anything reordering menus needs no invalidation of its own.
+- Menu `create`/`write`/`unlink` invalidate `'default'`, where all three menu caches live: on 20
+  through `IrUiMenu._clear_cache_name`, which the ORM honours in all three, and through 19 by a bare
+  `registry.clear_cache()` in each. Anything reordering menus needs no invalidation of its own.
+- **On 20 the web client also keeps the menus in IndexedDB** (`menu_service.js`), keyed by the
+  registry hash, and paints from that copy before refetching. A changed order can appear on the
+  second load rather than the first, like the view cache under _Testing locally_.
+- **Resolve an xmlid with `_xmlid_to_res_id`, not `env.ref`, anywhere on the `load_menus` path.**
+  The lookup is ormcached, but `env.ref` also reads the record, which on a cold fields cache is one
+  query, and core's `web/tests/test_perf_load_menu.py` asserts none. Run it beside ours with
+  `-u base --test-tags /web:TestPerfSessionInfo,/<ours>`; it failed on Enterprise until both our
+  menu modules switched. Found on 20; not checked on 19.
 - A bare `/odoo` lands on `res.users.action_id` if the user has one, else on `root.children[0]` —
   literally the first app (`webclient.js` `_loadDefaultApp`). Reordering root menus therefore moves
   the post-login screen on Community. Enterprise overrides that method to open the app grid instead,
@@ -453,13 +474,17 @@ checked there yet.
   feeds the ormcache key; `_filter_visible_menus` reads `request.session.debug` instead. With no
   request there is no debug, so a `groups="base.group_no_one"` menu — the whole Technical subtree —
   is absent from any payload fetched in a `TransactionCase`, however you call it. Test that ordering
-  against a fixture and verify the live path over an authenticated HTTP session.
+  against a fixture and verify the live path over an authenticated HTTP session. On 20 debug
+  visibility also needs a regular user (`user._is_regular()`), and `base.menu_tests` is
+  `group_user_regular`. Verified on 20.
 - **The Settings sidebar is drawn in arch order.** `settings_form_compiler.js` walks
   `{selector: "app"}` in document order and `settings_page.js` sorts nothing, so the order is
   whichever order the inheriting views were applied in. General Settings leads only because
   `base_setup` sets its view's `priority` to `0`. Sort it by overriding `_get_view` on
   `res.config.settings` — after `super()`, where the arch is fully combined and no third-party xpath
-  can still be broken — and remember `<form>` holds non-`<app>` children that must not move.
+  can still be broken — and remember `<form>` holds non-`<app>` children that must not move. A
+  minimal 20 install has only General Settings, so a test of the order brings its own `<app>`
+  blocks. Verified on 20.
 
 **Contacts, email, and matching**
 
@@ -828,39 +853,51 @@ backend instead of introducing a second vocabulary for the same word. Match core
 Catalan and Spanish both take the infinitive for action labels (`Afegir una línia`,
 `Añadir una línea`), while a message reporting what just happened takes the perfect.
 
-**A module's own name and summary are translatable, but `i18n export` will never give them to you.**
+**A module's own name and summary are translatable, and on 20 `i18n export` writes them.**
 `ir.module.module.shortdesc` and `summary` are `translate=True` and Odoo translates them wholesale —
-`base`'s `es.po` carries 1,526 module names. They live in **base's** catalogue because
+`base`'s `es.po` carries 1,526 module names. Their records belong to **base**, because
 `ir_module.py`'s `create()` registers every module record as `base.module_<name>` with
-`'module': 'base'`, so the exporter attributes them to base and omits them from ours. Write them in
-by hand, in the `.pot` **as well as** each `.po`:
+`'module': 'base'`. Through 19 that made the exporter omit them from ours, so they were written in
+by hand. **20's exporter selects each exported module's `base.module_<name>` row itself**
+(`TranslationModuleReader._export_translatable_records`, `odoo/tools/translate.py`) and writes it
+under our module:
 
 ```
-#. module: base
+#. module: <your module>
 #: model:ir.module.module,shortdesc:base.module_<your module>
 ```
+
+It also writes a `description` entry, which for a manifest without a `description` key is the whole
+`README.md` (`odoo/modules/module.py`, `Manifest.description`). **Leave that entry out of the POT
+and every PO** (decided 30 September 2026): the store and the backend both show
+`static/description/index.html`, nothing displays the description, and carrying it would copy the
+README into three catalogues, going stale on every README edit. Delete it after each export.
+
+20 also reads the name and summary straight from a module's own PO files by their `#:` reference
+(`Manifest.get_translations`, `ir_module.py`'s `_load_non_installed_modules_manifest_terms`), so the
+Apps list shows a translated name before the module is installed. Verified on 20 for an installed
+and an uninstalled module.
 
 **The POT half is not decorative, and skipping it fails silently.** `PoFileReader.__init__` merges
 every PO against its module's POT — the comment says the POT comments are the trustworthy ones — and
 `__iter__` skips `entry.obsolete`. polib's `merge()` marks anything absent from the POT obsolete, so
 a PO entry with no POT counterpart is dropped with no warning and the name just stays English. It
-reads like a bad translation, not a missing one. **Re-running `i18n export` therefore un-translates
-the module name**, so guard both entries with a test —
-`vmk_language_systray/tests/test_language_systray.py` does, and also asserts the xmlid still belongs
-to `base`, which is the premise the whole workaround rests on.
+reads like a bad translation, not a missing one. Guard both entries with a test —
+`TestModuleNameTranslation` in every module — which also asserts the xmlid still belongs to `base`,
+since every `#:` reference names it.
 
 **Every module needs a catalogue, because every module has at least two untranslated terms.** Its
-own name and summary, per the section above — and the exporter never shows them to you, so an empty
-POT is not evidence there is nothing to translate. **Put them in the POT as well as every `.po`, and
-guard them with a test.** This is the half that fails silently: `PoFileReader.__init__` merges each
-PO against its module's POT and `__iter__` skips whatever polib's `merge()` marked obsolete, so a PO
-entry with no POT counterpart is discarded without a warning and the module simply keeps its English
-name. `vmk_event_sessions` shipped in exactly that state — both entries present in `es.po` and
-`ca.po`, both dropped on load — until 22 September 2026. Every module now carries a
-`TestModuleNameTranslation`, which checks the POT still has them, that both catalogues give them a
-non-empty `msgstr`, and that the xmlid still belongs to `base`. Newer modules keep it in
-`tests/test_translations.py`; the first seven put it at the foot of their own test file, which is
-where to look.
+own name and summary, per the section above — which through 19 the exporter never showed, so an
+empty POT there was no evidence there was nothing to translate. **Put them in the POT as well as
+every `.po`, and guard them with a test.** This is the half that fails silently:
+`PoFileReader.__init__` merges each PO against its module's POT and `__iter__` skips whatever
+polib's `merge()` marked obsolete, so a PO entry with no POT counterpart is discarded without a
+warning and the module simply keeps its English name. `vmk_event_sessions` shipped in exactly that
+state — both entries present in `es.po` and `ca.po`, both dropped on load — until 22 September 2026.
+Every module now carries a `TestModuleNameTranslation`, which checks the POT still has them, that
+both catalogues give them a non-empty `msgstr`, and that the xmlid still belongs to `base`. Newer
+modules keep it in `tests/test_translations.py`; the first seven put it at the foot of their own
+test file, which is where to look.
 
 This reverses an earlier rule here, which held that a module whose extracted terms all belong to
 core needs no `i18n/` at all. That reasoning was sound as far as it went: extending a core model
@@ -872,7 +909,7 @@ database, which is the thing a catalogue exists to prevent. Both now carry one.
 
 What survives of the old rule: when a module's POT does carry core-owned terms, translate them with
 core's own wording rather than afresh — and `vmk_apps_page_sort` shows the floor, a catalogue whose
-entire contents are the two hand-written `base.module_*` blocks.
+entire contents are the two `base.module_*` entries and core's own terms.
 
 Export from a running container, into its `/tmp`, and read the file back out:
 
@@ -888,7 +925,7 @@ from the config file at `$ODOO_RC`. `-o` into the container's `/tmp` because the
 writes into each module's own `i18n/`, which may well be mounted read-only. The module must be
 installed for its terms to exist. **Compare the export with the committed POT rather than copying it
 over**: a long-lived database can hold terms from data another branch installed and left behind, and
-the exporter never writes the hand-kept `base.module_*` entries.
+on 20 the export carries the `description` entry we leave out.
 
 **A view's translation reaches only the views its entry names.** Each `#:` line on a
 `model_terms:ir.ui.view,arch_db:` entry is a record the translation is applied to. Reusing an
@@ -898,8 +935,9 @@ added to the entry in the POT and every PO, or the second view stays English. Ad
 **Write catalogues the way the exporter does.** Odoo writes PO files with `polib` at its defaults
 (`PoFileWriter`, `odoo/tools/translate.py`), wrapping at 78 columns, and sorts entries by msgid. An
 entry hand-inserted anywhere else, or wrapped differently, turns the next re-export into a diff of
-noise. The one exception is the `base.module_*` pair, which our guard test reads one line each.
-Added 2026-09-24.
+noise. On 20 that includes the `base.module_*` pair, which the exporter now writes like any other
+entry; a guard test reading one line each breaks on a summary long enough to wrap, so read the
+catalogue with `polib` as `vmk_apps_page_sort`'s does. Added 2026-09-24.
 
 **`loadlang` wants the full locale code.** `-l es` works because a language's `url_code` is `es`,
 but `-l ca` silently matches nothing and leaves Catalan inactive — it is `ca_ES`. The `.po` file
