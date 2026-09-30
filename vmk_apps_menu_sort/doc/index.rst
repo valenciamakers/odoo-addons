@@ -30,6 +30,11 @@ different orders. Case is ignored and accented names are sorted correctly, so *Ã
 
 **Changelog**
 
+*19.0.1.1.2 (30 September 2026)*
+
+- Fewer database queries on every backend page load: the pinned menus are found without
+  reading their records. No change in behaviour.
+
 *19.0.1.1.1 (24 September 2026)*
 
 - Licensed LGPL-3, and credited to Valencia Makers. No change in behaviour.

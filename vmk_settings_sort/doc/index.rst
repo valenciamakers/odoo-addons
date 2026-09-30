@@ -29,6 +29,11 @@ the original orders return.
 
 **Changelog**
 
+*19.0.1.1.2 (30 September 2026)*
+
+- Fewer database queries on every backend page load: the Technical menu is found without
+  reading its record. No change in behaviour.
+
 *19.0.1.1.1 (24 September 2026)*
 
 - Licensed LGPL-3, and credited to Valencia Makers. No change in behaviour.

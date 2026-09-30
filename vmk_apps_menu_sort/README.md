@@ -62,10 +62,10 @@ override:
 QWeb `t-foreach` in `website_templates.xml` that renders it server-side for internal users browsing
 the public site.
 
-The two carry different data, which is why the pinned menus are identified by resolving `env.ref`
-rather than by reading the payload. `load_menus` entries include an `xmlid` key and could be matched
-directly; `load_menus_root` entries come from `read()` and carry no xmlid at all. One mechanism that
-works on both beats two that each work on one.
+The two carry different data, which is why the pinned menus are identified by resolving their xmlids
+to ids with `_xmlid_to_res_id` rather than by reading the payload. `load_menus` entries include an
+`xmlid` key and could be matched directly; `load_menus_root` entries come from `read()` and carry no
+xmlid at all. One mechanism that works on both beats two that each work on one.
 
 ### Why the result is copied rather than sorted in place
 

@@ -4,7 +4,7 @@
 {
     "name": "Settings Sort",
     "summary": "Alphabetical order for the Settings sidebar and Technical menu groups",
-    "version": "19.0.1.1.1",
+    "version": "19.0.1.1.2",
     "author": "Valencia Makers",
     "license": "LGPL-3",
     "category": "Technical",
