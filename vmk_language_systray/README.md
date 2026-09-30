@@ -42,23 +42,28 @@ mean `odoo shell`. A screen beat a scope here.
 One file of Python: `models/ir_http.py`, which puts the flag above into `session_info`. That is not
 a convenience — `ir.config_parameter` is readable only by `base.group_system`, so a plain internal
 user cannot query it and the value has to be handed to them under `sudo()`. Core solves the same
-problem the same way for `web.quick_login`, a screen up in `web/models/ir_http.py`.
+problem the same way for `web.quick_login`, a screen up in `web/models/ir_http.py`. The value is
+read with `get_bool`: Odoo 20 replaced `get_param` with typed getters, and `get_bool` parses the
+free text as `str2bool` did, so `true` and `1` both mean on, and an unparseable value reads as off,
+with a warning in the log.
 
 Everything else the module needs already exists in core with the right access already granted, so
 there is nothing for a Python model to add:
 
-- `res.lang.get_installed()` is `@api.model`, and `base.group_user` has read access on `res.lang`
-  (`base/security/ir.model.access.csv`), so a plain internal user can call it directly.
-- `lang` is in `res.users.SELF_WRITEABLE_FIELDS` (`base/models/res_users.py:189-193`), and
-  `res.users.write()` sudo's the record when every key in `vals` is self-writeable (`:605-615`). Any
-  internal user can therefore set their own `lang` with no extra rights.
+- `res.lang.get_installed()` is `@api.model`, and everyone has read access on `res.lang`
+  (`base/security/ir.access.csv`), so a plain internal user can call it directly.
+- `lang` on `res.users` is declared `user_writeable=True` (`base/models/res_users.py`), and
+  `res.users._has_field_access` lets a plain user write a `user_writeable` field on their own record
+  (the `res_users_rule_write_self` rule limits it to themselves). Any internal user can therefore
+  set their own `lang` with no extra rights.
 
-That second point is narrower than it looks: the sudo path only triggers when **every** key in the
-write is self-writeable. `language_systray.js` writes `{ lang: code }` alone for exactly this reason
-— adding anything else to that call, even something else self-writeable in a different combination
-check, risks falling back to needing ordinary write access on `res.users`, which a non-admin user
-does not have. `tests/test_language_systray.py` asserts both halves of this: `lang` alone succeeds
-for a plain internal user, and `lang` paired with `login` (not self-writeable) raises `AccessError`.
+Odoo 19 spelled that second point differently: a `SELF_WRITEABLE_FIELDS` list, and a write took the
+sudo-free path only when **every** key was on it. Odoo 20 checks each key on its own against the
+field's flag. The outcome for us is the same: one key that is not `user_writeable` — `login`, say —
+refuses the whole write with an `AccessError`, so `language_systray.js` writes `{ lang: code }`
+alone, and anything it ever added would need the same flag. `tests/test_language_systray.py` asserts
+both halves: `lang` alone succeeds for a plain internal user, and `lang` paired with `login` raises
+`AccessError`.
 
 No `security/ir.model.access.csv` either. ACLs are per model, and `ir.http` is an abstract model
 with no table; inheriting it to extend one method grants nothing and needs nothing.
@@ -85,12 +90,12 @@ burger menu; adding a burger entry here would be the fix if it ever matters.
 
 ### Reusing `vmk_language_sequence`'s order, and not sorting again
 
-`get_installed()` reads `_get_active_by('code')`, the method our own `vmk_language_sequence` module
-overrides to sort by `(sequence, name)` instead of core's plain `name`. So when that module is
-installed, the list this module receives from `get_installed()` **already** reflects the hand-picked
-order — sorting it again client-side would silently undo that work. This module does not depend on
-`vmk_language_sequence` (which pulls in `website`, which this must not); the integration is soft,
-and holds whether or not that module is present.
+Core 20 sorts `get_installed()` by name, after asking `res.lang` for the active languages. Our own
+`vmk_language_sequence` module overrides it, and `_get_active_langs()` beneath it, to sort by
+`(sequence, name)`. So when that module is installed, the list this module receives **already**
+reflects the hand-picked order — sorting it again client-side would silently undo that work. This
+module does not depend on `vmk_language_sequence` (which pulls in `website`, which this must not);
+the integration is soft, and holds whether or not that module is present.
 
 ### Trimming the name, and why `title`/`aria-label` need it that core's own text nodes do not
 
@@ -118,9 +123,9 @@ our own. Core's global `:not(.dropstart) > .dropdown-item.selected` rule
 own is needed.
 
 That marker is **visual only**, which is easy to miss because it looks complete on screen. The
-checkmark is a FontAwesome glyph in a `:before` pseudo-element and the emphasis is a `font-weight`,
-so neither reaches the accessibility tree: a screen reader running down the list is told nothing
-about which language is currently in force. The items therefore also carry
+checkmark is a Material Symbols glyph in a `:before` pseudo-element and the emphasis is a
+`font-weight`, so neither reaches the accessibility tree: a screen reader running down the list is
+told nothing about which language is currently in force. The items therefore also carry
 `attrs="{ role: 'menuitemradio', 'aria-checked': … }"`. `attrs` is `DropdownItem`'s own escape hatch
 — `web.DropdownItem` spreads it through `t-att` after its static `role="menuitem"`, so the later
 value wins — and `menuitemradio` is the correct role for a single-select list, matching what core
@@ -157,9 +162,16 @@ alone. Naming the language inside the label rather than replacing it also keeps 
 a superset of the visible text in the case where the name _is_ shown, which is what WCAG 2.5.3
 (Label in Name) asks for.
 
-The globe carries `fa-lg`, matching the messaging and activity icons beside it (`fa-lg fa-comments`,
-`fa-lg fa-clock-o`). Without it FontAwesome inherits 14px against their 18.41px and the globe reads
-as visibly undersized — a difference that only shows up in the rendered row, not in the source.
+The icon is a Material Symbols glyph, `<i class="oi" data-icon="public"/>`, as the messaging and
+activity icons beside it are (`data-icon="forum"`, `"schedule"`): Odoo 20 no longer loads Font
+Awesome in the backend, so the `fa fa-globe` this module used on 19 would draw nothing. Two
+constraints shaped the choice. The glyph has to be in core's font **subset**
+(`web/static/src/libs/materialsymbols`, 964 icons), and `language`, the obvious globe, is not;
+`public` and `translate` are. And `public` keeps the globe that the screenshots and cover already
+show, where `translate`, which core uses for languages in `hr_skills`, would be the other reasonable
+pick. The neighbours carry no size class, so neither does this one: `oi` alone is 1em, where 19
+needed `fa-lg` to match its neighbours. Measure `getComputedStyle` against a neighbour rather than
+trusting a screenshot.
 
 `buttonLabel` falls back to plain `Language` when `activeLanguage` is undefined. That is not
 defensive padding: the localization service falls back to `browser.navigator.language` when the
@@ -175,37 +187,36 @@ carry `Display Name`, `HTTP Routing` and `ID`, which are not ours — inheriting
 that model's name and its `display_name`/`id` fields to this module in the export — so they take
 core's wording verbatim.
 
-### The module's own name and summary are hand-maintained in `i18n/`
-
-`ir.module.module.shortdesc` and `summary` are `translate=True`, and Odoo does translate them —
-`base`'s Spanish catalogue carries 1,526 module names. But it carries them under `#. module: base`,
-because `ir_module.py`'s `create()` registers every module record as `base.module_<name>` with
-`'module': 'base'`. The record is base's, so `odoo i18n export vmk_language_systray` attributes
-those terms to base and omits them from our POT entirely.
-
-They are therefore written into `vmk_language_systray.pot`, `es.po` and `ca.po` **by hand**, and the
-POT half is not optional:
-
-```
-#. module: base
-#: model:ir.module.module,shortdesc:base.module_vmk_language_systray
-```
-
-`PoFileReader.__init__` merges every PO against its module's POT — _"the POT comments are correct on
-GitHub but the PO comments tend to be outdated"_ — and `__iter__` skips `entry.obsolete`. polib's
-`merge()` marks anything absent from the POT obsolete, so a PO entry with no POT counterpart is
-discarded **in silence**: no warning, no error, the name simply stays English. The first attempt
-here did exactly that, and looked like the translation had been written wrongly.
-
-**So re-running `i18n export` for this module deletes both entries and silently un-translates its
-name.** Re-add them afterwards. `tests/test_language_systray.py` fails loudly if they go missing,
-rather than leaving it to be noticed in the Apps list, and also asserts the premise they encode —
-that the xmlid still belongs to `base` — so that a future Odoo change making the export emit them
-would surface too.
-
 `Language` is one core already owns — `base` translates it `Idioma` in both Spanish and Catalan — so
 `es.po` and `ca.po` reuse that wording rather than introducing a second vocabulary for the same
 word, and `Language: %s` follows it.
+
+### The module's own name and summary in `i18n/`
+
+`ir.module.module.shortdesc` and `summary` are `translate=True`, and Odoo does translate them —
+`base`'s Spanish catalogue carries 1,526 module names. The record is `base`'s, though:
+`ir_module.py`'s `create()` registers every module record as `base.module_<name>` with
+`'module': 'base'`. Odoo 19's exporter therefore attributed those terms to base and left them out of
+our POT, and they had to be written in by hand. **Odoo 20's exporter writes them itself**, under the
+module:
+
+```
+#. module: vmk_language_systray
+#: model:ir.module.module,shortdesc:base.module_vmk_language_systray
+```
+
+It also writes a `description` entry holding the whole of this README, which we delete from the POT
+and from each PO: nothing displays it, and it would go stale with every edit. Re-export, then remove
+that entry.
+
+The POT half still is not optional. `PoFileReader.__init__` merges every PO against its module's POT
+— _"the POT comments are correct on GitHub but the PO comments tend to be outdated"_ — and
+`__iter__` skips `entry.obsolete`. polib's `merge()` marks anything absent from the POT obsolete, so
+a PO entry with no POT counterpart is discarded **in silence**: no warning, no error, the name
+simply stays English. The first attempt here did exactly that, and looked like the translation had
+been written wrongly. `tests/test_language_systray.py` fails loudly if the entries go missing from
+the POT or the POs, and also asserts the premise they encode — that the xmlid still belongs to
+`base` — so a change in where Odoo attributes them would surface too.
 
 Worth recording why this module nearly shipped without an `i18n/` at all: before the accessible name
 was fixed, the only strings it contained were language names taken from the database, so
@@ -217,7 +228,7 @@ needed.
 
 ### Testing
 
-Against a local Odoo 19 with this repo on the addons path — Postgres, the `odoo:19` image, and the
+Against a local Odoo 20 with this repo on the addons path — Postgres, the `odoo:20.0` image, and the
 repo root mounted at `/mnt/extra-addons`:
 
 ```bash

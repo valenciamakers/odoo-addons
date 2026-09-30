@@ -2,7 +2,6 @@
 # License LGPL-3 (https://www.gnu.org/licenses/lgpl-3.0.html).
 
 from odoo import models
-from odoo.tools import str2bool
 
 SHOW_NAME_PARAM = "vmk_language_systray.show_name"
 
@@ -25,17 +24,17 @@ class IrHttp(models.AbstractModel):
         plain internal user cannot query it directly -- the ``sudo()`` here is
         what makes it visible to everyone at all. Core solves the identical
         problem the identical way one screen up, in ``web/models/ir_http.py``:
-        ``"quick_login": str2bool(IrConfigSudo.get_param('web.quick_login',
-        default=True), True)``.
+        ``"quick_login": IrConfigSudo.get_bool('web.quick_login', True)``.
 
-        ``str2bool`` because a system parameter is free-text -- someone typing
+        ``get_bool`` because a system parameter is free-text -- someone typing
         ``true`` or ``1`` in that screen means the same thing as ``True``, and
-        anything unparseable falls back to off rather than raising on a page
-        load.
+        anything unparseable falls back to off, with a warning in the log,
+        rather than raising on a page load. (Odoo 19 spelled this
+        ``str2bool(get_param(...), False)``; 20 removed ``get_param`` for typed
+        getters that parse the text the same way.)
         """
         result = super().session_info()
-        result[SHOW_NAME_PARAM] = str2bool(
-            self.env["ir.config_parameter"].sudo().get_param(SHOW_NAME_PARAM, default=False),
-            False,
+        result[SHOW_NAME_PARAM] = (
+            self.env["ir.config_parameter"].sudo().get_bool(SHOW_NAME_PARAM, False)
         )
         return result

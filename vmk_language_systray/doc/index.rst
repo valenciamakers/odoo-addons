@@ -32,6 +32,12 @@ value *True*. It applies to every user, and only appears on wide screens.
 
 **Changelog**
 
+*20.0.1.0.0 (30 September 2026)*
+
+- First release for Odoo 20, ported from 19.0.1.1.1. The globe is now one of Odoo 20's own icons,
+  since the backend no longer loads the one this module used, and is the same size as the icons
+  beside it.
+
 *19.0.1.1.1 (24 September 2026)*
 
 - Licensed LGPL-3, and credited to Valencia Makers. No change in behaviour.

@@ -24,24 +24,25 @@ const SHOW_NAME_PARAM = "vmk_language_systray.show_name";
 export class LanguageSystray extends Component {
     static template = "vmk_language_systray.LanguageSystray";
     static components = { Dropdown, DropdownGroup, DropdownItem };
-    static props = {};
+    // No props: this is mounted by the navbar with none. Owl 3 has no `static props`
+    // and its compatibility layer throws on one, even an empty object; a component
+    // taking none simply declares nothing, as core's SwitchCompanyMenu does.
 
     setup() {
         this.orm = useService("orm");
         this.languages = [];
 
         onWillStart(async () => {
-            // res.lang.get_installed() is @api.model and base.group_user has
-            // read access on res.lang (base/security/ir.model.access.csv),
-            // so a plain internal user can call this directly -- no sudo, no
+            // res.lang.get_installed() is @api.model and everyone has read
+            // access on res.lang (base/security/ir.access.csv), so a plain
+            // internal user can call this directly -- no sudo, no
             // server-side wrapper.
             //
-            // Its order already reflects vmk_language_sequence's ordering
-            // when that module is installed: get_installed() reads
-            // _get_active_by(), which that module overrides to sort by
-            // (sequence, name) instead of core's plain (name). Sorting the
-            // result again here would undo that, so it is used exactly as
-            // returned.
+            // Its order reflects vmk_language_sequence's ordering when that
+            // module is installed: it overrides get_installed() itself, since
+            // core sorts by name there, after asking for the active languages.
+            // Sorting the result again here would undo that, so it is used
+            // exactly as returned.
             const installed = await this.orm.call("res.lang", "get_installed", []);
             this.languages = installed.map(([code, name]) => ({
                 code,
@@ -111,12 +112,12 @@ export class LanguageSystray extends Component {
         if (code === localization.code) {
             return;
         }
-        // `lang` must be the only key in this write. res.users.write() only
-        // takes the sudo-free self-write path (base/models/res_users.py)
-        // when *every* key in vals is in SELF_WRITEABLE_FIELDS -- one
-        // unlisted key anywhere in the call and the whole write falls back
-        // to needing write access on res.users, which a plain internal user
-        // does not have.
+        // Keep `lang` the only key in this write. A plain internal user may
+        // write a field of their own record only when the field is marked
+        // `user_writeable` (res.users._has_field_access in
+        // base/models/res_users.py), and `lang` is. One key that is not --
+        // `login`, say -- refuses the whole write with an AccessError, since
+        // every key is checked on its own.
         await this.orm.write("res.users", [user.userId], { lang: code });
         browser.location.reload();
     }

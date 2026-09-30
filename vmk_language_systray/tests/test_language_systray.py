@@ -16,6 +16,7 @@ from pathlib import Path
 from odoo.exceptions import AccessError
 from odoo.tests import new_test_user
 from odoo.tests.common import HttpCase, TransactionCase, tagged
+from odoo.tools import mute_logger
 
 from ..models.ir_http import SHOW_NAME_PARAM
 
@@ -27,9 +28,9 @@ class TestLanguageSystray(TransactionCase):
         super().setUpClass()
         cls.ResLang = cls.env["res.lang"]
         # base.group_user, the default for new_test_user, is a plain
-        # internal, non-admin user -- read-only on res.users
-        # (base/security/ir.model.access.csv: access_res_users_employee is
-        # 1,0,0,0), so any write only succeeds through the self-write path.
+        # internal, non-admin user. It may write only fields marked
+        # `user_writeable`, and only on its own record (`res.users._has_field_access`
+        # and the `res_users_rule_write_self` rule in base/security/ir.access.csv).
         cls.staff = new_test_user(cls.env, login="vmk_systray_staff")
 
     def test_user_can_write_own_lang_alone(self):
@@ -38,17 +39,21 @@ class TestLanguageSystray(TransactionCase):
         self.assertEqual(self.staff.lang, "en_US")
 
     def test_user_cannot_write_lang_together_with_other_field(self):
-        """Why the JS must never add a second key to that write call.
+        """Why the JS must never add a key that is not `user_writeable`.
 
-        `res.users.write()` only takes the sudo-free self-write path when
-        *every* key in vals is in `SELF_WRITEABLE_FIELDS`. `login` is not on
-        that list, so pairing it with `lang` falls through to needing
-        ordinary write access on res.users, which this user does not have.
+        Odoo 19 checked that every key was in `SELF_WRITEABLE_FIELDS`; 20 marks
+        the field itself `user_writeable` and checks each key on its own. Either
+        way `login` is not one, so pairing it with `lang` refuses the whole write.
         """
         with self.assertRaises(AccessError):
             self.staff.with_user(self.staff).write(
                 {"lang": "en_US", "login": "renamed_login"}
             )
+
+    def test_lang_is_a_user_writeable_field(self):
+        """The premise of the JS write: it is the field's own flag, not a list."""
+        self.assertTrue(self.env["res.users"]._fields["lang"].user_writeable)
+        self.assertFalse(getattr(self.env["res.users"]._fields["login"], "user_writeable", False))
 
     def test_get_installed_covers_exactly_the_active_languages(self):
         """Activate a language inside the test rather than assuming one is
@@ -85,17 +90,18 @@ class TestLanguageSystray(TransactionCase):
 
 @tagged("post_install", "-at_install")
 class TestModuleNameTranslation(TransactionCase):
-    """Guard the two catalogue entries `i18n export` will never regenerate.
+    """Guard the two catalogue entries for the module's own name and summary.
 
-    The module's own name and summary live on `ir.module.module` records whose
-    `ir.model.data` row belongs to **base** (`ir_module.py` creates them as
-    `base.module_<name>`), so the exporter attributes them to base and omits
-    them from our POT. They are in `i18n/` by hand.
+    They live on `ir.module.module` records whose `ir.model.data` row belongs to
+    **base** (`ir_module.py` creates them as `base.module_<name>`). Odoo 19's
+    exporter attributed them to base and omitted them from our POT, so they were
+    in `i18n/` by hand; Odoo 20's exporter emits them itself. The guard stays,
+    since the reader's merge against the POT is what makes a missing entry
+    vanish in silence.
 
     That matters because `PoFileReader` merges each PO against its module's
     POT and skips anything the merge marks obsolete -- so an entry missing
-    from the POT is discarded in silence, translations and all. Re-running
-    `i18n export` overwrites the POT and would do exactly that. This test is
+    from the POT is discarded in silence, translations and all. This test is
     what turns that into a failure instead of a quiet regression.
     """
 
@@ -112,9 +118,9 @@ class TestModuleNameTranslation(TransactionCase):
                 self.assertIn(
                     f'msgid "{msgid}"',
                     pot,
-                    "The POT has lost an entry `odoo i18n export` does not generate. If you "
-                    "just re-exported it, re-add the two `base.module_vmk_language_systray` "
-                    "blocks by hand -- without them the module name and summary silently stop "
+                    "The POT has lost an entry for the module's name or summary. If you "
+                    "just re-exported it, check the two `base.module_vmk_language_systray` "
+                    "blocks survived -- without them the module name and summary silently stop "
                     "being translated. See the README's Translations section.",
                 )
 
@@ -129,8 +135,7 @@ class TestModuleNameTranslation(TransactionCase):
         """The premise the POT entries encode: the xmlid is base's, not ours.
 
         If Odoo ever attributes these records to the module itself, the
-        exporter would start emitting them and the hand-maintenance above
-        becomes not just unnecessary but actively wrong.
+        entries' `base.module_*` references would stop matching.
         """
         data = self.env["ir.model.data"].search(
             [("model", "=", "ir.module.module"), ("name", "=", "module_vmk_language_systray")]
@@ -181,8 +186,10 @@ class TestShowNameFlag(HttpCase):
             ("", False),
         ):
             with self.subTest(written=written):
-                Param.set_param(SHOW_NAME_PARAM, written)
-                self.assertIs(self._flag_for("admin", "admin"), expected)
+                Param.set_str(SHOW_NAME_PARAM, written)
+                # An empty value is not a boolean; `get_bool` logs that and answers off.
+                with mute_logger("odoo.addons.base.models.ir_config_parameter"):
+                    self.assertIs(self._flag_for("admin", "admin"), expected)
 
     def test_ordinary_user_receives_the_flag_despite_the_acl(self):
         """The whole reason the value travels in `session_info` under sudo.
@@ -192,7 +199,7 @@ class TestShowNameFlag(HttpCase):
         here so that a future ACL relaxation does not quietly make the sudo
         look unnecessary.
         """
-        self.env["ir.config_parameter"].sudo().set_param(SHOW_NAME_PARAM, "True")
+        self.env["ir.config_parameter"].sudo().set_bool(SHOW_NAME_PARAM, True)
         staff = new_test_user(
             self.env, login="vmk_systray_reader", password="vmk_systray_reader"
         )

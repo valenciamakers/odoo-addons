@@ -6,12 +6,13 @@
         <DropdownGroup group="'web-navbar-group'">
             <Dropdown position="'bottom-end'" menuClass="'o_vmk_language_systray_menu'">
                 <button class="py-1 py-lg-0" t-att-aria-label="this.buttonLabel" t-att-title="this.buttonLabel">
-                    <!-- `fa-lg` is what the neighbouring systray icons carry (mail's
-                         `fa-lg fa-comments`, the activity menu's `fa-lg fa-clock-o`), and it is
-                         load-bearing rather than decorative: without it FontAwesome renders at the
-                         inherited 14px against their 18.41px, and the globe reads as visibly
-                         undersized in the row. -->
-                    <i class="fa fa-lg fa-globe"/>
+                    <!-- A Material Symbols glyph, as core's own systray icons are: Odoo 20 no
+                         longer loads Font Awesome in the backend, so an `fa` class renders
+                         nothing. The glyph must be in core's font subset
+                         (`web/static/src/libs/materialsymbols`), which has `public` (a globe)
+                         and `translate` but not `language`. No size class, as with the activity
+                         and messaging icons beside it (`oi` alone, 1em). -->
+                    <i class="oi" data-icon="public" aria-hidden="true"/>
                     <!-- Opt-in, and then only where there is room for it: the flag says the
                          user wants the name, `d-lg-block` still withholds it at widths where
                          it would crowd the row. Hidden either way, the button is a bare globe,

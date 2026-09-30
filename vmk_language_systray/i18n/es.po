@@ -7,6 +7,11 @@
 # inherits ir.http; the two the module actually authors are "Language" and
 # "Language: %s", and base already translates "Language" as "Idioma".
 #
+# The two `base.module_` entries are the module's own name and summary. Odoo
+# 20's `i18n export` writes them, beside a `description` entry holding the
+# whole README, which we leave out: nothing displays it. Keep them in all three
+# files, since a PO entry with no POT counterpart is dropped in silence.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0\n"
@@ -21,7 +26,7 @@ msgstr ""
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#. module: base
+#. module: vmk_language_systray
 #: model:ir.module.module,shortdesc:base.module_vmk_language_systray
 msgid "Backend Language Menu"
 msgstr "Menú de idioma del backend"
@@ -53,7 +58,8 @@ msgstr "Idioma"
 msgid "Language: %s"
 msgstr "Idioma: %s"
 
-#. module: base
+#. module: vmk_language_systray
 #: model:ir.module.module,summary:base.module_vmk_language_systray
 msgid "Switch your own backend language from a dropdown in the menu bar"
-msgstr "Cambia tu propio idioma del backend desde un desplegable en la barra de menú"
+msgstr ""
+"Cambia tu propio idioma del backend desde un desplegable en la barra de menú"
