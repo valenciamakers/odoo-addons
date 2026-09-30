@@ -2,8 +2,13 @@
 # This file contains the translation of the following modules:
 # 	* vmk_apps_menu_sort
 #
-# Terms shared with Odoo core reuse core's own Catalan wording. Odoo 19 ships no
+# Terms shared with Odoo core reuse core's own Catalan wording. Odoo 20 ships no
 # Valencian variant -- ca_ES is the only Catalan locale.
+#
+# The two `base.module_` entries are the module's own name and summary. Odoo
+# 20's `i18n export` writes them, beside a `description` entry holding the
+# whole README, which we leave out: nothing displays it. Keep them in all three
+# files, since a PO entry with no POT counterpart is dropped in silence.
 #
 msgid ""
 msgstr ""
@@ -60,12 +65,12 @@ msgstr "S'ha restablert l'ordre de la graella d'aplicacions de %s usuari(s)."
 msgid "User Settings"
 msgstr "Arranjament d'usuari"
 
-#. module: base
+#. module: vmk_apps_menu_sort
 #: model:ir.module.module,shortdesc:base.module_vmk_apps_menu_sort
 msgid "Apps Menu Sort"
 msgstr "Ordre del menú d'aplicacions"
 
-#. module: base
+#. module: vmk_apps_menu_sort
 #: model:ir.module.module,summary:base.module_vmk_apps_menu_sort
 msgid "Alphabetical order for the apps menu, with Apps and Settings at the end"
 msgstr "Ordre alfabètic per al menú d'aplicacions, amb Aplicacions i Configuració al final"

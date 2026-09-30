@@ -164,17 +164,17 @@ class TestAppMenuSort(TransactionCase):
 
 @tagged("post_install", "-at_install")
 class TestModuleNameTranslation(TransactionCase):
-    """Guard the two catalogue entries `i18n export` will never regenerate.
+    """Guard the two catalogue entries for the module's own name and summary.
 
-    The module's own name and summary live on `ir.module.module` records whose
-    `ir.model.data` row belongs to **base** (`ir_module.py` creates them as
-    `base.module_<name>`), so the exporter attributes them to base and omits
-    them from our POT. They are in `i18n/` by hand.
+    They live on `ir.module.module` records whose `ir.model.data` row belongs to
+    **base** (`ir_module.py` creates them as `base.module_<name>`). Odoo 19's
+    exporter attributed them to base and omitted them from our POT, so they were
+    in `i18n/` by hand; Odoo 20's exporter emits them itself.
 
     That matters because `PoFileReader` merges each PO against its module's
     POT and skips anything the merge marks obsolete -- so an entry missing
     from the POT is discarded in silence, translations and all. Re-running
-    `i18n export` overwrites the POT and would do exactly that. This test is
+    a re-export overwrites the POT and could do exactly that. This test is
     what turns that into a failure instead of a quiet regression.
     """
 
@@ -191,9 +191,9 @@ class TestModuleNameTranslation(TransactionCase):
                 self.assertIn(
                     f'msgid "{msgid}"',
                     pot,
-                    "The POT has lost an entry `odoo i18n export` does not generate. If you "
-                    "just re-exported it, re-add the two `base.module_vmk_apps_menu_sort` "
-                    "blocks by hand -- without them the module name and summary silently stop "
+                    "The POT has lost an entry for the module's name or summary. If you "
+                    "just re-exported it, check the two `base.module_vmk_apps_menu_sort` "
+                    "blocks survived -- without them the module name and summary silently stop "
                     "being translated. See the README's Translations section.",
                 )
 
@@ -208,8 +208,7 @@ class TestModuleNameTranslation(TransactionCase):
         """The premise the POT entries encode: the xmlid is base's, not ours.
 
         If Odoo ever attributes these records to the module itself, the
-        exporter would start emitting them and the hand-maintenance above
-        becomes not just unnecessary but actively wrong.
+        entries' `base.module_*` references would stop matching.
         """
         data = self.env["ir.model.data"].search(
             [("model", "=", "ir.module.module"), ("name", "=", "module_vmk_apps_menu_sort")]

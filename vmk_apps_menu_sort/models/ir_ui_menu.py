@@ -36,14 +36,18 @@ class IrUiMenu(models.Model):
     def _root_menu_sort_key(self):
         """Build the ranking applied to each root menu's `(id, name)`.
 
-        The pinned ids are resolved once per payload rather than once per menu:
-        `env.ref` is cheap, `_xmlid_lookup` being ormcached, but not free.
+        The pinned ids are resolved once per payload rather than once per menu, and
+        through `_xmlid_to_res_id`, which is ormcached and reads nothing from the
+        database once warm. `env.ref` looks the record up as well, and that one
+        query on a cold fields cache is what core's `test_load_menus_perf` counts.
         """
         pinned = {}
         for position, xmlid in enumerate(PINNED_LAST):
-            menu = self.env.ref(xmlid, raise_if_not_found=False)
-            if menu:
-                pinned[menu.id] = position
+            menu_id = self.env["ir.model.data"]._xmlid_to_res_id(
+                xmlid, raise_if_not_found=False
+            )
+            if menu_id:
+                pinned[menu_id] = position
 
         def sort_key(menu_id, name):
             if menu_id in pinned:

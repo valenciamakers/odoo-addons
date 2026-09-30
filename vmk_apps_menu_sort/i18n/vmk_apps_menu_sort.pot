@@ -2,6 +2,11 @@
 # This file contains the translation of the following modules:
 # 	* vmk_apps_menu_sort
 #
+# The two `base.module_` entries are the module's own name and summary. Odoo
+# 20's `i18n export` writes them, beside a `description` entry holding the
+# whole README, which we leave out: nothing displays it. Keep them in all three
+# files, since a PO entry with no POT counterpart is dropped in silence.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0-20260810\n"
@@ -54,12 +59,12 @@ msgstr ""
 msgid "User Settings"
 msgstr ""
 
-#. module: base
+#. module: vmk_apps_menu_sort
 #: model:ir.module.module,shortdesc:base.module_vmk_apps_menu_sort
 msgid "Apps Menu Sort"
 msgstr ""
 
-#. module: base
+#. module: vmk_apps_menu_sort
 #: model:ir.module.module,summary:base.module_vmk_apps_menu_sort
 msgid "Alphabetical order for the apps menu, with Apps and Settings at the end"
 msgstr ""
