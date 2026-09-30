@@ -192,7 +192,7 @@ fallback and is independent of this module.
 The module's own name and summary in `i18n/vmk_apps_menu_sort.pot`, `es.po` and `ca.po` were
 hand-maintained until Odoo 19, since `ir.module.module` records belong to `base`'s xmlid namespace
 and the exporter never saw them. See
-[`vmk_language_systray`'s README](../vmk_language_systray#the-modules-own-name-and-summary-are-hand-maintained-in-i18n)
+[`vmk_language_systray`'s README](../vmk_language_systray#the-modules-own-name-and-summary-in-i18n)
 for the full explanation. Odoo 20's exporter emits both entries under this module's name, and also
 dumps the whole README as the module's `description`, which the catalogues leave out.
 `tests/test_apps_menu_sort.py::TestModuleNameTranslation` fails loudly if re-running the export

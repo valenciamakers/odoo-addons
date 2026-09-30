@@ -97,7 +97,7 @@ were hand-maintained until Odoo 19, since `ir.module.module` records belong to `
 namespace and the exporter never saw them. Odoo 20's exporter does emit them, under this module's
 name, and also dumps the whole README as the module's `description`; the catalogues keep the two
 short entries and leave that one out. See
-[`vmk_language_systray`'s README](../vmk_language_systray#the-modules-own-name-and-summary-are-hand-maintained-in-i18n)
+[`vmk_language_systray`'s README](../vmk_language_systray#the-modules-own-name-and-summary-in-i18n)
 for the full explanation. `tests/test_language_freeze.py::TestModuleNameTranslation` fails loudly if
 re-running the export drops them.
 
