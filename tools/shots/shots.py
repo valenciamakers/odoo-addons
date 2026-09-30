@@ -17,13 +17,13 @@ BASE = os.environ.get("ODOO_URL", "http://localhost:8069")
 POLISH = r"""async (extraCss) => {
   const style = document.createElement('style');
   style.textContent = `
-    .o-mail-MessagingMenu-counter { display: none !important; }
+    .o-mail-MessagingMenu-counter, .o-mail-MessagingMenuInDropdown-counter { display: none !important; }
     .o_tour_pointer { display: none !important; }  /* an onboarding tour's bouncing pointer */
     .o_calendar_color_11, .o_calendar_renderer .o_calendar_color_11 {
       --o-event-bg: #531B93 !important; --fc-event-bg-color: rgb(178,152,206) !important;
       --o-event-bg--subtle-rgb: 178,152,206 !important; }
     .o_field_color_picker .o_colorlist_item_color_11 { background-color: #531B93 !important; }
-    .o_calendar_sidebar .o_date_item_cell.o_selected { background: radial-gradient(circle,
+    .o_calendar_sidebar .o_date_item_cell.o_selected, .o_datetime_picker .o_date_item_cell.o_selected { background: radial-gradient(circle,
       rgb(241, 235, 252) 0% calc(100% / sqrt(2)), transparent calc(100% / sqrt(2)) 100%) !important; }
   ` + (extraCss || '');
   document.head.appendChild(style);
@@ -48,6 +48,21 @@ CURSOR = r"""([x, y]) => {
 }"""
 
 
+class _Emulation:
+    """`page._vmk_cdp`: recipes resize the tab with `send("Emulation.setDeviceMetricsOverride", ...)`.
+
+    In the context's own headless Chromium a CDP override neither resizes the layout nor changes the
+    device scale factor (the tab kept its first viewport, at 1x), so the scale is set on the context
+    and a resize goes through Playwright's viewport."""
+    def __init__(self, page):
+        self.page = page
+
+    async def send(self, method, params=None):
+        if method != "Emulation.setDeviceMetricsOverride":
+            raise NotImplementedError(method)
+        await self.page.set_viewport_size({"width": params["width"], "height": params["height"]})
+
+
 async def backend_tab(p, width=1280, height=800, scale=2):
     """A headless backend tab, logged in as admin, at `scale`x.
 
@@ -56,16 +71,21 @@ async def backend_tab(p, width=1280, height=800, scale=2):
     September 2026 this reused one tab in a Chrome started with remote debugging on port 9222, in a
     profile of its own, which had to be running and logged in before every session."""
     browser = await p.chromium.launch()
-    ctx = await browser.new_context(viewport={"width": width, "height": height}, locale="en-GB")
+    ctx = await browser.new_context(viewport={"width": width, "height": height},
+                                    device_scale_factor=scale, locale="en-GB")
     page = await ctx.new_page()
-    await page.goto(BASE + "/web/login?redirect=/odoo")
+    for attempt in range(4):  # the first request of a run is sometimes reset by the dev server
+        try:
+            await page.goto(BASE + "/web/login?redirect=/odoo")
+            break
+        except Exception:
+            if attempt == 3:
+                raise
+            await page.wait_for_timeout(3000)
     await page.wait_for_url("**/odoo**")
     await color_scheme(page, "light")  # store screenshots are always light
     await page.reload()
-    cdp = await ctx.new_cdp_session(page)  # the override lasts while this session does
-    await cdp.send("Emulation.setDeviceMetricsOverride",
-                   {"width": width, "height": height, "deviceScaleFactor": scale, "mobile": False})
-    page._vmk_cdp = cdp
+    page._vmk_cdp = _Emulation(page)
     return page
 
 
@@ -96,7 +116,7 @@ async def park_mouse(page, width, height):
 
 def day_cell(page, day):
     """The calendar sidebar's cell for day-of-month `day`, matched exactly (9 must not match 29)."""
-    return page.locator(".o_calendar_sidebar .o_date_item_cell").filter(has_text=re.compile(rf"^\s*{day}\s*$")).first
+    return page.locator(".o_calendar_sidebar .o_date_item_cell, .o_content .o_datetime_picker .o_date_item_cell").filter(has_text=re.compile(rf"^\s*{day}\s*$")).first
 
 
 

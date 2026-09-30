@@ -19,6 +19,9 @@ LEAD = "Laser cutting for a small order"
 # capture-only: the form scrolls, and its scrollbar would show at the right edge
 NO_SCROLLBAR = "* { scrollbar-width: none !important; }"
 # capture-only, for the cover: the field groups between the contact's name and the tabs
+# 20 lays its form out for a phone below 768px, stacking the name, email, and phone under the
+# avatar, so the cut-out is taken at the narrowest width that keeps the desktop layout (19: 620)
+COVER_WIDTH = 768
 COVER_CSS = " .o_form_sheet .o_group { display: none !important; }"
 # capture-only, for the lead: its Notes and Contacts tabs, between the rows and the message, and
 # the empty Properties row under them; and the form's two groups side by side, as above
@@ -54,11 +57,11 @@ async def main(out, parts):
         # cover part: the contact's name and primary address above the Additional Emails list,
         # narrower so the columns sit close, with the field groups between them hidden
         await page._vmk_cdp.send("Emulation.setDeviceMetricsOverride",
-                                 {"width": 620, "height": 900, "deviceScaleFactor": 2, "mobile": False})
+                                 {"width": COVER_WIDTH, "height": 900, "deviceScaleFactor": 2, "mobile": False})
         await shots.open_backend(page, f"/odoo/contacts/{contact}", extra_css=NO_SCROLLBAR + COVER_CSS)
         await page.locator(".o_notebook .nav-link[name=vmk_additional_emails]").first.click(); await page.wait_for_timeout(700)
         await sharp_avatar(page)
-        await shots.polish(page); await shots.park_mouse(page, 620, 900)
+        await shots.polish(page); await shots.park_mouse(page, COVER_WIDTH, 900)
         sheet = await page.locator(".o_form_sheet").first.bounding_box()
         add = await page.locator(".o_notebook .o_field_x2many_list_row_add").first.bounding_box()
         await page.screenshot(path=parts / "vmk_partner_email_multiple_emails.png", clip={

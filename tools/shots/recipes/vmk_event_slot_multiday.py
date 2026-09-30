@@ -14,6 +14,14 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 import shots
 
 EVENT = "Beginner's Bootcamp"
+# capture-only: the popover sized to its title, with room for 20's close icon, which sits over the
+# header's end; and today's marker off, since it lands in the month shown (the 19 shots predate it)
+CAL_CSS = """
+    .o_cw_popover { width: max-content !important; }
+    .o_cw_popover .o_popover_header { padding-right: 3rem !important; }
+    .fc-day-today .fc-daygrid-day-number { background: none !important; color: inherit !important; }
+    .o_datetime_picker .o_date_item_cell.o_today, .o_datetime_picker .o_date_item_cell.o_today > div {
+        background: none !important; color: inherit !important; font-weight: normal !important; }"""
 
 
 async def main(out):
@@ -24,7 +32,7 @@ async def main(out):
         slot = (await shots.rpc(page, "event.slot", "search_read", [[["event_id", "=", event]]],
                                 {"fields": ["id", "date"], "order": "start_datetime", "limit": 1}))[0]
         # calendar: the popover sized to its title
-        await shots.open_backend(page, f"/odoo/events/{event}", extra_css=".o_cw_popover { width: max-content !important; }")
+        await shots.open_backend(page, f"/odoo/events/{event}", extra_css=CAL_CSS)
         await page.click("button[name=action_open_slot_calendar]")
         bar = page.locator(f".fc-event[data-event-id='{slot['id']}']").first
         await bar.wait_for(); await shots.polish(page)

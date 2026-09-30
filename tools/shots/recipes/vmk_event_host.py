@@ -19,11 +19,17 @@ EVENT = "Beginner's Bootcamp"
 # as siblings of .o_inner_group directly; 18 wraps each pair together in one .o_wrap_field instead,
 # so .o_cell is no longer .o_inner_group's direct child -- see shots/README.md on porting a recipe.
 FORM_CSS = """
+    /* 20 adds a Published toggle and a Publish on row to the group; neither was in the 19 framing */
+    .o_inner_group > .o_cell:has([name=website_published]),
+    .o_inner_group > .o_cell:has(+ .o_cell [name=website_published]),
+    .o_inner_group > .o_cell:has(label[for^=publish_on]),
+    .o_inner_group > .o_cell:has(label[for^=publish_on]) + .o_cell { display: none !important; }
     .o_inner_group > .o_cell:has([name=vmk_deadline_custom]),
     .o_inner_group > .o_cell:has(+ .o_cell [name=vmk_deadline_custom]),
     .o_wrap_field:has([name=vmk_deadline_custom]) { display: none !important; }
     .o_field_widget[name=address_id] .o_field_many2one_extra { display: none !important; }
-    label[for^='vmk_host_names'].o_form_label_readonly { opacity: 1 !important; }"""
+    label[for^='vmk_host_names'].o_form_label_readonly { opacity: 1 !important; color: inherit !important; }
+    .o-form-buttonbox button[name=action_view_linked_pos_orders] { display: none !important; }  /* PoS Sales: another app's button */"""
 LIST_CSS = """
     .o_list_view [data-name=address_id], .o_list_view [name=address_id],
     .o_list_view [data-name=seats_taken], .o_list_view [name=seats_taken],
@@ -60,8 +66,8 @@ async def main(out, parts):
             "x": x0, "y": y0, "width": hosts["x"] + hosts["width"] - x0 + 12, "height": hosts["y"] + hosts["height"] - y0 + 6})
         # cover part: the tabs and the Hosts list, narrower so the columns sit close
         # taller, so the whole list is on screen: a clip cannot capture what the viewport cuts off,
-        # and 18's form puts the list lower than 19's
-        await event_form(page, event, 760, height=1200)
+        # and 18's form puts the list lower than 19's; 20's is stacked to one column at this width, lower still
+        await event_form(page, event, 745, height=1700)
         nb = await page.locator(".o_notebook").first.bounding_box()
         last = await page.locator(".o_notebook .o_data_row").last.bounding_box()
         await page.screenshot(path=parts / "vmk_event_host_list.png", clip={
@@ -80,6 +86,11 @@ async def main(out, parts):
         await page.wait_for_timeout(800); await page.keyboard.press("Escape")
         for g in await page.locator(".o_group_header").all():
             await g.click(); await page.wait_for_timeout(500)
+        # capture-only: the host-less "None" group, which holds Open Studio Evening once the
+        # deadline recipe's public-page event exists (it has no host); hide it and what follows
+        await page.evaluate("""() => { const h = [...document.querySelectorAll('.o_group_header')]
+            .find(g => /^\\s*None/.test(g.textContent)); if (!h) return;
+            for (let e = h; e; e = e.nextElementSibling) e.style.display = 'none'; }""")
         await shots.polish(page); await shots.park_mouse(page, 1100, 800)
         bottom = await page.evaluate("document.querySelector('.o_list_table').getBoundingClientRect().bottom")
         await page.screenshot(path=out / "hosts_by_host.png", clip={"x": 0, "y": 0, "width": 1100, "height": bottom + 1})
