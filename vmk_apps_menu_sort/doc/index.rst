@@ -30,6 +30,11 @@ different orders. Case is ignored and accented names are sorted correctly, so *Ã
 
 **Changelog**
 
+*18.0.1.0.1 (30 September 2026)*
+
+- Fewer database queries on every backend page load: the pinned menus are found without
+  reading their records. No change in behaviour.
+
 *18.0.1.0.0 (28 September 2026)*
 
 - First release for Odoo 18, ported from 19.0.1.1.1. No change in behaviour.

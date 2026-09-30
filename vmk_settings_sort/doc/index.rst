@@ -29,6 +29,11 @@ the original orders return.
 
 **Changelog**
 
+*18.0.1.0.1 (30 September 2026)*
+
+- Fewer database queries on every backend page load: the Technical menu is found without
+  reading its record. No change in behaviour.
+
 *18.0.1.0.0 (28 September 2026)*
 
 - First release for Odoo 18, ported from 19.0.1.1.1.

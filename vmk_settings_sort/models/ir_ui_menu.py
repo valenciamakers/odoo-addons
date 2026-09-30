@@ -36,11 +36,15 @@ class IrUiMenu(models.Model):
         ordinary case.
         """
         menus = super().load_menus(debug)
-        technical = self.env.ref(TECHNICAL_MENU, raise_if_not_found=False)
-        if not technical:
+        # By xmlid to id, not `env.ref`: the lookup is ormcached, where `env.ref` also
+        # queries for the record, which core's `test_load_menus_perf` would count.
+        technical_id = self.env["ir.model.data"]._xmlid_to_res_id(
+            TECHNICAL_MENU, raise_if_not_found=False
+        )
+        if not technical_id:
             return menus
         # Shallow copies inside, never an in-place sort: `super()` is ormcached,
         # so its return value is shared between requests. `vmk_apps_menu_sort`
         # copies the same way for the root menus, and the two compose, each
         # rewriting a different key of the payload.
-        return sorted_children(menus, technical.id)
+        return sorted_children(menus, technical_id)

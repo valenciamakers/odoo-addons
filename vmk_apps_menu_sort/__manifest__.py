@@ -4,7 +4,7 @@
 {
     "name": "Apps Menu Sort",
     "summary": "Alphabetical order for the apps menu, with Apps and Settings at the end",
-    "version": "18.0.1.0.0",
+    "version": "18.0.1.0.1",
     "author": "Valencia Makers",
     "license": "LGPL-3",
     "category": "Technical",
