@@ -43,11 +43,11 @@ class VmkPartnerEmail(models.Model):
     sequence = fields.Integer(default=10)
 
     # There is deliberately NO database-level unique constraint here, on any column.
-    # base/wizard/base_partner_merge.py:167 asks _has_check_or_unique_constraint()
+    # base/wizard/base_partner_merge.py:168 asks _has_check_or_unique_constraint()
     # whether any CHECK or UNIQUE constraint touches the foreign key column it is
     # about to re-point -- partner_id. If one does, the UPDATE runs inside a
     # savepoint whose `except psycopg2.Error` handler falls back to
-    # `DELETE FROM vmk_partner_email WHERE partner_id IN <every source id>` (:179).
+    # `DELETE FROM vmk_partner_email WHERE partner_id IN <every source id>` (:191).
     # A single colliding address during a contact merge would therefore destroy
     # every additional address of every source contact. Uniqueness lives in
     # _check_email_unique() below, which that raw SQL bypasses anyway.
@@ -108,7 +108,7 @@ class VmkPartnerEmail(models.Model):
         module never writes there on its *own* initiative, behind the user's back;
         a button somebody presses is the user editing their own contact, with the
         bookkeeping done for them. ``email`` carries ``tracking=1``
-        (mail/models/res_partner.py:21), so the swap lands in the chatter by itself.
+        (mail/models/res_partner.py:23), so the swap lands in the chatter by itself.
         """
         self.ensure_one()
         partner = self.partner_id

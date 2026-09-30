@@ -3,6 +3,8 @@
 
 from pathlib import Path
 
+import polib
+
 from odoo.exceptions import ValidationError
 from odoo.tests import TransactionCase, tagged
 
@@ -61,52 +63,68 @@ class TestPartnerEmailModel(PartnerEmailCase):
 
 @tagged("post_install", "-at_install")
 class TestModuleNameTranslation(TransactionCase):
-    """Guard the two catalogue entries `i18n export` will never regenerate.
+    """Guard the catalogue entries carrying the module's own name and summary.
 
-    The module's own name and summary live on `ir.module.module` records whose
+    The module's name and summary live on an `ir.module.module` record whose
     `ir.model.data` row belongs to **base** (`ir_module.py` creates them as
-    `base.module_<name>`), so the exporter attributes them to base and omits
-    them from our POT. They are in `i18n/` by hand.
+    `base.module_<name>`). Odoo 19's exporter attributed them to base and left
+    them out of our POT, so they were kept there by hand. Odoo 20's exporter
+    writes them itself (`TranslationModuleReader._export_translatable_records`
+    selects the `base.module_<name>` row of each exported module), and
+    `Manifest.get_translations` reads them back from the module's own PO files
+    by their `#:` reference, so a catalogue lacking that reference leaves the
+    name in English on a module that is not installed yet.
 
-    That matters because `PoFileReader` merges each PO against its module's
-    POT and skips anything the merge marks obsolete -- so an entry missing
-    from the POT is discarded in silence, translations and all. Re-running
-    `i18n export` overwrites the POT and would do exactly that. This test is
-    what turns that into a failure instead of a quiet regression.
+    `PoFileReader` still merges each PO against its module's POT and skips
+    whatever the merge marks obsolete, so an entry missing from the POT is
+    still discarded in silence once the module is installed. These tests keep
+    the entries, and their references, from going missing unnoticed.
     """
 
     I18N = Path(__file__).resolve().parent.parent / "i18n"
-    HAND_MAINTAINED = (
+    MODULE_METADATA = (
         "Multiple Contact Emails",
         "Assign multiple email addresses to a contact, and Odoo matches mail from all of them",
     )
 
-    def test_pot_still_carries_the_hand_added_module_metadata(self):
-        pot = (self.I18N / "vmk_partner_email_multiple.pot").read_text(encoding="utf-8")
-        for msgid in self.HAND_MAINTAINED:
+    REFERENCES = (
+        "model:ir.module.module,shortdesc:base.module_vmk_partner_email_multiple",
+        "model:ir.module.module,summary:base.module_vmk_partner_email_multiple",
+    )
+
+    def _entries(self, filename):
+        """The entries by msgid: the exporter wraps long ones, so read them as a parser does."""
+        return {e.msgid: e for e in polib.pofile(str(self.I18N / filename))}
+
+    def test_pot_still_carries_the_module_metadata(self):
+        entries = self._entries("vmk_partner_email_multiple.pot")
+        for msgid, reference in zip(self.MODULE_METADATA, self.REFERENCES):
             with self.subTest(msgid=msgid):
                 self.assertIn(
-                    f'msgid "{msgid}"',
-                    pot,
-                    "The POT has lost an entry `odoo i18n export` does not generate. If you "
-                    "just re-exported it, re-add the two `base.module_vmk_partner_email_multiple` "
-                    "blocks by hand -- without them the module name and summary silently stop "
-                    "being translated. See the README's Translations section.",
+                    msgid,
+                    entries,
+                    "The POT has lost the module's name or summary. Re-export it with "
+                    "`odoo i18n export`, which writes them on Odoo 20, or the module name and "
+                    "summary silently stop being translated. See the README's Translations "
+                    "section.",
                 )
+                self.assertIn(reference, [o for o, _ in entries[msgid].occurrences])
 
     def test_every_catalogue_translates_them(self):
         for po_name in ("es.po", "ca.po"):
-            po = (self.I18N / po_name).read_text(encoding="utf-8")
-            for msgid in self.HAND_MAINTAINED:
+            entries = self._entries(po_name)
+            for msgid, reference in zip(self.MODULE_METADATA, self.REFERENCES):
                 with self.subTest(po=po_name, msgid=msgid):
-                    self.assertIn(f'msgid "{msgid}"', po)
+                    self.assertIn(msgid, entries)
+                    self.assertTrue(entries[msgid].msgstr, "untranslated")
+                    self.assertIn(reference, [o for o, _ in entries[msgid].occurrences])
 
     def test_the_module_record_really_is_owned_by_base(self):
-        """The premise the POT entries encode: the xmlid is base's, not ours.
+        """The premise the `#:` references encode: the xmlid is base's, not ours.
 
-        If Odoo ever attributes these records to the module itself, the
-        exporter would start emitting them and the hand-maintenance above
-        becomes not just unnecessary but actively wrong.
+        The catalogues name the record `base.module_vmk_partner_email_multiple`.
+        If Odoo ever moved these records into the module's own namespace, every
+        reference would stop matching.
         """
         data = self.env["ir.model.data"].search(
             [

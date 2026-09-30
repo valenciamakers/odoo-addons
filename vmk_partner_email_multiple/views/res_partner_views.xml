@@ -57,7 +57,7 @@
                             <button
                                 name="action_promote_to_primary"
                                 type="object"
-                                icon="fa-exchange"
+                                icon="swap_horiz"
                                 string="Swap with the contact's primary email address"
                                 title="Swap with the contact's primary email address"
                                 invisible="not id"

@@ -33,6 +33,11 @@ their addresses. **Merging two contacts** keeps both sets of addresses in the re
 
 **Changelog**
 
+*20.0.1.0.0 (30 September 2026)*
+
+- First release for Odoo 20, ported from 19.0.1.2.1. The envelope and the swap button use Odoo 20's
+  own icons. No other change in behaviour.
+
 *19.0.1.2.1 (28 September 2026)*
 
 - Merging contacts no longer leaves the surviving contact with the same address twice, when two

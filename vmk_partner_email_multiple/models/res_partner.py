@@ -68,8 +68,8 @@ class ResPartner(models.Model):
 
         Widening core's search domain is not enough and this is the trap that makes
         the module non-trivial. ``mail/models/res_partner.py`` searches
-        ``[('email_normalized', 'in', [...])]`` at :175, but then resolves each input
-        address back to a partner at :222-232 by comparing
+        ``[('email_normalized', 'in', [...])]`` at :157, but then resolves each input
+        address back to a partner at :199-212 by comparing
         ``partner.email_normalized == email_normalized``. Satisfy the domain through
         this module's child table and that final step still hands back an empty
         recordset.
@@ -125,7 +125,7 @@ class ResPartner(models.Model):
 
     @api.model
     def find_or_create(self, email, assert_valid_email=False):
-        """Legacy single-address path, which searches separately (:96-107)."""
+        """Legacy single-address path, which searches separately (:78-97)."""
         if email:
             _parsed_name, parsed_email_normalized = tools.parse_contact_from_email(email)
             if parsed_email_normalized:
@@ -144,12 +144,12 @@ class ResPartner(models.Model):
     def _search_display_name(self, operator, value):
         """Let the contacts autocomplete find additional addresses too.
 
-        ``_rec_names_search`` (base/models/res_partner.py:189) does accept dotted
-        paths -- ``orm/models.py:1462-1473`` resolves the last field in the chain --
+        ``_rec_names_search`` (base/models/res_partner.py:272, a tuple on 20) does accept
+        dotted paths -- ``orm/models.py:1543-1556`` resolves the last field in the chain --
         so ``vmk_email_ids.email`` would work as an entry. But appending to a class
         attribute means restating core's whole list and silently losing whatever
         Odoo adds to it later, so combine the domains instead. The aggregator
-        follows core's own choice at :1460.
+        follows core's own choice at :1539.
         """
         domain = super()._search_display_name(operator, value)
         if not operator.endswith("like") or not value or not isinstance(value, str):
@@ -170,7 +170,7 @@ class ResPartner(models.Model):
         too: they will never match anything, but the alternative is destroying a
         contact's address during a merge, and core itself stores unparseable
         addresses deliberately so a typo can be corrected later
-        (mail/models/res_partner.py:130-132).
+        (mail/models/res_partner.py:185-192).
         """
         self.ensure_one()
         # _update_foreign_keys moved the source contacts' rows here in raw SQL,

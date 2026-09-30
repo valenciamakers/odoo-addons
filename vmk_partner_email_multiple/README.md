@@ -50,14 +50,14 @@ promoted address becomes the primary, and the old primary is kept as an addition
 from it still matches. Its label is cleared, because the label described the address that has just
 left.
 
-It draws `fa-exchange` rather than an up arrow deliberately. The row already carries a drag handle
-for reordering, so a vertical arrow beside it reads as "move up one position" — the one thing the
-button does not do.
+It draws `swap_horiz` (Material Symbols, as core's mailing-list button does) rather than an up arrow
+deliberately. The row already carries a drag handle for reordering, so a vertical arrow beside it
+reads as "move up one position" — the one thing the button does not do.
 
 This is the one place the module writes to `res.partner.email`, and it does not contradict the rule
 above. The rule is that the module never writes there on its _own_ initiative, behind your back; a
 button somebody presses is the user editing their own contact, with the bookkeeping done for them.
-`email` carries `tracking=1` (`mail/models/res_partner.py:21`), so the swap appears in the chatter
+`email` carries `tracking=1` (`mail/models/res_partner.py:23`), so the swap appears in the chatter
 by itself.
 
 ### The envelope, and why it needs a widget
@@ -94,7 +94,7 @@ is tabbed to.
 The swap button gets its accessible name from `string`, which the stylesheet then hides visually so
 the control stays icon-only. Neither obvious alternative works: `title` becomes `data-tooltip` and
 nothing else, which carries no accessible name, and an `aria-label` in the arch never reaches the
-DOM at all — `list_renderer.xml:308-318` instantiates `ViewButton` from a fixed prop list
+DOM at all — `list_renderer.xml:374-386` instantiates `ViewButton` from a fixed prop list
 (`className`, `clickParams`, `icon`, `string`, `title`, `tabindex`…) that never passes the arch's
 remaining attributes through. The arch keeps the attribute all the way to the client, which is what
 makes this one hard to spot: it is dropped at render, not at load.
@@ -116,23 +116,23 @@ else. The drag handle keeps the grab cursor core gives it.
 #### Widening the search is not enough
 
 This is the trap that makes the module more than a `search()` override.
-`res.partner._find_or_create_from_emails` (`mail/models/res_partner.py:118`) searches
-`[('email_normalized', 'in', [...])]` at `:175` — but then, at `:222-232`, resolves each input
+`res.partner._find_or_create_from_emails` (`mail/models/res_partner.py:101`) searches
+`[('email_normalized', 'in', [...])]` at `:157` — but then, at `:199-212`, resolves each input
 address back to a partner by comparing `partner.email_normalized == email_normalized`. Satisfy the
 domain through the child table and that final step **still hands back an empty recordset**. Both
 halves need dealing with, in all three entry points:
 
 | Method                           | Where                             | What it needs                        |
 | -------------------------------- | --------------------------------- | ------------------------------------ |
-| `_find_or_create_from_emails`    | `mail/models/res_partner.py:118`  | both halves; the real implementation |
-| `find_or_create`                 | `mail/models/res_partner.py:96`   | legacy path, searches separately     |
-| `_mail_find_partner_from_emails` | `mail/models/mail_thread.py:2145` | the resolution half only — see below |
+| `_find_or_create_from_emails`    | `mail/models/res_partner.py:101`  | both halves; the real implementation |
+| `find_or_create`                 | `mail/models/res_partner.py:78`   | legacy path, searches separately     |
+| `_mail_find_partner_from_emails` | `mail/models/mail_thread.py:2206` | the resolution half only — see below |
 
-The third one needs less than it looks. In 19 it delegates its search to `_partner_find_from_emails`
-(`:2156-2165`), which funnels everything through `_find_or_create_from_emails` at `:2094` — so the
-mail gateway, author resolution, and recipient resolution are all covered by the first override.
-What it still does on its own is re-resolve by `p.email_normalized == email_key` at `:2173`, which
-drops the very partner core just found for us.
+The third one needs less than it looks. In 20 it delegates its search to `_partner_find_from_emails`
+(`:2155-2165`, defined at `:2071`), which funnels everything through `_find_or_create_from_emails` —
+so the mail gateway, author resolution, and recipient resolution are all covered by the first
+override. What it still does on its own is re-resolve by `p.email_normalized == email_key` at
+`:2234`, which drops the very partner core just found for us.
 
 All three route through one resolver, `vmk.partner.email._resolve_partners`, so their behaviour
 cannot drift apart.
@@ -150,8 +150,8 @@ next.
 #### There is deliberately no unique constraint, on any column
 
 The tempting one is `unique(partner_id, email_normalized)`. It is precisely the one that must not
-exist. `_update_foreign_keys_generic` (`base/wizard/base_partner_merge.py:119-181`) re-points every
-foreign key to `res_partner` in raw SQL, and at `:167` asks `_has_check_or_unique_constraint()`
+exist. `_update_foreign_keys_generic` (`base/wizard/base_partner_merge.py:119-196`) re-points every
+foreign key to `res_partner` in raw SQL, and at `:168` asks `_has_check_or_unique_constraint()`
 whether any CHECK or UNIQUE constraint touches the column it is about to update — `partner_id`. If
 one does, the `UPDATE` runs inside a savepoint whose `except psycopg2.Error` handler falls back to:
 
@@ -172,14 +172,15 @@ Odoo's built-in contact merge is how duplicates actually get cleaned up, so the 
 that workflow. Most of it is free: `_update_foreign_keys` discovers our `partner_id` column from the
 schema, so child rows follow the surviving contact with no code from us.
 
-The gap is `_update_values` (`:341-392`), which skips o2m/m2m and computed fields and, for plain
-fields, takes the last truthy value with the destination last — so the destination's `email` wins
-and every merged-away address is simply lost. **That single gap is the feature**: `_merge` is
-overridden to capture the addresses first and re-create them as additional ones afterwards.
+The gap is `_update_values` (`:405-425`), which now takes its values from `_merge_values`
+(`:356-402`) and skips o2m/m2m and computed fields and, for plain fields, takes the last truthy
+value with the destination last — so the destination's `email` wins and every merged-away address is
+simply lost. **That single gap is the feature**: `_merge` is overridden to capture the addresses
+first and re-create them as additional ones afterwards.
 
-They have to be captured _before_ `super()`, because the source contacts are unlinked at `:471`. The
+They have to be captured _before_ `super()`, because the source contacts are unlinked at `:505`. The
 destination cannot be captured that early — when the wizard passes none, core picks it itself at
-`:446-448` — so every candidate's address is captured and the survivor is identified afterwards.
+`:480-481` — so every candidate's address is captured and the survivor is identified afterwards.
 
 **The migration can duplicate an address, though.** For a table with no constraint on the foreign
 key, `_update_foreign_keys_generic` (`:119`) re-points the rows with one bulk `UPDATE`, which
@@ -190,12 +191,12 @@ any that repeats the primary; `tests/test_merge.py` merges three contacts to pro
 
 #### Searching by dotted path
 
-`_rec_names_search` (`base/models/res_partner.py:189`) does accept dotted paths —
-`_search_display_name` resolves the last field in the chain (`orm/models.py:1462-1473`) — so
+`_rec_names_search` (`base/models/res_partner.py:272`, a tuple on 20) does accept dotted paths —
+`_search_display_name` resolves the last field in the chain (`orm/models.py:1543-1556`) — so
 `vmk_email_ids.email` works as an entry and no helper field is needed. But _appending_ to a class
 attribute means restating core's whole list and silently losing whatever Odoo adds to it later, so
 `_search_display_name` is overridden and the domains combined instead, with the same aggregator core
-chooses at `:1460`.
+chooses at `:1539`.
 
 That covers the autocomplete and the search panel's **Name** entry, which filters on `display_name`.
 It does not cover its **Email** entry, which is a separate mechanism: `base.view_res_partner_filter`
@@ -213,8 +214,8 @@ so one inherited view fixes the search people actually use.
 
 ### Known limitation: merging as a non-admin
 
-`_merge` refuses when the contacts differ by email (`base/wizard/base_partner_merge.py:439-440`) —
-which is every case this module exists for. Admins are exempted two lines earlier
+`_merge` refuses when the contacts differ by email (`base/wizard/base_partner_merge.py:473`) — which
+is every case this module exists for. Admins are exempted two lines earlier
 (`if self.env.is_admin(): extra_checks = False`), so it does not bite an administrator, but a
 non-admin staff member cannot merge two contacts into one and keep both addresses.
 
@@ -233,7 +234,7 @@ Each of these keeps reading the primary address only:
   way. An additional address could be blacklisted while `partner.is_blacklisted` still reads false.
   Revisit if we ever send marketing mail, where GDPR obliges honouring opt-outs.
 - **Bounce counters and mail-loop detection**, which query `email_normalized` with raw domains
-  (`mail/models/mail_thread.py:814, 955, 998, 1016, 1756`).
+  (`mail/models/mail_thread.py:860, 1005, 1066, 1815`).
 
 ### Mailflow
 
@@ -309,35 +310,41 @@ with no manifest entry. Terms this module shares with core — _Contact_, _Creat
 reuse core's own wording in each language rather than a second translation of the same word, so the
 module reads as part of the backend.
 
+The module's own name and summary are `ir.module.module` records, whose xmlid belongs to `base`
+(`base.module_vmk_partner_email_multiple`). On Odoo 19 that made `odoo i18n export` skip them, so
+they were kept in the catalogues by hand. **On Odoo 20 the exporter writes them itself**
+(`TranslationModuleReader._export_translatable_records` selects the `base.module_<name>` row of each
+exported module), and adds the module's description, which is the whole `README.md`, since a
+manifest without a `description` defaults to it. The description is left out of the catalogues: the
+Apps page shows `static/description/index.html`, not that field, and nothing else displays it.
+
+Odoo 20 also reads the name and summary straight from a module's `.po` by their `#:` reference
+(`Manifest.get_translations`), so a module that is not installed yet shows them translated in a
+translated database. That makes the reference lines load-bearing, and the POT still has to carry
+each entry, because `PoFileReader` merges every PO against it and drops what the merge marks
+obsolete once the module is installed. `tests/test_model.py::TestModuleNameTranslation` fails loudly
+if either goes missing. Re-run the export after any change to `README.md`, or the description entry
+goes stale, and delete that entry again.
+
 Regenerating the template after changing any user-facing string:
 
 ```bash
-# Run from the directory holding your Compose file; REPO is the path to this repo.
-REPO=/path/to/odoo-addons
-docker compose run --rm -e PGHOST=db -e PGUSER=odoo -e PGPASSWORD=odoo \
-    -v "$REPO/vmk_partner_email_multiple/i18n:/mnt/out" --entrypoint odoo odoo \
-    i18n export -d test -o /mnt/out/vmk_partner_email_multiple.pot vmk_partner_email_multiple
+docker compose exec -T odoo sh -c \
+    'odoo i18n export -d <db> -l pot -o /tmp/x.pot vmk_partner_email_multiple && cat /tmp/x.pot' \
+    > /tmp/x.pot
 ```
 
-Two details are doing work in that command. `--entrypoint odoo` is required because the image's
-entrypoint translates `HOST`/`USER`/`PASSWORD` into `--db_host` and friends, which the `i18n`
-subcommand rejects outright — hence passing the connection as libpq's `PG*` variables instead. And
-`-o` is required because the export otherwise writes into each module's own `i18n/` folder, which
-the harness mounts read-only.
+`exec` skips the image's entrypoint, so the connection has to come from the config file at
+`$ODOO_RC`. `-o` goes to the container's `/tmp` because the export otherwise writes into the
+module's own `i18n/`, which may be mounted read-only. The module must be installed for its terms to
+exist.
 
 Upgrade the module with the database's language loaded to see a change take effect; `-u` alone
 reloads the `.po` but the terms only render for a user whose language is set.
 
-**The module's own name and summary are a separate, hand-maintained exception.** They live on
-`ir.module.module` records that belong to `base`'s xmlid namespace, so the export above never sees
-them — they are written into the POT and both catalogues by hand and re-running the export would
-silently drop them. See
-[`vmk_language_systray`'s README](../vmk_language_systray#the-modules-own-name-and-summary-are-hand-maintained-in-i18n)
-for the full explanation; `tests/test_model.py::TestModuleNameTranslation` guards it here.
-
 ### Testing
 
-Against a local Odoo 19 with this repo on the addons path — Postgres, the `odoo:19` image, and the
+Against a local Odoo 20 with this repo on the addons path — Postgres, the `odoo:20` image, and the
 repo root mounted at `/mnt/extra-addons`:
 
 ```bash

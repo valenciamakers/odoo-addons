@@ -10,7 +10,7 @@
     "category": "Productivity/Discuss",
     "depends": ["mail"],
     "data": [
-        "security/ir.model.access.csv",
+        "security/ir.access.csv",
         "views/res_partner_views.xml",
     ],
     "assets": {

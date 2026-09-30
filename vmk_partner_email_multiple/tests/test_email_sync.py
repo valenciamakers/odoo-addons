@@ -31,7 +31,8 @@ class TestEmailSync(PartnerEmailCase):
     def _mail(self, model, sender, subject):
         key = subject.lower().replace(" ", "-")
         message = MAIL.format(sender=sender, subject=subject, key=key)
-        return self.env[model].browse(self.env["mail.thread"].message_process(model, message))
+        # message_process returns the thread record on 20, where 19 returned its id.
+        return self.env["mail.thread"].message_process(model, message)
 
     # ------------------------------------------------------------
     # The patches themselves

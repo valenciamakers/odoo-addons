@@ -76,7 +76,7 @@ class TestPromoteToPrimary(PartnerEmailCase):
         ])
         row.action_promote_to_primary()
         # Tracking values are only materialised on flush, as mail's own
-        # MailCommon.flush_tracking() does (mail/tests/common.py:1152).
+        # MailCommon.flush_tracking() does (mail/tests/common.py:1351).
         self.env.flush_all()
         self.cr.flush()
 

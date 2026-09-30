@@ -12,24 +12,24 @@ class BasePartnerMergeAutomaticWizard(models.TransientModel):
 
         Most of the merge already does the right thing. ``_update_foreign_keys``
         re-points every foreign key to ``res_partner`` in raw SQL discovered from
-        the schema (base/wizard/base_partner_merge.py:119-181), so this module's
+        the schema (base/wizard/base_partner_merge.py:119-196), so this module's
         child rows follow the surviving contact with no code from us.
 
-        The gap is ``_update_values`` (:341-392): it skips o2m/m2m and computed
-        fields, and for plain fields takes the last truthy value with the
-        destination last -- so the destination's ``email`` wins and every other
+        The gap is ``_update_values`` (:405-425), which takes its values from ``_merge_values``
+        (:356-402): that skips o2m/m2m and computed fields, and for plain fields
+        takes the last truthy value with the destination last -- so the destination's ``email`` wins and every other
         contact's address is simply lost. That single gap is the feature.
 
         The addresses have to be captured before ``super()``, because the source
-        contacts are unlinked at :471. The *destination* cannot be captured that
-        early: when the wizard passes none, core picks it itself at :446-448. So
+        contacts are unlinked at :505. The *destination* cannot be captured that
+        early: when the wizard passes none, core picks it itself at :480-481. So
         capture every candidate's address, then ask which record survived.
 
         The migration can also leave a duplicate behind: it re-points our rows
         with a bulk UPDATE that compares no values. So every successful merge is
         followed by ``_vmk_dedupe_emails``, not only one with an address to absorb.
 
-        The same-email guard at :439-440 is deliberately left alone. It refuses a
+        The same-email guard at :473 is deliberately left alone. It refuses a
         merge when the contacts differ by email -- which is every case this module
         exists for -- but admins are exempted two lines earlier, so it does not
         bite in practice. See README.md.
