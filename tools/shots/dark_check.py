@@ -4,8 +4,8 @@
 # ///
 """Render a module's page in the backend's Apps menu, in Enterprise's dark or light mode.
 
-Emulates the system colour scheme in the reused backend tab; Enterprise's colour-scheme service
-follows it on 19; 18 follows only its cookie, which is set too. The tab is left light.
+Emulates the system colour scheme in a headless backend tab; Enterprise's colour-scheme service
+follows it on 19; 18 follows only its cookie, which is set too.
 
     uv run tools/shots/dark_check.py vmk_event_host /tmp/dark.png dark
 """
