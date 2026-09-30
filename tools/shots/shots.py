@@ -8,7 +8,6 @@ import re
 
 # The harness serves each Odoo series on its own port (8069 for 19, 8169 for 18); ODOO_URL picks one.
 BASE = os.environ.get("ODOO_URL", "http://localhost:8069")
-MARK = "vmk-shots"  # window.name of the one backend tab the recipes reuse
 
 # Screenshot-only polish, applied after a backend page loads:
 # - hide the unread-messages counter;
@@ -50,19 +49,17 @@ CURSOR = r"""([x, y]) => {
 
 
 async def backend_tab(p, width=1280, height=800, scale=2):
-    """The one reusable tab in the debugging Chrome, logged in to the backend, at `scale`x."""
-    browser = await p.chromium.connect_over_cdp("http://127.0.0.1:9222")
-    ctx = browser.contexts[0]
-    for page in ctx.pages:
-        try:
-            if await page.evaluate("window.name") == MARK:
-                break
-        except Exception:
-            pass
-    else:
-        page = await ctx.new_page()
-        await page.goto(BASE + "/odoo")
-        await page.evaluate(f"window.name = '{MARK}'")
+    """A headless backend tab, logged in as admin, at `scale`x.
+
+    It logs in through the harness's autologin (`odev_autologin`), which fills in admin/admin on a
+    GET to /web/login from localhost, so nothing needs starting or signing in by hand. Until 30
+    September 2026 this reused one tab in a Chrome started with remote debugging on port 9222, in a
+    profile of its own, which had to be running and logged in before every session."""
+    browser = await p.chromium.launch()
+    ctx = await browser.new_context(viewport={"width": width, "height": height}, locale="en-GB")
+    page = await ctx.new_page()
+    await page.goto(BASE + "/web/login?redirect=/odoo")
+    await page.wait_for_url("**/odoo**")
     await color_scheme(page, "light")  # store screenshots are always light
     await page.reload()
     cdp = await ctx.new_cdp_session(page)  # the override lasts while this session does

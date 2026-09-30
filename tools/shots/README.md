@@ -19,17 +19,10 @@ recipe imports `shots.py` from here.
 **A local Odoo with these modules installed**, from `../Tech Stack/odoo-dev`, serving the scratch
 database the demo data lives in (`./odev db use shots && ./odev up`).
 
-**A Chrome started with remote debugging, logged in to it.** Backend captures reuse one tab in that
-Chrome, named by `window.name`, rather than opening a new tab each time; public-page captures run
-headless and logged out.
-
-```bash
-open -na "Google Chrome" --args --remote-debugging-port=9222 --user-data-dir="$HOME/.chrome-devtools-profile"
-```
-
-The tools connect to `127.0.0.1:9222`, so only one Chrome may hold that port: a second one started
-with the flag binds only the IPv6 half and is never reached. If a capture hangs or the backend tab
-shows Odoo's "Offline" page, quit every Chrome and start this one again.
+**Nothing else to start.** Backend captures run in a headless Chromium of their own, logged in as
+admin through the harness's autologin, which answers a GET to `/web/login` from localhost; public
+page captures run headless and logged out. Until 30 September 2026 backend captures reused a tab in
+a Chrome started with remote debugging on port 9222, which had to be running and logged in first.
 
 **The demo data**, in English (UK), which gives 24-hour times and day-first dates, is created by
 `demo/seed.py`, idempotently — safe to re-run, finding each record by name rather than duplicating
@@ -106,5 +99,4 @@ uv run tools/shots/dark_check.py vmk_event_host /tmp/light.png light
 ```
 
 `store_preview.py` renders the page inside the live store with the inline styles the store drops
-already dropped. `dark_check.py` switches the reused tab's colour scheme, so run it with `light`
-afterwards to put the tab back.
+already dropped. `dark_check.py` renders in a fresh headless tab, so it leaves nothing dark behind.
