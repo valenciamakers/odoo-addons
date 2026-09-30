@@ -34,6 +34,10 @@ changes to the Responsible and Organizer fields.
 
 **Changelog**
 
+*20.0.1.0.0 (30 September 2026)*
+
+- First release for Odoo 20, ported from 19.0.1.0.2. No change in behaviour.
+
 *19.0.1.0.2 (24 September 2026)*
 
 - Licensed LGPL-3, and credited to Valencia Makers. No change in behaviour.

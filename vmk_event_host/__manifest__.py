@@ -10,8 +10,7 @@
     "category": "Marketing/Events",
     "depends": ["event"],
     "data": [
-        "security/ir.model.access.csv",
-        "security/vmk_event_host_security.xml",
+        "security/ir.access.csv",
         "views/event_event_views.xml",
     ],
     "assets": {

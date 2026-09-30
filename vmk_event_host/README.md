@@ -62,6 +62,14 @@ clicks the tab the user would have clicked. That tab is findable by name rather 
 label, because `Notebook`'s template renders `t-att-name` on each `.nav-link`; the page to open is a
 field option (`options="{'page': 'vmk_hosts'}"`) rather than hard-coded.
 
+**On Odoo 20 it is an Owl 3 component.** Owl 3 refuses `static props`, so the props are declared
+with `props = useProps({...})` and `t.*` types, spread from `standardFieldProps`, as core's own
+fields do (`web/static/src/views/fields/char/char_field.js`). The button is found with
+`root = signal.ref()`, which the template binds with `t-ref="this.root"` and the method calls as
+`this.root()`, in place of `useRef`. Templates reach every member through `this.`, and `t-out`
+replaces `t-esc`. The registry entry is unchanged: it has the same shape as core's 20.0
+registrations.
+
 It renders a real `<button>`, not a styled `<div>`: a div is invisible to the keyboard and to a
 screen reader. Its accessible name says what the control does rather than only what it reads — "Ada
 Lovelace, Zoe — show the Hosts tab" — with the visible text kept as a substring, per WCAG 2.5.3.
@@ -99,8 +107,13 @@ installs that have both.
 one event. It is a SQL constraint, so it surfaces as `IntegrityError`, not `ValidationError`.
 
 **Access rights mirror core's own event rules**: read for the registration desk, full rights for
-event users and managers. The multi-company record rule mirrors
-`event.ir_rule_event_event_ticket_company` — a host line is reachable exactly when its event is.
+event users and managers. The multi-company rule mirrors the `ir_rule_event_event_ticket_company`
+row of `event/security/ir.access.csv` — a host line is reachable exactly when its event is.
+
+**On Odoo 20 they are rows of one file**, `security/ir.access.csv`, since `ir.model.access` and
+`ir.rule` are gone (`base/models/ir_access.py`). A row with a group is a permission; a row with none
+is a restriction applying to everyone, which is what a global rule was, so the company row carries
+no group. Host lines are not readable by the public or portal users, as before: no row grants it.
 
 **Views are anchored on fields and named pages, never on the root tag.**
 `<field name="user_id" position="after">` and `<page name="tickets" position="after">` survive core
@@ -115,13 +128,15 @@ _Last Updated on_ — take core's own `msgstr` out of `base`'s and `event`'s cat
 being translated afresh, so the Hosts tab reads as part of the backend rather than introducing a
 second vocabulary. Strings core does not have, such as the host `help` text, are ours to write.
 
-**The module's own name and summary are hand-maintained**, in the POT as well as both PO files.
-`ir_module.py` registers every module record as `base.module_<name>`, so the exporter attributes
-them to `base` and omits them from our catalogue — and `PoFileReader` merges each PO against its POT
-and drops whatever the merge marks obsolete, so a PO entry with no POT counterpart disappears in
-silence and the module keeps its English name in a Spanish database.
-`tests/test_translations.py::TestModuleNameTranslation` fails loudly if a re-export drops them, and
-also asserts the premise the whole workaround rests on: that the xmlid still belongs to `base`.
+**The module's own name and summary** are entries of the POT and both PO files, referenced as
+`base.module_vmk_event_host` because `ir_module.py` registers every module record under `base`. Odoo
+20's exporter writes them itself, where 19's left them to be kept by hand. It writes a `description`
+entry beside them, holding this whole README, which we delete from every catalogue: nothing displays
+it. `PoFileReader` still merges each PO against its POT and drops whatever the merge marks obsolete,
+so a PO entry with no POT counterpart disappears in silence and the module keeps its English name in
+a Spanish database. `tests/test_translations.py::TestModuleNameTranslation` fails loudly if either
+is missing, and also asserts the premise the references rest on: that the xmlid still belongs to
+`base`.
 
 ### Licence: LGPL-3
 
@@ -136,5 +151,8 @@ but **not** on AGPL-3, so AGPL here would leave that glue with no licence it cou
 ```bash
 cd "../Tech Stack/odoo-dev"
 ./odev install vmk_event_host
-./odev test vmk_event_host
+./odev test event --test-tags /event,/vmk_event_host
 ```
+
+The access tests act as a registration-desk user, as event users and managers, and as a manager of
+another company, since a test run as the superuser never meets `security/ir.access.csv`.

@@ -2,10 +2,9 @@
 // Copyright 2026 Valencia Makers, SL
 // License LGPL-3 (https://www.gnu.org/licenses/lgpl-3.0.html).
 
-import { Component } from "@odoo/owl";
+import { Component, signal, t, useProps } from "@odoo/owl";
 import { _t } from "@web/core/l10n/translation";
 import { registry } from "@web/core/registry";
-import { useRef } from "@web/owl2/utils";
 import { standardFieldProps } from "@web/views/fields/standard_field_props";
 
 /**
@@ -19,15 +18,12 @@ import { standardFieldProps } from "@web/views/fields/standard_field_props";
  */
 export class VmkHostSummaryField extends Component {
     static template = "vmk_event_host.HostSummaryField";
-    static props = {
+    props = useProps({
         ...standardFieldProps,
-        page: { type: String },
-        placeholder: { type: String, optional: true },
-    };
-
-    setup() {
-        this.root = useRef("root");
-    }
+        page: t.string(),
+        placeholder: t.string().optional(),
+    });
+    root = signal.ref();
 
     get value() {
         return this.props.record.data[this.props.name] || "";
@@ -40,7 +36,7 @@ export class VmkHostSummaryField extends Component {
     }
 
     showPage() {
-        const tab = this.root.el
+        const tab = this.root()
             ?.closest(".o_form_renderer")
             ?.querySelector(`.o_notebook .nav-link[name="${this.props.page}"]`);
         tab?.click();

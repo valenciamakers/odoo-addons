@@ -1,0 +1,5 @@
+id,name,model_id,group_id/id,operation,domain
+access_vmk_event_host_registration,vmk.event.host.registration,vmk.event.host,event.group_event_registration_desk,r,
+access_vmk_event_host_user,vmk.event.host.user,vmk.event.host,event.group_event_user,crud,
+access_vmk_event_host_manager,vmk.event.host.manager,vmk.event.host,event.group_event_manager,crud,
+ir_rule_vmk_event_host_company,Event/Host: multi-company,vmk.event.host,,crud,"[('event_id.company_id', 'in', company_ids + [False])]"

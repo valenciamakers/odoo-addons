@@ -4,6 +4,7 @@
 from psycopg2 import IntegrityError
 
 from odoo import Command
+from odoo.exceptions import AccessError
 from odoo.tests import TransactionCase, tagged
 from odoo.tools import mute_logger
 
@@ -113,3 +114,49 @@ class TestEventHost(TransactionCase):
             view_id=self.env.ref("event.view_event_search").id, view_type="search"
         )["arch"]
         self.assertIn("'group_by': 'vmk_host_partner_ids'", arch)
+
+    def _user(self, login, group):
+        return self.env["res.users"].create(
+            {
+                "name": login,
+                "login": login,
+                "group_ids": [Command.set([self.env.ref("base.group_user").id, self.env.ref(group).id])],
+            }
+        )
+
+    def test_the_registration_desk_can_read_hosts_but_not_change_them(self):
+        desk = self._user("vmk_host_desk", "event.group_event_registration_desk")
+        hosts = self.event.vmk_host_ids.with_user(desk)
+        self.assertEqual(len(hosts), 2)
+        hosts.check_access("read")
+        with self.assertRaises(AccessError):
+            hosts.check_access("write")
+        with self.assertRaises(AccessError):
+            hosts.check_access("unlink")
+
+    def test_event_users_and_managers_have_full_rights(self):
+        for group in ("event.group_event_user", "event.group_event_manager"):
+            user = self._user(f"vmk_host_{group}", group)
+            with self.subTest(group=group):
+                self.event.vmk_host_ids.with_user(user).check_access("write")
+                self.env["vmk.event.host"].with_user(user).check_access("create")
+                self.event.vmk_host_ids.with_user(user).check_access("unlink")
+
+    def test_a_host_line_is_reachable_exactly_when_its_event_is(self):
+        """The multi-company rule: hosts of another company's event are invisible."""
+        other = self.env["res.company"].create({"name": "Other Makers"})
+        event = self.env["event.event"].create(
+            {
+                "name": "Elsewhere",
+                "company_id": other.id,
+                "date_begin": "2026-10-06 16:00:00",
+                "date_end": "2026-10-06 18:00:00",
+                "vmk_host_ids": [Command.create({"partner_id": self.ada.id})],
+            }
+        )
+        manager = self._user("vmk_host_mgr", "event.group_event_manager")
+        manager.company_ids = [Command.set(self.env.company.ids)]
+        manager.company_id = self.env.company
+        host = self.env["vmk.event.host"].with_user(manager)
+        self.assertFalse(host.search([("event_id", "=", event.id)]))
+        self.assertEqual(len(host.search([("event_id", "=", self.event.id)])), 2)
