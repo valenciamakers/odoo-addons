@@ -34,6 +34,10 @@ A deadline, expressed as a duration before the event starts:
 - **The duration is `float_time`,** so it takes hours and minutes, which Odoo 20 displays as a
   duration in the user's language: `1h 30m` closes registration ninety minutes before the start, and
   `0h` ends registration at the event start time.
+- **On the event form the hours fit their content,** so "2h Before Start" reads as one phrase.
+  Core's `o_input_5ch` fixes the input at 5ch, which suited 19's `02:00` but leaves a gap after 20's
+  `2h`; `static/src/registration_deadline.scss` sizes it with `field-sizing: content` where the
+  browser supports it, and leaves core's width elsewhere.
 
 The duration field carries no `help` in Settings: a `<setting>` labels its own fields and does not
 give them the `?` a form label would, so anything written there is never seen. What needed saying

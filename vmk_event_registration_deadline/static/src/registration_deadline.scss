@@ -1,0 +1,13 @@
+// Copyright 2026 Valencia Makers, SL
+// License LGPL-3 (https://www.gnu.org/licenses/lgpl-3.0.html).
+
+// The deadline's hours sit inline in a sentence ("[2h] Before Start"). Core's `o_input_5ch` fixes
+// the input at 5ch, which fitted 19's "02:00" but leaves a gap after 20's "2h". Where the browser
+// can size an input to its content, do that; elsewhere core's fixed width stays.
+@supports (field-sizing: content) {
+    .o_form_view .o_field_widget.o_input_5ch.vmk_fit_content input {
+        field-sizing: content;
+        width: auto !important;
+        min-width: 2ch;
+    }
+}

@@ -40,6 +40,7 @@ starts.
 
 - First release for Odoo 20, ported from 19.0.1.0.4. No change in behaviour.
 - The settings help says to set *0h*, not *00:00*, since Odoo 20 shows the time as a duration.
+- On the event form the hours take the width of their content, so *2h Before Start* has no gap.
 
 *19.0.1.0.4 (28 September 2026)*
 

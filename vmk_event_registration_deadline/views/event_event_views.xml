@@ -21,7 +21,7 @@
                          beside `seats_limited`. Kept on one line: the arch is
                          extracted verbatim, so a wrapped source line puts the
                          indentation inside the msgid. -->
-                    <span invisible="not vmk_deadline_custom" class="ms-2"><field name="vmk_deadline_hours" widget="float_time" class="oe_inline o_input_5ch"/> Before Start</span>
+                    <span invisible="not vmk_deadline_custom" class="ms-2"><field name="vmk_deadline_hours" widget="float_time" class="oe_inline o_input_5ch vmk_fit_content"/> Before Start</span>
                 </div>
             </xpath>
         </field>

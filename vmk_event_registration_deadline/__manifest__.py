@@ -11,6 +11,11 @@
     # website_event, not event: half the rule lives in `_filter_open_slots`,
     # which that module defines. See README.md.
     "depends": ["website_event"],
+    "assets": {
+        "web.assets_backend": [
+            "vmk_event_registration_deadline/static/src/registration_deadline.scss",
+        ],
+    },
     "data": [
         "views/res_config_settings_views.xml",
         "views/event_event_views.xml",
