@@ -12,7 +12,7 @@ Install **Event Registration Deadline** from the Apps menu. It requires the **Ev
 
 #. Turn it on in the global Events settings, setting a single deadline for every event: go to
    **Events > Configuration > Settings**, turn on **Registration Deadline** under
-   **Registration**, and set **Time Before Start**, such as *01:30*. Set *00:00* to close
+   **Registration**, and set **Time Before Start**, such as *1h 30m*. Set *0h* to close
    registration when the event starts.
 #. Set a custom deadline on individual events, next to the registration limit: open the event,
    tick **Registration Deadline** next to **Limit Registrations**, and set the time before the
@@ -39,6 +39,7 @@ starts.
 *20.0.1.0.0 (30 September 2026)*
 
 - First release for Odoo 20, ported from 19.0.1.0.4. No change in behaviour.
+- The settings help says to set *0h*, not *00:00*, since Odoo 20 shows the time as a duration.
 
 *19.0.1.0.4 (28 September 2026)*
 

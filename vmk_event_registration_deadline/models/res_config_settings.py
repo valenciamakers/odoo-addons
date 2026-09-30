@@ -20,11 +20,11 @@ class ResConfigSettings(models.TransientModel):
         string="Registration Deadline",
         config_parameter=ENABLED_PARAM,
         help="Allow registration only until an event starts, or a set time in "
-        "advance. Set to 00:00 to end registration at the event start time.",
+        "advance. Set to 0h to end registration at the event start time.",
     )
     # No `help`: a `setting` labels its own fields and does not give them the
     # `?` a form label would, so anything written here is never seen. The one
-    # detail worth saying, that 00:00 ends registration at the event's start,
+    # detail worth saying, that 0h ends registration at the event's start,
     # lives in the help above, which renders as the muted line under the title.
     vmk_registration_deadline_hours = fields.Float(
         string="Time Before Start",

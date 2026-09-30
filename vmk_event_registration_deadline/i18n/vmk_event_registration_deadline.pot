@@ -27,7 +27,8 @@ msgstr ""
 
 #. module: vmk_event_registration_deadline
 #: model:ir.module.module,summary:base.module_vmk_event_registration_deadline
-msgid "Allow registration only until an event starts, or a set time in advance"
+msgid ""
+"Allow registration only until an event starts, or a set time in advance"
 msgstr ""
 
 #. module: vmk_event_registration_deadline
@@ -75,7 +76,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:vmk_event_registration_deadline.res_config_settings_view_form
 msgid ""
 "Allow registration only until an event starts, or a set time in advance. Set"
-" to 00:00 to end registration at the event start time."
+" to 0h to end registration at the event start time."
 msgstr ""
 
 #. module: vmk_event_registration_deadline

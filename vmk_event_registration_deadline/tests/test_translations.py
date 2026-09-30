@@ -3,6 +3,8 @@
 
 from pathlib import Path
 
+import polib
+
 from odoo.tests.common import TransactionCase, tagged
 
 
@@ -31,22 +33,14 @@ class TestModuleNameTranslation(TransactionCase):
     )
 
     def _translation(self, catalogue, msgid):
-        """The msgstr following `msgid`, or None if the entry is absent.
+        """The msgstr of `msgid` in the catalogue, or None if the entry is absent.
 
-        Deliberately crude: this guards the presence of two entries, so it
-        reads the file rather than the database, where a dropped entry looks
-        like nothing at all.
+        This reads the file rather than the database, where a dropped entry
+        looks like nothing at all, and parses it with polib, as Odoo does,
+        since the exporter wraps a long summary across lines.
         """
-        lines = (self.I18N / catalogue).read_text(encoding="utf-8").splitlines()
-        needle = f'msgid "{msgid}"'
-        for index, line in enumerate(lines):
-            if line == needle:
-                following = lines[index + 1]
-                prefix = 'msgstr "'
-                if following.startswith(prefix):
-                    return following[len(prefix):-1]
-                return ""
-        return None
+        entry = polib.pofile(str(self.I18N / catalogue)).find(msgid)
+        return entry.msgstr if entry else None
 
     def test_the_pot_still_carries_them(self):
         for msgid in self.MODULE_METADATA:
