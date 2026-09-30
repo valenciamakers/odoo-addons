@@ -653,10 +653,13 @@ uv run tools/feature_icons.py vmk_foo
 uv run tools/feature_icons.py --all
 ```
 
-**One exception to Lucide: Odoo's own globe.** The Backend Language Menu draws Material Symbols'
-`public` in the systray on 20, since `language` is not in Odoo's font subset, so the two language
-pages show that glyph, as `material:public` in the mapping, where they refer to the systray's globe.
-It is filled where Lucide is outlined, by design: it has to be recognisably the same icon.
+**One exception to Lucide: the systray's own globe.** Where the two language pages mean the Backend
+Language Menu's globe, they show the glyph that series' systray draws, so page and menu match. On 18
+and 19 that is Font Awesome's `fa-globe`, which both the store and those backends render, so the
+mapping says `fa:globe` and the tool keeps the span, in the same fixed `#9B69F4` as the icons beside
+it. On 20, whose backend no longer loads Font Awesome, it is Material Symbols' `public` (not
+`language`, which Odoo's font subset lacks), as `material:public`: filled where Lucide is outlined,
+by design.
 
 **One fixed purple, because an icon cannot follow the page.** An SVG shown through `<img>` is a
 sealed document: its CSS sees nothing of the page around it, and the only thing that crosses is the
