@@ -1073,14 +1073,63 @@ consistent — event dates that disagree with their sessions, an end date that d
 count — refuse it with a `ValidationError` saying what to do instead, rather than silently picking a
 winner. A guess that goes wrong surfaces later as someone else's confusing error. Added 2026-09-24.
 
-**Test twice: automated, and in a real browser.** Every module carries tests; that is the floor, not
-the ceiling. Anything touching a view, a widget, or a stylesheet also gets driven in a real browser
-before it is called done, because a whole class of failure never reaches a Python test. Two from
-this repo: a `cursor` rule that lost silently to a `cursor-pointer` utility core declares
-`!important`, and a template inheritance whose xpath is resolved **client-side**, so a wrong one
-fails in the console rather than raising on install. Both looked correct in the source, both passed
-every test, and both were wrong on screen. Check computed styles and the rendered DOM rather than
-trusting a screenshot — a screenshot cannot show you a cursor or an accessible name.
+**Test twice: in Python, and in a browser, and automate both.** Every module carries tests; that is
+the floor, not the ceiling. Anything touching a view, a widget, or a stylesheet fails in ways no
+Python test sees. Two from this repo: a `cursor` rule that lost silently to a `cursor-pointer`
+utility core declares `!important`, and a template inheritance whose xpath is resolved
+**client-side**, so a wrong one fails in the console rather than raising on install. Both looked
+correct in the source, both passed every Python test, and both were wrong on screen.
+
+**Browser behaviour is a tour test, not a manual check** (decided 1 October 2026). A manual check is
+done once and never again; the next Odoo build breaks it silently. So what a person would click
+through to call a module done — the widget, the dialog, the menu, the accessible name — is a tour
+that `./odev test` runs with the rest:
+
+- **The tour drives, Python checks.** `static/tests/tours/<module>_tour.js` registers each tour in
+  `registry.category("web_tour.tours")`, under a name starting with the module's, and the manifest
+  adds `"web.assets_tests": ["<module>/static/tests/tours/**/*"]`. `tests/test_tours.py` holds
+  `TestTours(HttpCase)`, tagged `post_install` and `-at_install`: it creates the data, calls
+  `self.start_tour(url, tour, login=…)`, then asserts the records the tour should have produced.
+- **A tour fails on a console error**, so a broken client-side xpath or an Owl error fails the run
+  even where no step checks for it.
+- **Wait on triggers, never on time.** Tours are the flakiest tests we own: each step waits for its
+  trigger, and a flow that needs a pause needs a better trigger.
+- **Prove a negative with a control.** A tour asserting that something does _not_ happen (a drag
+  that must not move an icon) passes just as well if the tour never managed to drag at all, so run
+  the same steps with the behaviour enabled and show that they do move it.
+- **Check computed styles and the rendered DOM,** not a screenshot, in a tour step or by hand: a
+  screenshot cannot show a cursor or an accessible name.
+- **They need a browser in the test image.** The official `odoo` image has none, and without one
+  every tour skips, which reads as a pass. A local test setup has to add Chrome and
+  `websocket-client`, and set `ODOO_BROWSER_BIN`.
+
+**Driving Odoo 20 in a tour, learned writing ours** (1 October 2026). Read `web_tour`'s step API
+rather than guessing it; these are the parts that cost time:
+
+- **A picker opened from a dialog is "below the modal"** to the tour runner, which then refuses to
+  click it. A trigger starting with `body` skips that check: `body .o_popover .o_datetime_picker …`,
+  where `.o_popover` also keeps it off the calendar's side-panel picker.
+- **A datetime field is a button opening a picker**, and on a new record an input doing the same;
+  there is no typing a date. Click days and fill the `.o_time_picker_input` boxes, then Apply.
+- **Dragging a list handle** needs `hoot.drag(handle)`, a move over the dragged row itself, and only
+  then a move onto the target, because the sortable binds its listeners when the drag starts.
+  `run: "drag_and_drop …"` works where the target stays visible throughout
+  (`{ position: "bottom", relative: true }`).
+- **`opacity: 0` counts as not visible.** Assert a hover-revealed control with `:not(:visible)`, and
+  reveal it by calling `focus()` from a function `run`.
+- **A tour ending on an unsaved form fails** ("dirty form view"). Finish with `stepUtils.saveForm()`
+  or `stepUtils.discardForm()`.
+- **The calendar's multi-select reads Ctrl from window key events**, not the click, so hold it with
+  hoot's `keyDown`/`keyUp`. Its "N selected" counts slots, not days.
+- **A patch a component reads in `setup()`** takes effect only in a new instance: reopen the view
+  before a control step that changes it.
+- **A website URL loses its query string** through the event page's redirects; pass data in the
+  fragment. Website slots are offered only in the future, so date them from the run day.
+- **Dates format per the browser's locale** (Luxon), so match a displayed date loosely, or compute
+  it in Python with the same format.
+
+What stays manual is judging how something looks: store screenshots, and whether a layout reads
+well.
 
 Write tests that assert **behaviour, not ambient state**. A test asserting freshly-installed
 ordering fails on any database whose users have used the feature; re-run the seeding hook inside the
