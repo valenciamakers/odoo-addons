@@ -22,7 +22,8 @@ right before capturing vmk_event_registration_deadline's public page:
     (cat tools/shots/demo/seed.py; echo "open_studio_evening(env)") | SERIES=18.0 DB=shots ../../Tech\\ Stack/odoo-dev/odev shell
 """
 import base64
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
+from zoneinfo import ZoneInfo
 
 import odoo.tools as tools
 
@@ -43,6 +44,12 @@ if company.partner_id.name != "Valencia Makers":
 spain = env.ref("base.es")
 if company.country_id != spain:
     company.write({"country_id": spain.id})
+# Euros, as in Spain: a fresh database keeps the default dollar, and the CRM and contact captures
+# show amounts. The currency must be active before a company can use it.
+euro = env.ref("base.EUR")
+if company.currency_id != euro:
+    euro.active = True
+    company.write({"currency_id": euro.id})
 
 admin = env.ref("base.user_admin")
 if admin.name != "Mitchell Admin" or admin.lang != "en_GB":
@@ -139,7 +146,10 @@ def set_hosts(event, hosts):
 
 
 def dt(year, month, day, hour, minute=0):
-    return datetime(year, month, day, hour, minute)
+    """A Madrid wall-clock time, as the naive UTC datetime Odoo stores. Until 30 September 2026 this
+    passed the wall-clock time through as UTC, so every event showed an hour or two late."""
+    local = datetime(year, month, day, hour, minute, tzinfo=ZoneInfo(madrid))
+    return local.astimezone(timezone.utc).replace(tzinfo=None)
 
 
 if IS_18:
@@ -154,11 +164,11 @@ else:
     # Multiple Slots, as the published screenshots show it: three Violet slots in October, the
     # first and last a Friday evening to Sunday afternoon (which needs vmk_event_slot_multiday),
     # the second one Saturday. The event's own dates must cover them all, so they are set first.
-    # Slot hours are in the event's timezone; event dates are UTC.
+    # Slot hours are in the event's timezone, as are dt()'s.
     bootcamp = find_or_create_event(
         "Beginner's Bootcamp",
-        date_begin=dt(2026, 10, 2, 6, 0),
-        date_end=dt(2026, 10, 31, 20, 0),
+        date_begin=dt(2026, 10, 2, 8, 0),
+        date_end=dt(2026, 10, 31, 21, 0),
         address_id=company.partner_id.id,
         website_published=True,
         is_multi_slots=True,
