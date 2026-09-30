@@ -160,7 +160,14 @@ changelog of Odoo 20.
   does most of this.
 - **`ir.access` replaces `ir.model.access` and `ir.rule`** (`base/models/ir_access.py`). A module
   ships `security/ir.access.csv` instead, and public and portal users are one group,
-  `base.group_everyone`. `upgrade_code`'s `19.4-00-ir-access` converts the old files.
+  `base.group_everyone`. `upgrade_code`'s `19.4-00-ir-access` converts the old files, but only run
+  over 19 source: on a 20.0 tree it fails, because core's security files are already gone. The
+  header is `id,name,model_id,group_id/id,operation,domain`, where `model_id` is the model's name
+  and `operation` a string such as `crud`. A row with a group is a permission, a row without one a
+  restriction on everyone (`_compute_kind`), which is where a multi-company `ir.rule` goes: core's
+  own ticket rule is `,crud,"[('event_id.company_id', 'in', company_ids + [False])]"` with no group.
+  **A test run as the superuser never meets these rows**, so test access as real users. Verified on
+  20 with `vmk_event_host`.
 - **`ir.config_parameter` is typed.** `get_param` and `set_param` are gone; read and write with
   `get_bool`, `get_int`, `get_float`, `get_str`, and their `set_*` counterparts. A
   `res.config.settings` field with `config_parameter=` needs no change: `res_config.py` reads and
@@ -176,8 +183,15 @@ changelog of Odoo 20.
   (`orm/environments.py`, `committing`), from a shell as much as from a request. `tools.ormcache`
   still works but warns; use `api.ormcache`.
 - **`res.lang` is a `models.CachedModel`.** Its cached fields are the class attribute
-  `_cached_data_fields`, and `write()` clears the cache only for fields in `_clear_cache_on_fields`.
-  `get_installed()` no longer goes through `_get_active_by`.
+  `_cached_data_fields`, and `write()` clears the cache only for fields in `_clear_cache_on_fields`,
+  which derives from it: add a field to `_cached_data_fields` and writing it clears the cache.
+  `_get_active_by` and `_get_data` build on `_get_active_langs()`, in id order, and
+  `get_installed()` is `_get_active_langs().sorted('name')`, so those two are the extension points
+  for an order. Verified on 20 with `vmk_language_sequence`.
+- **`message_process` returns the thread record**, not its id; `browse()` on it fails with "can't
+  adapt type".
+- **`SELF_WRITEABLE_FIELDS` is gone.** A field a user may write on their own record carries
+  `user_writeable=True`, checked per key in `res.users._has_field_access`; `lang` does.
 - **`_order_field_to_sql` takes `(table, field_expr, direction, nulls)`**, a `TableSQL` in place of
   the alias and query.
 - **`odoo/http.py` is a package**, and session functions such as
@@ -261,8 +275,8 @@ checked there yet.
   `mobile`, `env.lang`, and any `*_view_ref` context keys (`base/models/ir_ui_view.py`). Anything
   else the arch depends on goes into an override of that method, or the first user's version is
   served to everyone. `vmk_event_sessions` orders its weekday checkboxes by `res.lang.week_start`
-  and adds it to the key: editing a language clears the `'stable'` cache, never the views'. Added
-  2026-09-24.
+  and adds it to the key: editing a language clears the `'stable'` cache, never the views' (on 20,
+  only for its cached fields, which include `week_start`). Added 2026-09-24.
 - **Datetimes render in the browser's timezone, not the user's preference and not the record's.**
   Nothing in `web` sets luxon's `Settings.defaultZone`, so it is the system zone. Core's slot
   calendar shows slots in the event's timezone by converting and relabelling
@@ -426,18 +440,22 @@ checked there yet.
 **Caches**
 
 - Odoo caches by **name**: `'default'`, `'stable'`, and others. `Registry.clear_cache(*names)`
-  clears whole groups, and the per-method `ormcache.clear_cache()` of older versions **is gone in
-  19** — there is no narrow invalidation.
+  clears whole groups — `env.invalidate_ormcache(name)` on 20 — and the per-method
+  `ormcache.clear_cache()` of older versions **is gone in 19** — there is no narrow invalidation.
 - So prefer reading values from a cache that core already invalidates over clearing a broad one
-  yourself. `res.lang.write()` clears `'stable'`; sorting on values from there avoided clearing
-  `'default'` — every compiled QWeb template on the site — on each reorder.
+  yourself. `res.lang.write()` clears `'stable'` (on 20, only for its cached fields); sorting on
+  values from there avoided clearing `'default'` — every compiled QWeb template on the site — on
+  each reorder.
 - **`_order` is not the last word on ordering.** Core routinely sorts explicitly past it:
-  `res.lang.get_installed()` goes through `search_fetch(..., order='name')` and
-  `website._get_frontend()` uses `language_ids.sorted('name')`. Grep for the _consumers_ of an
-  ordering before assuming a model-level change reaches them.
+  `res.lang.get_installed()` goes through `search_fetch(..., order='name')` (on 20,
+  `_get_active_langs().sorted('name')`) and `website._get_frontend()` uses
+  `language_ids.sorted('name')`. On 20 the translation dialog, Studio's XML editor, and the POS
+  kiosk also sort languages by name themselves. Grep for the _consumers_ of an ordering before
+  assuming a model-level change reaches them.
 - A custom `__getitem__` can break `in`. `LangDataDict` returns a dummy for unknown keys instead of
   raising, and `Mapping.__contains__` is built on `__getitem__` — so `key in it` is **always true**.
-  Build a plain `dict` when you need real membership.
+  Build a plain `dict` when you need real membership. **Fixed on 20**: `LangData` and `LangDataDict`
+  are `Mapping`s with a real `__contains__`, though `.get()` still returns the dummy.
 
 **Menus, and the order of the apps**
 
@@ -524,7 +542,8 @@ checked there yet.
 - `_update_values` in the same wizard skips o2m/m2m and computed fields, and for plain fields takes
   the last truthy value with the destination last — so the destination wins and the merged-away
   values are simply dropped. It also refuses outright when contacts differ by email, except for
-  admins, who are exempted two lines earlier.
+  admins, who are exempted two lines earlier. On 20 it delegates the per-field logic to an
+  `@api.model _merge_values`, with the same outcome; `_merge` itself is a plain method.
 - **The blacklist is narrower than it looks.** `mail.blacklist` keys on a normalized address string
   globally, and only mass mailing and SMS consult it — `mail/models/mail_mail.py` never does, so
   transactional mail goes out regardless. Addresses land there by unsubscribe or by auto-blacklist
@@ -966,12 +985,16 @@ does poorly. What we hit building `vmk_partner_email_multiple`, all verified in 
   substring of the label, per WCAG 2.5.3.
 - **A selected-state class is not a selected state.** Core's global
   `:not(.dropstart) > .dropdown-item.selected` rule marks the active entry with `font-weight` and a
-  FontAwesome glyph in a `:before`, neither of which reaches the accessibility tree. Pass
-  `attrs="{ role: 'menuitemradio', 'aria-checked': … }"` — `attrs` is `DropdownItem`'s escape hatch,
-  spread through `t-att` _after_ its static `role="menuitem"`, so the later value wins.
+  FontAwesome glyph in a `:before` (a Material Symbols one on 20), neither of which reaches the
+  accessibility tree. Pass `attrs="{ role: 'menuitemradio', 'aria-checked': … }"` — `attrs` is
+  `DropdownItem`'s escape hatch, spread through `t-att` _after_ its static `role="menuitem"`, so the
+  later value wins.
 - **Systray icons need `fa-lg`.** Core's own carry it (`fa-lg fa-comments`, `fa-lg fa-clock-o`) and
   render at 18.41px; without it FontAwesome inherits 14px and the icon reads as visibly undersized
   beside them. Measure `getComputedStyle` against a neighbour rather than eyeballing a screenshot.
+  **On 20 they are `<i class="oi" data-icon="…"/>` with no size class**, 14px like every neighbour,
+  and the glyph must be in core's Material Symbols subset (`web/static/src/libs/materialsymbols`):
+  `public` and `translate` are, `language` is not. Verified on 20 with `vmk_language_systray`.
 - **Check the rendered DOM, not the arch.** These failures are invisible in the source and in the
   arch alike.
 - **An empty `.pot` can be a symptom rather than a fact.** A module whose only strings are database
