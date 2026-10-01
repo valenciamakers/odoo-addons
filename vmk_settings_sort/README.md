@@ -95,9 +95,33 @@ So both orderings are tested against fixtures built in the test file, where ever
 and the live checks confirm only that the overrides are wired in. The live sidebar check adds two
 `<app>` blocks of its own in the wrong order, because a minimal Odoo 20 install (`base` and `web`,
 with `base_setup`) contributes only General Settings, and a count of whatever happens to be
-installed would fail on a fresh database. The Technical path was then verified by hand on Odoo 19
-over an authenticated HTTP session in developer mode, which is the one way to exercise it end to
-end; that check is still to repeat on 20.
+installed would fail on a fresh database.
+
+### Browser tests
+
+`tests/test_tours.py` drives a real browser, which is the one way to exercise the Technical path end
+to end: it needs an HTTP session in developer mode. The tests add four Settings sections of their
+own, with an accent and a lowercase initial among them, so the result does not depend on what is
+installed. Each tour reads the order off the screen and compares it with the promise, using its own
+copy of the comparison, never a list of apps.
+
+- **The sidebar**: General Settings first, the rest in folded-label order, and a click on an entry
+  (the second, the last, General Settings) opens that section's own settings.
+- **Another language**: one of the added sections has a Spanish name that sorts elsewhere, and with
+  the user switched to Spanish the sidebar follows it.
+- **Technical, in developer mode** (`?debug=1`): the groupings are alphabetical, and the entries
+  inside each keep `sequence, id`.
+- **Technical, without developer mode**: the menu is absent, and the sidebar is still sorted.
+
+Two things differ on Odoo 20, both in the tours and not in the module. The Technical dropdown is
+drawn flat, levels told apart only by `padding-left`, and 20 adds a sub-grouping there, _Sequences &
+Identifiers_ under User Interface, which 19 does not have. The module sorts only Technical's own
+children and leaves a sub-grouping where its sequence puts it, so the tour reads the groupings at
+the first level (20px) and each grouping's direct entries (32px) rather than every
+`.dropdown-header`. And a bare `.tab.selected` is already true for General Settings before a click
+has rendered, so the tour marks the entry it clicked and waits for that one to be selected.
+
+Tours need a browser in the test image.
 
 ```bash
 odoo -d <db> -u vmk_settings_sort --test-enable --test-tags /vmk_settings_sort --stop-after-init

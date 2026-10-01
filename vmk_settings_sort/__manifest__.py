@@ -4,11 +4,16 @@
 {
     "name": "Settings Sort",
     "summary": "Alphabetical order for the Settings sidebar and Technical menu groups",
-    "version": "20.0.1.0.0",
+    "version": "20.0.1.0.1",
     "author": "Valencia Makers",
     "license": "LGPL-3",
     "category": "Technical",
     "depends": ["base"],
+    "assets": {
+        "web.assets_tests": [
+            "vmk_settings_sort/static/tests/tours/**/*",
+        ],
+    },
     "images": ["static/description/cover.png"],
     "installable": True,
     "application": False,
