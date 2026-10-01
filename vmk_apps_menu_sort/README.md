@@ -183,8 +183,8 @@ re-running the export drops them.
 **One term departs from core on purpose.** Core's Catalan for _User Settings_ is
 `Arranjament d' usuari` — with a space after the apostrophe — in twelve modules including `base`.
 This module writes `Arranjament d'usuari`. Taking core's wording is the rule here; taking its
-typography is not. `./odev terms vmk_apps_menu_sort` therefore reports one divergence by design, and
-carries it as a declared exception so the check still ends clean. Decided 22 September 2026.
+typography is not. It is this module's one deliberate divergence from core's catalogues. Decided 22
+September 2026.
 
 ### Browser tests
 

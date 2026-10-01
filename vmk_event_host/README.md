@@ -109,11 +109,11 @@ xpath.
 
 ### Translations
 
-`i18n/` carries `es` and `ca`, and `./odev terms vmk_event_host` reports both clean against core.
-Terms this module shares with core — _Event_, _Sequence_, _Company_, the ORM's own _Created by_ and
-_Last Updated on_ — take core's own `msgstr` out of `base`'s and `event`'s catalogues rather than
-being translated afresh, so the Hosts tab reads as part of the backend rather than introducing a
-second vocabulary. Strings core does not have, such as the host `help` text, are ours to write.
+`i18n/` carries `es` and `ca`, both checked term by term against core's catalogues. Terms this
+module shares with core — _Event_, _Sequence_, _Company_, the ORM's own _Created by_ and _Last
+Updated on_ — take core's own `msgstr` out of `base`'s and `event`'s catalogues rather than being
+translated afresh, so the Hosts tab reads as part of the backend rather than introducing a second
+vocabulary. Strings core does not have, such as the host `help` text, are ours to write.
 
 **The module's own name and summary are hand-maintained**, in the POT as well as both PO files.
 `ir_module.py` registers every module record as `base.module_<name>`, so the exporter attributes
@@ -133,10 +133,14 @@ but **not** on AGPL-3, so AGPL here would leave that glue with no licence it cou
 
 ### Testing
 
+Against a local Odoo 19 with this repo on the addons path, as in
+[DEVELOPING.md](../DEVELOPING.md#testing-locally):
+
 ```bash
-cd "../Tech Stack/odoo-dev"
-./odev install vmk_event_host
-./odev test vmk_event_host
+docker compose run --rm odoo odoo -d test --init vmk_event_host \
+    --without-demo=all --stop-after-init
+docker compose run --rm odoo odoo -d test -u vmk_event_host \
+    --test-enable --test-tags /vmk_event_host --stop-after-init
 ```
 
 **Browser tests.** `tests/test_tours.py` runs tours from `static/tests/tours/` in headless Chrome:

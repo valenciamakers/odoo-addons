@@ -67,10 +67,14 @@ LGPL-3, as `vmk_event_slot_multiday` is; see its README.
 
 ### Testing
 
+Against a local Odoo 19 with this repo on the addons path, as in
+[DEVELOPING.md](../DEVELOPING.md#testing-locally):
+
 ```bash
-cd "../Tech Stack/odoo-dev"
-./odev install vmk_website_event_slot_multiday
-./odev test vmk_website_event_slot_multiday
+docker compose run --rm odoo odoo -d test --init vmk_website_event_slot_multiday \
+    --without-demo=all --stop-after-init
+docker compose run --rm odoo odoo -d test -u vmk_website_event_slot_multiday \
+    --test-enable --test-tags /vmk_website_event_slot_multiday --stop-after-init
 ```
 
 The patch needs a browser, and `tests/test_tours.py` drives one, as a public visitor, through
