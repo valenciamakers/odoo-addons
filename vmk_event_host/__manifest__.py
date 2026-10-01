@@ -4,7 +4,7 @@
 {
     "name": "Event Hosts",
     "summary": "Record who runs an event, as one or more contacts",
-    "version": "18.0.1.0.0",
+    "version": "18.0.1.0.1",
     "author": "Valencia Makers",
     "license": "LGPL-3",
     "category": "Marketing/Events",
@@ -17,6 +17,9 @@
     "assets": {
         "web.assets_backend": [
             "vmk_event_host/static/src/**/*",
+        ],
+        "web.assets_tests": [
+            "vmk_event_host/static/tests/tours/**/*",
         ],
     },
     "images": ["static/description/cover.png"],

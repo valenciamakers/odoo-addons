@@ -34,6 +34,11 @@ changes to the Responsible and Organizer fields.
 
 **Changelog**
 
+*18.0.1.0.1 (1 October 2026)*
+
+- Adding a host to an event that already had one no longer fails with an error.
+- Browser tests added.
+
 *18.0.1.0.0 (28 September 2026)*
 
 - First release for Odoo 18, ported from 19.0.1.0.2. No change in behaviour.

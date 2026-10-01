@@ -52,5 +52,11 @@ class EventEvent(models.Model):
             # until the cache is invalidated, so writing `sequence` alone
             # leaves `vmk_host_ids` in its old order within the same
             # transaction -- and the summary would lag a drag-and-drop.
-            hosts = event.vmk_host_ids.sorted(lambda host: (host.sequence, host.id))
+            # While the form is being edited every line is a new record, and
+            # 18's NewId cannot be ordered: ties on `sequence`, which is every
+            # line until one is dragged, are settled by the saved id, with
+            # lines not yet saved last, in the order they were added.
+            hosts = event.vmk_host_ids.sorted(
+                lambda host: (host.sequence, host._origin.id or float("inf"))
+            )
             event.vmk_host_names = ", ".join(host.display_name for host in hosts)

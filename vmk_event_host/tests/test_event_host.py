@@ -4,7 +4,7 @@
 from psycopg2 import IntegrityError
 
 from odoo import Command
-from odoo.tests import TransactionCase, tagged
+from odoo.tests import Form, TransactionCase, tagged
 from odoo.tools import mute_logger
 
 
@@ -65,6 +65,17 @@ class TestEventHost(TransactionCase):
         self.assertEqual(
             self.event.vmk_host_names, "Ada Lovelace, Zoe Zapata (Lead)"
         )
+
+    def test_summary_survives_adding_a_host_in_the_form(self):
+        """Lines share a sequence until dragged, and in the form are new records."""
+        grace = self.env["res.partner"].create({"name": "Grace Hopper"})
+        with Form(self.event) as form:
+            with form.vmk_host_ids.new() as line:
+                line.partner_id = grace
+            self.assertEqual(
+                form.vmk_host_names, "Zoe Zapata (Lead), Ada Lovelace, Grace Hopper"
+            )
+        self.assertEqual(self.event.vmk_host_ids.partner_id, self.zoe + self.ada + grace)
 
     def test_mirror_field_follows_the_lines(self):
         """The searchable mirror is what the search view and list column read."""
