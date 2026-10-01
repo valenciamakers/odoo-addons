@@ -39,6 +39,15 @@ September 2026, with the same commits. The Apps Store reads a repository by its 
 This branch, `20.0`, holds the Odoo 20 versions, branched from `19.0` on 30 September 2026. A fix
 lands on `19.0` first and is carried here where it applies, with a version bump of its own.
 
+**A module that is not ready for a series is `"installable": False` on that branch.** The Apps Store
+scans every series branch by itself and lists what it finds installable, so pushing a branch
+publishes it: there is no separate step to hold back. So a new series branch starts with every
+module switched off, beside the version reset; each module's port turns its own back on, in the
+commit that finishes it; and a new module stays off until it is ready to launch. Odoo ignores an
+uninstallable module on the addons path, so the others install and test beside it. Decided 1 October
+2026, after a branch nearly went out carrying modules with a new series' version and the old series'
+code.
+
 ## Testing locally
 
 Modules here install by name against a local Odoo 20 with this repo on the addons path. A
