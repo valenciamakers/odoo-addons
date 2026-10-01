@@ -169,12 +169,45 @@ cd "../Tech Stack/odoo-dev"
 ./odev test vmk_event_slot_multiday
 ```
 
-Fifteen tests on the model and form arch, three on translations. The names are checked by formatting
-the expected dates with the same helpers, so the tests pass in any language's date format.
+Fifteen tests on the model and form arch, three on translations, three tours. The names are checked
+by formatting the expected dates with the same helpers, so the tests pass in any language's date
+format.
 
-**The widget needs a browser**, which the `odoo:19` image has not, so it was checked by hand in
-Chrome with the event in `America/New_York` and the browser in `Europe/Madrid`: the range showed
-event time, and editing, moving, and creating a slot through it stored the right date, hours and day
-count. Core's `event` and `website_event` suites were run with the module installed on two fresh
-databases: one with only core's event modules, and one with our `vmk_event_sessions` and
+### Browser tests
+
+**The widget needs a browser**, and `tests/test_tours.py` drives one: three tours in
+`static/tests/tours/vmk_event_slot_multiday_tour.js`, each followed by assertions on the records in
+Python. The event is in `America/New_York` and the test browser in UTC, so a widget showing the
+viewer's time instead of the event's would store the wrong hours.
+
+- **`vmk_event_slot_multiday_edit_range`** opens a one-day slot's form, checks that the range reads
+  18:00, the event's time, rather than the browser's 22:00, sets the range through the picker to end
+  two days later at 13:00, and saves; the date, hours, day count, and UTC datetimes are checked.
+- **`vmk_event_slot_multiday_calendar_multi_create`** selects two days in the calendar (Ctrl held
+  for the second), clicks Add, sets the hours in the popover, and creates; one single-day slot per
+  day is checked.
+- **`vmk_event_slot_multiday_calendar_new`** switches the slot list to its calendar, clicks a day,
+  and picks a three-day range with times in the New Slot dialog's picker; the created slot is
+  checked the same way. It runs in a 480px-wide browser (`browser_size` on `TestSmallScreenTours`),
+  because on 19 that dialog opens only on a small screen.
+
+Two things about core 19's slot calendar that shape these. On a desktop screen a click on a day only
+selects it, and slots are made with the Add button of the selection box
+(`web/static/src/views/calendar/calendar_model.js`, `hasMultiCreate`, which is false on a small
+screen), so there is no New button; the dialog is `event.view_event_slot_form`, which this module
+inherits, and `hasQuickCreate` opens it from a click only when the screen is small. And the
+selection box's "N selected" counts the _slots_ under the selection, so two empty days read "0
+selected": the tour checks the highlighted days instead.
+
+Taking out the range widget's conversion to the event's timezone fails the first tour. The tours
+were run on a fresh database holding only `event` and this module.
+
+```bash
+cd "../Tech Stack/odoo-dev"
+./odev test vmk_event_slot_multiday
+```
+
+The harness's image carries a browser, so this needs nothing more than an installed module. Core's
+`event` and `website_event` suites were also run with the module installed on two fresh databases:
+one with only core's event modules, and one with our `vmk_event_sessions` and
 `vmk_website_event_sessions` as well.
