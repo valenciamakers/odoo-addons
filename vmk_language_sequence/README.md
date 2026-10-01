@@ -173,3 +173,10 @@ just the one test that needs it.
 
 On 18, verified by the tests above, 22 of ours and `website`'s suite alongside, on 28
 September 2026.
+
+**Browser tests.** `tests/test_tours.py` runs tours from `static/tests/tours/` in headless Chrome,
+with the sequences set to a non-alphabetical order: the order reaches the systray menu of
+`vmk_language_systray` (the tour needs that module's `.o_vmk_language_systray` markup, and is
+skipped without it), the website's language selector for a visitor and for a signed-in user, and
+dragging a handle in the Languages list saves a new sequence. They are tagged `post_install` and
+need a Chrome the Odoo image can find.
