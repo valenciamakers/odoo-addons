@@ -18,7 +18,7 @@ soon as more than one language is enabled.
   website are unaffected.
 
 Every backend user can use it, with no extra access rights required. With `Language Sequence
-<https://apps.odoo.com/apps/modules/19.0/vmk_language_sequence>`_ installed, the menu follows your
+<https://apps.odoo.com/apps/modules/20.0/vmk_language_sequence>`_ installed, the menu follows your
 custom order.
 
 **To display the language name** beside the globe in the menu bar, enable developer mode, go to
