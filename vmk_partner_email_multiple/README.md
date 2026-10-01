@@ -389,6 +389,12 @@ docker compose run --rm odoo odoo -d test -u vmk_partner_email_multiple \
 that also has `crm` and `hr_recruitment` installed, plus `helpdesk` where Enterprise is available.
 Core's own suites for all three pass with this module installed.
 
+**Browser tests.** `tests/test_tours.py` runs tours from `static/tests/tours/` in headless Chrome:
+adding an additional address from the tab, the swap button (its accessible name, its hidden label,
+its icon, and the exchange itself), the envelope link being hidden until its row is focused, finding
+a contact in the list search and in a many2one by an additional address. They are tagged
+`post_install` and run with the tests above, given a Chrome the Odoo image can find.
+
 Valencia Makers also runs these on a shared harness of its own; it is not needed to run the tests
 above.
 
