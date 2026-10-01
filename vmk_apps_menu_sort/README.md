@@ -187,6 +187,19 @@ typography is not. `./odev terms vmk_apps_menu_sort` therefore reports one diver
 carries it as a declared exception so the check still ends clean. Decided 22 September 2026, and
 still the only divergence on 18.0's catalogues.
 
+### Browser tests
+
+`tests/test_tours.py` drives the order in a real browser, since the web client decides it last. The
+tests add four apps of their own, with an accent and a lowercase initial among them, so the result
+does not depend on what is installed, and each tour works out the expected order from the names on
+screen. Enterprise: the home menu is alphabetical with Apps and Settings last, a stored
+`homemenu_config` wins over it, and the **Reset per-user app grid order** logic hands the module's
+order back (the control). Community: the navbar dropdown is alphabetical, and a bare `/odoo` opens
+its first app. Either edition: in Spanish the order follows the translated names, with Apps still
+ahead of Settings. Each test skips itself on the edition it does not apply to. The tours are the
+19.0 ones unchanged apart from the script header: the home menu's, the navbar's and the user
+settings' markup and API match on 18.
+
 ### Requirements
 
 Odoo 18. Depends on `base` only. Both overridden methods are defined there, and `res.users.settings`

@@ -4,12 +4,15 @@
 {
     "name": "Apps Menu Sort",
     "summary": "Alphabetical order for the apps menu, with Apps and Settings at the end",
-    "version": "18.0.1.0.1",
+    "version": "18.0.1.0.2",
     "author": "Valencia Makers",
     "license": "LGPL-3",
     "category": "Technical",
     "depends": ["base"],
     "data": ["data/ir_actions_server.xml"],
+    "assets": {
+        "web.assets_tests": ["vmk_apps_menu_sort/static/tests/tours/**/*"],
+    },
     "images": ["static/description/cover.png"],
     "installable": True,
     "application": False,
