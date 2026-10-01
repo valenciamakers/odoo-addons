@@ -138,3 +138,9 @@ cd "../Tech Stack/odoo-dev"
 ./odev install vmk_event_host
 ./odev test vmk_event_host
 ```
+
+**Browser tests.** `tests/test_tours.py` runs tours from `static/tests/tours/` in headless Chrome:
+the hosts summary reads in the lines' own order and opens the Hosts tab, adding a host from the tab,
+dragging a line by its handle reorders the hosts and the summary, and the events list is searched
+and grouped by host (an event with two hosts appears under both). They are tagged `post_install` and
+run with the tests above, given a Chrome the Odoo image can find.
