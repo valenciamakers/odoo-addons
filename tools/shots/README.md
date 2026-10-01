@@ -10,9 +10,9 @@ where a recipe needs one. Recipes add their own capture-only CSS, such as hiding
 field.
 
 **The tools serve the Private repo's modules too.** `tools/repos.py` finds a module, and its icon,
-cover, and recipe sources, in this repo or in `../Odoo Addons - Private`, whose `tools/` keeps the
-same layout. Those sources stay there because they describe modules we do not publish; a Private
-recipe imports `shots.py` from here.
+cover, and recipe sources, in this repo or in `../Odoo Addons - Private (20.0)`, whose `tools/`
+keeps the same layout. Those sources stay there because they describe modules we do not publish; a
+Private recipe imports `shots.py` from here.
 
 ## What the recipes need
 
