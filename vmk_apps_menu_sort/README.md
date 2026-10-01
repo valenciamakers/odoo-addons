@@ -15,7 +15,7 @@ Odoo lists the apps in the main menu in whatever order their `sequence` values h
 is a number each app's own module picked for itself. This module sorts them alphabetically instead,
 keeping **Apps** and **Settings** at the end where Odoo conventionally puts them.
 
-Verified on a database with six apps installed:
+Checked on a database with six apps installed, before the browser tests below:
 
 ```
 stock  : Discuss, Calendar, Contacts, CRM, Website, Inventory, Apps, Settings
@@ -185,6 +185,17 @@ re-running the export drops them.
 This module writes `Arranjament d'usuari`. Taking core's wording is the rule here; taking its
 typography is not. `./odev terms vmk_apps_menu_sort` therefore reports one divergence by design, and
 carries it as a declared exception so the check still ends clean. Decided 22 September 2026.
+
+### Browser tests
+
+`tests/test_tours.py` drives the order in a real browser, since the web client decides it last. The
+tests add four apps of their own, with an accent and a lowercase initial among them, so the result
+does not depend on what is installed, and each tour works out the expected order from the names on
+screen. Enterprise: the home menu is alphabetical with Apps and Settings last, a stored
+`homemenu_config` wins over it, and the **Reset per-user app grid order** logic hands the module's
+order back (the control). Community: the navbar dropdown is alphabetical, and a bare `/odoo` opens
+its first app. Either edition: in Spanish the order follows the translated names, with Apps still
+ahead of Settings. Each test skips itself on the edition it does not apply to.
 
 ### Requirements
 
