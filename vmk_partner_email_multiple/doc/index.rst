@@ -33,6 +33,10 @@ their addresses. **Merging two contacts** keeps both sets of addresses in the re
 
 **Changelog**
 
+*19.0.1.2.2 (1 October 2026)*
+
+- Browser tests added. No change in behaviour.
+
 *19.0.1.2.1 (28 September 2026)*
 
 - Merging contacts no longer leaves the surviving contact with the same address twice, when two
