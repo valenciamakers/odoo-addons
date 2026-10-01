@@ -797,6 +797,10 @@ bumping for one makes the version stop meaning anything. The test is whether a f
 changed — Python, XML, JS, SCSS, CSV, or the manifest itself. A docstring counts, because it lives
 in a file Odoo loads; a README does not.
 
+**Nor does a change to the tests alone.** A fix under `tests/` or `static/tests/` changes nothing an
+installed module does, so the version stays where it is: the same build runs before and after.
+Decided 1 October 2026.
+
 **Every module here is LGPL-3**, the licence Odoo's own modules carry. It is an exact member of the
 `Selection` on `ir.module.module`, so the manifest string is `"license": "LGPL-3"`, with the text in
 a `LICENSE` file beside the manifest. Decided 24 September 2026.
