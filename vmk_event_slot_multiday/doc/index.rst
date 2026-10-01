@@ -50,6 +50,10 @@ A multi-day slot is named by its range, for example *9 Oct 2026, 18:00 - 11 Oct 
 
 **Changelog**
 
+*20.0.1.0.1 (1 October 2026)*
+
+- The browser test of the slot form also checks that it shows the event's own time. No change in behaviour.
+
 *20.0.1.0.0 (30 September 2026)*
 
 - First release for Odoo 20, ported from 19.0.1.0.1. No change in behaviour, apart from the slot form: Odoo 20's own Date row is hidden, so the date is not shown twice.

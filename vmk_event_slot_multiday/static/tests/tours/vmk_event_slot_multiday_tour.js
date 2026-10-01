@@ -58,7 +58,20 @@ const dayCell = (isoDate) => `.o_calendar_widget .fc-day[data-date="${isoDate}"]
 registry.category("web_tour.tours").add("vmk_event_slot_multiday_edit_range", {
     steps: () => [
         {
-            content: "The slot form shows the range widget",
+            // 18:00 in New York is 22:00 in the test browser's UTC: showing
+            // the viewer's own time instead of the event's would read 22:00.
+            content: "The slot form shows the range in the event's time",
+            trigger: ".o_form_view .o_field_vmk_event_slot_daterange .o_daterange_start",
+            run() {
+                // A button on a saved record, reading in the language's own clock.
+                const shown = this.anchor.value || this.anchor.textContent;
+                if (!/\b(0?6:00(:00)?\s?PM|18:00(:00)?)/i.test(shown)) {
+                    throw new Error(`The range starts "${shown}", not at 18:00 as in New York`);
+                }
+            },
+        },
+        {
+            content: "Open the range widget's picker",
             trigger: ".o_form_view .o_field_vmk_event_slot_daterange .o_daterange_start",
             run: "click",
         },
