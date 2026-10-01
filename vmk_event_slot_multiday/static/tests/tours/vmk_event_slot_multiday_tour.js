@@ -9,6 +9,40 @@ import * as hoot from "@odoo/hoot-dom";
 // refuses to act on; a selector starting with `body` skips that check.
 const PICKER = "body .o_popover .o_datetime_picker";
 
+const SLOT_COUNT = "button[name=action_open_slot_calendar]";
+
+/**
+ * Open the slot calendar from the event's slot count. Core draws the count
+ * beside Multiple Slots, on the form itself, but another module may move the
+ * pair onto a tab, and a notebook only draws the tab that is open: so where
+ * the count is not on show, each tab is opened in turn until it is.
+ */
+const openSlotCalendar = [
+    {
+        content: "Find the slot count, on whichever tab holds it",
+        trigger: ".o_form_view .o_notebook",
+        async run() {
+            const onShow = () =>
+                [...document.querySelectorAll(SLOT_COUNT)].some((button) => button.offsetParent);
+            for (const tab of [null, ...document.querySelectorAll(".o_notebook .nav-link")]) {
+                if (tab) {
+                    await hoot.click(tab);
+                    await hoot.animationFrame();
+                }
+                if (onShow()) {
+                    return;
+                }
+            }
+            throw new Error("The event form shows no slot count on any tab");
+        },
+    },
+    {
+        content: "Open the slot calendar from the event",
+        trigger: `${SLOT_COUNT}:visible`,
+        run: "click",
+    },
+];
+
 /**
  * With the range picker open: click a first day, then a last one, set both
  * times, and close it with Apply. Days are the day-of-month numbers of the
@@ -92,11 +126,7 @@ registry.category("web_tour.tours").add("vmk_event_slot_multiday_edit_range", {
 // selecting it. The test runs this tour in a narrow browser.
 registry.category("web_tour.tours").add("vmk_event_slot_multiday_calendar_new", {
     steps: () => [
-        {
-            content: "Open the slot calendar from the event",
-            trigger: "button[name=action_open_slot_calendar]:visible",
-            run: "click",
-        },
+        ...openSlotCalendar,
         {
             // The action opens on its list on a small screen.
             content: "Open the view switcher",
@@ -143,11 +173,7 @@ registry.category("web_tour.tours").add("vmk_event_slot_multiday_calendar_new", 
 // Select days in the calendar and add one single-day slot to each.
 registry.category("web_tour.tours").add("vmk_event_slot_multiday_calendar_multi_create", {
     steps: () => [
-        {
-            content: "Open the slot calendar from the event",
-            trigger: "button[name=action_open_slot_calendar]:visible",
-            run: "click",
-        },
+        ...openSlotCalendar,
         {
             content: "Select the 13th",
             trigger: dayCell("2026-10-13"),
