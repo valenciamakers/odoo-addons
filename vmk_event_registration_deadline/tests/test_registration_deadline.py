@@ -132,6 +132,26 @@ class TestRegistrationDeadline(TransactionCase):
         event.invalidate_recordset()
         self.assertTrue(event.event_registrations_open)
 
+    def test_a_multi_slot_event_closes_once_every_slot_is_past_the_deadline(self):
+        """Otherwise the page offers Register over a pop-up with no dates."""
+        self._set_default(24)
+        event = self._event(starts_in_hours=-1, length_hours=24 * 10, is_multi_slots=True)
+        self._slot(event, self.now + timedelta(hours=2))
+        self._slot(event, self.now + timedelta(hours=20))
+        event.invalidate_recordset()
+        self.assertFalse(event.event_registrations_open)
+        # One slot beyond the deadline keeps the event open.
+        self._slot(event, self.now + timedelta(days=5))
+        event.invalidate_recordset()
+        self.assertTrue(event.event_registrations_open)
+
+    def test_a_multi_slot_event_without_a_deadline_is_cores(self):
+        """With the rule off, slots about to start change nothing."""
+        event = self._event(starts_in_hours=-1, length_hours=24 * 10, is_multi_slots=True)
+        self._slot(event, self.now + timedelta(hours=2))
+        event.invalidate_recordset()
+        self.assertTrue(event.event_registrations_open)
+
     def test_a_slot_is_retired_by_the_deadline_not_just_its_start(self):
         self._set_default(24)
         event = self._event(starts_in_hours=-1, length_hours=24 * 10, is_multi_slots=True)
