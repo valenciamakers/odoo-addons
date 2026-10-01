@@ -1106,8 +1106,13 @@ that `./odev test` runs with the rest:
 - **Prove a negative with a control.** A tour asserting that something does _not_ happen (a drag
   that must not move an icon) passes just as well if the tour never managed to drag at all, so run
   the same steps with the behaviour enabled and show that they do move it.
+- **Break the code and watch the tour fail**, once, when writing it. A tour that types explicit
+  times into the slot range passed with the widget's timezone conversion removed, until it also
+  checked the time the form showed.
 - **Check computed styles and the rendered DOM,** not a screenshot, in a tour step or by hand: a
   screenshot cannot show a cursor or an accessible name.
+- **Odoo's JavaScript is indented four spaces.** Do not run Prettier over a tour file; this
+  repository's config is for Markdown and YAML.
 - **They need a browser in the test image.** The official `odoo` image has none, and without one
   every tour skips, which reads as a pass. A local test setup has to add Chrome and
   `websocket-client`, and set `ODOO_BROWSER_BIN`.
