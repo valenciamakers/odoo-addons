@@ -254,6 +254,11 @@ checked there yet.
 
 **Models**
 
+- **A new record's id cannot be ordered on 18.** `NewId` (`odoo/api.py`) defines no `__lt__`, where
+  19's does, so sorting on `(sequence, id)` raises `TypeError` as soon as two unsaved records tie —
+  and during a form's onchange every line of a one2many is a new record, saved or not. Break the tie
+  with `record._origin.id or float("inf")`. `vmk_event_host` failed this way on adding a second
+  host, in code that is correct on 19; a tour found it on 1 October 2026.
 - An inherit-only module needs **no `security/ir.model.access.csv`** — ACLs are per model, and
   adding a field to an existing model inherits them. Generators emit one anyway; delete it.
 - `models.Constraint()` replaces `_sql_constraints`. On 18: not yet introduced — use
@@ -994,14 +999,61 @@ consistent — event dates that disagree with their sessions, an end date that d
 count — refuse it with a `ValidationError` saying what to do instead, rather than silently picking a
 winner. A guess that goes wrong surfaces later as someone else's confusing error. Added 2026-09-24.
 
-**Test twice: automated, and in a real browser.** Every module carries tests; that is the floor, not
-the ceiling. Anything touching a view, a widget, or a stylesheet also gets driven in a real browser
-before it is called done, because a whole class of failure never reaches a Python test. Two from
-this repo: a `cursor` rule that lost silently to a `cursor-pointer` utility core declares
-`!important`, and a template inheritance whose xpath is resolved **client-side**, so a wrong one
-fails in the console rather than raising on install. Both looked correct in the source, both passed
-every test, and both were wrong on screen. Check computed styles and the rendered DOM rather than
-trusting a screenshot — a screenshot cannot show you a cursor or an accessible name.
+**Test twice: in Python, and in a browser, and automate both.** Every module carries tests; that is
+the floor, not the ceiling. Anything touching a view, a widget, or a stylesheet fails in ways no
+Python test sees. Two from this repo: a `cursor` rule that lost silently to a `cursor-pointer`
+utility core declares `!important`, and a template inheritance whose xpath is resolved
+**client-side**, so a wrong one fails in the console rather than raising on install. Both looked
+correct in the source, both passed every Python test, and both were wrong on screen.
+
+**Browser behaviour is a tour test, not a manual check** (decided 1 October 2026). A manual check is
+done once and never again; the next Odoo build breaks it silently. So what a person would click
+through to call a module done — the widget, the dialog, the menu, the accessible name — is a tour
+that runs with the module's other tests. On this branch the first tours found a real fault the same
+day: adding a host failed on 18 in code that was correct on 19.
+
+- **The tour drives, Python checks.** `static/tests/tours/<module>_tour.js` registers each tour in
+  `registry.category("web_tour.tours")`, under a name starting with the module's, and the manifest
+  adds `"web.assets_tests": ["<module>/static/tests/tours/**/*"]`. `tests/test_tours.py` holds
+  `TestTours(HttpCase)`, tagged `post_install` and `-at_install`: it creates the data, calls
+  `self.start_tour(url, tour, login=…)`, then asserts the records the tour should have produced.
+- **A tour fails on a console error**, so a broken client-side xpath or an Owl error fails the run
+  even where no step checks for it.
+- **Wait on triggers, never on time.** Tours are the flakiest tests we own: each step waits for its
+  trigger, and a flow that needs a pause needs a better trigger.
+- **Prove a negative with a control.** A tour asserting that something does _not_ happen (a drag
+  that must not move an icon) passes just as well if the tour never managed to drag at all, so run
+  the same steps with the behaviour enabled and show that they do move it.
+- **Break the code and watch the tour fail**, once, when writing it.
+- **Check computed styles and the rendered DOM,** not a screenshot, in a tour step or by hand: a
+  screenshot cannot show a cursor or an accessible name.
+- **They need a browser in the test image.** The official `odoo` image has none, and without one
+  every tour skips, which reads as a pass. A local test setup has to add Chrome and
+  `websocket-client`, and set `ODOO_BROWSER_BIN`. Count the `tour succeeded` lines in the log: a
+  browser that is slow to start skips the tour too, and the run still says `0 failed`.
+- **Odoo's JavaScript is indented four spaces.** Do not run Prettier over a tour file; this
+  repository's config is for Markdown and YAML.
+
+**Driving Odoo 18 in a tour, learned writing ours** (1 October 2026). Most of what a 19 tour uses
+exists on 18 unchanged: `run: "click"`, `run: "edit …"`, `expectUnloadPage`, the `@odoo/hoot-dom`
+helpers, and the `:visible`, `:contains`, `:eq()`, `:has()` and `:value()` selectors. What differs:
+
+- **`stepUtils` comes from `@web_tour/tour_service/tour_utils`**, not `@web_tour/tour_utils`.
+- **`drag_and_drop` is called on the helpers**,
+  `async run(helpers) { await helpers.drag_and_drop(…) }`: destructured, it loses the anchor it
+  reads.
+- **Search suggestions are `.o_searchview_autocomplete .o_menu_item`**; the group-by menu's items
+  are `.o-dropdown-item` as on 19.
+- **`stepUtils.discardForm()` can time out on a new record opened by URL**, which ends on the list
+  or on a blank form depending on timing. Wait for either.
+- **`opacity: 0` counts as not visible.** Assert a hover-revealed control with `:not(:visible)`, and
+  reveal it by calling `focus()` from a function `run`.
+- **A tour ending on an unsaved form fails** ("dirty form view"). Save or discard first.
+- **A patch a component reads in `setup()`** takes effect only in a new instance: reopen the view
+  before a control step that changes it.
+
+What stays manual is judging how something looks: store screenshots, and whether a layout reads
+well.
 
 Write tests that assert **behaviour, not ambient state**. A test asserting freshly-installed
 ordering fails on any database whose users have used the feature; re-run the seeding hook inside the
