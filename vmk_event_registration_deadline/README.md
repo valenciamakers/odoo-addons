@@ -108,6 +108,22 @@ Nine tests: the default, the per-event override, an override of zero, a ticket's
 winning, and a ticket without one not winning. The 19.0 module's two slot tests are gone with
 `event_slot.py` — see [What Odoo 18 does not have](#what-odoo-18-does-not-have).
 
+### Browser tests
+
+`tests/test_tours.py` drives a real browser through `static/tests/tours/`. A visitor on the event
+page is shown Register or core's _Registrations Closed_ notice, each case beside its opposite: past
+and before the deadline, an event's own deadline looser and tighter than the global one, and a
+global switch that is off. In the backend, the setting and the per-event field are set and saved
+through the interface, and Python then checks the stored values and `event_registrations_open`.
+Every date is relative to the run. The 19.0 tours for multi-slot events (the registration pop-up
+offering a later slot, and an event closing once every slot is past the deadline) are not here, for
+the reason in [What Odoo 18 does not have](#what-odoo-18-does-not-have).
+
+**One thing the tests do for 18.** With `website_event` installed, core's event onboarding tour
+starts on its own for the admin, and one of its steps carries a key (`noPrepend`) that 18's step
+schema rejects, which fails whatever tour is running. The test class switches the admin's onboarding
+off, as core's own UI tests do.
+
 ### Licence
 
 LGPL-3, as the whole repo is. See `LICENSE`.

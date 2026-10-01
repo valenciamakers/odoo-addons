@@ -35,6 +35,10 @@ one.
 
 **Changelog**
 
+*18.0.1.0.1 (1 October 2026)*
+
+- Browser tests added. No change in behaviour.
+
 *18.0.1.0.0 (28 September 2026)*
 
 - First release for Odoo 18, ported from 19.0.1.0.3. Odoo 18 has no multi-slot events, so this
