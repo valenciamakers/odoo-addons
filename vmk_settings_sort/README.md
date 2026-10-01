@@ -84,9 +84,25 @@ Neither sort can be proved against live data:
   without an HTTP request, and a `TransactionCase` has none.
 
 So both orderings are tested against fixtures built in the test file, where every element is known,
-and the live checks confirm only that the overrides are wired in. The Technical path was then
-verified by hand over an authenticated HTTP session in developer mode, which is the one way to
-exercise it end to end.
+and the live checks confirm only that the overrides are wired in.
+
+### Browser tests
+
+`tests/test_tours.py` drives a real browser, which is the one way to exercise the Technical path end
+to end: it needs an HTTP session in developer mode. The tests add four Settings sections of their
+own, with an accent and a lowercase initial among them, so the result does not depend on what is
+installed. Each tour reads the order off the screen and compares it with the promise, using its own
+copy of the comparison, never a list of apps.
+
+- **The sidebar**: General Settings first, the rest in folded-label order, and a click on an entry
+  (the second, the last, General Settings) opens that section's own settings.
+- **Another language**: one of the added sections has a Spanish name that sorts elsewhere, and with
+  the user switched to Spanish the sidebar follows it.
+- **Technical, in developer mode** (`?debug=1`): the groupings are alphabetical, and the entries
+  inside each keep `sequence, id`.
+- **Technical, without developer mode**: the menu is absent, and the sidebar is still sorted.
+
+Tours need a browser in the test image.
 
 ```bash
 odoo -d <db> -u vmk_settings_sort --test-enable --test-tags /vmk_settings_sort --stop-after-init

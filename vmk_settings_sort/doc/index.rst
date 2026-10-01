@@ -29,6 +29,10 @@ the original orders return.
 
 **Changelog**
 
+*19.0.1.1.3 (1 October 2026)*
+
+- Browser tests added. No change in behaviour.
+
 *19.0.1.1.2 (30 September 2026)*
 
 - Fewer database queries on every backend page load: the Technical menu is found without
