@@ -4,7 +4,7 @@
 {
     "name": "Multi-Day Event Slots (Website)",
     "summary": "Allow event slots to span multiple days, displayed on the website too",
-    "version": "19.0.1.0.1",
+    "version": "19.0.1.0.2",
     "author": "Valencia Makers",
     # LGPL-3, as vmk_event_slot_multiday is: see its README.
     "license": "LGPL-3",
@@ -17,6 +17,9 @@
     "assets": {
         "web.assets_frontend": [
             "vmk_website_event_slot_multiday/static/src/interactions/*.js",
+        ],
+        "web.assets_tests": [
+            "vmk_website_event_slot_multiday/static/tests/tours/**/*",
         ],
     },
     "images": ["static/description/cover.png"],

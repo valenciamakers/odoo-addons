@@ -73,6 +73,18 @@ cd "../Tech Stack/odoo-dev"
 ./odev test vmk_website_event_slot_multiday
 ```
 
-The tests cover the translations only. The patch itself needs a browser, which the `odoo:19` image
-has not, so it was checked by hand in Chrome against a Friday-to-Sunday slot and a one-day slot on
-the same event.
+The patch needs a browser, and `tests/test_tours.py` drives one, as a public visitor, through
+`static/tests/tours/vmk_website_event_slot_multiday_tour.js`. The event is in `America/New_York` and
+the test browser in UTC, and its slots are dated relative to the day the suite runs, since visitors
+are offered only slots still ahead. The test passes the slot and the days it expects in the URL's
+fragment, because the event page redirects to its `/register` page and drops the query string.
+
+- **`vmk_website_event_slot_multiday_multiday_slot`** clicks Register, picks a Friday-to-Sunday
+  slot, and checks that the "Selected Date" line carries a weekday and day of the month at both
+  ends. It fails with the patch disabled, reading `Fri, Dec 4, 2026, 6:00 PM - 1:00 PM`.
+- **`vmk_website_event_slot_multiday_one_day_slot`** does the same for a one-day slot, whose line
+  must stay core's: a date and time, then the end as a time alone. It fails if the patch is applied
+  to every slot.
+
+The line is matched loosely on its hours, so the tours do not pin the event's timezone: a line
+formatted in the visitor's zone would be caught only for a slot that crosses midnight there.

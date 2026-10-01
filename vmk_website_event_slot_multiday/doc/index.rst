@@ -51,6 +51,10 @@ A multi-day slot is named by its range, for example *9 Oct 2026, 18:00 - 11 Oct 
 
 **Changelog**
 
+*19.0.1.0.2 (1 October 2026)*
+
+- Browser tests added for the registration modal. No change in behaviour.
+
 *19.0.1.0.1 (24 September 2026)*
 
 - Credited to Valencia Makers. No change in behaviour.
