@@ -32,6 +32,10 @@ value *True*. It applies to every user, and only appears on wide screens.
 
 **Changelog**
 
+*18.0.1.0.1 (1 October 2026)*
+
+- Browser tests added. No change in behaviour.
+
 *18.0.1.0.0 (28 September 2026)*
 
 - First release for Odoo 18, ported from 19.0.1.1.1. No change in behaviour.

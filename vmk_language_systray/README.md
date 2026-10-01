@@ -240,6 +240,13 @@ docker compose run --rm odoo odoo -d test -u vmk_language_systray \
 `-u` on a module that is not installed does nothing and reports nothing, so install first and check
 `ir_module_module.state` rather than trusting a clean log.
 
+**Browser tests.** `tests/test_tours.py` drives the dropdown in headless Chrome, with the tours in
+`static/tests/tours/`: the item and its globe icon are there with the aria-label
+`Language: <active language>`; opening it lists every active language as a `menuitemradio`, the
+active one `aria-checked="true"` and the rest `"false"`; choosing another reloads the backend in it
+and the user's `lang` is changed; and with one language active the item is absent. They are tagged
+`post_install` and run with the tests above, given a Chrome the Odoo image can find.
+
 Valencia Makers also runs these on a shared harness of its own; it is not needed to run the tests
 above.
 
