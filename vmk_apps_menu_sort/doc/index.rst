@@ -30,6 +30,10 @@ different orders. Case is ignored and accented names are sorted correctly, so *Ã
 
 **Changelog**
 
+*20.0.1.0.1 (1 October 2026)*
+
+- Browser tests added. No change in behaviour.
+
 *20.0.1.0.0 (30 September 2026)*
 
 - First release for Odoo 20, ported from 19.0.1.1.1. No change in behaviour.
