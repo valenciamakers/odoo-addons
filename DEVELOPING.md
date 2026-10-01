@@ -177,6 +177,14 @@ changelog of Odoo 20.
   own ticket rule is `,crud,"[('event_id.company_id', 'in', company_ids + [False])]"` with no group.
   **A test run as the superuser never meets these rows**, so test access as real users. Verified on
   20 with `vmk_event_host`.
+- **Internal users hold `base.group_everyone` too**: it is implied by the public, portal, and
+  internal groups alike. So a row for it reaches employees, where 19's pair of public and portal
+  rows did not, and core pairs each such row with one for `base.group_user`: `website_event` gives
+  everyone read access to a published event's slots and internal users read access to every slot.
+  Mirror the pair for a record a website page reads, or the page fails for a signed-in employee
+  outside the app's own groups. Ask about a model's own rows with `records.check_access("write")`
+  rather than by writing: a write can be refused by another record it touches, which proves nothing
+  about the rows under test. Verified on 20 with `vmk_website_event_sessions`.
 - **`ir.config_parameter` is typed.** `get_param` and `set_param` are gone; read and write with
   `get_bool`, `get_int`, `get_float`, `get_str`, and their `set_*` counterparts. A
   `res.config.settings` field with `config_parameter=` needs no change: `res_config.py` reads and
@@ -185,8 +193,35 @@ changelog of Odoo 20.
 - **Font Awesome is no longer loaded in the backend.** Core's icons are `oi` with `data-icon`
   (Material Symbols), and a view button's `icon` names a Material Symbols glyph. An `fa` class in a
   backend template renders nothing, including the feature icons of a module's `index.html` on the
-  backend's Apps page (seen on 20: no glyph, zero width). The website still uses Font Awesome.
-- **pytz is gone from core** in favour of `zoneinfo`, and from `requirements.txt`.
+  backend's Apps page (seen on 20: no glyph, zero width). **The website loads none either**: no
+  bundle names `libs/fontawesome`, and `website_event`'s templates carry `oi` icons throughout, the
+  arrow between two times being `data-icon="east"`. Corrected 1 October 2026; this entry said the
+  website still used Font Awesome.
+- **pytz is gone from core** in favour of `zoneinfo`, and from `requirements.txt`. A zone's name is
+  `ZoneInfo.key`, where pytz had `.zone`, and a naive local time takes its zone with
+  `value.replace(tzinfo=ZoneInfo(name))`, as core's `event.slot` does, where pytz wanted
+  `localize()`. Two things still depend on pytz, which the image keeps installed. vobject cannot
+  name `datetime.UTC`, so an iCalendar stamp takes `ZoneInfo("UTC")`, as core's own does, and the
+  file names a zone by an id vobject picks (`CET` for Europe/Madrid) with a `VTIMEZONE` defining it:
+  test such a file by reading it back and comparing instants, not by its text. And QWeb's datetime
+  widget formats through babel, which uses pytz where it finds it, and pytz knows no summer time
+  after 2037: a fixture dated 2099 is stored one way and printed an hour off in summer. Build the
+  expected text with `ir.qweb.field.datetime`'s own `value_to_html`. Verified on 20 with
+  `vmk_event_sessions`.
+- **Mail tracking was rewritten** as `mail.track.mixin` (`mail/models/mail_track_mixin.py`).
+  `_message_track` is gone, so an override of it is never called and raises nothing: the tracking
+  simply returns. The per-record hook is `_mail_track(tracked_fields_get, initial_values)`, called
+  at precommit from `_track_finalize`, and filtering `tracked_fields_get` there keeps a field out of
+  the chatter. There is no `mail.tracking.value` model either: a tracked change is written into its
+  message's body, as `old → <b>new</b> <i>(Field Label)</i>`, which is where a test has to look.
+  Verified on 20.
+- **`event.event` renamed two things an extension may call**: `_get_external_description` is
+  `_get_ics_description`, and `address_inline` is `contact_address_inline`, a related field of the
+  venue that is empty for a venue with no address, so core falls back to the venue's name.
+- **Core's event form has two buttons named `action_open_slot_calendar`**: the count beside Multiple
+  Slots, as on 19, and a new Slots button among those at the top. An extension anchoring on the name
+  alone lands on the first, the one at the top; reach the other from the field beside it,
+  `//field[@name='is_multi_slots']/following-sibling::div/button[…]`.
 - **`Registry.clear_cache` and `Registry.signal_changes` are gone.** Invalidation is
   `env.invalidate_ormcache(name)`, and a commit signals other workers by itself
   (`orm/environments.py`, `committing`), from a shell as much as from a request. `tools.ormcache`
@@ -209,8 +244,12 @@ changelog of Odoo 20.
 - **A binary field refuses `bytes`** (`orm/fields_binary.py`): write a `BinaryValue` such as
   `BinaryBytes`, or base64 text. `fields.Image` too. Found on 20 in a test writing a flag.
 - **`float_time` displays a duration**, `1h 30m`, where 19 showed `01:30`. Every one of core's 124
-  uses takes the new look, and `options="{'numeric': true}"` would bring the old one back. Help text
-  saying "set to 00:00" is now wrong.
+  uses takes the new look, and `options="{'numeric': true}"` brings the old one back. Help text
+  saying "set to 00:00" is now wrong. **A time of day takes `numeric`**, or 18:00 reads "18h": core
+  does so for its one clock time, the POS closing hour, though not for a slot's hours.
+- **A view's `options` are not checked when the view loads.** A malformed value, a stray character
+  after the closing brace, installs and upgrades without a word and passes every Python test; the
+  field then fails in the browser. Only a tour, or a look, catches it.
 - **`http_interface` defaults to `127.0.0.1`**, not every interface. Set it to `0.0.0.0` in a
   container's config, or the published port reaches nothing.
 
@@ -1145,6 +1184,19 @@ rather than guessing it; these are the parts that cost time:
   fragment. Website slots are offered only in the future, so date them from the run day.
 - **Dates format per the browser's locale** (Luxon), so match a displayed date loosely, or compute
   it in Python with the same format.
+- **A notebook tab is a button**, `.o_notebook .nav-link[name=…]`, where 19 drew a link, and a
+  list's "Add a line" is a button too, `.o_field_x2many_list_row_add button`.
+- **A reference field is two inputs**, the kind of record and then the record, so name the second:
+  `div[name=…] .o-autocomplete--input`.
+- **Save an x2many line before adding the next**, where the line's value comes from an autocomplete.
+  Asked for straight after a pick, "Add a line" adds nothing while the pick is still being applied,
+  and the next pick lands on the same row. A saved list is also redrawn in an order of its own, so
+  check its lines by content and leave which came first to Python.
+- **Bootstrap ignores a request to close a modal that is still fading in**, and one to reopen it
+  while it fades out. Wait for `.modal.show.modal_shown` before closing, and for
+  `body:not(.modal-open)` before reopening. A tour gets through a modal faster than its fade.
+- **A website list page names every event twice**: 20 lists them again in the page's head, as
+  structured data. Find a card by its element, not by the first mention of its name.
 
 What stays manual is judging how something looks: store screenshots, and whether a layout reads
 well.
