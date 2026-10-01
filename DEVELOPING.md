@@ -245,8 +245,10 @@ changelog of Odoo 20.
   `BinaryBytes`, or base64 text. `fields.Image` too. Found on 20 in a test writing a flag.
 - **`float_time` displays a duration**, `1h 30m`, where 19 showed `01:30`. Every one of core's 124
   uses takes the new look, and `options="{'numeric': true}"` brings the old one back. Help text
-  saying "set to 00:00" is now wrong. **A time of day takes `numeric`**, or 18:00 reads "18h": core
-  does so for its one clock time, the POS closing hour, though not for a slot's hours.
+  saying "set to 00:00" is now wrong. **Core leaves its times of day that way too**: a slot's hours
+  read "18h" on its form and list, and ours follow, though `numeric` is what core's POS closing hour
+  uses. We tried `numeric` on session hours and took it out: follow core's pattern for the same kind
+  of field, and change when core does.
 - **A view's `options` are not checked when the view loads.** A malformed value, a stray character
   after the closing brace, installs and upgrades without a word and passes every Python test; the
   field then fails in the browser. Only a tour, or a look, catches it.
