@@ -416,5 +416,4 @@ chosen to prevent, someone shipping a closed copy of this code as their own prod
 here too.
 
 The OCA makes the same distinction, using LGPL-3 where modules are expected to be extended.
-`web_chatter_position` from `OCA/web`, vendored in `../Odoo Addons - External`, is one of theirs
-under LGPL-3 for this reason.
+`web_chatter_position` from `OCA/web` is one of theirs under LGPL-3 for this reason.

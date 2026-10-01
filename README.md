@@ -48,8 +48,9 @@ exist only there.
 
 ## Developing
 
-A two-service Compose file is enough to run these modules — Postgres 17 and `odoo:18.0` with the
-repo root mounted at `/mnt/extra-addons`:
+A two-service Compose file of your own is enough to run these modules — Postgres 17 and `odoo:18.0`
+with the repo root mounted at `/mnt/extra-addons`. The repo does not ship one. With services named
+`db` and `odoo`:
 
 ```bash
 docker compose up -d db
