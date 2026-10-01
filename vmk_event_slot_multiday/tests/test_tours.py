@@ -73,6 +73,9 @@ class TestTours(HttpCase):
         self.assertEqual(slot.end_datetime, fields.Datetime.to_datetime("2026-10-18 15:15:00"))
 
     def test_multi_create_one_slot_per_selected_day(self):
+        calendar = self.env["event.slot"].get_view(view_type="calendar")["arch"]
+        if "multi_create_view" not in calendar:
+            self.skipTest("Another module turned off the slot calendar's multi-create")
         self.start_tour(
             self._event_url(), "vmk_event_slot_multiday_calendar_multi_create", login="admin"
         )

@@ -158,6 +158,8 @@ class TestSlotMultiday(TransactionCase):
         arch = self.env["event.slot"].get_view(
             view_id=self.env.ref("event.view_event_slot_form").id
         )["arch"]
-        dates = etree.fromstring(arch).xpath("//field[@name='date']")
+        # The form's own field: a list another module embeds in the form may
+        # have a date column of its own.
+        dates = etree.fromstring(arch).xpath("//field[@name='date'][not(ancestor::field)]")
         self.assertEqual(len(dates), 1)
         self.assertEqual(dates[0].get("invisible"), "1")
