@@ -119,7 +119,7 @@ as the host `help` text, are ours to write.
 **One term differs from core 18 in `es`, deliberately.** The field labelled _Host_ keeps
 "Anfitrión". Core 18's only Spanish "Host" is Enterprise's `frontdesk` app, an unrelated sense, and
 its catalogue reads `"Anfitrión "` with a stray trailing space, which core 19 removed; ours matches
-19's.
+19's, and is declared as an exception for 18 in our catalogue check.
 
 **The module's own name and summary are hand-maintained**, in the POT as well as both PO files.
 `ir_module.py` registers every module record as `base.module_<name>`, so the exporter attributes

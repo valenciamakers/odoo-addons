@@ -183,8 +183,9 @@ re-running the export drops them.
 **One term departs from core on purpose.** Core's Catalan for _User Settings_ is
 `Arranjament d' usuari` — with a space after the apostrophe — in twelve modules including `base`.
 This module writes `Arranjament d'usuari`. Taking core's wording is the rule here; taking its
-typography is not. It is this module's one deliberate divergence from core's catalogues. Decided 22
-September 2026, and still the only divergence on 18.0's catalogues.
+typography is not. It is this module's one deliberate divergence from core's catalogues, declared as
+an exception in our catalogue check. Decided 22 September 2026, and still the only divergence on
+18.0's catalogues.
 
 ### Browser tests
 
