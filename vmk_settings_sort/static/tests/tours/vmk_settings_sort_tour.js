@@ -55,12 +55,18 @@ function openTab(selector, name) {
                     key: helpers.anchor.dataset.key,
                     label: helpers.anchor.querySelector(".app_name").textContent.trim(),
                 };
+                // Mark the entry: the entry already selected, General Settings at
+                // first, satisfies a bare `.selected` before the click has rendered.
+                for (const tab of document.querySelectorAll("[data-vmk-clicked]")) {
+                    delete tab.dataset.vmkClicked;
+                }
+                helpers.anchor.dataset.vmkClicked = "1";
                 await helpers.click();
             },
         },
         {
             content: `The ${name} entry is selected and its own settings are shown`,
-            trigger: ".settings_tab .tab.selected",
+            trigger: ".settings_tab .tab.selected[data-vmk-clicked]",
             run() {
                 const selected = document.querySelector(".settings_tab .tab.selected");
                 expect(selected.dataset.key, clicked.key, "Selected entry");
