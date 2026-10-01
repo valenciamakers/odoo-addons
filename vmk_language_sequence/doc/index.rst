@@ -30,6 +30,10 @@ New languages you enable are added to the end of the list, and can be dragged in
 
 **Changelog**
 
+*19.0.1.2.1 (1 October 2026)*
+
+- Browser tests added. No change in behaviour.
+
 *19.0.1.2.0 (25 September 2026)*
 
 - With two variants of one language enabled, search engines are told to use the first language in

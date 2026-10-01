@@ -4,12 +4,17 @@
 {
     "name": "Language Sequence",
     "summary": "Reorder languages manually instead of alphabetically",
-    "version": "19.0.1.2.0",
+    "version": "19.0.1.2.1",
     "author": "Valencia Makers",
     "license": "LGPL-3",
     "category": "Website/Website",
     "depends": ["website"],
     "data": ["views/res_lang_views.xml"],
+    "assets": {
+        "web.assets_tests": [
+            "vmk_language_sequence/static/tests/tours/**/*",
+        ],
+    },
     "post_init_hook": "seed_language_sequence",
     "images": ["static/description/cover.png"],
     "installable": True,

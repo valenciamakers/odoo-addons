@@ -174,3 +174,10 @@ odoo -d <db> -u vmk_language_sequence --test-enable --test-tags /vmk_language_se
 
 Verified against `odoo:19` with English, Spanish, French, and Catalan enabled: reordering in the
 backend reordered the site selector live, without a server restart.
+
+**Browser tests.** `tests/test_tours.py` runs tours from `static/tests/tours/` in headless Chrome,
+with the sequences set to a non-alphabetical order: the order reaches the systray menu of
+`vmk_language_systray` (the tour needs that module's `.o_vmk_language_systray` markup, and is
+skipped without it), the website's language selector for a visitor and for a signed-in user, and
+dragging a handle in the Languages list saves a new sequence. They are tagged `post_install` and
+need a Chrome the Odoo image can find.
