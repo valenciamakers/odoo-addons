@@ -122,11 +122,11 @@ xpath.
 
 ### Translations
 
-`i18n/` carries `es` and `ca`, and `./odev terms vmk_event_host` reports both clean against core.
-Terms this module shares with core — _Event_, _Sequence_, _Company_, the ORM's own _Created by_ and
-_Last Updated on_ — take core's own `msgstr` out of `base`'s and `event`'s catalogues rather than
-being translated afresh, so the Hosts tab reads as part of the backend rather than introducing a
-second vocabulary. Strings core does not have, such as the host `help` text, are ours to write.
+`i18n/` carries `es` and `ca`, both checked term by term against core's catalogues. Terms this
+module shares with core — _Event_, _Sequence_, _Company_, the ORM's own _Created by_ and _Last
+Updated on_ — take core's own `msgstr` out of `base`'s and `event`'s catalogues rather than being
+translated afresh, so the Hosts tab reads as part of the backend rather than introducing a second
+vocabulary. Strings core does not have, such as the host `help` text, are ours to write.
 
 **The module's own name and summary** are entries of the POT and both PO files, referenced as
 `base.module_vmk_event_host` because `ir_module.py` registers every module record under `base`. Odoo
@@ -148,10 +148,14 @@ but **not** on AGPL-3, so AGPL here would leave that glue with no licence it cou
 
 ### Testing
 
+Against a local Odoo 20 with this repo on the addons path, as in
+[DEVELOPING.md](../DEVELOPING.md#testing-locally):
+
 ```bash
-cd "../Tech Stack/odoo-dev"
-./odev install vmk_event_host
-./odev test event --test-tags /event,/vmk_event_host
+docker compose run --rm odoo odoo -d test --init vmk_event_host \
+    --without-demo=all --stop-after-init
+docker compose run --rm odoo odoo -d test -u event \
+    --test-enable --test-tags /event,/vmk_event_host --stop-after-init
 ```
 
 The access tests act as a registration-desk user, as event users and managers, and as a manager of
@@ -163,5 +167,5 @@ another company, since a test run as the superuser never meets `security/ir.acce
 the tours in `static/tests/tours/vmk_event_host_tour.js`. They cover the summary button (hosts in
 their own order, its accessible name, and that clicking it opens the Hosts tab), adding a host line
 with a role, reordering lines by dragging the handle, and searching and grouping the event list by
-host. Each test checks the resulting records in Python. They need a browser, so they run in the
-harness image: `SERIES=20.0 ./odev test vmk_event_host`; a passing tour logs `tour succeeded`.
+host. Each test checks the resulting records in Python. They need a browser in the test image, and
+skip without one; a passing tour logs `tour succeeded`.

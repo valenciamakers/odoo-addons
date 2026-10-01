@@ -69,10 +69,14 @@ LGPL-3, as `vmk_event_slot_multiday` is; see its README.
 
 ### Testing
 
+Against a local Odoo 20 with this repo on the addons path, as in
+[DEVELOPING.md](../DEVELOPING.md#testing-locally):
+
 ```bash
-cd "../Tech Stack/odoo-dev"
-./odev install vmk_website_event_slot_multiday
-./odev test event --test-tags /event,/website_event,/vmk_event_slot_multiday,/vmk_website_event_slot_multiday
+docker compose run --rm odoo odoo -d test --init vmk_website_event_slot_multiday \
+    --without-demo=all --stop-after-init
+docker compose run --rm odoo odoo -d test -u event \
+    --test-enable --test-tags /event,/website_event,/vmk_event_slot_multiday,/vmk_website_event_slot_multiday --stop-after-init
 ```
 
 ### Browser tests
@@ -92,7 +96,6 @@ fragment, because the event page redirects to its `/register` page and drops the
 The line is matched loosely, since Luxon writes the month and the space before "PM" as the browser's
 locale sees fit.
 
-```bash
-cd "../Tech Stack/odoo-dev"
-./odev test vmk_website_event_slot_multiday
-```
+The tours run with the rest of the module's tests, by the command under Testing, and need a browser
+in the test image; without one every tour skips, which reads as a pass.
+[DEVELOPING.md](../DEVELOPING.md) says what to add.

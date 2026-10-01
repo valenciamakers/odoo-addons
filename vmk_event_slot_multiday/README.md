@@ -159,10 +159,10 @@ event's dates to cover the slots first; core refuses a slot that falls outside t
 
 ### Translations
 
-`i18n/` carries `es` and `ca`, and `./odev terms vmk_event_slot_multiday` reports both clean against
-core 20. _Date_, _End Date_, _Event Slot_, _Display Name_ and core's timezone help take core's own
-`msgstr`, so the new row reads as part of core's form. Catalan's core catalogue leaves the timezone
-help empty, so that one is ours.
+`i18n/` carries `es` and `ca`, both checked term by term against core 20's catalogues. _Date_, _End
+Date_, _Event Slot_, _Display Name_ and core's timezone help take core's own `msgstr`, so the new
+row reads as part of core's form. Catalan's core catalogue leaves the timezone help empty, so that
+one is ours.
 
 **The module's own name and summary** are entries of the POT and both PO files, referenced as
 `base.module_vmk_event_slot_multiday` because `ir_module.py` registers every module record under
@@ -183,10 +183,14 @@ It is also plainly a gap in core that other modules may want to build on.
 
 ### Testing
 
+Against a local Odoo 20 with this repo on the addons path, as in
+[DEVELOPING.md](../DEVELOPING.md#testing-locally):
+
 ```bash
-cd "../Tech Stack/odoo-dev"
-./odev install vmk_event_slot_multiday
-./odev test event --test-tags /event,/vmk_event_slot_multiday
+docker compose run --rm odoo odoo -d test --init vmk_event_slot_multiday \
+    --without-demo=all --stop-after-init
+docker compose run --rm odoo odoo -d test -u event \
+    --test-enable --test-tags /event,/vmk_event_slot_multiday --stop-after-init
 ```
 
 Sixteen tests on the model and form arch, three on translations, three tours. The names are checked
@@ -216,12 +220,8 @@ selector starting with `body` skips that check. And the selection box's "N selec
 _slots_ under the selection, so two empty days read "0 selected": the tour checks the highlighted
 days instead.
 
-```bash
-cd "../Tech Stack/odoo-dev"
-./odev test vmk_event_slot_multiday
-```
-
-The `odoo:20` image carries a browser, so this needs nothing more than an installed module. Core's
-`event` and `website_event` suites were also run with the module installed on two fresh databases:
-one with only core's event modules, and one with our `vmk_event_sessions` and
-`vmk_website_event_sessions` as well.
+The tours run with the rest of the module's tests, by the command under Testing, and need a browser
+in the test image; without one every tour skips, which reads as a pass.
+[DEVELOPING.md](../DEVELOPING.md) says what to add. Core's `event` and `website_event` suites were
+also run with the module installed on two fresh databases: one with only core's event modules, and
+one with our `vmk_event_sessions` and `vmk_website_event_sessions` as well.

@@ -104,10 +104,10 @@ without this module knowing sessions exist.
 
 ### Translations
 
-`i18n/` carries `es` and `ca`, and `./odev terms vmk_event_registration_deadline` reports both clean
-against core. Shared terms — _Event_, _Config Settings_, _Display Name_ — take core's own `msgstr`
-rather than a fresh translation. _Event Slot_ is core's row and core's Catalan leaves it
-untranslated, so ours stays empty rather than asserting a value on a record we do not own.
+`i18n/` carries `es` and `ca`, both checked term by term against core's catalogues. Shared terms —
+_Event_, _Config Settings_, _Display Name_ — take core's own `msgstr` rather than a fresh
+translation. _Event Slot_ is core's row and core's Catalan leaves it untranslated, so ours stays
+empty rather than asserting a value on a record we do not own.
 
 **The module's own name and summary** are in the POT as well as both PO files. `ir_module.py`
 registers every module record as `base.module_<name>`, so 19's `odoo i18n export` never emitted them
@@ -128,9 +128,14 @@ of the act. Nothing here calls `message_post` either.
 
 ### Testing
 
+Against a local Odoo 20 with this repo on the addons path, as in
+[DEVELOPING.md](../DEVELOPING.md#testing-locally):
+
 ```bash
-cd ../../Tech\ Stack/odoo-dev
-./odev test vmk_event_registration_deadline
+docker compose run --rm odoo odoo -d test --init vmk_event_registration_deadline \
+    --without-demo=all --stop-after-init
+docker compose run --rm odoo odoo -d test -u vmk_event_registration_deadline \
+    --test-enable --test-tags /vmk_event_registration_deadline --stop-after-init
 ```
 
 Thirteen tests: the default, the per-event override, an override of zero, a ticket's Registration

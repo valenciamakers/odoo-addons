@@ -51,8 +51,8 @@ code.
 ## Testing locally
 
 Modules here install by name against a local Odoo 20 with this repo on the addons path. A
-two-service Compose file is enough — Postgres 17 and `odoo:20.0` with the repo root mounted at
-`/mnt/extra-addons`:
+two-service Compose file of your own is enough — Postgres 17 and `odoo:20.0` with the repo root
+mounted at `/mnt/extra-addons`. The repo does not ship one. With services named `db` and `odoo`:
 
 ```bash
 docker compose up -d db
@@ -608,8 +608,8 @@ In practice that is four different things, and only one of them saves work:
   model-name entries across core's Spanish catalogues are filled. `_load_module_terms` loads with
   `overwrite=False`, so an ordinary upgrade never touches a translation a user edited; "Update
   Translations" with overwrite, or `-l`, resets it to core's wording, which core's own catalogues
-  would do anyway. A blank entry fails `odev terms`. Decided 28 September 2026, replacing a rule
-  that said to leave these blank, which no module followed.
+  would do anyway. A blank entry is a defect. Decided 28 September 2026, replacing a rule that said
+  to leave these blank, which no module followed.
 - **Copy core's translation, not just core's English.** Where a string of ours says what core says,
   its `msgstr` is core's `msgstr` — looked up in `base/i18n/<lang>.po` or the relevant module's, and
   pasted verbatim. This is not optional polish: the ORM's automatic fields (`create_uid`,
@@ -1092,7 +1092,7 @@ correct in the source, both passed every Python test, and both were wrong on scr
 **Browser behaviour is a tour test, not a manual check** (decided 1 October 2026). A manual check is
 done once and never again; the next Odoo build breaks it silently. So what a person would click
 through to call a module done — the widget, the dialog, the menu, the accessible name — is a tour
-that `./odev test` runs with the rest:
+that runs with the rest of the module's tests:
 
 - **The tour drives, Python checks.** `static/tests/tours/<module>_tour.js` registers each tour in
   `registry.category("web_tour.tours")`, under a name starting with the module's, and the manifest
