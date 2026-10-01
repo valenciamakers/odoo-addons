@@ -41,7 +41,12 @@ class EventEvent(models.Model):
             return None
         return config.get_float(DEADLINE_PARAM)
 
-    @api.depends("date_begin", "vmk_deadline_custom", "vmk_deadline_hours")
+    @api.depends(
+        "date_begin",
+        "vmk_deadline_custom",
+        "vmk_deadline_hours",
+        "event_slot_ids.start_datetime",
+    )
     def _compute_event_registrations_open(self):
         """Close registration once the event has started, or is about to.
 
@@ -51,7 +56,7 @@ class EventEvent(models.Model):
         adds the rule rather than replacing anything — core decides first, and
         this can only ever close what core left open.
 
-        Two cases are deliberately left alone:
+        One case is deliberately left alone, and one is judged by its slots:
 
         * **A ticket with its own Registration End.** Core's `is_expired` is
           False whenever `end_sale_datetime` is blank, so blank is what this
@@ -60,17 +65,28 @@ class EventEvent(models.Model):
         * **Multi-slot events.** Their `date_begin` is the earliest slot's
           start, so closing the event there would stop selling every later
           slot too. Core handles those per slot, and so does this module —
-          see `event_slot.py`.
+          see `event_slot.py`. The event closes only once the deadline has
+          reached every one of its slots: until then a later slot is still on
+          sale, and after that the page would offer Register over a pop-up
+          with no dates in it. Core leaves that gap open from the last slot's
+          start to the event's end; a deadline widens it by its own length.
         """
         super()._compute_event_registrations_open()
         now = fields.Datetime.now()
         for event in self:
-            if not event.event_registrations_open or event.is_multi_slots:
+            if not event.event_registrations_open:
+                continue
+            deadline = event._vmk_deadline_hours()
+            if deadline is None:
+                continue
+            lead = timedelta(hours=deadline)
+            if event.is_multi_slots:
+                # An event with no slots yet is left as core has it.
+                starts = event.event_slot_ids.mapped("start_datetime")
+                if starts and all(start - lead <= now for start in starts):
+                    event.event_registrations_open = False
                 continue
             if any(ticket.end_sale_datetime for ticket in event.event_ticket_ids):
                 continue
-            deadline = event._vmk_deadline_hours()
-            if deadline is None or not event.date_begin:
-                continue
-            if event.date_begin - timedelta(hours=deadline) <= now:
+            if event.date_begin and event.date_begin - lead <= now:
                 event.event_registrations_open = False

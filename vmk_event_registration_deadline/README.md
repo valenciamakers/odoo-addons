@@ -59,7 +59,11 @@ deliberate choice to allow late registration, and it wins.
 
 **Multi-slot events, at the event level.** Their `date_begin` is the earliest slot's start, so
 closing the event there would stop selling every later slot too. Core handles those per slot — and
-so does this module, by extending `_filter_open_slots`.
+so does this module, by extending `_filter_open_slots`. The event itself closes only once the
+deadline has reached every one of its slots (20.0.1.1.0). Until then a later slot is still on sale;
+after that, the page would offer Register over a pop-up saying "No Future Dates Available". Core has
+the same gap from the last slot's start to the event's end, and a deadline widens it by its own
+length, on every multi-slot event. An event with no slots yet is left as core has it.
 
 ### Slots get the same rule
 
@@ -129,14 +133,26 @@ cd ../../Tech\ Stack/odoo-dev
 ./odev test vmk_event_registration_deadline
 ```
 
-Eleven tests: the default, the per-event override, an override of zero, a ticket's Registration End
-winning, a ticket without one not winning, a multi-slot event being left to its slots, and a slot
-retired by the deadline rather than merely by its start.
+Thirteen tests: the default, the per-event override, an override of zero, a ticket's Registration
+End winning, a ticket without one not winning, a multi-slot event staying open while a slot is still
+ahead and closing once none is, and a slot retired by the deadline rather than merely by its start.
 
 **A trap for anyone writing more of them.** `start_hour` on a slot is a clock time in the event's
 timezone, not an offset — a literal `10.0` in a test built from `now` lands wherever it lands, and
 the first draft of these put slots outside their own events. `_slot()` in the test file converts a
 moment into the date and hours core wants.
+
+### Browser tests
+
+`tests/test_tours.py` drives a real browser through `static/tests/tours/`. A visitor on the event
+page is shown Register or core's _Registrations Closed_ notice, each case beside its opposite: past
+and before the deadline, an event's own deadline looser and tighter than the global one, and a
+global switch that is off. On a multi-slot event the registration pop-up offers a later slot but not
+one inside the deadline. In the backend, the setting and the per-event field are set and saved
+through the interface, and Python then checks the stored values and `event_registrations_open`.
+Every date is relative to the run. A multi-slot event whose slots are all inside the deadline is
+closed like any other, with the two-slot case beside it as the control. On Odoo 20 the time fields
+show durations, so the tours type and expect _3h 30m_ and _1h_ where 19's read _03:30_ and _01:00_.
 
 ### Licence
 

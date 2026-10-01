@@ -4,7 +4,7 @@
 {
     "name": "Event Registration Deadline",
     "summary": "Allow registration only until an event starts, or a set time in advance",
-    "version": "20.0.1.0.0",
+    "version": "20.0.1.1.0",
     "author": "Valencia Makers",
     "license": "LGPL-3",
     "category": "Marketing/Events",
@@ -15,6 +15,7 @@
         "web.assets_backend": [
             "vmk_event_registration_deadline/static/src/registration_deadline.scss",
         ],
+        "web.assets_tests": ["vmk_event_registration_deadline/static/tests/tours/**/*"],
     },
     "data": [
         "views/res_config_settings_views.xml",

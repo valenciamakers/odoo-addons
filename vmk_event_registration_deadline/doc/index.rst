@@ -26,7 +26,7 @@ Once the deadline passes, the event's website page shows **Registrations Closed*
 one.
 
 **On events with multiple slots**, registration closes the same amount of time before each slot
-starts.
+starts, and the event's page shows *Registrations Closed* once it has closed for every slot.
 
 **Limits**
 
@@ -35,6 +35,12 @@ starts.
 - **A deadline cannot reopen registrations.** It only ever closes them earlier than Odoo would.
 
 **Changelog**
+
+*20.0.1.1.0 (1 October 2026)*
+
+- An event with multiple slots now shows *Registrations Closed* once the deadline has passed for
+  every slot. Before, its page kept offering Register, over a pop-up with no dates to choose.
+- Browser tests added.
 
 *20.0.1.0.0 (30 September 2026)*
 
