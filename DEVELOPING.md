@@ -254,6 +254,25 @@ checked there yet.
 
 **Models**
 
+- **18's calendar reads `quick_create_view_id` only where `quick_create` is spelled out**
+  (`calendar_arch_parser.js`: the view id is read inside `if (node.hasAttribute("quick_create"))`).
+  Without it a click on a day opens core's one-box "New Event" dialog, whatever form the arch names.
+  Core's own calendar writes both. A tour found it on 2 October 2026; 19 reads the id by itself.
+- **On 18 `message_post` refuses a user with no email address of their own** ("Unable to send
+  message, please configure the sender's email address"), which 19 does not. A module that logs what
+  a user did, and sends nothing, logs with `_message_log`, core's note logger: it notifies nobody
+  and does not ask for a sender.
+- **`float_to_time` is not in `odoo.tools.date_utils` on 18.** It lives in `resource`
+  (`resource/models/utils.py`), so a module that does not depend on `resource` writes its own.
+- **The notebook's CSS variables are lower case on 18**, `--notebook-margin-x` and
+  `--notebook-padding-x`, where 19 writes `--Notebook-…`. A rule naming 19's falls back to nothing
+  and says nothing.
+- **18's event emails are not 19's.** They carry text links to Google, iCal/Outlook, and Yahoo, and
+  From/To date lines, so a copy of core's template is made afresh per series, and a link rebuilt for
+  an event's sessions has a Yahoo twin on 18.
+- **18's event page has no switchable sidebar blocks** (no `opt_event_*` in
+  `website_event.event_description_full`) and does not know the visitor's timezone, and its event
+  card sits inside `website_event.events_list`.
 - **A new record's id cannot be ordered on 18.** `NewId` (`odoo/api.py`) defines no `__lt__`, where
   19's does, so sorting on `(sequence, id)` raises `TypeError` as soon as two unsaved records tie —
   and during a form's onchange every line of a one2many is a new record, saved or not. Break the tie
@@ -1053,6 +1072,14 @@ helpers, and the `:visible`, `:contains`, `:eq()`, `:has()` and `:value()` selec
 - **`opacity: 0` counts as not visible.** Assert a hover-revealed control with `:not(:visible)`, and
   reveal it by calling `focus()` from a function `run`.
 - **A tour ending on an unsaved form fails** ("dirty form view"). Save or discard first.
+- **Call a tour's helpers on their object**, `async run(helpers) { await helpers.edit(…) }`. Taken
+  apart in the argument list, `edit` loses the anchor it reads, as `drag_and_drop` does, and
+  `queryFirst` is not there at all: use hoot's.
+- **With `website` installed and `website_sale` not, every backend tour fails on 18**, ours and
+  core's alike: a step of one of core's website tours carries a `noPrepend` key the tour schema
+  rejects, and the error counts against whichever tour is running. Seen on our 18 build on 2 October
+  2026, with none of our modules installed. Run backend tours on a database without `website`, or
+  with `website_sale`.
 - **A patch a component reads in `setup()`** takes effect only in a new instance: reopen the view
   before a control step that changes it.
 
