@@ -24,10 +24,15 @@ class TestTours(HttpCase):
             lang.sequence = sequence
         # Every other enabled language would join the lists and muddy the order.
         ResLang.search([("id", "not in", (cls.fr + cls.en + cls.ca + cls.es).ids)]).active = False
-        cls.env.ref("website.default_website").language_ids = [
-            Command.set((cls.fr + cls.en + cls.ca + cls.es).ids)
-        ]
         cls.codes = ("fr_FR", "en_US", "ca_ES", "es_ES")
+
+    def _offer_on_the_website(self):
+        """Put the four languages on the website, or skip where there is none."""
+        if "website" not in self.env:
+            self.skipTest("website is not installed")
+        self.env.ref("website.default_website").language_ids = [
+            Command.set((self.fr + self.en + self.ca + self.es).ids)
+        ]
 
     def test_systray_menu_follows_sequence(self):
         if not self.env["ir.module.module"].search_count(
@@ -38,9 +43,11 @@ class TestTours(HttpCase):
         self.start_tour("/odoo", "vmk_language_sequence_systray", login="admin")
 
     def test_website_selector_follows_sequence(self):
+        self._offer_on_the_website()
         self.start_tour("/", "vmk_language_sequence_website_selector")
 
     def test_website_selector_follows_sequence_when_logged_in(self):
+        self._offer_on_the_website()
         self.start_tour("/", "vmk_language_sequence_website_selector", login="admin")
 
     def test_dragging_in_the_languages_list_resequences(self):

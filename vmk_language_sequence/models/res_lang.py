@@ -1,6 +1,8 @@
 # Copyright 2026 Valencia Makers, SL
 # License LGPL-3 (https://www.gnu.org/licenses/lgpl-3.0.html).
 
+import logging
+
 from odoo import api, fields, models, tools
 from odoo.addons.base.models.res_lang import LangData, LangDataDict
 from odoo.tools import OrderedSet
@@ -8,6 +10,37 @@ from odoo.tools import OrderedSet
 # Disabled languages are parked above this, keeping the enabled ones -- the only
 # ones this module exists to order -- together at the top of the Languages list.
 DISABLED_SEQUENCE_BASE = 10000
+
+# Marks ``_get_frontend`` as ours, so a second hook call does not wrap it twice.
+PATCHED = "_vmk_follows_sequence"
+
+_logger = logging.getLogger(__name__)
+
+
+def _frontend_in_sequence(model_cls):
+    """Build the ``_get_frontend`` that ``_register_hook`` puts on the registry class.
+
+    ``super(model_cls, self)`` is every module's ``_get_frontend`` in turn:
+    ``website``'s where it is installed, ``http_routing``'s otherwise. It is
+    resolved on each call, not kept from the moment of patching, because Odoo
+    reassigns the registry class's bases as modules load.
+    """
+
+    def _get_frontend(self) -> LangDataDict:
+        # ``website`` builds the site language selector from
+        # ``language_ids.sorted('name')``, bypassing ``_order`` again. No cache of
+        # our own here: ``website``'s method is already cached, and this runs once
+        # per page render over a handful of entries.
+        #
+        # The sequences are read from ``_get_active_by`` rather than from the data
+        # core returns. Both are cached on 'default', which core's own
+        # ``res.lang.write()`` clears on every write, so a reorder reaches both.
+        langs = super(model_cls, self)._get_frontend()
+        langs = self._sorted_by_sequence(langs, self._live_sequences())
+        return self._hreflang_in_order(langs)
+
+    setattr(_get_frontend, PATCHED, True)
+    return _get_frontend
 
 
 class ResLang(models.Model):
@@ -80,17 +113,31 @@ class ResLang(models.Model):
         # core's own decorator is: Odoo 18 has no 'stable' cache group.
         return self._sorted_by_sequence(super()._get_active_by(field))
 
-    def _get_frontend(self) -> LangDataDict:
-        # ``website`` builds the site language selector from
-        # ``language_ids.sorted('name')``, bypassing ``_order`` again. No cache of
-        # our own here: ``super()`` is already cached, and this runs once per page
-        # render over a handful of entries.
-        #
-        # The sequences are read from ``_get_active_by`` rather than from the data
-        # ``super()`` returns. Both are cached on 'default', which core's own
-        # ``res.lang.write()`` clears on every write, so a reorder reaches both.
-        langs = self._sorted_by_sequence(super()._get_frontend(), self._live_sequences())
-        return self._hreflang_in_order(langs)
+    def _register_hook(self):
+        """Put the frontend ordering on top of every module's ``_get_frontend``.
+
+        An ordinary override would do while ``website`` is a dependency. Without
+        one, ``website`` may load after this module, and its ``_get_frontend()``
+        rebuilds the list by name without asking ``super()`` for it, so ours would
+        sit underneath and be undone. The registry class is above every module's
+        class whatever order they loaded in, so the method goes there, as
+        ``base_automation`` patches models (``base_automation.py``,
+        ``_register_hook``). Every registry load builds a fresh class and calls
+        this again, so installing ``website`` later needs nothing.
+        """
+        super()._register_hook()
+        model_cls = self.env.registry[self._name]
+        current = getattr(model_cls, "_get_frontend", None)
+        if current is None:
+            _logger.warning(
+                "res.lang._get_frontend is gone, so the website's language selector "
+                "no longer follows the language sequence. Re-check "
+                "vmk_language_sequence against this version of Odoo."
+            )
+            return
+        if getattr(current, PATCHED, False):
+            return
+        model_cls._get_frontend = _frontend_in_sequence(model_cls)
 
     @staticmethod
     def _hreflang_in_order(langs: LangDataDict) -> LangDataDict:

@@ -6,7 +6,7 @@ order. This module lets you drag enabled languages into any order you choose.
 
 **Installation**
 
-Install **Language Sequence** from the Apps menu. It requires the **Website** app, and works on both Community and Enterprise.
+Install **Language Sequence** from the Apps menu. It works with or without the **Website** app, on both Community and Enterprise.
 
 **Using it**
 
@@ -29,6 +29,11 @@ New languages you enable are added to the end of the list, and can be dragged in
 - **Odoo shows the Languages list only in developer mode**, and this module leaves that as it is.
 
 **Changelog**
+
+*18.0.1.1.0 (3 October 2026)*
+
+- The **Website** app is no longer required, and is no longer installed along with this module.
+  Where it is installed, its language selector follows your order as before.
 
 *18.0.1.0.1 (1 October 2026)*
 
