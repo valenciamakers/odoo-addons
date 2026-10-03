@@ -632,10 +632,11 @@ checked there yet.
   above only what its module depends on, so an optional module that loads later lands on top of it,
   and one that never calls `super()` undoes it: `website`'s `res.lang._get_frontend()` rebuilds the
   language list by name. A method set on the registry class is above every module's class, whatever
-  the load order. Reach core from it with `super(<registry class>, self)`, not a saved `origin`:
-  Odoo reassigns that class's bases as modules load (`odoo/orm/model_classes.py`), so a function
-  captured when patching can be stale. `vmk_language_sequence/models/res_lang.py` does this, which
-  is how it stopped requiring `website`. Added 2026-10-03.
+  the load order. Reach core from it with `super(<registry class>, self)`, or with a saved `origin`
+  as `email_sync.py` does. Both see every module's method: hooks run once all modules have loaded,
+  and a later install builds a new registry and runs them again.
+  `vmk_language_sequence/models/res_lang.py` does this, which is how it stopped requiring `website`.
+  Added 2026-10-03.
 
 ## Authoring conventions
 
