@@ -2,9 +2,11 @@
 # License LGPL-3 (https://www.gnu.org/licenses/lgpl-3.0.html).
 
 from pathlib import Path
+from unittest import SkipTest
 
 from odoo.addons.http_routing.tests.common import MockRequest
 from odoo.addons.vmk_language_sequence.hooks import seed_language_sequence
+from odoo.addons.vmk_language_sequence.models.res_lang import PATCHED
 from odoo.fields import Command
 from odoo.tests.common import TransactionCase, tagged
 
@@ -163,16 +165,41 @@ class TestLanguageSequence(TransactionCase):
 
 
 @tagged("post_install", "-at_install")
+class TestFrontendPatch(TransactionCase):
+    """``_get_frontend`` is ours on the registry class, above every module's.
+
+    Nothing raises if the patch stops applying: the site selector just goes back
+    to name order, and only where ``website`` is installed.
+    """
+
+    def test_the_registry_class_carries_our_method(self):
+        model_cls = self.env.registry["res.lang"]
+        # In the class's own ``__dict__``, not inherited: that is what puts it
+        # above ``website``'s override whichever module loaded first.
+        self.assertIn("_get_frontend", model_cls.__dict__)
+        self.assertTrue(getattr(model_cls.__dict__["_get_frontend"], PATCHED, False))
+
+    def test_a_second_hook_call_does_not_wrap_it_again(self):
+        model_cls = self.env.registry["res.lang"]
+        before = model_cls.__dict__["_get_frontend"]
+        self.env["res.lang"]._register_hook()
+        self.assertIs(model_cls.__dict__["_get_frontend"], before)
+
+
+@tagged("post_install", "-at_install")
 class TestHreflang(TransactionCase):
     """The generic hreflang code goes to the first variant in your order, not by name.
 
     Written the way ``website``'s own ``test_alternate_hreflang`` is, which fails
-    with this module installed because it asserts the name order.
+    with this module installed because it asserts the name order. Only ``website``
+    hands out hreflang codes, so this is skipped on a database without it.
     """
 
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        if "website" not in cls.env:
+            raise SkipTest("website is not installed")
         cls.website = cls.env["website"].get_current_website() or cls.env["website"].browse(1)
         cls.ResLang = cls.env["res.lang"].with_context(website_id=cls.website.id)
         cls.lang_us = cls.ResLang._activate_lang("en_US")

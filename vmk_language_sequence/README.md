@@ -8,7 +8,8 @@ into any order you choose.
 **How to use it** is in the user documentation, [`doc/index.rst`](doc/index.rst), which the Odoo
 Apps Store also shows on the module's page, together with the changelog.
 
-It depends only on `website`. LGPL-3, © 2026 Valencia Makers, SL.
+It depends only on `http_routing`, and orders the website's selector wherever `website` is
+installed. LGPL-3, © 2026 Valencia Makers, SL.
 
 ## For developers
 
@@ -42,8 +43,30 @@ So `models/res_lang.py` does three things beyond declaring the field:
    the backend dropdowns and the portal selector, so one override covers both. It keeps its own
    `ormcache` because `_get_data()` reaches it on every date and number format.
 3. **`_get_frontend()`** re-sorts, undoing `website`'s `.sorted('name')`. No cache of its own —
-   `super()` is already cached, and this runs once per page render over a handful of entries. It
-   then re-assigns the hreflang codes, below.
+   `website`'s method is already cached, and this runs once per page render over a handful of
+   entries. It then re-assigns the hreflang codes, below. It is not an ordinary override; see the
+   next section.
+
+### `_get_frontend()` is patched onto the registry class
+
+`website`'s `_get_frontend()` (`website/models/res_lang.py`) builds its list by name and returns it,
+calling `super()` only outside a website request. So an override of ours has to sit **above** it to
+have any effect, and an ordinary override sits above only what its module depends on. Depending on
+`website` would do that, and until 19.0.1.3.0 this module did, which installed the Website app on
+every database that only wanted its language dropdowns ordered.
+
+Instead `_register_hook()` sets the method on the `res.lang` registry class itself, the way
+`base_automation` patches models (`base_automation/models/base_automation.py`, `_register_hook`).
+That class is above every module's class whatever order they loaded in: here this module loads long
+before `website`. The method reaches core through `super(<registry class>, self)`, resolved on each
+call, since Odoo reassigns that class's bases as modules load (`odoo/orm/model_classes.py`). Every
+registry load builds a fresh class and runs the hook again, so installing `website` afterwards needs
+nothing, and uninstalling this module leaves nothing behind.
+
+A patch that stops applying raises nothing, and here it would show only as the site selector going
+back to name order. So the hook logs a warning if `_get_frontend` is gone from `res.lang`, the
+method is marked so that a second hook call does not wrap it twice, and `TestFrontendPatch` asserts
+it is in place. Written as a plain override, the two website tours and `TestHreflang` fail.
 
 ### hreflang follows the order too
 
@@ -69,8 +92,8 @@ generic. `TestHreflang` covers the same ground in our order, including the `es_4
 
 ### Why no cache invalidation of our own
 
-`_get_frontend()` reads its sequence values from `_get_active_by()` rather than from the data
-`super()` hands back, and that is the whole reason `write()` needs no `registry.clear_cache()`.
+`_get_frontend()` reads its sequence values from `_get_active_by()` rather than from the data core
+hands back, and that is the whole reason `write()` needs no `registry.clear_cache()`.
 
 `website._get_frontend` is cached on the `'default'` cache, which nothing invalidates when a
 sequence changes. Sorting on the values baked into _that_ cache would mean clearing all of it on
@@ -160,9 +183,9 @@ if re-running the export drops them.
 
 ### Requirements
 
-Odoo 19. Depends on `website`, which supplies the `_get_frontend()` override point that makes the
-site selector follow the order. On a database without `website`, split this into a `base`-only
-module plus an `auto_install` bridge carrying override 3.
+Odoo 19. Depends on `http_routing`, which defines `_get_frontend()` and itself needs only `web`.
+`website` is optional: where it is installed, before or after this module, its language selector and
+hreflang codes follow the order.
 
 ### Testing
 
@@ -179,5 +202,7 @@ backend reordered the site selector live, without a server restart.
 with the sequences set to a non-alphabetical order: the order reaches the systray menu of
 `vmk_language_systray` (the tour needs that module's `.o_vmk_language_systray` markup, and is
 skipped without it), the website's language selector for a visitor and for a signed-in user, and
-dragging a handle in the Languages list saves a new sequence. They are tagged `post_install` and
-need a Chrome the Odoo image can find.
+dragging a handle in the Languages list saves a new sequence. The two website tours and
+`TestHreflang` are skipped on a database without `website`, and a skip reads as a pass, so run the
+tests once with `website` installed as well as once without. They are tagged `post_install` and need
+a Chrome the Odoo image can find.

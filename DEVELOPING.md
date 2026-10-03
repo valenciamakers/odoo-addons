@@ -491,6 +491,14 @@ in `web/static/src/**`, not in Python. Half the surprises below live there.
   wrapper so a second call does not wrap it twice, log a warning when the method is missing, and
   test that each patch is in place: a renamed method otherwise stops the patch applying without a
   word. `vmk_partner_email_multiple/models/email_sync.py` is the worked example.
+- **The same hook puts an override above a module you do not depend on.** An ordinary override sits
+  above only what its module depends on, so an optional module that loads later lands on top of it,
+  and one that never calls `super()` undoes it: `website`'s `res.lang._get_frontend()` rebuilds the
+  language list by name. A method set on the registry class is above every module's class, whatever
+  the load order. Reach core from it with `super(<registry class>, self)`, not a saved `origin`:
+  Odoo reassigns that class's bases as modules load (`odoo/orm/model_classes.py`), so a function
+  captured when patching can be stale. `vmk_language_sequence/models/res_lang.py` does this, which
+  is how it stopped requiring `website`. Added 2026-10-03.
 
 ## Authoring conventions
 

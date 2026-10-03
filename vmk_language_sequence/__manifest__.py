@@ -4,11 +4,11 @@
 {
     "name": "Language Sequence",
     "summary": "Reorder languages manually instead of alphabetically",
-    "version": "19.0.1.2.1",
+    "version": "19.0.1.3.0",
     "author": "Valencia Makers",
     "license": "LGPL-3",
     "category": "Website/Website",
-    "depends": ["website"],
+    "depends": ["http_routing"],
     "data": ["views/res_lang_views.xml"],
     "assets": {
         "web.assets_tests": [
