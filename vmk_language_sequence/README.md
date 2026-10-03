@@ -21,6 +21,7 @@ The chosen order drives:
 
 - the **website language selector** in the site header;
 - the **language dropdowns** on user and contact forms;
+- the **translation dialog**, where a field is translated into each language;
 - the Languages list itself, and any other `res.lang` search;
 - which variant of a language search engines are told is the generic one, when two are enabled.
 
@@ -36,6 +37,7 @@ by name itself:
 | Language dropdowns (users, contacts) | `get_installed()`                                            | `_get_active_langs().sorted('name')` |
 | Portal selector (no website)         | `http_routing`'s `_get_frontend()`, `_get_active_by('code')` | `_get_active_langs()`, id order      |
 | Website language selector            | `website`'s `_get_frontend()`                                | `language_ids.sorted('name')`        |
+| Translation dialog                   | `web`'s `get_translation_for_field` route                    | `_get_active_langs().sorted('name')` |
 
 So `models/res_lang.py` does four things beyond declaring the field:
 
@@ -77,13 +79,40 @@ back to name order. So the hook logs a warning if `_get_frontend` is gone from `
 method is marked so that a second hook call does not wrap it twice, and `TestFrontendPatch` asserts
 it is in place. Written as a plain override, the two website tours and `TestHreflang` fail.
 
+### The translation dialog is ordered in its controller
+
+The dialog that translates a field asks `/web/translations/get_translation_for_field` for its
+languages, and that route (`web/controllers/webclient.py`, `ModelTranslations`) sorts
+`_get_active_langs()` by name in its own body, so point 2 above never reaches it. The client then
+sorts nothing: `translation_components.xml` draws `Object.values(this.model.languages())`, the
+`languages` object in the order its keys arrived. So the fix is on the server, with no JavaScript:
+`controllers/translation.py` extends the route, calls `super()`, and puts `languages` in our order.
+Since 20.0.1.2.0.
+
+It re-orders core's result rather than rebuilding it, so nothing of core's is copied, and a key core
+stops sending is left alone. Two things follow from how the dialog reads that payload:
+
+- **The user's own language still leads.** For a plain field the template draws it first, apart from
+  the loop, and the rest follow in our order. A rich-text field shows it on the left and the others
+  as buttons; a view shows every language as a button.
+- **`terms` is sorted too.** Core builds it from a `set` of language codes, so its order is
+  arbitrary, and `_selfUpdate` (`translation_model.js`) opens a rich-text field on the first
+  language in it that is not the user's. Sorted, that is the first in our order.
+
+One case is left to core: when the dialog asks for a language that is no longer enabled, the route
+picks the first one by name that is not the record's base language, and fetches a view's terms for
+it before our code runs. The dialog asks for the user's own language unless the browser remembers
+another, so this needs a language to be disabled after someone translated into it.
+
+`TestTranslationDialog` asks the route over HTTP, since the order has to survive the JSON response,
+and a tour opens the dialog on a country's name and reads its labels.
+
 ### What the order does not reach
 
-Three places in core 20 sort `_get_active_langs()` by name themselves, in their own code, and this
-module leaves them alone: the **translation dialog** (`web/controllers/webclient.py`), Studio's XML
-resource editor, and the **Point of Sale self-order kiosk's** default languages
-(`pos_self_order/models/pos_config.py`). The first two are for staff translating content, where
-alphabetical is as good as any order. The kiosk is customer-facing, so it may be worth a patch if
+Two places in 20 sort `_get_active_langs()` by name themselves, in their own code, and this module
+leaves them alone: Studio's XML resource editor, which is Enterprise and for staff, where
+alphabetical is as good as any order, and the **Point of Sale self-order kiosk's** default languages
+(`pos_self_order/models/pos_config.py`). The kiosk is customer-facing, so it may be worth a patch if
 you run it, but it is one more copy of core to keep in step and nobody asked for it.
 
 Two consumers take the first language in our order as a default rather than listing them:
@@ -227,9 +256,10 @@ odoo -d <db> -u vmk_language_sequence --test-enable --test-tags /vmk_language_se
 with sequences set so that the order is not alphabetical (French, English, Catalan, Spanish): the
 `vmk_language_systray` dropdown lists the languages in that order, the website's language selector
 does too (as a visitor and logged in), and dragging a row by its handle in the Languages list
-(developer mode) resequences the languages. The drag needs two moves, one past the tolerance over
-the dragged row and then one onto the target, because Sortable binds its `pointerenter` handlers
-only when the drag starts. The systray tour needs `vmk_language_systray` installed alongside, and is
-skipped without it. The two website tours and `TestHreflang` are skipped on a database without
-`website`, and a skip reads as a pass, so run the tests once with `website` installed as well as
-once without.
+(developer mode) resequences the languages. Another opens the translation dialog on a country's name
+and checks that, after the user's own language, the others follow the order. The drag needs two
+moves, one past the tolerance over the dragged row and then one onto the target, because Sortable
+binds its `pointerenter` handlers only when the drag starts. The systray tour needs
+`vmk_language_systray` installed alongside, and is skipped without it. The two website tours and
+`TestHreflang` are skipped on a database without `website`, and a skip reads as a pass, so run the
+tests once with `website` installed as well as once without.

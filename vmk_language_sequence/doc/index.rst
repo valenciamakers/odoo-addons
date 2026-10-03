@@ -17,6 +17,7 @@ Your order is used by:
 
 - the website language selector and the footer language list
 - the language dropdowns on user and contact forms
+- the pop-up for translating a field, after your own language, which Odoo always lists first
 - the Languages list itself
 
 With two variants of one language enabled, such as English (UK) and English (US), search
@@ -29,6 +30,11 @@ New languages you enable are added to the end of the list, and can be dragged in
 - **Odoo shows the Languages list only in developer mode**, and this module leaves that as it is.
 
 **Changelog**
+
+*20.0.1.2.0 (3 October 2026)*
+
+- The pop-up for translating a field lists the languages in your order, after your own language.
+  The Point of Sale self-order kiosk still lists them alphabetically.
 
 *20.0.1.1.0 (3 October 2026)*
 

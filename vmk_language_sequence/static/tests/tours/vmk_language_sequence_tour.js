@@ -58,6 +58,46 @@ registry.category("web_tour.tours").add("vmk_language_sequence_website_selector"
     ],
 });
 
+registry.category("web_tour.tours").add("vmk_language_sequence_translation_dialog", {
+    steps: () => [
+        {
+            // The translate button is hidden until its field is hovered or focused.
+            content: "Focus the country's name",
+            trigger: ".o_field_widget[name='name'] input",
+            run: "click",
+        },
+        {
+            content: "Open the translation dialog of the name",
+            trigger: ".o_field_widget[name='name'] .o-translate-button",
+            run: "click",
+        },
+        {
+            content: "After the user's own language, the dialog follows the sequence",
+            trigger: ".o_translation_dialog label:eq(3)",
+            run() {
+                const names = [...document.querySelectorAll(".o_translation_dialog label")].map(
+                    (el) => el.textContent.trim()
+                );
+                // The dialog itself puts the user's language, English, first.
+                expect(
+                    names,
+                    ["English (US)", "French / Français", "Catalan / Català", "Spanish / Español"],
+                    "Dialog order"
+                );
+            },
+        },
+        {
+            content: "Close the dialog",
+            trigger: ".o_translation_dialog footer .btn-secondary",
+            run: "click",
+        },
+        {
+            content: "The dialog is gone",
+            trigger: "body:not(:has(.o_translation_dialog))",
+        },
+    ],
+});
+
 registry.category("web_tour.tours").add("vmk_language_sequence_drag", {
     steps: () => [
         {

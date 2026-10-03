@@ -53,6 +53,14 @@ class TestTours(HttpCase):
         self._offer_on_the_website()
         self.start_tour("/", "vmk_language_sequence_website_selector", login="admin")
 
+    def test_translation_dialog_follows_sequence(self):
+        country = self.env.ref("base.es")
+        self.start_tour(
+            f"/odoo/action-base.action_country/{country.id}",
+            "vmk_language_sequence_translation_dialog",
+            login="admin",
+        )
+
     def test_dragging_in_the_languages_list_resequences(self):
         self.start_tour(
             "/odoo/action-base.res_lang_act_window?debug=1",
