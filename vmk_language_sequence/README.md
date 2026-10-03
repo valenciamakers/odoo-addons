@@ -58,10 +58,10 @@ every database that only wanted its language dropdowns ordered.
 Instead `_register_hook()` sets the method on the `res.lang` registry class itself, the way
 `base_automation` patches models (`base_automation/models/base_automation.py`, `_register_hook`).
 That class is above every module's class whatever order they loaded in: here this module loads long
-before `website`. The method reaches core through `super(<registry class>, self)`, resolved on each
-call, since Odoo reassigns that class's bases as modules load (`odoo/orm/model_classes.py`). Every
-registry load builds a fresh class and runs the hook again, so installing `website` afterwards needs
-nothing, and uninstalling this module leaves nothing behind.
+before `website`. The method reaches core through `super(<registry class>, self)`, which is every
+module's `_get_frontend()` in turn. Every registry load builds a fresh class and runs the hook
+again, so installing `website` afterwards needs nothing, and uninstalling this module leaves nothing
+behind.
 
 A patch that stops applying raises nothing, and here it would show only as the site selector going
 back to name order. So the hook logs a warning if `_get_frontend` is gone from `res.lang`, the

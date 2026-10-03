@@ -21,9 +21,7 @@ def _frontend_in_sequence(model_cls):
     """Build the ``_get_frontend`` that ``_register_hook`` puts on the registry class.
 
     ``super(model_cls, self)`` is every module's ``_get_frontend`` in turn:
-    ``website``'s where it is installed, ``http_routing``'s otherwise. It is
-    resolved on each call, not kept from the moment of patching, because Odoo
-    reassigns the registry class's bases as modules load.
+    ``website``'s where it is installed, ``http_routing``'s otherwise.
     """
 
     def _get_frontend(self) -> LangDataDict:
