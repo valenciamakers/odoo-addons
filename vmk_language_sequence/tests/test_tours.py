@@ -24,19 +24,29 @@ class TestTours(HttpCase):
             lang.sequence = sequence
         # Every other enabled language would join the lists and muddy the order.
         ResLang.search([("id", "not in", (cls.fr + cls.en + cls.ca + cls.es).ids)]).active = False
-        cls.env.ref("base.default_website").language_ids = [
-            Command.set((cls.fr + cls.en + cls.ca + cls.es).ids)
-        ]
         cls.codes = ("fr_FR", "en_US", "ca_ES", "es_ES")
+
+    def _offer_on_the_website(self):
+        """Put the four languages on the website, or skip where there is none."""
+        # Odoo 20 keeps the ``website`` model in ``base``; its languages are the
+        # ``website`` module's.
+        website = self.env.ref("base.default_website")
+        if "language_ids" not in website._fields:
+            self.skipTest("website is not installed")
+        website.language_ids = [
+            Command.set((self.fr + self.en + self.ca + self.es).ids)
+        ]
 
     def test_systray_menu_follows_sequence(self):
         self.assertEqual([c for c, _ in self.env["res.lang"].get_installed()], list(self.codes))
         self.start_tour("/odoo", "vmk_language_sequence_systray", login="admin")
 
     def test_website_selector_follows_sequence(self):
+        self._offer_on_the_website()
         self.start_tour("/", "vmk_language_sequence_website_selector")
 
     def test_website_selector_follows_sequence_when_logged_in(self):
+        self._offer_on_the_website()
         self.start_tour("/", "vmk_language_sequence_website_selector", login="admin")
 
     def test_dragging_in_the_languages_list_resequences(self):
