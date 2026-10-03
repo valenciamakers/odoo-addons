@@ -38,6 +38,10 @@ class TestTours(HttpCase):
         ]
 
     def test_systray_menu_follows_sequence(self):
+        if not self.env["ir.module.module"].search_count(
+            [("name", "=", "vmk_language_systray"), ("state", "=", "installed")]
+        ):
+            self.skipTest("vmk_language_systray is not installed")
         self.assertEqual([c for c, _ in self.env["res.lang"].get_installed()], list(self.codes))
         self.start_tour("/odoo", "vmk_language_sequence_systray", login="admin")
 

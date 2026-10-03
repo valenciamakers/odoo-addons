@@ -229,6 +229,7 @@ with sequences set so that the order is not alphabetical (French, English, Catal
 does too (as a visitor and logged in), and dragging a row by its handle in the Languages list
 (developer mode) resequences the languages. The drag needs two moves, one past the tolerance over
 the dragged row and then one onto the target, because Sortable binds its `pointerenter` handlers
-only when the drag starts. The systray tour needs `vmk_language_systray` installed alongside. The
-two website tours and `TestHreflang` are skipped on a database without `website`, and a skip reads
-as a pass, so run the tests once with `website` installed as well as once without.
+only when the drag starts. The systray tour needs `vmk_language_systray` installed alongside, and is
+skipped without it. The two website tours and `TestHreflang` are skipped on a database without
+`website`, and a skip reads as a pass, so run the tests once with `website` installed as well as
+once without.
