@@ -1013,9 +1013,12 @@ POT, and a hand edit is lost on the next run. For each string it takes the first
   _Slot_ is a slot machine in Swedish and a hardware socket in Chinese, _Session_ a login, _Host_ a
   server, _To_ a mail recipient. A correction to a string core also has goes here.
 - **Core's own translation** of the same English, on this series, as for Spanish and Catalan.
-- **An email body core translates**, with our lines put back where they sit in the English. Where
-  core has no body in a language, or its markup is broken (core ships both), that email stays
-  English there. Building one from core's bodies on another series was tried and dropped: tested on
+- **An email body core translates**, with our lines put back where they sit in the English. Core
+  ships bodies a translator broke, and the tool mends the two kinds it can prove right against the
+  English: a dropped closing tag goes back after the words it closes (core's Dutch reminder leaves
+  the rest of the email inside a link), and so does an opening tag's lost `>`. Any other difference
+  in markup is refused, and where core has no body in a language at all, that email stays English
+  there. Building one from core's bodies on another series was tried and dropped: tested on
   reproducing core's own bodies, it misplaced text wherever a language reorders the sentence.
 - **The translation already in the file**, or in another module of ours for the same English, which
   is what keeps one word for one thing across modules. So the PO files are the record of our own
