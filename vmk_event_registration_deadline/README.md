@@ -105,10 +105,10 @@ without this module knowing sessions exist.
 ### Translations
 
 `i18n/` carries `es` and `ca`, both checked term by term against core's catalogues. Nineteen more
-languages are written by `tools/i18n_fill.py`, never by hand; see `DEVELOPING.md`. Shared terms —
-_Event_, _Config Settings_, _Display Name_ — take core's own `msgstr` rather than a fresh
-translation. _Event Slot_ is core's row and core's Catalan leaves it untranslated, so ours says
-`Franja horària`, as our other slot modules do, rather than showing English (5 October 2026).
+languages are generated, never edited by hand; see `DEVELOPING.md`. Shared terms — _Event_, _Config
+Settings_, _Display Name_ — take core's own `msgstr` rather than a fresh translation. _Event Slot_
+is core's row and core's Catalan leaves it untranslated, so ours says `Franja horària`, as our other
+slot modules do, rather than showing English (5 October 2026).
 
 **The module's own name and summary** are in the POT as well as both PO files. `ir_module.py`
 registers every module record as `base.module_<name>`, so 19's `odoo i18n export` never emitted them

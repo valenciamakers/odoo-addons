@@ -62,7 +62,7 @@ attributes on each slot button are byte for byte those of 19, so the patch neede
 The module adds no text of its own; the line is formatted by Luxon in the visitor's language.
 `i18n/` carries `es` and `ca` for the module's own name and summary, hand-maintained for the reason
 given in `../vmk_event_slot_multiday/README.md`, and `tests/test_translations.py` guards them.
-Nineteen more languages are written by `tools/i18n_fill.py`, never by hand; see `DEVELOPING.md`.
+Nineteen more languages are generated, never edited by hand; see `DEVELOPING.md`.
 
 ### Licence
 

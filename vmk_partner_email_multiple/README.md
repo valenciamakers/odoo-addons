@@ -306,10 +306,10 @@ database that has the app.
 ### Translations
 
 `i18n/` carries the template and Spanish and Catalan catalogues; Odoo loads `i18n/*.po` on install
-with no manifest entry. Nineteen more languages are written by `tools/i18n_fill.py`, never by hand;
-see `DEVELOPING.md`. Terms this module shares with core — _Contact_, _Created by_, _Send Email_ —
-reuse core's own wording in each language rather than a second translation of the same word, so the
-module reads as part of the backend.
+with no manifest entry. Nineteen more languages are generated, never edited by hand; see
+`DEVELOPING.md`. Terms this module shares with core — _Contact_, _Created by_, _Send Email_ — reuse
+core's own wording in each language rather than a second translation of the same word, so the module
+reads as part of the backend.
 
 The module's own name and summary are `ir.module.module` records, whose xmlid belongs to `base`
 (`base.module_vmk_partner_email_multiple`). On Odoo 19 that made `odoo i18n export` skip them, so

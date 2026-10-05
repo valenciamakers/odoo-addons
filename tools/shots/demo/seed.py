@@ -8,7 +8,7 @@ slots, handled below by branching on ``odoo.release.series``. For 20, ``commit()
 one difference known so far; it has not been run there yet.
 
     cd "Odoo Addons - Custom (18.0)"                     # or the 19.0 checkout
-    SERIES=18.0 DB=shots ../../Tech\\ Stack/odoo-dev/odev shell < tools/shots/demo/seed.py
+    SERIES=18.0 DB=shots ../../Tech\\ Stack/odoo/dev/odev shell < tools/shots/demo/seed.py
 
 Odoo 18 has no ``event.slot`` model and no demo contacts (``without_demo = all`` in both series'
 harness config), so this script creates Marc Demo and Edith Sanchez itself, with the same avatars
@@ -20,7 +20,7 @@ Odoo's own demo data uses (``base/static/img/user_demo-image`` and
 starting "in an hour", which only means something run right before a capture. Call it on its own,
 right before capturing vmk_event_registration_deadline's public page:
 
-    (cat tools/shots/demo/seed.py; echo "open_studio_evening(env)") | SERIES=18.0 DB=shots ../../Tech\\ Stack/odoo-dev/odev shell
+    (cat tools/shots/demo/seed.py; echo "open_studio_evening(env)") | SERIES=18.0 DB=shots ../../Tech\\ Stack/odoo/dev/odev shell
 """
 import base64
 from datetime import datetime, timedelta, timezone

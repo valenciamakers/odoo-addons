@@ -16,7 +16,7 @@ Private recipe imports `shots.py` from here.
 
 ## What the recipes need
 
-**A local Odoo with these modules installed**, from `../Tech Stack/odoo-dev`, serving the scratch
+**A local Odoo with these modules installed**, from `../Tech Stack/odoo/dev`, serving the scratch
 database the demo data lives in (`./odev db use shots && ./odev up`).
 
 **Nothing else to start.** Backend captures run in a headless Chromium of their own, logged in as
@@ -29,7 +29,7 @@ a Chrome started with remote debugging on port 9222, which had to be running and
 it:
 
 ```bash
-DB=shots ../Tech\ Stack/odoo-dev/odev shell < tools/shots/demo/seed.py   # from the repo root; SERIES=18.0 for 18
+DB=shots ../Tech\ Stack/odoo/dev/odev shell < tools/shots/demo/seed.py   # from the repo root; SERIES=18.0 for 18
 ```
 
 It works on both Odoo 18 and 19, branching on `odoo.release.series` where they differ — see the
@@ -53,7 +53,7 @@ ordinary event rather than a multi-slot one. What it makes:
 
 ```bash
 (cat tools/shots/demo/seed.py; echo "open_studio_evening(env)") | \
-    DB=shots ../Tech\ Stack/odoo-dev/odev shell
+    DB=shots ../Tech\ Stack/odoo/dev/odev shell
 ```
 
 - for the sort modules, a spread of Odoo's own apps: CRM, Sales, Invoicing, Inventory, Purchase,
