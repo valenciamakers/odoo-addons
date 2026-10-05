@@ -55,6 +55,8 @@ PREFERRED = ["event", "website_event", "event_sale", "base", "web", "mail", "web
 STRING = re.compile(r'"((?:[^"\\]|\\.)*)"')
 ESCAPE = re.compile(r"\\(.)")
 TAG = re.compile(r"<[^>]+>")
+SPLIT = re.compile(r"(<[^>]+>)")
+UNCLOSED = re.compile(r"""(<[a-z]+\b[^<>]*["'])([^<>"'=]+)(</[a-z]+>)""")
 PLACEHOLDER = re.compile(r"%\([a-z_]+\)[sd]|%[sd]|\{\{.*?\}\}")
 
 
@@ -117,28 +119,74 @@ def load_core(dirs, wanted):
 
 
 def with_our_lines(ours, core_source, core_translation):
-    """Core's translated body with the lines we inserted into its source, or None if it will not fit."""
-    source, wanted, translated = core_source.split("\n"), ours.split("\n"), core_translation.split("\n")
-    if len(source) != len(translated):
+    """Core's translated body with the lines we inserted into its source, or None if it will not fit.
+
+    Line for line where the translation kept the source's lines, as most do. Where a translator
+    joined or split lines, each block of ours goes in before the same tag it precedes in the source.
+    """
+    core_translation = mended(core_source, core_translation)
+    if core_translation is None:
         return None
-    out = []
-    for op, i1, i2, j1, j2 in difflib.SequenceMatcher(None, source, wanted, autojunk=False).get_opcodes():
-        if op == "equal":
-            out += translated[i1:i2]
-        elif op == "insert":
-            out += wanted[j1:j2]
-        else:
+    source, wanted, translated = core_source.split("\n"), ours.split("\n"), core_translation.split("\n")
+    inserts = []  # (source line our block goes in before, the block)
+    for op, i1, _i2, j1, j2 in difflib.SequenceMatcher(None, source, wanted, autojunk=False).get_opcodes():
+        if op == "insert":
+            inserts.append((i1, wanted[j1:j2]))
+        elif op != "equal":
             return None
-    result = "\n".join(out)
+    if len(source) == len(translated):
+        for at, block in reversed(inserts):
+            translated[at:at] = block
+        result = "\n".join(translated)
+    else:
+        tokens = SPLIT.split(core_translation)
+        tags = [n for n, token in enumerate(tokens) if token.startswith("<") and not token.startswith("<!--")]
+        for at, block in reversed(inserts):
+            before = len(markup("\n".join(source[:at])))  # how many tags precede our block in the source
+            if before >= len(tags):
+                return None
+            gap = tags[before] - 1  # the text between the tag before our block and the one after
+            head, newline, tail = tokens[gap].rpartition("\n")
+            if tail.strip() or (not newline and head.strip()):
+                return None  # words sit where our block belongs: not ours to split
+            tokens[gap] = head + "\n" + "\n".join(block) + "\n" + tail
+        result = "".join(tokens)
     return result if markup(result) == markup(ours) else None
+
+
+def mended(source, translation):
+    """A core translation with its markup made whole, or None where that is more than a closing tag.
+
+    Core ships email bodies a translator broke: a closing tag dropped, so that the rest of the email
+    sits inside a link. Each missing closing tag goes back where the source has it, after the words
+    it closes. Anything else that differs is refused, and the email stays English in that language.
+    """
+    if markup(source) == markup(translation):
+        return translation
+    # An opening tag that lost its `>`, so its words run on from the last attribute:
+    # `<strong t-out="x"oggi</strong>`.
+    translation = UNCLOSED.sub(r"\1>\2\3", translation)
+    tokens = SPLIT.split(translation)
+    tags = [n for n, token in enumerate(tokens) if token.startswith("<") and not token.startswith("<!--")]
+    wanted, found = markup(source), markup(translation)
+    for op, i1, i2, j1, _j2 in reversed(difflib.SequenceMatcher(None, wanted, found, autojunk=False).get_opcodes()):
+        if op == "equal":
+            continue
+        missing = wanted[i1:i2]
+        if op != "delete" or not all(tag.startswith("</") for tag in missing) or not 0 < j1 < len(tags):
+            return None
+        text = tokens[tags[j1] - 1]  # the words before the tag that follows the gap
+        words = text.rstrip()
+        tokens[tags[j1] - 1] = words + "".join(missing) + text[len(words) :]
+    result = "".join(tokens)
+    return result if markup(result) == wanted else None
 
 
 def markup(text):
     """A body's tags, without comments or the texts inside a tag a translator may translate.
 
     Those are an `alt` or `title`, and the fallback in a QWeb expression: `object.name or 'Guest'`.
-    Anything else that differs is a broken translation, and core ships some: a body missing a
-    closing tag is refused here, and that email stays English in that language.
+    Anything else that differs is a broken translation, and core ships some: see mended().
     """
     tags = (re.sub(r'(alt|title)="[^"]*"', r'\1=""', t) for t in TAG.findall(text) if not t.startswith("<!--"))
     return [re.sub(r"or '[^']*'", "or ''", t) for t in tags]
@@ -152,7 +200,8 @@ def sound(msgid, msgstr):
     """
     return (
         sorted(PLACEHOLDER.findall(msgid)) == sorted(PLACEHOLDER.findall(msgstr))
-        and msgid.count("\n") == msgstr.count("\n")
+        # An email body is HTML, where a translator may join lines freely; a message is not.
+        and (len(msgid) > 1000 or msgid.count("\n") == msgstr.count("\n"))
         and sorted(markup(msgid)) == sorted(markup(msgstr))
     )
 
