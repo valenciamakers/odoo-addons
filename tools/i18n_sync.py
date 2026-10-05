@@ -30,8 +30,21 @@ import polib
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import repos  # noqa: E402
 
-# A catalogue allowed to hold only the entries that differ from the English source.
-PARTIAL = {"en_GB"}
+# The languages every module must ship complete, written by hand.
+PRIMARY = ("es", "ca")
+# The languages shipped as a courtesy, written whole by i18n_fill.py and never edited by hand: core
+# translates most of base, web, mail, and Events into each on every series we support, and we are
+# confident of our own sentences in them. A blank in one shows English and blocks nothing.
+# Wanted, and held back until someone who reads them can review ours: Arabic first, then Finnish,
+# Vietnamese, and Thai.
+SECONDARY = (
+    "cs", "da", "de", "fr", "id", "it", "ja", "ko", "nl", "pl",
+    "pt", "pt_BR", "ro", "ru", "sv", "tr", "uk", "zh_CN", "zh_TW",
+)  # fmt: skip
+
+
+# Secondary-language catalogues behind their POT: reported, never a failure.
+LAGGING = []
 
 
 def blocks(text):
@@ -63,10 +76,16 @@ def sync(module, check):
     problems = []
     for po_path in sorted(i18n.glob("*.po")):
         name = f"{module} {po_path.stem}"
+        if po_path.stem in SECONDARY:
+            # Written from the POT by i18n_fill.py; say only how far behind it is.
+            entries = {(e.msgctxt, e.msgid): e for e in polib.pofile(str(po_path))}
+            behind = sum(1 for key in pot if key not in entries or not entries[key].msgstr)
+            if behind or entries.keys() - pot.keys():
+                LAGGING.append(f"{name}: {behind} of {len(pot)} strings show English; run tools/i18n_fill.py")
+            continue
         po = keyed(po_path)
         for key in pot.keys() - po.keys():
-            if po_path.stem not in PARTIAL:
-                problems.append(f"{name}: missing {key[1][:70]!r}")
+            problems.append(f"{name}: missing {key[1][:70]!r}")
         for key in po.keys() - pot.keys():
             problems.append(f"{name}: not in the POT, so never loaded: {key[1][:70]!r}")
         text = po_path.read_text()
@@ -109,10 +128,10 @@ def main():
     if not names:
         parser.error("name a module, or pass --all")
     problems = [problem for name in names for problem in sync(name, args.check)]
-    for problem in problems:
-        print(problem)
+    for line in LAGGING + problems:
+        print(line)
     if not problems:
-        print(f"{len(names)} modules in step with their POT")
+        print(f"{len(names)} modules in step with their POT in {' and '.join(PRIMARY)}")
     sys.exit(1 if problems else 0)
 
 
