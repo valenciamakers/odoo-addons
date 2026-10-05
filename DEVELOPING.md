@@ -26,9 +26,7 @@ was verified against the series of the branch you are reading.
 - **`vmk_partner_email_multiple`** — several email addresses per contact, matched by Odoo's own
   machinery, and kept rather than dropped when contacts are merged.
 - **`tools/`** — not a module. `make_icon.py` renders each module's store icon from the glyphs in
-  `tools/icons/`; see _Store icons_ under the authoring conventions. `i18n_sync.py` keeps PO files
-  in step with their POT, and `i18n_fill.py` writes the catalogues of the languages beyond Spanish
-  and Catalan; see _Translations_ there.
+  `tools/icons/`; see _Store icons_ under the authoring conventions.
 
 Read the existing modules' `README.md` files before writing another; between them they document most
 of the traps below in context.
@@ -1115,37 +1113,36 @@ noise. On 20 that includes the `base.module_*` pair, which the exporter now writ
 entry; a guard test reading one line each breaks on a summary long enough to wrap, so read the
 catalogue with `polib` as `vmk_apps_page_sort`'s does. Added 2026-09-24.
 
-**After any change to a POT, run `tools/i18n_sync.py` on the module.** A re-export that adds no new
-string still moves references: an existing term gains a view, or leaves a file. With no new term to
-translate, the PO files look finished and get left behind, which is how one module's had six entries
-naming the wrong places within a week. Odoo itself loads the POT's references, so nothing breaks,
-but the PO then misleads its next reader. The tool copies each entry's `#.` and `#:` lines from the
-POT, touching no msgid or msgstr, and reports what a person has to settle: an entry missing from a
-PO, one the POT no longer has, and a blank. `--all --check` changes nothing and exits 1 on any of
-them, so run it before committing a catalogue. Added 2026-10-05.
+**After any change to a POT, bring `es.po` and `ca.po` back in step with it.** A re-export that adds
+no new string still moves references: an existing term gains a view, or leaves a file. With no new
+term to translate, the PO files look finished and get left behind, which is how one module's had six
+entries naming the wrong places within a week. Odoo itself loads the POT's references, so nothing
+breaks, but the PO then misleads its next reader. Copy each entry's `#.` and `#:` lines from the
+POT, touching no msgid or msgstr, and look for what a person has to settle: an entry missing from a
+PO, one the POT no longer has, and a blank. We check all three before committing a catalogue. Added
+2026-10-05.
 
-```bash
-uv run tools/i18n_sync.py vmk_foo
-uv run tools/i18n_sync.py --all --check
-```
+**Spanish and Catalan are ours; nineteen more languages are shipped as a courtesy, and are
+generated.** `es` and `ca` are the languages we use: every module ships them complete, written by
+hand, and its tests hold them. The other nineteen are for other people's databases: Chinese
+(Simplified and Traditional), Czech, Danish, Dutch, French, German, Indonesian, Italian, Japanese,
+Korean, Polish, Portuguese (Brazil and Portugal), Romanian, Russian, Swedish, Turkish, and
+Ukrainian. They were chosen on 5 October 2026 as the ones where core itself translates most of base,
+web, mail, and Events on every series we support, so a translated module of ours does not sit alone
+in an English backend. Arabic, Finnish, Vietnamese, and Thai meet that test and are wanted, and wait
+for a reviewer who reads them: nobody here reads any of these languages, so each one shipped was
+translated and then read a second time, independently, against core's catalogues, and a language
+that cannot be held to that is not shipped.
 
-**Spanish and Catalan are ours; nineteen more languages are shipped as a courtesy, and a tool writes
-them.** `es` and `ca` are the languages we use: every module ships them complete, written by hand,
-and its tests hold them. The languages in `SECONDARY` in `tools/i18n_sync.py`, Czech to Traditional
-Chinese, are for other people's databases. They were chosen on 5 October 2026 as the ones where core
-itself translates most of base, web, mail, and Events on every series we support, so a translated
-module of ours does not sit alone in an English backend. Arabic, Finnish, Vietnamese, and Thai meet
-that test and are wanted, and wait for a reviewer who reads them: nobody here reads any of these
-languages, so each one shipped was translated and then read a second time, independently, against
-core's catalogues, and a language that cannot be held to that is not shipped.
+**Those nineteen catalogues are written whole by a tool of ours, kept outside this repository, so an
+edit made to one by hand is lost on its next run.** To correct a translation, write to
+info@valenciamakers.es, or open a pull request against the `.po` file: either way we apply it at the
+source, where it survives. For each string of a module's POT the tool takes the first of:
 
-**Never edit a secondary `<lang>.po` by hand.** `tools/i18n_fill.py` writes each one whole, from the
-POT, and a hand edit is lost on the next run. For each string it takes the first of:
-
-- **`tools/i18n/overrides.json`**, a wording we chose over the one core would give, with its reason
-  beside it. Core's translation of a short English string is often another sense of the word: a bare
-  _Slot_ is a slot machine in Swedish and a hardware socket in Chinese, _Session_ a login, _Host_ a
-  server, _To_ a mail recipient. A correction to a string core also has goes here.
+- **A wording we chose over the one core would give**, each recorded with its reason. Core's
+  translation of a short English string is often another sense of the word: a bare _Slot_ is a slot
+  machine in Swedish and a hardware socket in Chinese, _Session_ a login, _Host_ a server, _To_ a
+  mail recipient.
 - **Core's own translation** of the same English, on this series, as for Spanish and Catalan.
 - **An email body core translates**, with our lines put back where they sit in the English. Core
   ships bodies a translator broke, and the tool mends the two kinds it can prove right against the
@@ -1156,16 +1153,10 @@ POT, and a hand edit is lost on the next run. For each string it takes the first
   reproducing core's own bodies, it misplaced text wherever a language reorders the sentence.
 - **The translation already in the file**, or in another module of ours for the same English, which
   is what keeps one word for one thing across modules. So the PO files are the record of our own
-  wording, and a new translation enters once, through `--memory`.
+  wording, and a new translation is written once and then carried to every module and series.
 
-A string with none of those stays blank and shows English. That never blocks a release:
-`i18n_sync.py --check` reports how far a secondary language lags and still passes.
-
-```bash
-uv run tools/i18n_fill.py vmk_foo
-uv run tools/i18n_fill.py --all --todo /tmp/todo    # the strings each language still lacks
-uv run tools/i18n_fill.py --all --memory /tmp/new   # <lang>.json files of {msgid: msgstr}
-```
+A string with none of those stays blank and shows English. That never blocks a release: only Spanish
+and Catalan can fail a module's checks, and a lagging language is reported.
 
 **There is no `en_GB.po`, on purpose.** Core ships none on any series, so English (UK) changes date
 and time formats and no wording. British spellings in ours would sit beside core's American ones on
