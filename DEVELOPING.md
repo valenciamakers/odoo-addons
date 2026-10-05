@@ -254,6 +254,19 @@ changelog of Odoo 20.
   field then fails in the browser. Only a tour, or a look, catches it.
 - **`http_interface` defaults to `127.0.0.1`**, not every interface. Set it to `0.0.0.0` in a
   container's config, or the published port reaches nothing.
+- **Activating a language overwrites the English names of uninstalled modules where `en_US` is
+  inactive** ([odoo/odoo#292316](https://github.com/odoo/odoo/issues/292316)). A database created in
+  any other language, English (UK) included, never has `en_US` active. There, the step that loads
+  uninstalled modules' names from their PO files (`_load_non_installed_modules_manifest_terms`)
+  writes only the new translations, and the ORM fills the `en_US` it finds missing from the write
+  with one of them (`orm/fields_textual.py`, `write`). The Apps list then shows every uninstalled
+  module in the language just activated to anyone whose language falls back to `en_US`. Installed
+  modules are untouched, and Update Apps List restores the names until the next activation. It is
+  core's, not ours: it reproduces with only `base` installed. Found 3 October 2026 on build
+  `20.0-20260926`; a fix is proposed in
+  [odoo/odoo#292362](https://github.com/odoo/odoo/pull/292362), and it does not repair a database
+  already affected, which needs Update Apps List once. Remove this entry when the fix is in the
+  image we test on.
 
 ## Odoo traps, verified
 
