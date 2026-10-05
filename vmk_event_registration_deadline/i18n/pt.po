@@ -1,0 +1,80 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* vmk_event_registration_deadline
+#
+# Written by tools/i18n_fill.py: do not edit by hand. Core's wording where core
+# has the same English, ours otherwise. See DEVELOPING.md.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-28 18:32+0000\n"
+"PO-Revision-Date: 2026-09-28 18:32+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: pt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : ((n != 0 && n % 1000000 == 0) ? 1 : 2);\n"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_vmk_event_registration_deadline
+msgid "Event Registration Deadline"
+msgstr "Prazo de inscrição no evento"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_vmk_event_registration_deadline
+msgid ""
+"Allow registration only until an event starts, or a set time in advance"
+msgstr ""
+"Permita a inscrição apenas até ao início de um evento, ou até um determinado"
+" tempo antes"
+
+#. module: vmk_event_registration_deadline
+#: model:ir.model.fields,help:vmk_event_registration_deadline.field_res_config_settings__vmk_registration_deadline_enabled
+#: model_terms:ir.ui.view,arch_db:vmk_event_registration_deadline.res_config_settings_view_form
+msgid ""
+"Allow registration only until an event starts, or a set time in advance. Set"
+" to 00:00 to end registration at the event start time."
+msgstr ""
+"Permita a inscrição apenas até ao início de um evento, ou até um determinado"
+" tempo antes. Defina 00:00 para encerrar as inscrições à hora de início do "
+"evento."
+
+#. module: vmk_event_registration_deadline
+#: model_terms:ir.ui.view,arch_db:vmk_event_registration_deadline.view_event_form_deadline
+msgid "Before Start"
+msgstr "antes do início"
+
+#. module: vmk_event_registration_deadline
+#: model:ir.model,name:vmk_event_registration_deadline.model_res_config_settings
+msgid "Config Settings"
+msgstr "Definições de Configuração"
+
+#. module: vmk_event_registration_deadline
+#: model:ir.model,name:vmk_event_registration_deadline.model_event_event
+msgid "Event"
+msgstr "Evento"
+
+#. module: vmk_event_registration_deadline
+#: model:ir.model.fields,field_description:vmk_event_registration_deadline.field_event_event__vmk_deadline_custom
+#: model:ir.model.fields,field_description:vmk_event_registration_deadline.field_res_config_settings__vmk_registration_deadline_enabled
+msgid "Registration Deadline"
+msgstr "Prazo de inscrição"
+
+#. module: vmk_event_registration_deadline
+#: model:ir.model.fields,field_description:vmk_event_registration_deadline.field_event_event__vmk_deadline_hours
+#: model:ir.model.fields,field_description:vmk_event_registration_deadline.field_res_config_settings__vmk_registration_deadline_hours
+msgid "Time Before Start"
+msgstr "Tempo antes do início"
+
+#. module: vmk_event_registration_deadline
+#: model:ir.model.fields,help:vmk_event_registration_deadline.field_event_event__vmk_deadline_custom
+msgid ""
+"Use a custom registration deadline for the event, overriding the global "
+"setting."
+msgstr ""
+"Usar um prazo de inscrição próprio para o evento, substituindo a definição "
+"global."

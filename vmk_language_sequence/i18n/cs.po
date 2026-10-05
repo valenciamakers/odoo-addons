@@ -1,0 +1,49 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* vmk_language_sequence
+#
+# Written by tools/i18n_fill.py: do not edit by hand. Core's wording where core
+# has the same English, ours otherwise. See DEVELOPING.md.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-28 18:20+0000\n"
+"PO-Revision-Date: 2026-09-28 18:20+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: cs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;\n"
+
+#. module: vmk_language_sequence
+#: model:ir.model,name:vmk_language_sequence.model_res_lang
+msgid "Languages"
+msgstr "Jazyky"
+
+#. module: vmk_language_sequence
+#: model:ir.model.fields,help:vmk_language_sequence.field_res_lang__sequence
+msgid ""
+"Order in which enabled languages are offered, lowest first: in the website "
+"language selector, and in the language dropdowns of users and contacts."
+msgstr ""
+"Pořadí, v jakém se nabízejí povolené jazyky, od nejnižšího: ve výběru jazyka"
+" na webu a v rozbalovacích seznamech jazyků u uživatelů a kontaktů."
+
+#. module: vmk_language_sequence
+#: model:ir.model.fields,field_description:vmk_language_sequence.field_res_lang__sequence
+msgid "Sequence"
+msgstr "Sekvence"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_vmk_language_sequence
+msgid "Language Sequence"
+msgstr "Pořadí jazyků"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_vmk_language_sequence
+msgid "Reorder languages manually instead of alphabetically"
+msgstr "Změňte pořadí jazyků ručně namísto abecedního řazení"

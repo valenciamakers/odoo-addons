@@ -4,7 +4,7 @@
 {
     "name": "Protect Language Edits",
     "summary": "Stop Odoo updates from reverting your edits to language settings",
-    "version": "18.0.1.0.0",
+    "version": "18.0.1.1.0",
     "author": "Valencia Makers",
     "license": "LGPL-3",
     "category": "Technical",

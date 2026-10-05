@@ -1,0 +1,62 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* vmk_apps_menu_sort
+#
+# Written by tools/i18n_fill.py: do not edit by hand. Core's wording where core
+# has the same English, ours otherwise. See DEVELOPING.md.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-28 18:04+0000\n"
+"PO-Revision-Date: 2026-09-28 18:04+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: tr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_vmk_apps_menu_sort
+msgid "Apps Menu Sort"
+msgstr "Uygulamalar Menüsü Sıralaması"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_vmk_apps_menu_sort
+msgid ""
+"Alphabetical order for the apps menu, with Apps and Settings at the end"
+msgstr ""
+"Uygulamalar ve Ayarlar sonda olacak şekilde uygulamalar menüsü için "
+"alfabetik sıralama"
+
+#. module: vmk_apps_menu_sort
+#: model:ir.model,name:vmk_apps_menu_sort.model_ir_ui_menu
+msgid "Menu"
+msgstr "Menü"
+
+#. module: vmk_apps_menu_sort
+#. odoo-python
+#: code:addons/vmk_apps_menu_sort/models/res_users_settings.py:0
+msgid "Nothing to reset: the app grid order is an Odoo Enterprise feature."
+msgstr ""
+"Sıfırlanacak bir şey yok: uygulama ızgarası sıralaması bir Odoo Enterprise "
+"özelliğidir."
+
+#. module: vmk_apps_menu_sort
+#: model:ir.actions.server,name:vmk_apps_menu_sort.action_reset_app_grid_order
+msgid "Reset per-user app grid order"
+msgstr "Kullanıcı başına uygulama ızgarası sıralamasını sıfırla"
+
+#. module: vmk_apps_menu_sort
+#. odoo-python
+#: code:addons/vmk_apps_menu_sort/models/res_users_settings.py:0
+msgid "Reset the app grid order for %s user(s)."
+msgstr "%s kullanıcı için uygulama ızgarası sıralaması sıfırlandı."
+
+#. module: vmk_apps_menu_sort
+#: model:ir.model,name:vmk_apps_menu_sort.model_res_users_settings
+msgid "User Settings"
+msgstr "Kullanıcı ayarları"

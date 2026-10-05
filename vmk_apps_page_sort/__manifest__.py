@@ -4,7 +4,7 @@
 {
     "name": "Apps Page Sort",
     "summary": "Alphabetical order on the Apps page, sorted by the name shown on the card",
-    "version": "18.0.1.0.0",
+    "version": "18.0.1.1.0",
     "author": "Valencia Makers",
     "license": "LGPL-3",
     "category": "Technical",

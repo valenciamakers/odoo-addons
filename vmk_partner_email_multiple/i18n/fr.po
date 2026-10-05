@@ -1,0 +1,180 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* vmk_partner_email_multiple
+#
+# Written by tools/i18n_fill.py: do not edit by hand. Core's wording where core
+# has the same English, ours otherwise. See DEVELOPING.md.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-28 19:01+0000\n"
+"PO-Revision-Date: 2026-09-28 19:01+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : ((n != 0 && n % 1000000 == 0) ? 1 : 2);\n"
+
+#. module: vmk_partner_email_multiple
+#. odoo-python
+#: code:addons/vmk_partner_email_multiple/models/vmk_partner_email.py:0
+msgid "%(email)s is already an additional address of %(contact)s."
+msgstr "%(email)s est déjà une adresse supplémentaire de %(contact)s."
+
+#. module: vmk_partner_email_multiple
+#. odoo-python
+#: code:addons/vmk_partner_email_multiple/models/vmk_partner_email.py:0
+msgid "%(email)s is already the primary address of %(contact)s."
+msgstr "%(email)s est déjà l'adresse principale de %(contact)s."
+
+#. module: vmk_partner_email_multiple
+#: model_terms:ir.ui.view,arch_db:vmk_partner_email_multiple.view_partner_form_vmk_email_multiple
+msgid "Add an email address"
+msgstr "Ajouter une adresse e-mail"
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model,name:vmk_partner_email_multiple.model_vmk_partner_email
+msgid "Additional Contact Email"
+msgstr "E-mail supplémentaire du contact"
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_res_partner__vmk_email_ids
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_res_users__vmk_email_ids
+#: model_terms:ir.ui.view,arch_db:vmk_partner_email_multiple.view_partner_form_vmk_email_multiple
+msgid "Additional Emails"
+msgstr "E-mails supplémentaires"
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model,name:vmk_partner_email_multiple.model_res_partner
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_vmk_partner_email__partner_id
+msgid "Contact"
+msgstr "Contact"
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_vmk_partner_email__create_uid
+msgid "Created by"
+msgstr "Créé par"
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_vmk_partner_email__create_date
+msgid "Created on"
+msgstr "Créé le"
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_vmk_partner_email__display_name
+msgid "Display Name"
+msgstr "Nom d'affichage"
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_vmk_partner_email__email
+msgid "Email Address"
+msgstr "Adresse e-mail"
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model,name:vmk_partner_email_multiple.model_mail_thread
+msgid "Email Thread"
+msgstr "Discussion par e-mail"
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,help:vmk_partner_email_multiple.field_vmk_partner_email__label
+msgid "Free-text note about this address, e.g. billing, personal, noreply."
+msgstr ""
+"Note libre sur cette adresse, par ex. facturation, personnelle, noreply."
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_vmk_partner_email__id
+msgid "ID"
+msgstr "ID"
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_vmk_partner_email__label
+msgid "Label"
+msgstr "Libellé"
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_vmk_partner_email__write_uid
+msgid "Last Updated by"
+msgstr "Mis à jour par"
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_vmk_partner_email__write_date
+msgid "Last Updated on"
+msgstr "Mis à jour le"
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,help:vmk_partner_email_multiple.field_vmk_partner_email__email_normalized
+msgid ""
+"Lower-cased address without a display name, used for matching. Mirrors "
+"res.partner.email_normalized."
+msgstr ""
+"Adresse en minuscules, sans nom d'affichage, utilisée pour associer les "
+"e-mails entrants. Reflète res.partner.email_normalized."
+
+#. module: vmk_partner_email_multiple
+#: model_terms:ir.ui.view,arch_db:vmk_partner_email_multiple.view_partner_form_vmk_email_multiple
+msgid ""
+"Mail arriving from any of these addresses is matched to this contact.\n"
+"                        Nothing is ever sent to them."
+msgstr ""
+"Les e-mails reçus de l'une de ces adresses sont associés à ce contact.\n"
+"                        Aucun e-mail n'y est jamais envoyé."
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model,name:vmk_partner_email_multiple.model_base_partner_merge_automatic_wizard
+msgid "Merge Partner Wizard"
+msgstr "Assistant de fusion des partenaires"
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_vmk_partner_email__email_normalized
+msgid "Normalized Email"
+msgstr "E-mail normalisé"
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,help:vmk_partner_email_multiple.field_res_partner__vmk_email_ids
+#: model:ir.model.fields,help:vmk_partner_email_multiple.field_res_users__vmk_email_ids
+msgid ""
+"Other addresses this contact writes from. Mail arriving from any of them is "
+"matched to this contact. Nothing is ever sent to them."
+msgstr ""
+"Autres adresses depuis lesquelles ce contact écrit. Les e-mails reçus de "
+"l'une d'elles sont associés à ce contact. Aucun e-mail n'y est jamais "
+"envoyé."
+
+#. module: vmk_partner_email_multiple
+#. odoo-javascript
+#: code:addons/vmk_partner_email_multiple/static/src/email_link_field/email_link_field.xml:0
+msgid "Send Email"
+msgstr "Envoyer un e-mail"
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_vmk_partner_email__sequence
+msgid "Sequence"
+msgstr "Séquence"
+
+#. module: vmk_partner_email_multiple
+#: model_terms:ir.ui.view,arch_db:vmk_partner_email_multiple.view_partner_form_vmk_email_multiple
+msgid "Swap with the contact's primary email address"
+msgstr "Échanger avec l'adresse e-mail principale du contact"
+
+#. module: vmk_partner_email_multiple
+#: model_terms:ir.ui.view,arch_db:vmk_partner_email_multiple.view_partner_form_vmk_email_multiple
+msgid "e.g. billing"
+msgstr "par ex. facturation"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_vmk_partner_email_multiple
+msgid "Multiple Contact Emails"
+msgstr "E-mails multiples par contact"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_vmk_partner_email_multiple
+msgid ""
+"Assign multiple email addresses to a contact, and Odoo matches mail from all"
+" of them"
+msgstr ""
+"Attribuer plusieurs adresses e-mail à un contact, pour qu'Odoo lui associe "
+"les e-mails reçus de chacune d'elles"

@@ -30,6 +30,12 @@ New languages you enable are added to the end of the list, and can be dragged in
 
 **Changelog**
 
+*18.0.1.2.0 (5 October 2026)*
+
+- Translated into nineteen more languages: Chinese (Simplified and Traditional), Czech, Danish,
+  Dutch, French, German, Indonesian, Italian, Japanese, Korean, Polish, Portuguese (Brazil and
+  Portugal), Romanian, Russian, Swedish, Turkish, and Ukrainian.
+
 *18.0.1.1.0 (3 October 2026)*
 
 - The **Website** app is no longer required, and is no longer installed along with this module.

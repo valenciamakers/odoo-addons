@@ -4,7 +4,7 @@
 {
     "name": "Event Registration Deadline",
     "summary": "Allow registration only until an event starts, or a set time in advance",
-    "version": "18.0.1.0.1",
+    "version": "18.0.1.1.0",
     "author": "Valencia Makers",
     "license": "LGPL-3",
     "category": "Marketing/Events",

@@ -1,0 +1,51 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* vmk_language_protect_settings
+#
+# Written by tools/i18n_fill.py: do not edit by hand. Core's wording where core
+# has the same English, ours otherwise. See DEVELOPING.md.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-28 18:05+0000\n"
+"PO-Revision-Date: 2026-09-28 18:05+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. module: vmk_language_protect_settings
+#: model:ir.model.fields,help:vmk_language_protect_settings.field_res_lang__protect_from_updates
+msgid ""
+"Keep this language's settings when Odoo modules are updated.\n"
+"\n"
+"Odoo ships language records as module data and re-applies them on every update, reverting edits to the name, ISO code, formats and so on. This is set automatically when you edit one of those fields; untick it to let Odoo manage this language again."
+msgstr ""
+"更新 Odoo 模块时保留此语言的设置。\n"
+"\n"
+"Odoo 将语言记录作为模块数据提供，并在每次更新时重新应用，从而还原对名称、ISO 代码、格式等的修改。编辑这些字段之一时会自动勾选此项；取消勾选可让 Odoo 重新管理此语言。"
+
+#. module: vmk_language_protect_settings
+#: model:ir.model,name:vmk_language_protect_settings.model_res_lang
+msgid "Languages"
+msgstr "语言"
+
+#. module: vmk_language_protect_settings
+#: model:ir.model.fields,field_description:vmk_language_protect_settings.field_res_lang__protect_from_updates
+msgid "Protect From Updates"
+msgstr "防止更新覆盖"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_vmk_language_protect_settings
+msgid "Protect Language Edits"
+msgstr "保护语言修改"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_vmk_language_protect_settings
+msgid "Stop Odoo updates from reverting your edits to language settings"
+msgstr "防止 Odoo 更新还原您对语言设置的修改"

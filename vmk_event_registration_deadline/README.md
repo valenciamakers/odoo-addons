@@ -76,7 +76,8 @@ sessions exist.
 
 ### Translations
 
-`i18n/` carries `es` and `ca`, both checked term by term against core's catalogues. Shared terms —
+`i18n/` carries `es` and `ca`, both checked term by term against core's catalogues. Nineteen more
+languages are written by `tools/i18n_fill.py`, never by hand; see `DEVELOPING.md`. Shared terms —
 _Event_ and _Config Settings_ — take core's own `msgstr` rather than a fresh translation. (The 19.0
 module's catalogue also carries _Display Name_, _ID_, and _Event Slot_; Odoo 18's exporter no longer
 attributes `display_name`/`id` to an inheriting module, and this port has no `event.slot` model, so
