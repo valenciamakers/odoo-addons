@@ -26,7 +26,8 @@ was verified against the series of the branch you are reading.
 - **`vmk_partner_email_multiple`** — several email addresses per contact, matched by Odoo's own
   machinery, and kept rather than dropped when contacts are merged.
 - **`tools/`** — not a module. `make_icon.py` renders each module's store icon from the glyphs in
-  `tools/icons/`; see _Store icons_ under the authoring conventions.
+  `tools/icons/`; see _Store icons_ under the authoring conventions. `i18n_sync.py` keeps PO files
+  in step with their POT; see _Translations_ there.
 
 Read the existing modules' `README.md` files before writing another; between them they document most
 of the traps below in context.
@@ -929,6 +930,20 @@ added to the entry in the POT and every PO, or the second view stays English. Ad
 entry hand-inserted anywhere else, or wrapped differently, turns the next re-export into a diff of
 noise. The one exception is the `base.module_*` pair, which our guard test reads one line each.
 Added 2026-09-24.
+
+**After any change to a POT, run `tools/i18n_sync.py` on the module.** A re-export that adds no new
+string still moves references: an existing term gains a view, or leaves a file. With no new term to
+translate, the PO files look finished and get left behind, which is how one module's had six entries
+naming the wrong places within a week. Odoo itself loads the POT's references, so nothing breaks,
+but the PO then misleads its next reader. The tool copies each entry's `#.` and `#:` lines from the
+POT, touching no msgid or msgstr, and reports what a person has to settle: an entry missing from a
+PO, one the POT no longer has, and a blank. `--all --check` changes nothing and exits 1 on any of
+them, so run it before committing a catalogue. Added 2026-10-05.
+
+```bash
+uv run tools/i18n_sync.py vmk_foo
+uv run tools/i18n_sync.py --all --check
+```
 
 **`loadlang` wants the full locale code.** `-l es` works because a language's `url_code` is `es`,
 but `-l ca` silently matches nothing and leaves Catalan inactive — it is `ca_ES`. The `.po` file
