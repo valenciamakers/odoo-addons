@@ -28,6 +28,13 @@ different orders. Case is ignored and accented names are sorted correctly, so *Ã
 - **The command palette ranks by relevance once you type**, as in standard Odoo.
 - **Spanish Ã± is sorted as n.**
 
+**Languages**
+
+Catalan, Chinese (Simplified and Traditional), Czech, Danish, Dutch, English, French, German,
+Indonesian, Italian, Japanese, Korean, Polish, Portuguese (Brazil and Portugal), Romanian,
+Russian, Spanish, Swedish, Turkish, and Ukrainian. If any translation seems incorrect, please
+contact us and we will fix it.
+
 **Changelog**
 
 *19.0.1.2.0 (5 October 2026)*

@@ -49,6 +49,13 @@ A multi-day slot is named by its range, for example *9 Oct 2026, 18:00 - 11 Oct 
 - **The event's own dates must cover its slots.** Odoo refuses to save a slot that ends after the
   event does, so extend the event first.
 
+**Languages**
+
+Catalan, Chinese (Simplified and Traditional), Czech, Danish, Dutch, English, French, German,
+Indonesian, Italian, Japanese, Korean, Polish, Portuguese (Brazil and Portugal), Romanian,
+Russian, Spanish, Swedish, Turkish, and Ukrainian. If any translation seems incorrect, please
+contact us and we will fix it.
+
 **Changelog**
 
 *19.0.1.1.0 (5 October 2026)*

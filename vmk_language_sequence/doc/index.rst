@@ -28,6 +28,13 @@ New languages you enable are added to the end of the list, and can be dragged in
 
 - **Odoo shows the Languages list only in developer mode**, and this module leaves that as it is.
 
+**Languages**
+
+Catalan, Chinese (Simplified and Traditional), Czech, Danish, Dutch, English, French, German,
+Indonesian, Italian, Japanese, Korean, Polish, Portuguese (Brazil and Portugal), Romanian,
+Russian, Spanish, Swedish, Turkish, and Ukrainian. If any translation seems incorrect, please
+contact us and we will fix it.
+
 **Changelog**
 
 *19.0.1.4.0 (5 October 2026)*

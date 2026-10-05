@@ -34,6 +34,13 @@ starts, and the event's page shows *Registrations Closed* once it has closed for
   still add attendees from the backend.
 - **A deadline cannot reopen registrations.** It only ever closes them earlier than Odoo would.
 
+**Languages**
+
+Catalan, Chinese (Simplified and Traditional), Czech, Danish, Dutch, English, French, German,
+Indonesian, Italian, Japanese, Korean, Polish, Portuguese (Brazil and Portugal), Romanian,
+Russian, Spanish, Swedish, Turkish, and Ukrainian. If any translation seems incorrect, please
+contact us and we will fix it.
+
 **Changelog**
 
 *19.0.1.2.0 (5 October 2026)*
