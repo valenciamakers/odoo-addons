@@ -110,11 +110,11 @@ xpath.
 ### Translations
 
 `i18n/` carries `es` and `ca`, both checked term by term against core's catalogues. Nineteen more
-languages are written by `tools/i18n_fill.py`, never by hand; see `DEVELOPING.md`. Terms this module
-shares with core — _Event_, _Sequence_, _Company_, the ORM's own _Created by_ and _Last Updated on_
-— take core's own `msgstr` out of `base`'s and `event`'s catalogues rather than being translated
-afresh, so the Hosts tab reads as part of the backend rather than introducing a second vocabulary.
-Strings core does not have, such as the host `help` text, are ours to write.
+languages are generated, never edited by hand; see `DEVELOPING.md`. Terms this module shares with
+core — _Event_, _Sequence_, _Company_, the ORM's own _Created by_ and _Last Updated on_ — take
+core's own `msgstr` out of `base`'s and `event`'s catalogues rather than being translated afresh, so
+the Hosts tab reads as part of the backend rather than introducing a second vocabulary. Strings core
+does not have, such as the host `help` text, are ours to write.
 
 **The module's own name and summary are hand-maintained**, in the POT as well as both PO files.
 `ir_module.py` registers every module record as `base.module_<name>`, so the exporter attributes
