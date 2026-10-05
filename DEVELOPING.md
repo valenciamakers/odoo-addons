@@ -271,10 +271,10 @@ changelog of Odoo 20.
   module in the language just activated to anyone whose language falls back to `en_US`. Installed
   modules are untouched, and Update Apps List restores the names until the next activation. It is
   core's, not ours: it reproduces with only `base` installed. Found 3 October 2026 on build
-  `20.0-20260926`; a fix is proposed in
-  [odoo/odoo#292362](https://github.com/odoo/odoo/pull/292362), and it does not repair a database
-  already affected, which needs Update Apps List once. Remove this entry when the fix is in the
-  image we test on.
+  `20.0-20260926`, and fixed on the `20.0` branch on 5 October 2026
+  ([odoo/odoo#292362](https://github.com/odoo/odoo/pull/292362), commit `52f793d2f`), so a build
+  dated after that has it. The fix does not repair a database already affected, which needs Update
+  Apps List once. Remove this entry when the image we test on is such a build.
 
 ## Odoo traps, verified
 
