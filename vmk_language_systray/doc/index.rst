@@ -30,6 +30,13 @@ value *True*. It applies to every user, and only appears on wide screens.
 - **The menu hides on phone-width screens**, just like the company switcher does. Switch languages
   with the normal method using your preferences.
 
+**Languages**
+
+Catalan, Chinese (Simplified and Traditional), Czech, Danish, Dutch, English, French, German,
+Indonesian, Italian, Japanese, Korean, Polish, Portuguese (Brazil and Portugal), Romanian,
+Russian, Spanish, Swedish, Turkish, and Ukrainian. If any translation seems incorrect, please
+contact us and we will fix it.
+
 **Changelog**
 
 *18.0.1.1.0 (5 October 2026)*

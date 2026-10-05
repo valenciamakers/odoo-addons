@@ -27,6 +27,13 @@ the original orders return.
 - **Only the order of the sidebar sections and the Technical groups changes.** Every setting and
   menu item stays where it was.
 
+**Languages**
+
+Catalan, Chinese (Simplified and Traditional), Czech, Danish, Dutch, English, French, German,
+Indonesian, Italian, Japanese, Korean, Polish, Portuguese (Brazil and Portugal), Romanian,
+Russian, Spanish, Swedish, Turkish, and Ukrainian. If any translation seems incorrect, please
+contact us and we will fix it.
+
 **Changelog**
 
 *18.0.1.1.0 (5 October 2026)*
