@@ -1,0 +1,102 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* vmk_event_slot_multiday
+#
+# Written by tools/i18n_fill.py: do not edit by hand. Core's wording where core
+# has the same English, ours otherwise. See DEVELOPING.md.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 20.0+e-20260926\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-30 18:50+0000\n"
+"PO-Revision-Date: 2026-09-30 18:50+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. module: vmk_event_slot_multiday
+#. odoo-python
+#: code:addons/vmk_event_slot_multiday/models/event_slot.py:0
+msgid "A slot cannot end before it starts: %(slot)s ends on %(end)s."
+msgstr "时段的结束时间不能早于开始时间：%(slot)s 结束于 %(end)s。"
+
+#. module: vmk_event_slot_multiday
+#. odoo-python
+#: code:addons/vmk_event_slot_multiday/models/event_slot.py:0
+msgid "A slot hour must be between 0:00 and 23:59."
+msgstr "时段小时必须在 0:00 至 23:59 之间。"
+
+#. module: vmk_event_slot_multiday
+#. odoo-python
+#: code:addons/vmk_event_slot_multiday/models/event_slot.py:0
+msgid ""
+"A slot's end date and its number of days disagree: it ends on %(end)s, which"
+" is %(offset)s days after its date, not %(given)s."
+msgstr "时段的结束日期与其天数不一致：它结束于 %(end)s，即其日期之后 %(offset)s 天，而不是 %(given)s 天。"
+
+#. module: vmk_event_slot_multiday
+#: model:ir.module.module,summary:base.module_vmk_event_slot_multiday
+msgid "Allow event slots to span multiple days"
+msgstr "允许活动时段跨越多天"
+
+#. module: vmk_event_slot_multiday
+#: model_terms:ir.ui.view,arch_db:vmk_event_slot_multiday.view_event_slot_form_multiday
+msgid "Date"
+msgstr "日期"
+
+#. module: vmk_event_slot_multiday
+#: model:ir.model.fields,field_description:vmk_event_slot_multiday.field_event_slot__vmk_end_day_offset
+msgid "Days Spanned"
+msgstr "跨越天数"
+
+#. module: vmk_event_slot_multiday
+#: model:ir.model.fields,field_description:vmk_event_slot_multiday.field_event_slot__display_name
+msgid "Display Name"
+msgstr "显示名称"
+
+#. module: vmk_event_slot_multiday
+#: model:ir.model.fields,field_description:vmk_event_slot_multiday.field_event_slot__vmk_end_date
+msgid "End Date"
+msgstr "结束日期"
+
+#. module: vmk_event_slot_multiday
+#: model:ir.model,name:vmk_event_slot_multiday.model_event_slot
+msgid "Event Slot"
+msgstr "活动时段"
+
+#. module: vmk_event_slot_multiday
+#: model_terms:ir.ui.view,arch_db:vmk_event_slot_multiday.view_event_slot_form_multiday
+msgid "Expressed in the event timezone."
+msgstr "以活动时区表示。"
+
+#. module: vmk_event_slot_multiday
+#: model:ir.model.fields,help:vmk_event_slot_multiday.field_event_slot__vmk_end_day_offset
+msgid ""
+"How many days after its date the slot ends. 0 for a slot within one day."
+msgstr "时段在其日期之后多少天结束。当天内的时段为 0。"
+
+#. module: vmk_event_slot_multiday
+#: model:ir.model.fields,field_description:vmk_event_slot_multiday.field_event_slot__id
+msgid "ID"
+msgstr "ID"
+
+#. module: vmk_event_slot_multiday
+#: model:ir.module.module,shortdesc:base.module_vmk_event_slot_multiday
+msgid "Multi-Day Event Slots"
+msgstr "多天活动时段"
+
+#. module: vmk_event_slot_multiday
+#. odoo-javascript
+#: code:addons/vmk_event_slot_multiday/static/src/fields/event_slot_daterange_field.js:0
+msgid "Slot Date Range"
+msgstr "时段日期范围"
+
+#. module: vmk_event_slot_multiday
+#: model:ir.model.fields,help:vmk_event_slot_multiday.field_event_slot__vmk_end_date
+msgid "The day the slot ends. The same as its date for a slot within one day."
+msgstr "时段结束的日期。当天内的时段与其日期相同。"

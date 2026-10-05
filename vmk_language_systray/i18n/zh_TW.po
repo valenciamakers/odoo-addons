@@ -1,0 +1,57 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* vmk_language_systray
+#
+# Written by tools/i18n_fill.py: do not edit by hand. Core's wording where core
+# has the same English, ours otherwise. See DEVELOPING.md.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 20.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-30 18:21+0000\n"
+"PO-Revision-Date: 2026-09-30 18:21+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. module: vmk_language_systray
+#: model:ir.module.module,shortdesc:base.module_vmk_language_systray
+msgid "Backend Language Menu"
+msgstr "後台語言功能表"
+
+#. module: vmk_language_systray
+#: model:ir.model.fields,field_description:vmk_language_systray.field_ir_http__display_name
+msgid "Display Name"
+msgstr "顯示名稱"
+
+#. module: vmk_language_systray
+#: model:ir.model,name:vmk_language_systray.model_ir_http
+msgid "HTTP Routing"
+msgstr "HTTP 路由"
+
+#. module: vmk_language_systray
+#: model:ir.model.fields,field_description:vmk_language_systray.field_ir_http__id
+msgid "ID"
+msgstr "識別號"
+
+#. module: vmk_language_systray
+#. odoo-javascript
+#: code:addons/vmk_language_systray/static/src/language_systray.js:0
+msgid "Language"
+msgstr "語言"
+
+#. module: vmk_language_systray
+#. odoo-javascript
+#: code:addons/vmk_language_systray/static/src/language_systray.js:0
+msgid "Language: %s"
+msgstr "語言：%s"
+
+#. module: vmk_language_systray
+#: model:ir.module.module,summary:base.module_vmk_language_systray
+msgid "Switch your own backend language from a dropdown in the menu bar"
+msgstr "從功能表列的下拉選單切換你自己的後台語言"

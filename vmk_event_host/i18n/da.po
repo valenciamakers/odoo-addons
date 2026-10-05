@@ -1,0 +1,171 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* vmk_event_host
+#
+# Written by tools/i18n_fill.py: do not edit by hand. Core's wording where core
+# has the same English, ours otherwise. See DEVELOPING.md.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 20.0+e-20260926\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-30 18:16+0000\n"
+"PO-Revision-Date: 2026-09-30 18:16+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: da\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#. module: vmk_event_host
+#. odoo-javascript
+#: code:addons/vmk_event_host/static/src/host_summary_field.js:0
+msgid "%s — show the Hosts tab"
+msgstr "%s – vis fanen Værter"
+
+#. module: vmk_event_host
+#: model:ir.model.constraint,message:vmk_event_host.constraint_vmk_event_host_partner_event_uniq
+msgid "A contact can only be listed once as a host of an event."
+msgstr "En kontakt kan kun optræde én gang som vært for et arrangement."
+
+#. module: vmk_event_host
+#: model_terms:ir.ui.view,arch_db:vmk_event_host.view_event_form_host
+msgid "Added in the Hosts tab"
+msgstr "Tilføjes på fanen Værter"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__company_id
+msgid "Company"
+msgstr "Virksomhed"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__create_uid
+msgid "Created by"
+msgstr "Oprettet af"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__create_date
+msgid "Created on"
+msgstr "Oprettet den"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_event_event__display_name
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__display_name
+msgid "Display Name"
+msgstr "Visningsnavn"
+
+#. module: vmk_event_host
+#: model:ir.model,name:vmk_event_host.model_event_event
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__event_id
+msgid "Event"
+msgstr "Arrangement"
+
+#. module: vmk_event_host
+#: model:ir.model,name:vmk_event_host.model_vmk_event_host
+msgid "Event Host"
+msgstr "Arrangementsvært"
+
+#. module: vmk_event_host
+#: model:ir.module.module,shortdesc:base.module_vmk_event_host
+msgid "Event Hosts"
+msgstr "Arrangementsværter"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__partner_id
+#: model_terms:ir.ui.view,arch_db:vmk_event_host.view_event_search_host
+msgid "Host"
+msgstr "Vært"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_event_event__vmk_host_ids
+msgid "Host Lines"
+msgstr "Værtslinjer"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_event_event__vmk_host_names
+msgid "Host Summary"
+msgstr "Opsummering af værter"
+
+#. module: vmk_event_host
+#. odoo-javascript
+#: code:addons/vmk_event_host/static/src/host_summary_field.js:0
+msgid "Host summary"
+msgstr "Opsummering af værter"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_event_event__vmk_host_partner_ids
+#: model_terms:ir.ui.view,arch_db:vmk_event_host.view_event_form_host
+msgid "Hosts"
+msgstr "Værter"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_event_event__id
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__id
+msgid "ID"
+msgstr "ID"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__write_uid
+msgid "Last Updated by"
+msgstr "Sidst opdateret af"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__write_date
+msgid "Last Updated on"
+msgstr "Sidst opdateret den"
+
+#. module: vmk_event_host
+#: model_terms:ir.ui.view,arch_db:vmk_event_host.view_event_form_host
+msgid "Lead, Assistant, Guest speaker…"
+msgstr "Leder, Assistent, Gæstetaler…"
+
+#. module: vmk_event_host
+#. odoo-javascript
+#: code:addons/vmk_event_host/static/src/host_summary_field.js:0
+msgid "Name of the notebook page this summary opens."
+msgstr "Navn på den fane, som denne opsummering åbner."
+
+#. module: vmk_event_host
+#. odoo-javascript
+#: code:addons/vmk_event_host/static/src/host_summary_field.js:0
+msgid "Notebook page"
+msgstr "Fane"
+
+#. module: vmk_event_host
+#: model:ir.module.module,summary:base.module_vmk_event_host
+msgid "Record who runs an event, as one or more contacts"
+msgstr ""
+"Registrér, hvem der afholder et arrangement, som én eller flere kontakter"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__role
+msgid "Role"
+msgstr "Rolle"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__sequence
+msgid "Sequence"
+msgstr "Sekvens"
+
+#. module: vmk_event_host
+#. odoo-javascript
+#: code:addons/vmk_event_host/static/src/host_summary_field.js:0
+msgid "Show the Hosts tab"
+msgstr "Vis fanen Værter"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,help:vmk_event_host.field_vmk_event_host__partner_id
+msgid "The person running the event: a speaker, teacher or facilitator."
+msgstr ""
+"Personen, der afholder arrangementet: en taler, underviser eller "
+"facilitator."
+
+#. module: vmk_event_host
+#: model:ir.model.fields,help:vmk_event_host.field_vmk_event_host__role
+msgid ""
+"What this host does, when it is worth saying: Lead, Assistant, Guest "
+"speaker."
+msgstr ""
+"Hvad denne vært gør, når det er værd at nævne: Leder, Assistent, Gæstetaler."

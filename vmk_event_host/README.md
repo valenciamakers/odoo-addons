@@ -122,11 +122,12 @@ xpath.
 
 ### Translations
 
-`i18n/` carries `es` and `ca`, both checked term by term against core's catalogues. Terms this
-module shares with core — _Event_, _Sequence_, _Company_, the ORM's own _Created by_ and _Last
-Updated on_ — take core's own `msgstr` out of `base`'s and `event`'s catalogues rather than being
-translated afresh, so the Hosts tab reads as part of the backend rather than introducing a second
-vocabulary. Strings core does not have, such as the host `help` text, are ours to write.
+`i18n/` carries `es` and `ca`, both checked term by term against core's catalogues. Nineteen more
+languages are written by `tools/i18n_fill.py`, never by hand; see `DEVELOPING.md`. Terms this module
+shares with core — _Event_, _Sequence_, _Company_, the ORM's own _Created by_ and _Last Updated on_
+— take core's own `msgstr` out of `base`'s and `event`'s catalogues rather than being translated
+afresh, so the Hosts tab reads as part of the backend rather than introducing a second vocabulary.
+Strings core does not have, such as the host `help` text, are ours to write.
 
 **The module's own name and summary** are entries of the POT and both PO files, referenced as
 `base.module_vmk_event_host` because `ir_module.py` registers every module record under `base`. Odoo

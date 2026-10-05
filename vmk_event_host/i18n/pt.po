@@ -1,0 +1,169 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* vmk_event_host
+#
+# Written by tools/i18n_fill.py: do not edit by hand. Core's wording where core
+# has the same English, ours otherwise. See DEVELOPING.md.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 20.0+e-20260926\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-30 18:16+0000\n"
+"PO-Revision-Date: 2026-09-30 18:16+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: pt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : ((n != 0 && n % 1000000 == 0) ? 1 : 2);\n"
+
+#. module: vmk_event_host
+#. odoo-javascript
+#: code:addons/vmk_event_host/static/src/host_summary_field.js:0
+msgid "%s — show the Hosts tab"
+msgstr "%s — mostrar o separador Anfitriões"
+
+#. module: vmk_event_host
+#: model:ir.model.constraint,message:vmk_event_host.constraint_vmk_event_host_partner_event_uniq
+msgid "A contact can only be listed once as a host of an event."
+msgstr "Um contacto só pode constar uma vez como anfitrião de um evento."
+
+#. module: vmk_event_host
+#: model_terms:ir.ui.view,arch_db:vmk_event_host.view_event_form_host
+msgid "Added in the Hosts tab"
+msgstr "Adicionados no separador Anfitriões"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__company_id
+msgid "Company"
+msgstr "Empresa"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__create_uid
+msgid "Created by"
+msgstr "Criado por"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__create_date
+msgid "Created on"
+msgstr "Criado em"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_event_event__display_name
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__display_name
+msgid "Display Name"
+msgstr "Nome"
+
+#. module: vmk_event_host
+#: model:ir.model,name:vmk_event_host.model_event_event
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__event_id
+msgid "Event"
+msgstr "Evento"
+
+#. module: vmk_event_host
+#: model:ir.model,name:vmk_event_host.model_vmk_event_host
+msgid "Event Host"
+msgstr "Anfitrião do evento"
+
+#. module: vmk_event_host
+#: model:ir.module.module,shortdesc:base.module_vmk_event_host
+msgid "Event Hosts"
+msgstr "Anfitriões do evento"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__partner_id
+#: model_terms:ir.ui.view,arch_db:vmk_event_host.view_event_search_host
+msgid "Host"
+msgstr "Anfitrião"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_event_event__vmk_host_ids
+msgid "Host Lines"
+msgstr "Linhas de anfitrião"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_event_event__vmk_host_names
+msgid "Host Summary"
+msgstr "Resumo de anfitriões"
+
+#. module: vmk_event_host
+#. odoo-javascript
+#: code:addons/vmk_event_host/static/src/host_summary_field.js:0
+msgid "Host summary"
+msgstr "Resumo de anfitriões"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_event_event__vmk_host_partner_ids
+#: model_terms:ir.ui.view,arch_db:vmk_event_host.view_event_form_host
+msgid "Hosts"
+msgstr "Anfitriões"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_event_event__id
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__id
+msgid "ID"
+msgstr "ID"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__write_uid
+msgid "Last Updated by"
+msgstr "Última Atualização por"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__write_date
+msgid "Last Updated on"
+msgstr "Última Atualização em"
+
+#. module: vmk_event_host
+#: model_terms:ir.ui.view,arch_db:vmk_event_host.view_event_form_host
+msgid "Lead, Assistant, Guest speaker…"
+msgstr "Principal, Assistente, Orador convidado…"
+
+#. module: vmk_event_host
+#. odoo-javascript
+#: code:addons/vmk_event_host/static/src/host_summary_field.js:0
+msgid "Name of the notebook page this summary opens."
+msgstr "Nome do separador que este resumo abre."
+
+#. module: vmk_event_host
+#. odoo-javascript
+#: code:addons/vmk_event_host/static/src/host_summary_field.js:0
+msgid "Notebook page"
+msgstr "Separador"
+
+#. module: vmk_event_host
+#: model:ir.module.module,summary:base.module_vmk_event_host
+msgid "Record who runs an event, as one or more contacts"
+msgstr "Registe quem dirige um evento, como um ou vários contactos"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__role
+msgid "Role"
+msgstr "Função"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__sequence
+msgid "Sequence"
+msgstr "Sequência"
+
+#. module: vmk_event_host
+#. odoo-javascript
+#: code:addons/vmk_event_host/static/src/host_summary_field.js:0
+msgid "Show the Hosts tab"
+msgstr "Mostrar o separador Anfitriões"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,help:vmk_event_host.field_vmk_event_host__partner_id
+msgid "The person running the event: a speaker, teacher or facilitator."
+msgstr "A pessoa que dirige o evento: um orador, professor ou facilitador."
+
+#. module: vmk_event_host
+#: model:ir.model.fields,help:vmk_event_host.field_vmk_event_host__role
+msgid ""
+"What this host does, when it is worth saying: Lead, Assistant, Guest "
+"speaker."
+msgstr ""
+"O que este anfitrião faz, quando vale a pena indicá-lo: Principal, "
+"Assistente, Orador convidado."

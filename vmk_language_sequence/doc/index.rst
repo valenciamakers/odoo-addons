@@ -31,6 +31,12 @@ New languages you enable are added to the end of the list, and can be dragged in
 
 **Changelog**
 
+*20.0.1.3.0 (5 October 2026)*
+
+- Translated into nineteen more languages: Chinese (Simplified and Traditional), Czech, Danish,
+  Dutch, French, German, Indonesian, Italian, Japanese, Korean, Polish, Portuguese (Brazil and
+  Portugal), Romanian, Russian, Swedish, Turkish, and Ukrainian.
+
 *20.0.1.2.0 (3 October 2026)*
 
 - The pop-up for translating a field lists the languages in your order, after your own language.

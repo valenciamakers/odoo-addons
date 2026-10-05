@@ -1,0 +1,61 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* vmk_language_protect_settings
+#
+# Written by tools/i18n_fill.py: do not edit by hand. Core's wording where core
+# has the same English, ours otherwise. See DEVELOPING.md.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0-20260810\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-08-14 12:57+0000\n"
+"PO-Revision-Date: 2026-08-14 12:57+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: uk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
+
+#. module: vmk_language_protect_settings
+#: model:ir.model.fields,field_description:vmk_language_protect_settings.field_res_lang__display_name
+msgid "Display Name"
+msgstr "Назва для відображення"
+
+#. module: vmk_language_protect_settings
+#: model:ir.model.fields,field_description:vmk_language_protect_settings.field_res_lang__id
+msgid "ID"
+msgstr "ID"
+
+#. module: vmk_language_protect_settings
+#: model:ir.model.fields,help:vmk_language_protect_settings.field_res_lang__protect_from_updates
+msgid ""
+"Keep this language's settings when Odoo modules are updated.\n"
+"\n"
+"Odoo ships language records as module data and re-applies them on every update, reverting edits to the name, ISO code, formats and so on. This is set automatically when you edit one of those fields; untick it to let Odoo manage this language again."
+msgstr ""
+"Зберігати налаштування цієї мови під час оновлення модулів Odoo.\n"
+"\n"
+"Odoo постачає записи мов як дані модуля й повторно застосовує їх під час кожного оновлення, скасовуючи зміни назви, коду ISO, форматів тощо. Цей прапорець ставиться автоматично, коли ви змінюєте одне з цих полів; зніміть його, щоб Odoo знову керував цією мовою."
+
+#. module: vmk_language_protect_settings
+#: model:ir.model,name:vmk_language_protect_settings.model_res_lang
+msgid "Language"
+msgstr "Мова"
+
+#. module: vmk_language_protect_settings
+#: model:ir.model.fields,field_description:vmk_language_protect_settings.field_res_lang__protect_from_updates
+msgid "Protect From Updates"
+msgstr "Захистити від оновлень"
+
+#. module: vmk_language_protect_settings
+#: model:ir.module.module,shortdesc:base.module_vmk_language_protect_settings
+msgid "Protect Language Edits"
+msgstr "Захист змін мов"
+
+#. module: vmk_language_protect_settings
+#: model:ir.module.module,summary:base.module_vmk_language_protect_settings
+msgid "Stop Odoo updates from reverting your edits to language settings"
+msgstr "Запобігає скасуванню оновленнями Odoo ваших змін у налаштуваннях мов"

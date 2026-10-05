@@ -1,0 +1,110 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* vmk_event_slot_multiday
+#
+# Written by tools/i18n_fill.py: do not edit by hand. Core's wording where core
+# has the same English, ours otherwise. See DEVELOPING.md.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 20.0+e-20260926\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-30 18:50+0000\n"
+"PO-Revision-Date: 2026-09-30 18:50+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ro\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < 20)) ? 1 : 2;\n"
+
+#. module: vmk_event_slot_multiday
+#. odoo-python
+#: code:addons/vmk_event_slot_multiday/models/event_slot.py:0
+msgid "A slot cannot end before it starts: %(slot)s ends on %(end)s."
+msgstr ""
+"Un slot nu se poate termina înainte de a începe: %(slot)s se termină la "
+"%(end)s."
+
+#. module: vmk_event_slot_multiday
+#. odoo-python
+#: code:addons/vmk_event_slot_multiday/models/event_slot.py:0
+msgid "A slot hour must be between 0:00 and 23:59."
+msgstr "O oră de slot trebuie să fie între 0:00 și 23:59."
+
+#. module: vmk_event_slot_multiday
+#. odoo-python
+#: code:addons/vmk_event_slot_multiday/models/event_slot.py:0
+msgid ""
+"A slot's end date and its number of days disagree: it ends on %(end)s, which"
+" is %(offset)s days after its date, not %(given)s."
+msgstr ""
+"Data de sfârșit a unui slot și numărul lui de zile nu concordă: se termină "
+"la %(end)s, adică la %(offset)s zile după data lui, nu la %(given)s."
+
+#. module: vmk_event_slot_multiday
+#: model:ir.module.module,summary:base.module_vmk_event_slot_multiday
+msgid "Allow event slots to span multiple days"
+msgstr "Permiteți ca sloturile unui eveniment să se întindă pe mai multe zile"
+
+#. module: vmk_event_slot_multiday
+#: model_terms:ir.ui.view,arch_db:vmk_event_slot_multiday.view_event_slot_form_multiday
+msgid "Date"
+msgstr "Dată"
+
+#. module: vmk_event_slot_multiday
+#: model:ir.model.fields,field_description:vmk_event_slot_multiday.field_event_slot__vmk_end_day_offset
+msgid "Days Spanned"
+msgstr "Zile acoperite"
+
+#. module: vmk_event_slot_multiday
+#: model:ir.model.fields,field_description:vmk_event_slot_multiday.field_event_slot__display_name
+msgid "Display Name"
+msgstr "Nume afișat"
+
+#. module: vmk_event_slot_multiday
+#: model:ir.model.fields,field_description:vmk_event_slot_multiday.field_event_slot__vmk_end_date
+msgid "End Date"
+msgstr "Dată sfârșit"
+
+#. module: vmk_event_slot_multiday
+#: model:ir.model,name:vmk_event_slot_multiday.model_event_slot
+msgid "Event Slot"
+msgstr "Slot eveniment"
+
+#. module: vmk_event_slot_multiday
+#: model_terms:ir.ui.view,arch_db:vmk_event_slot_multiday.view_event_slot_form_multiday
+msgid "Expressed in the event timezone."
+msgstr "Exprimat în fusul orar al evenimentului."
+
+#. module: vmk_event_slot_multiday
+#: model:ir.model.fields,help:vmk_event_slot_multiday.field_event_slot__vmk_end_day_offset
+msgid ""
+"How many days after its date the slot ends. 0 for a slot within one day."
+msgstr ""
+"La câte zile după data lui se termină slotul. 0 pentru un slot care se "
+"desfășoară într-o singură zi."
+
+#. module: vmk_event_slot_multiday
+#: model:ir.model.fields,field_description:vmk_event_slot_multiday.field_event_slot__id
+msgid "ID"
+msgstr "ID"
+
+#. module: vmk_event_slot_multiday
+#: model:ir.module.module,shortdesc:base.module_vmk_event_slot_multiday
+msgid "Multi-Day Event Slots"
+msgstr "Sloturi de eveniment pe mai multe zile"
+
+#. module: vmk_event_slot_multiday
+#. odoo-javascript
+#: code:addons/vmk_event_slot_multiday/static/src/fields/event_slot_daterange_field.js:0
+msgid "Slot Date Range"
+msgstr "Interval de date al slotului"
+
+#. module: vmk_event_slot_multiday
+#: model:ir.model.fields,help:vmk_event_slot_multiday.field_event_slot__vmk_end_date
+msgid "The day the slot ends. The same as its date for a slot within one day."
+msgstr ""
+"Ziua în care se termină slotul. Aceeași cu data lui, pentru un slot care se "
+"desfășoară într-o singură zi."

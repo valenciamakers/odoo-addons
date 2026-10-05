@@ -1,0 +1,93 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* vmk_event_registration_deadline
+#
+# Written by tools/i18n_fill.py: do not edit by hand. Core's wording where core
+# has the same English, ours otherwise. See DEVELOPING.md.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 20.0+e-20260926\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-22 11:38+0000\n"
+"PO-Revision-Date: 2026-09-22 11:38+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ko\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. module: vmk_event_registration_deadline
+#: model:ir.module.module,shortdesc:base.module_vmk_event_registration_deadline
+msgid "Event Registration Deadline"
+msgstr "행사 등록 마감 시한"
+
+#. module: vmk_event_registration_deadline
+#: model:ir.module.module,summary:base.module_vmk_event_registration_deadline
+msgid ""
+"Allow registration only until an event starts, or a set time in advance"
+msgstr "행사가 시작될 때까지 또는 정해진 시간 전까지만 등록을 허용합니다"
+
+#. module: vmk_event_registration_deadline
+#: model_terms:ir.ui.view,arch_db:vmk_event_registration_deadline.view_event_form_deadline
+msgid "Before Start"
+msgstr "시작 전"
+
+#. module: vmk_event_registration_deadline
+#: model:ir.model,name:vmk_event_registration_deadline.model_res_config_settings
+msgid "Config Settings"
+msgstr "환경 설정"
+
+#. module: vmk_event_registration_deadline
+#: model:ir.model.fields,field_description:vmk_event_registration_deadline.field_event_event__display_name
+#: model:ir.model.fields,field_description:vmk_event_registration_deadline.field_event_slot__display_name
+#: model:ir.model.fields,field_description:vmk_event_registration_deadline.field_res_config_settings__display_name
+msgid "Display Name"
+msgstr "표시명"
+
+#. module: vmk_event_registration_deadline
+#: model:ir.model,name:vmk_event_registration_deadline.model_event_event
+msgid "Event"
+msgstr "행사"
+
+#. module: vmk_event_registration_deadline
+#: model:ir.model,name:vmk_event_registration_deadline.model_event_slot
+msgid "Event Slot"
+msgstr "행사 슬롯"
+
+#. module: vmk_event_registration_deadline
+#: model:ir.model.fields,field_description:vmk_event_registration_deadline.field_event_event__id
+#: model:ir.model.fields,field_description:vmk_event_registration_deadline.field_event_slot__id
+#: model:ir.model.fields,field_description:vmk_event_registration_deadline.field_res_config_settings__id
+msgid "ID"
+msgstr "ID"
+
+#. module: vmk_event_registration_deadline
+#: model:ir.model.fields,field_description:vmk_event_registration_deadline.field_event_event__vmk_deadline_custom
+#: model:ir.model.fields,field_description:vmk_event_registration_deadline.field_res_config_settings__vmk_registration_deadline_enabled
+msgid "Registration Deadline"
+msgstr "등록 마감 시한"
+
+#. module: vmk_event_registration_deadline
+#: model:ir.model.fields,help:vmk_event_registration_deadline.field_res_config_settings__vmk_registration_deadline_enabled
+#: model_terms:ir.ui.view,arch_db:vmk_event_registration_deadline.res_config_settings_view_form
+msgid ""
+"Allow registration only until an event starts, or a set time in advance. Set"
+" to 0h to end registration at the event start time."
+msgstr ""
+"행사가 시작될 때까지 또는 정해진 시간 전까지만 등록을 허용합니다. 행사 시작 시각에 등록을 마감하려면 0시간으로 설정하세요."
+
+#. module: vmk_event_registration_deadline
+#: model:ir.model.fields,field_description:vmk_event_registration_deadline.field_event_event__vmk_deadline_hours
+#: model:ir.model.fields,field_description:vmk_event_registration_deadline.field_res_config_settings__vmk_registration_deadline_hours
+msgid "Time Before Start"
+msgstr "시작 전 시간"
+
+#. module: vmk_event_registration_deadline
+#: model:ir.model.fields,help:vmk_event_registration_deadline.field_event_event__vmk_deadline_custom
+msgid ""
+"Use a custom registration deadline for the event, overriding the global "
+"setting."
+msgstr "전역 설정 대신 이 행사에 별도의 등록 마감 시한을 사용합니다."

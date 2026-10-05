@@ -50,6 +50,13 @@ A multi-day slot is named by its range, for example *9 Oct 2026, 18:00 - 11 Oct 
 
 **Changelog**
 
+*20.0.1.1.0 (5 October 2026)*
+
+- Translated into nineteen more languages: Chinese (Simplified and Traditional), Czech, Danish,
+  Dutch, French, German, Indonesian, Italian, Japanese, Korean, Polish, Portuguese (Brazil and
+  Portugal), Romanian, Russian, Swedish, Turkish, and Ukrainian.
+- Catalan: *Event Slot* is now translated, as *Franja horària*.
+
 *20.0.1.0.1 (1 October 2026)*
 
 - The browser test of the slot form also checks that it shows the event's own time. No change in behaviour.

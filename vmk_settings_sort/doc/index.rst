@@ -29,6 +29,12 @@ the original orders return.
 
 **Changelog**
 
+*20.0.1.1.0 (5 October 2026)*
+
+- Translated into nineteen more languages: Chinese (Simplified and Traditional), Czech, Danish,
+  Dutch, French, German, Indonesian, Italian, Japanese, Korean, Polish, Portuguese (Brazil and
+  Portugal), Romanian, Russian, Swedish, Turkish, and Ukrainian.
+
 *20.0.1.0.1 (1 October 2026)*
 
 - Browser tests added. No change in behaviour.

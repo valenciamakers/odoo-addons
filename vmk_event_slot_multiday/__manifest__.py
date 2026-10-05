@@ -4,7 +4,7 @@
 {
     "name": "Multi-Day Event Slots",
     "summary": "Allow event slots to span multiple days",
-    "version": "20.0.1.0.1",
+    "version": "20.0.1.1.0",
     "author": "Valencia Makers",
     "license": "LGPL-3",
     "category": "Marketing/Events",

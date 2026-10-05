@@ -32,6 +32,12 @@ usual; only the language settings are protected.
 
 **Changelog**
 
+*20.0.1.1.0 (5 October 2026)*
+
+- Translated into nineteen more languages: Chinese (Simplified and Traditional), Czech, Danish,
+  Dutch, French, German, Indonesian, Italian, Japanese, Korean, Polish, Portuguese (Brazil and
+  Portugal), Romanian, Russian, Swedish, Turkish, and Ukrainian.
+
 *20.0.1.0.0 (30 September 2026)*
 
 - First release for Odoo 20, ported from 19.0.1.1.2. No change in behaviour.

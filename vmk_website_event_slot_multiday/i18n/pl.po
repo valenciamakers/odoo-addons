@@ -1,0 +1,32 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* vmk_website_event_slot_multiday
+#
+# Written by tools/i18n_fill.py: do not edit by hand. Core's wording where core
+# has the same English, ours otherwise. See DEVELOPING.md.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 20.0+e-20260926\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-30 18:51+0000\n"
+"PO-Revision-Date: 2026-09-30 18:51+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: pl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
+
+#. module: vmk_website_event_slot_multiday
+#: model:ir.module.module,summary:base.module_vmk_website_event_slot_multiday
+msgid "Allow event slots to span multiple days, displayed on the website too"
+msgstr ""
+"Zezwalaj na przedziały czasowe wydarzeń obejmujące wiele dni, wyświetlane "
+"także na stronie internetowej"
+
+#. module: vmk_website_event_slot_multiday
+#: model:ir.module.module,shortdesc:base.module_vmk_website_event_slot_multiday
+msgid "Multi-Day Event Slots (Website)"
+msgstr "Wielodniowe przedziały czasowe wydarzenia (strona internetowa)"

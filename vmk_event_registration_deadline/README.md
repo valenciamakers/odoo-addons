@@ -104,7 +104,8 @@ without this module knowing sessions exist.
 
 ### Translations
 
-`i18n/` carries `es` and `ca`, both checked term by term against core's catalogues. Shared terms —
+`i18n/` carries `es` and `ca`, both checked term by term against core's catalogues. Nineteen more
+languages are written by `tools/i18n_fill.py`, never by hand; see `DEVELOPING.md`. Shared terms —
 _Event_, _Config Settings_, _Display Name_ — take core's own `msgstr` rather than a fresh
 translation. _Event Slot_ is core's row and core's Catalan leaves it untranslated, so ours says
 `Franja horària`, as our other slot modules do, rather than showing English (5 October 2026).
