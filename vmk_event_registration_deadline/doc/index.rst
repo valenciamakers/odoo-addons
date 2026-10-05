@@ -38,7 +38,7 @@ one.
 Catalan, Chinese (Simplified and Traditional), Czech, Danish, Dutch, English, French, German,
 Indonesian, Italian, Japanese, Korean, Polish, Portuguese (Brazil and Portugal), Romanian,
 Russian, Spanish, Swedish, Turkish, and Ukrainian. If any translation seems incorrect, please
-contact us and we will fix it.
+`contact us <mailto:info@valenciamakers.es>`_ and we will fix it.
 
 **Changelog**
 
