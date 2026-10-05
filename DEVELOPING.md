@@ -250,7 +250,15 @@ changelog of Odoo 20.
   saying "set to 00:00" is now wrong. **Core leaves its times of day that way too**: a slot's hours
   read "18h" on its form and list, and ours follow, though `numeric` is what core's POS closing hour
   uses. We tried `numeric` on session hours and took it out: follow core's pattern for the same kind
-  of field, and change when core does.
+  of field, and change when core does. **The unit is the language's, not `h`**: `formatDuration`
+  (`web/static/src/views/fields/formatters.js`) goes through `Intl.DurationFormat` in the narrow
+  style, so zero hours reads `0h` in English, Spanish, and Catalan, `0t` in Danish, `0u` in Dutch,
+  `0ч` in Russian, `0s` in Turkish, and `0小时` in Chinese. A translated help text that says "set to
+  0h" has to name what that language's field shows, and ours do. Compute it rather than recall it,
+  and the way Odoo does: it drops the separator `format()` would put between number and unit, so
+  Danish is `0t` where `format()` alone says `0 t`. In Node 23 or later:
+  `new Intl.DurationFormat("da", {style: "narrow", hoursDisplay: "always"}).formatToParts({hours: 0}).filter((p) => p.type !== "literal").map((p) => p.value).join("")`.
+  Added 2026-10-05.
 - **A view's `options` are not checked when the view loads.** A malformed value, a stray character
   after the closing brace, installs and upgrades without a word and passes every Python test; the
   field then fails in the browser. Only a tour, or a look, catches it.
