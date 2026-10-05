@@ -1,0 +1,111 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* vmk_event_slot_multiday
+#
+# Written by tools/i18n_fill.py: do not edit by hand. Core's wording where core
+# has the same English, ours otherwise. See DEVELOPING.md.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0+e-20260908\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-24 11:08+0000\n"
+"PO-Revision-Date: 2026-09-24 11:08+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_vmk_event_slot_multiday
+msgid "Multi-Day Event Slots"
+msgstr "Многодневные слоты мероприятий"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_vmk_event_slot_multiday
+msgid "Allow event slots to span multiple days"
+msgstr "Разрешите слотам мероприятий занимать несколько дней"
+
+#. module: vmk_event_slot_multiday
+#. odoo-python
+#: code:addons/vmk_event_slot_multiday/models/event_slot.py:0
+msgid "A slot cannot end before it starts: %(slot)s ends on %(end)s."
+msgstr ""
+"Слот не может заканчиваться раньше, чем начинается: %(slot)s заканчивается "
+"%(end)s."
+
+#. module: vmk_event_slot_multiday
+#. odoo-python
+#: code:addons/vmk_event_slot_multiday/models/event_slot.py:0
+msgid "A slot hour must be between 0:00 and 23:59."
+msgstr "Время слота должно быть в диапазоне от 0:00 до 23:59."
+
+#. module: vmk_event_slot_multiday
+#. odoo-python
+#: code:addons/vmk_event_slot_multiday/models/event_slot.py:0
+msgid ""
+"A slot's end date and its number of days disagree: it ends on %(end)s, which"
+" is %(offset)s days after its date, not %(given)s."
+msgstr ""
+"Дата окончания слота и количество дней не совпадают: слот заканчивается "
+"%(end)s, то есть через %(offset)s дн. после даты начала, а не через "
+"%(given)s."
+
+#. module: vmk_event_slot_multiday
+#: model_terms:ir.ui.view,arch_db:vmk_event_slot_multiday.view_event_slot_form_multiday
+msgid "Date"
+msgstr "Дата"
+
+#. module: vmk_event_slot_multiday
+#: model:ir.model.fields,field_description:vmk_event_slot_multiday.field_event_slot__vmk_end_day_offset
+msgid "Days Spanned"
+msgstr "Количество охватываемых дней"
+
+#. module: vmk_event_slot_multiday
+#: model:ir.model.fields,field_description:vmk_event_slot_multiday.field_event_slot__display_name
+msgid "Display Name"
+msgstr "Отображаемое имя"
+
+#. module: vmk_event_slot_multiday
+#: model:ir.model.fields,field_description:vmk_event_slot_multiday.field_event_slot__vmk_end_date
+msgid "End Date"
+msgstr "Дата окончания"
+
+#. module: vmk_event_slot_multiday
+#: model:ir.model,name:vmk_event_slot_multiday.model_event_slot
+msgid "Event Slot"
+msgstr "Слот мероприятия"
+
+#. module: vmk_event_slot_multiday
+#: model_terms:ir.ui.view,arch_db:vmk_event_slot_multiday.view_event_slot_form_multiday
+msgid "Expressed in the event timezone."
+msgstr "Указано в часовом поясе мероприятия."
+
+#. module: vmk_event_slot_multiday
+#: model:ir.model.fields,help:vmk_event_slot_multiday.field_event_slot__vmk_end_day_offset
+msgid ""
+"How many days after its date the slot ends. 0 for a slot within one day."
+msgstr ""
+"Через сколько дней после даты начала заканчивается слот. 0 для слота в "
+"пределах одного дня."
+
+#. module: vmk_event_slot_multiday
+#: model:ir.model.fields,field_description:vmk_event_slot_multiday.field_event_slot__id
+msgid "ID"
+msgstr "ID"
+
+#. module: vmk_event_slot_multiday
+#. odoo-javascript
+#: code:addons/vmk_event_slot_multiday/static/src/fields/event_slot_daterange_field.js:0
+msgid "Slot Date Range"
+msgstr "Диапазон дат слота"
+
+#. module: vmk_event_slot_multiday
+#: model:ir.model.fields,help:vmk_event_slot_multiday.field_event_slot__vmk_end_date
+msgid "The day the slot ends. The same as its date for a slot within one day."
+msgstr ""
+"День, в который заканчивается слот. Совпадает с датой начала для слота в "
+"пределах одного дня."

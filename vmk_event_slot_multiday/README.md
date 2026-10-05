@@ -141,7 +141,8 @@ event's dates to cover the slots first; core refuses a slot that falls outside t
 
 ### Translations
 
-`i18n/` carries `es` and `ca`, both checked term by term against core's catalogues. _Date_, _End
+`i18n/` carries `es` and `ca`, both checked term by term against core's catalogues. Nineteen more
+languages are written by `tools/i18n_fill.py`, never by hand; see `DEVELOPING.md`. _Date_, _End
 Date_, _Event Slot_, _Display Name_ and core's timezone help take core's own `msgstr`, so the new
 row reads as part of core's form. Catalan's core catalogue leaves the timezone help empty, so that
 one is ours.

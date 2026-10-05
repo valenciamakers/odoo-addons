@@ -29,6 +29,12 @@ several hundred technical modules in among them.
 
 **Changelog**
 
+*19.0.1.3.0 (5 October 2026)*
+
+- Translated into nineteen more languages: Chinese (Simplified and Traditional), Czech, Danish,
+  Dutch, French, German, Indonesian, Italian, Japanese, Korean, Polish, Portuguese (Brazil and
+  Portugal), Romanian, Russian, Swedish, Turkish, and Ukrainian.
+
 *19.0.1.2.0 (24 September 2026)*
 
 - Names are compared alphabetically rather than in the database's byte order, so *CRM* sorts

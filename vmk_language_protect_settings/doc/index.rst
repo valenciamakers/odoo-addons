@@ -32,6 +32,12 @@ usual; only the language settings are protected.
 
 **Changelog**
 
+*19.0.1.2.0 (5 October 2026)*
+
+- Translated into nineteen more languages: Chinese (Simplified and Traditional), Czech, Danish,
+  Dutch, French, German, Indonesian, Italian, Japanese, Korean, Polish, Portuguese (Brazil and
+  Portugal), Romanian, Russian, Swedish, Turkish, and Ukrainian.
+
 *19.0.1.1.2 (25 September 2026)*
 
 - Renamed from *vmk_language_freeze_meta* to *vmk_language_protect_settings*. No change in

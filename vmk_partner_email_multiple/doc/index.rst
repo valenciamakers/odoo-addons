@@ -33,6 +33,12 @@ their addresses. **Merging two contacts** keeps both sets of addresses in the re
 
 **Changelog**
 
+*19.0.1.3.0 (5 October 2026)*
+
+- Translated into nineteen more languages: Chinese (Simplified and Traditional), Czech, Danish,
+  Dutch, French, German, Indonesian, Italian, Japanese, Korean, Polish, Portuguese (Brazil and
+  Portugal), Romanian, Russian, Swedish, Turkish, and Ukrainian.
+
 *19.0.1.2.2 (1 October 2026)*
 
 - Browser tests added. No change in behaviour.

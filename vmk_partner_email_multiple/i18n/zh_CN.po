@@ -1,0 +1,178 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* vmk_partner_email_multiple
+#
+# Written by tools/i18n_fill.py: do not edit by hand. Core's wording where core
+# has the same English, ours otherwise. See DEVELOPING.md.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0-20260810\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-08-14 13:07+0000\n"
+"PO-Revision-Date: 2026-08-14 13:07+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. module: vmk_partner_email_multiple
+#. odoo-python
+#: code:addons/vmk_partner_email_multiple/models/vmk_partner_email.py:0
+msgid "%(email)s is already an additional address of %(contact)s."
+msgstr "%(email)s 已是 %(contact)s 的附加地址。"
+
+#. module: vmk_partner_email_multiple
+#. odoo-python
+#: code:addons/vmk_partner_email_multiple/models/vmk_partner_email.py:0
+msgid "%(email)s is already the primary address of %(contact)s."
+msgstr "%(email)s 已是 %(contact)s 的主要地址。"
+
+#. module: vmk_partner_email_multiple
+#: model_terms:ir.ui.view,arch_db:vmk_partner_email_multiple.view_partner_form_vmk_email_multiple
+msgid "Add an email address"
+msgstr "添加电子邮件地址"
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model,name:vmk_partner_email_multiple.model_vmk_partner_email
+msgid "Additional Contact Email"
+msgstr "联系人附加电子邮件"
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_res_partner__vmk_email_ids
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_res_users__vmk_email_ids
+#: model_terms:ir.ui.view,arch_db:vmk_partner_email_multiple.view_partner_form_vmk_email_multiple
+msgid "Additional Emails"
+msgstr "附加电子邮件"
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model,name:vmk_partner_email_multiple.model_res_partner
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_vmk_partner_email__partner_id
+msgid "Contact"
+msgstr "联系人"
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_vmk_partner_email__create_uid
+msgid "Created by"
+msgstr "创建人"
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_vmk_partner_email__create_date
+msgid "Created on"
+msgstr "创建日期"
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_base_partner_merge_automatic_wizard__display_name
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_mail_thread__display_name
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_res_partner__display_name
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_vmk_partner_email__display_name
+msgid "Display Name"
+msgstr "显示名称"
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_vmk_partner_email__email
+msgid "Email Address"
+msgstr "电子邮件地址"
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model,name:vmk_partner_email_multiple.model_mail_thread
+msgid "Email Thread"
+msgstr "邮件会话"
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,help:vmk_partner_email_multiple.field_vmk_partner_email__label
+msgid "Free-text note about this address, e.g. billing, personal, noreply."
+msgstr "关于此地址的自由文本备注，例如：账单、个人、noreply。"
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_base_partner_merge_automatic_wizard__id
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_mail_thread__id
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_res_partner__id
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_vmk_partner_email__id
+msgid "ID"
+msgstr "ID"
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_vmk_partner_email__label
+msgid "Label"
+msgstr "标签"
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_vmk_partner_email__write_uid
+msgid "Last Updated by"
+msgstr "最后更新人"
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_vmk_partner_email__write_date
+msgid "Last Updated on"
+msgstr "上次更新日期"
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,help:vmk_partner_email_multiple.field_vmk_partner_email__email_normalized
+msgid ""
+"Lower-cased address without a display name, used for matching. Mirrors "
+"res.partner.email_normalized."
+msgstr "不含显示名称的小写地址，用于匹配。与 res.partner.email_normalized 保持一致。"
+
+#. module: vmk_partner_email_multiple
+#: model_terms:ir.ui.view,arch_db:vmk_partner_email_multiple.view_partner_form_vmk_email_multiple
+msgid ""
+"Mail arriving from any of these addresses is matched to this contact.\n"
+"                        Nothing is ever sent to them."
+msgstr ""
+"来自这些地址中任何一个的邮件都会匹配到此联系人。\n"
+"                        绝不会向这些地址发送任何内容。"
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model,name:vmk_partner_email_multiple.model_base_partner_merge_automatic_wizard
+msgid "Merge Partner Wizard"
+msgstr "合并合作伙伴向导"
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_vmk_partner_email__email_normalized
+msgid "Normalized Email"
+msgstr "规范化邮件"
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,help:vmk_partner_email_multiple.field_res_partner__vmk_email_ids
+#: model:ir.model.fields,help:vmk_partner_email_multiple.field_res_users__vmk_email_ids
+msgid ""
+"Other addresses this contact writes from. Mail arriving from any of them is "
+"matched to this contact. Nothing is ever sent to them."
+msgstr "此联系人用来发送邮件的其他地址。来自其中任何一个地址的邮件都会匹配到此联系人。绝不会向这些地址发送任何内容。"
+
+#. module: vmk_partner_email_multiple
+#. odoo-javascript
+#: code:addons/vmk_partner_email_multiple/static/src/email_link_field/email_link_field.xml:0
+msgid "Send Email"
+msgstr "发送电子邮件"
+
+#. module: vmk_partner_email_multiple
+#: model:ir.model.fields,field_description:vmk_partner_email_multiple.field_vmk_partner_email__sequence
+msgid "Sequence"
+msgstr "序列"
+
+#. module: vmk_partner_email_multiple
+#: model_terms:ir.ui.view,arch_db:vmk_partner_email_multiple.view_partner_form_vmk_email_multiple
+msgid "Swap with the contact's primary email address"
+msgstr "与联系人的主要电子邮件地址互换"
+
+#. module: vmk_partner_email_multiple
+#: model_terms:ir.ui.view,arch_db:vmk_partner_email_multiple.view_partner_form_vmk_email_multiple
+msgid "e.g. billing"
+msgstr "例如：账单"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_vmk_partner_email_multiple
+msgid "Multiple Contact Emails"
+msgstr "联系人多个电子邮件"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_vmk_partner_email_multiple
+msgid ""
+"Assign multiple email addresses to a contact, and Odoo matches mail from all"
+" of them"
+msgstr "为联系人分配多个电子邮件地址，Odoo 会匹配来自所有这些地址的邮件"

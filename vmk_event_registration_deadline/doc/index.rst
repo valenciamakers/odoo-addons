@@ -36,6 +36,13 @@ starts, and the event's page shows *Registrations Closed* once it has closed for
 
 **Changelog**
 
+*19.0.1.2.0 (5 October 2026)*
+
+- Translated into nineteen more languages: Chinese (Simplified and Traditional), Czech, Danish,
+  Dutch, French, German, Indonesian, Italian, Japanese, Korean, Polish, Portuguese (Brazil and
+  Portugal), Romanian, Russian, Swedish, Turkish, and Ukrainian.
+- Catalan: *Event Slot* is now translated, as *Franja horària*.
+
 *19.0.1.1.0 (1 October 2026)*
 
 - An event with multiple slots now shows *Registrations Closed* once the deadline has passed for

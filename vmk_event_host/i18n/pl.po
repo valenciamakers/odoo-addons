@@ -1,0 +1,169 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* vmk_event_host
+#
+# Written by tools/i18n_fill.py: do not edit by hand. Core's wording where core
+# has the same English, ours otherwise. See DEVELOPING.md.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0+e-20260817\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-20 13:15+0000\n"
+"PO-Revision-Date: 2026-09-20 13:15+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: pl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_vmk_event_host
+msgid "Event Hosts"
+msgstr "Gospodarze wydarzenia"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_vmk_event_host
+msgid "Record who runs an event, as one or more contacts"
+msgstr "Zapisuj, kto prowadzi wydarzenie, jako jeden lub więcej kontaktów"
+
+#. module: vmk_event_host
+#. odoo-javascript
+#: code:addons/vmk_event_host/static/src/host_summary_field.js:0
+msgid "%s — show the Hosts tab"
+msgstr "%s — pokaż zakładkę Gospodarze"
+
+#. module: vmk_event_host
+#: model:ir.model.constraint,message:vmk_event_host.constraint_vmk_event_host_partner_event_uniq
+msgid "A contact can only be listed once as a host of an event."
+msgstr "Kontakt może być wymieniony jako gospodarz wydarzenia tylko raz."
+
+#. module: vmk_event_host
+#: model_terms:ir.ui.view,arch_db:vmk_event_host.view_event_form_host
+msgid "Added in the Hosts tab"
+msgstr "Dodawani w zakładce Gospodarze"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__company_id
+msgid "Company"
+msgstr "Firma"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__create_uid
+msgid "Created by"
+msgstr "Utworzył(a)"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__create_date
+msgid "Created on"
+msgstr "Data utworzenia"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_event_event__display_name
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__display_name
+msgid "Display Name"
+msgstr "Nazwa wyświetlana"
+
+#. module: vmk_event_host
+#: model:ir.model,name:vmk_event_host.model_event_event
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__event_id
+msgid "Event"
+msgstr "Wydarzenie"
+
+#. module: vmk_event_host
+#: model:ir.model,name:vmk_event_host.model_vmk_event_host
+msgid "Event Host"
+msgstr "Gospodarz wydarzenia"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__partner_id
+#: model_terms:ir.ui.view,arch_db:vmk_event_host.view_event_search_host
+msgid "Host"
+msgstr "Gospodarz"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_event_event__vmk_host_ids
+msgid "Host Lines"
+msgstr "Pozycje gospodarzy"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_event_event__vmk_host_names
+msgid "Host Summary"
+msgstr "Podsumowanie gospodarzy"
+
+#. module: vmk_event_host
+#. odoo-javascript
+#: code:addons/vmk_event_host/static/src/host_summary_field.js:0
+msgid "Host summary"
+msgstr "Podsumowanie gospodarzy"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_event_event__vmk_host_partner_ids
+#: model_terms:ir.ui.view,arch_db:vmk_event_host.view_event_form_host
+msgid "Hosts"
+msgstr "Gospodarze"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_event_event__id
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__id
+msgid "ID"
+msgstr "ID"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__write_uid
+msgid "Last Updated by"
+msgstr "Ostatnio aktualizowane przez"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__write_date
+msgid "Last Updated on"
+msgstr "Data ostatniej aktualizacji"
+
+#. module: vmk_event_host
+#: model_terms:ir.ui.view,arch_db:vmk_event_host.view_event_form_host
+msgid "Lead, Assistant, Guest speaker…"
+msgstr "Główny prowadzący, Asystent, Zaproszony mówca…"
+
+#. module: vmk_event_host
+#. odoo-javascript
+#: code:addons/vmk_event_host/static/src/host_summary_field.js:0
+msgid "Name of the notebook page this summary opens."
+msgstr "Nazwa zakładki, którą otwiera to podsumowanie."
+
+#. module: vmk_event_host
+#. odoo-javascript
+#: code:addons/vmk_event_host/static/src/host_summary_field.js:0
+msgid "Notebook page"
+msgstr "Zakładka"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__role
+msgid "Role"
+msgstr "Rola"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__sequence
+msgid "Sequence"
+msgstr "Kolejność"
+
+#. module: vmk_event_host
+#. odoo-javascript
+#: code:addons/vmk_event_host/static/src/host_summary_field.js:0
+msgid "Show the Hosts tab"
+msgstr "Pokaż zakładkę Gospodarze"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,help:vmk_event_host.field_vmk_event_host__partner_id
+msgid "The person running the event: a speaker, teacher or facilitator."
+msgstr "Osoba prowadząca wydarzenie: mówca, nauczyciel lub moderator."
+
+#. module: vmk_event_host
+#: model:ir.model.fields,help:vmk_event_host.field_vmk_event_host__role
+msgid ""
+"What this host does, when it is worth saying: Lead, Assistant, Guest "
+"speaker."
+msgstr ""
+"Co robi ten gospodarz, jeśli warto to wskazać: Główny prowadzący, Asystent, "
+"Zaproszony mówca."

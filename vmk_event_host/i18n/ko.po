@@ -1,0 +1,167 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* vmk_event_host
+#
+# Written by tools/i18n_fill.py: do not edit by hand. Core's wording where core
+# has the same English, ours otherwise. See DEVELOPING.md.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0+e-20260817\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-20 13:15+0000\n"
+"PO-Revision-Date: 2026-09-20 13:15+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ko\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_vmk_event_host
+msgid "Event Hosts"
+msgstr "행사 호스트"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_vmk_event_host
+msgid "Record who runs an event, as one or more contacts"
+msgstr "행사를 진행하는 사람을 하나 이상의 연락처로 기록합니다"
+
+#. module: vmk_event_host
+#. odoo-javascript
+#: code:addons/vmk_event_host/static/src/host_summary_field.js:0
+msgid "%s — show the Hosts tab"
+msgstr "%s — 호스트 탭 표시"
+
+#. module: vmk_event_host
+#: model:ir.model.constraint,message:vmk_event_host.constraint_vmk_event_host_partner_event_uniq
+msgid "A contact can only be listed once as a host of an event."
+msgstr "한 연락처는 한 행사의 호스트로 한 번만 추가할 수 있습니다."
+
+#. module: vmk_event_host
+#: model_terms:ir.ui.view,arch_db:vmk_event_host.view_event_form_host
+msgid "Added in the Hosts tab"
+msgstr "호스트 탭에서 추가"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__company_id
+msgid "Company"
+msgstr "회사"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__create_uid
+msgid "Created by"
+msgstr "작성자"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__create_date
+msgid "Created on"
+msgstr "작성일자"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_event_event__display_name
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__display_name
+msgid "Display Name"
+msgstr "표시명"
+
+#. module: vmk_event_host
+#: model:ir.model,name:vmk_event_host.model_event_event
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__event_id
+msgid "Event"
+msgstr "행사"
+
+#. module: vmk_event_host
+#: model:ir.model,name:vmk_event_host.model_vmk_event_host
+msgid "Event Host"
+msgstr "행사 호스트"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__partner_id
+#: model_terms:ir.ui.view,arch_db:vmk_event_host.view_event_search_host
+msgid "Host"
+msgstr "호스트"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_event_event__vmk_host_ids
+msgid "Host Lines"
+msgstr "호스트 항목"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_event_event__vmk_host_names
+msgid "Host Summary"
+msgstr "호스트 요약"
+
+#. module: vmk_event_host
+#. odoo-javascript
+#: code:addons/vmk_event_host/static/src/host_summary_field.js:0
+msgid "Host summary"
+msgstr "호스트 요약"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_event_event__vmk_host_partner_ids
+#: model_terms:ir.ui.view,arch_db:vmk_event_host.view_event_form_host
+msgid "Hosts"
+msgstr "호스트"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_event_event__id
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__id
+msgid "ID"
+msgstr "ID"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__write_uid
+msgid "Last Updated by"
+msgstr "최근 갱신한 사람"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__write_date
+msgid "Last Updated on"
+msgstr "최근 갱신 일자"
+
+#. module: vmk_event_host
+#: model_terms:ir.ui.view,arch_db:vmk_event_host.view_event_form_host
+msgid "Lead, Assistant, Guest speaker…"
+msgstr "책임자, 보조, 초청 연사…"
+
+#. module: vmk_event_host
+#. odoo-javascript
+#: code:addons/vmk_event_host/static/src/host_summary_field.js:0
+msgid "Name of the notebook page this summary opens."
+msgstr "이 요약을 클릭하면 열리는 탭의 이름입니다."
+
+#. module: vmk_event_host
+#. odoo-javascript
+#: code:addons/vmk_event_host/static/src/host_summary_field.js:0
+msgid "Notebook page"
+msgstr "탭"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__role
+msgid "Role"
+msgstr "역할"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__sequence
+msgid "Sequence"
+msgstr "순서"
+
+#. module: vmk_event_host
+#. odoo-javascript
+#: code:addons/vmk_event_host/static/src/host_summary_field.js:0
+msgid "Show the Hosts tab"
+msgstr "호스트 탭 표시"
+
+#. module: vmk_event_host
+#: model:ir.model.fields,help:vmk_event_host.field_vmk_event_host__partner_id
+msgid "The person running the event: a speaker, teacher or facilitator."
+msgstr "행사를 진행하는 사람입니다. 연사, 강사 또는 진행자 등이 해당합니다."
+
+#. module: vmk_event_host
+#: model:ir.model.fields,help:vmk_event_host.field_vmk_event_host__role
+msgid ""
+"What this host does, when it is worth saying: Lead, Assistant, Guest "
+"speaker."
+msgstr "이 호스트가 맡은 역할로, 밝힐 필요가 있을 때 입력합니다. 예: 책임자, 보조, 초청 연사."
