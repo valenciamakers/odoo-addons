@@ -31,6 +31,13 @@ their addresses. **Merging two contacts** keeps both sets of addresses in the re
 - **Blacklisting, bounce counts, and mail-loop detection** read the primary email address only.
 - **Merging contacts with different addresses** needs an administrator, as in standard Odoo.
 
+**Languages**
+
+Catalan, Chinese (Simplified and Traditional), Czech, Danish, Dutch, English, French, German,
+Indonesian, Italian, Japanese, Korean, Polish, Portuguese (Brazil and Portugal), Romanian,
+Russian, Spanish, Swedish, Turkish, and Ukrainian. If any translation seems incorrect, please
+contact us and we will fix it.
+
 **Changelog**
 
 *20.0.1.1.0 (5 October 2026)*

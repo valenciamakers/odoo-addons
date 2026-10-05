@@ -30,6 +30,13 @@ usual; only the language settings are protected.
 - **Disabled languages, and languages you enable but don't edit**, keep receiving regular Odoo
   updates.
 
+**Languages**
+
+Catalan, Chinese (Simplified and Traditional), Czech, Danish, Dutch, English, French, German,
+Indonesian, Italian, Japanese, Korean, Polish, Portuguese (Brazil and Portugal), Romanian,
+Russian, Spanish, Swedish, Turkish, and Ukrainian. If any translation seems incorrect, please
+contact us and we will fix it.
+
 **Changelog**
 
 *20.0.1.1.0 (5 October 2026)*

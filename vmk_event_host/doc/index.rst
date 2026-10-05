@@ -32,6 +32,13 @@ changes to the Responsible and Organizer fields.
 - **A contact can be a host only once per event**, and with a single role.
 - **Hosts are not shown on the website.** They are recorded in the backend only.
 
+**Languages**
+
+Catalan, Chinese (Simplified and Traditional), Czech, Danish, Dutch, English, French, German,
+Indonesian, Italian, Japanese, Korean, Polish, Portuguese (Brazil and Portugal), Romanian,
+Russian, Spanish, Swedish, Turkish, and Ukrainian. If any translation seems incorrect, please
+contact us and we will fix it.
+
 **Changelog**
 
 *20.0.1.1.0 (5 October 2026)*
