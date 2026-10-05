@@ -80,7 +80,7 @@ msgstr "Data de finalització"
 #. module: vmk_event_slot_multiday
 #: model:ir.model,name:vmk_event_slot_multiday.model_event_slot
 msgid "Event Slot"
-msgstr ""
+msgstr "Franja horària"
 
 #. module: vmk_event_slot_multiday
 #: model_terms:ir.ui.view,arch_db:vmk_event_slot_multiday.view_event_slot_form_multiday

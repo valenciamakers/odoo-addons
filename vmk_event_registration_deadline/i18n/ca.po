@@ -3,7 +3,7 @@
 # 	* vmk_event_registration_deadline
 #
 # As `es`. "Event Slot" is core's row and core's Catalan leaves it
-# untranslated, so it stays empty rather than asserting a value there.
+# untranslated, so it says `Franja horària` here, as in our other slot modules.
 #
 # Odoo 20 ships no Valencian variant -- ca_ES is the only Catalan locale.
 #
@@ -64,7 +64,7 @@ msgstr "Esdeveniment"
 #. module: vmk_event_registration_deadline
 #: model:ir.model,name:vmk_event_registration_deadline.model_event_slot
 msgid "Event Slot"
-msgstr ""
+msgstr "Franja horària"
 
 #. module: vmk_event_registration_deadline
 #: model:ir.model.fields,field_description:vmk_event_registration_deadline.field_event_event__id
