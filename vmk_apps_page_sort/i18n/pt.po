@@ -2,8 +2,8 @@
 # This file contains the translation of the following modules:
 # 	* vmk_apps_page_sort
 #
-# Written by tools/i18n_fill.py: do not edit by hand. Core's wording where core
-# has the same English, ours otherwise. See DEVELOPING.md.
+# Generated, and written afresh on every run: do not edit by hand. Core's
+# wording where core has the same English, ours otherwise. See DEVELOPING.md.
 #
 msgid ""
 msgstr ""
