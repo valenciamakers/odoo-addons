@@ -85,8 +85,8 @@ without this module knowing sessions exist.
 
 `i18n/` carries `es` and `ca`, both checked term by term against core's catalogues. Shared terms —
 _Event_, _Config Settings_, _Display Name_ — take core's own `msgstr` rather than a fresh
-translation. _Event Slot_ is core's row and core's Catalan leaves it untranslated, so ours stays
-empty rather than asserting a value on a record we do not own.
+translation. _Event Slot_ is core's row and core's Catalan leaves it untranslated, so ours says
+`Franja horària`, as our other slot modules do, rather than showing English (5 October 2026).
 
 **The module's own name and summary are hand-maintained**, in the POT as well as both PO files.
 `ir_module.py` registers every module record as `base.module_<name>`, so `odoo i18n export` never

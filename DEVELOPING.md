@@ -522,7 +522,10 @@ In practice that is four different things, and only one of them saves work:
   `overwrite=False`, so an ordinary upgrade never touches a translation a user edited; "Update
   Translations" with overwrite, or `-l`, resets it to core's wording, which core's own catalogues
   would do anyway. A blank entry is a defect. Decided 28 September 2026, replacing a rule that said
-  to leave these blank, which no module followed.
+  to leave these blank, which no module followed. **Where core's own translation is blank, write
+  one.** Core's gaps are not a wording to copy: its Catalan leaves _Event Slot_ untranslated, and a
+  blank of ours would show English in a Catalan backend, so ours says `Franja horària`. Decided 5
+  October 2026.
 - **Copy core's translation, not just core's English.** Where a string of ours says what core says,
   its `msgstr` is core's `msgstr` — looked up in `base/i18n/<lang>.po` or the relevant module's, and
   pasted verbatim. This is not optional polish: the ORM's automatic fields (`create_uid`,

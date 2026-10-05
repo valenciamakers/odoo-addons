@@ -3,7 +3,7 @@
 # 	* vmk_event_registration_deadline
 #
 # As `es`. "Event Slot" is core's row and core's Catalan leaves it
-# untranslated, so it stays empty rather than asserting a value there.
+# untranslated, so it says `Franja horària` here, as in our other slot modules.
 #
 # The two `base.module_` entries below are the module's own name and summary.
 # They belong to base, not to this module, so `i18n export` never writes them
@@ -61,7 +61,7 @@ msgstr "Esdeveniment"
 #. module: vmk_event_registration_deadline
 #: model:ir.model,name:vmk_event_registration_deadline.model_event_slot
 msgid "Event Slot"
-msgstr ""
+msgstr "Franja horària"
 
 #. module: vmk_event_registration_deadline
 #: model:ir.model.fields,field_description:vmk_event_registration_deadline.field_event_event__id
