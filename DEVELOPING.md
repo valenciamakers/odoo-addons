@@ -970,6 +970,17 @@ installed for its terms to exist. **Compare the export with the committed POT ra
 over**: a long-lived database can hold terms from data another branch installed and left behind, and
 the exporter never writes the hand-kept `base.module_*` entries.
 
+**Write a sentence as one string, with named placeholders.** A sentence split across a template's
+nodes reaches the catalogue in pieces: "(all in", then a timezone printed by `t-out`, then ")". Each
+piece can only be translated where it stands, so every language inherits English word order, and
+nine of our nineteen translations had to reword around that one. Where a sentence carries a value,
+build it in Python, `_("(all times in %(timezone)s)", timezone=tz)`, and print the result with
+`t-out`. A named placeholder also tells the translator what will stand there, which `%s` does not.
+**And a count of one is a sentence of its own.** These strings have no plural forms, so
+`%(count)s sessions` reads "1 sessions" unless the code picks a separate `_("1 session")` when the
+count is one. Found by translating, not by testing: no test had tried a single session. Added
+2026-10-05.
+
 **A view's translation reaches only the views its entry names.** Each `#:` line on a
 `model_terms:ir.ui.view,arch_db:` entry is a record the translation is applied to. Reusing an
 existing msgid in another view — the same note on a second form — needs that view's reference line
