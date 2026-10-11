@@ -33,6 +33,10 @@ A deadline, expressed as a duration before the event starts:
   in `account`.
 - **The duration is `float_time`,** so it takes hours and minutes: `1:30` closes registration ninety
   minutes before the start. `00:00` ends registration at the event start time.
+- **A negative duration is refused**, in Settings and on an event alike. `float_time` accepts one,
+  and it would put the deadline after the start, quietly keeping registration open into the event:
+  the opposite of what the field is labelled. Refused since 19.0.1.2.1; a value stored before then
+  stays until somebody edits it.
 
 The duration field carries no `help` in Settings: a `<setting>` labels its own fields and does not
 give them the `?` a form label would, so anything written there is never seen. What needed saying
@@ -116,9 +120,10 @@ docker compose run --rm odoo odoo -d test -u vmk_event_registration_deadline \
     --test-enable --test-tags /vmk_event_registration_deadline --stop-after-init
 ```
 
-Nine tests: the default, the per-event override, an override of zero, a ticket's Registration End
-winning, a ticket without one not winning, a multi-slot event staying open while a slot is still
-ahead and closing once none is, and a slot retired by the deadline rather than merely by its start.
+The tests cover the default, the per-event override, an override of zero, a negative duration
+refused on an event and in Settings, a ticket's Registration End winning, a ticket without one not
+winning, a multi-slot event staying open while a slot is still ahead and closing once none is, and a
+slot retired by the deadline rather than merely by its start.
 
 **A trap for anyone writing more of them.** `start_hour` on a slot is a clock time in the event's
 timezone, not an offset — a literal `10.0` in a test built from `now` lands wherever it lands, and

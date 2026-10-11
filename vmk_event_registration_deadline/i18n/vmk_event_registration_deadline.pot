@@ -79,6 +79,13 @@ msgid ""
 msgstr ""
 
 #. module: vmk_event_registration_deadline
+#. odoo-python
+#: code:addons/vmk_event_registration_deadline/models/event_event.py:0
+#: code:addons/vmk_event_registration_deadline/models/res_config_settings.py:0
+msgid "The time before start cannot be negative."
+msgstr ""
+
+#. module: vmk_event_registration_deadline
 #: model:ir.model.fields,field_description:vmk_event_registration_deadline.field_event_event__vmk_deadline_hours
 #: model:ir.model.fields,field_description:vmk_event_registration_deadline.field_res_config_settings__vmk_registration_deadline_hours
 msgid "Time Before Start"
