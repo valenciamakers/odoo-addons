@@ -154,6 +154,14 @@ class ResPartner(models.Model):
         domain = super()._search_display_name(operator, value)
         if not operator.endswith("like") or not value or not isinstance(value, str):
             return domain
+        # Only where the caller may read the table. The ORM runs a dotted path on
+        # a one2many as a subquery under the caller's access (`_search` checks
+        # read access unless `su` or `bypass_access`), and a portal or public
+        # user, who has no ir.access permission on vmk.partner.email, would get an
+        # AccessError from every display_name search on contacts -- including a
+        # ('partner_id', 'ilike', ...) domain on any other model.
+        if not self.env["vmk.partner.email"].has_access("read"):
+            return domain
         extra = Domain("vmk_email_ids.email", operator, value)
         if operator in Domain.NEGATIVE_OPERATORS:
             return domain & extra

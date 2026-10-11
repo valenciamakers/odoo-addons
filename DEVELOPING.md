@@ -673,6 +673,21 @@ checked there yet.
   anything more and a lead arrives with an email that differs from its contact's, and the sync
   overwrites the contact's primary address. Found by `vmk_partner_email_multiple` on 25 September
   2026; its `models/email_sync.py` guards all three.
+- **A `sudo()` search that hands records back must filter them by the caller's access.** Reading a
+  table as superuser to learn which record of another model owns something is fine; returning that
+  record as a bare `browse()` in the caller's environment is not. Core reads it as the caller the
+  moment it gets it — `mail.thread._mail_find_partner_from_emails` reads `email_normalized` on every
+  partner `_find_or_create_from_emails` returns — and raises an AccessError there, in the middle of
+  posting a message. `_filtered_access("read")` on the result gives what core's own `search()` would
+  have found. Found in `vmk_partner_email_multiple` with a user of one company and a contact of
+  another, 11 October 2026. Verified on 20 with the same module.
+- **A domain added in `_search_display_name` runs for every user, portal and public included.** A
+  dotted path through a one2many is a subquery on the comodel under the caller's access: `_search`
+  checks read access on it unless `su` or `bypass_access`. A user with no `ir.access` permission on
+  that model then gets an AccessError from every `display_name` search on the parent, `name_search`
+  and a `('<many2one>', 'ilike', …)` domain on any other model included. Guard the addition with
+  `has_access("read")` on the comodel. Found in `vmk_partner_email_multiple` with a portal user, 11
+  October 2026. Verified on 20 with the same module, public user included.
 
 **Overriding a model you do not depend on**
 

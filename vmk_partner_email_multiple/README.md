@@ -226,6 +226,27 @@ without a group restricts everyone and never grants. Like any restriction it is 
 superuser, so matching, which reads the table with `sudo()`, is unchanged. If core changes its row,
 this copy has to follow; a test compares the two.
 
+**Matching hands back only contacts the caller may read** (20.0.1.1.2). Reading the table as
+superuser is right, but `_resolve_partners` then returned the owning contacts as bare `browse()`
+records in the caller's environment, whoever the caller was. Core's `_find_or_create_from_emails`
+only ever returns what its own `search()` found under the caller's rules, and
+`mail.thread._mail_find_partner_from_emails` reads `email_normalized` on every partner the search
+returned — so a contact of another company, resolved through an additional address, raised an
+AccessError in the middle of posting a message, and `find_or_create`, a public RPC method, handed
+its id to any logged-in user. The candidates now go through `_filtered_access("read")`. The
+primary-holder check stays in the caller's environment, on purpose: who holds an address is answered
+per viewer in core, which between two primary holders gives a user the one they can see, so a
+primary holder the user cannot see does not keep a visible contact's additional address from
+matching. The superuser, and so the mail gateway, still gets the primary holder.
+
+**The widened `display_name` search is skipped for users with no access to the table** (20.0.1.1.2).
+A dotted path on a one2many is evaluated as a subquery on the comodel under the caller's access —
+`_search` checks read access unless `su` or `bypass_access` — and portal and public users have no
+`ir.access` permission on `vmk.partner.email`. So every contact search by name, `name_search` and
+any `('partner_id', 'ilike', …)` domain on another model included, raised an AccessError for them.
+`_search_display_name` now adds its domain only where `has_access("read")` says so, which gives
+those users core's answer exactly.
+
 ### Known limitation: merging as a non-admin
 
 `_merge` refuses when the contacts differ by email (`base/wizard/base_partner_merge.py:473`) — which
