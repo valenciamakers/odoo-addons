@@ -319,6 +319,40 @@ in `web/static/src/**`, not in Python. Half the surprises below live there.
 - **A local date is not a UTC datetime's `.date()`.** An evening session west of Greenwich ends on
   the next UTC day. Use the record's own local `date` field, or convert with its timezone first.
   Added 2026-09-23.
+- **`astimezone()` on a stored datetime leans on the process's timezone.** A stored datetime is
+  naive, and Python reads a naive value in the process's local time. Odoo pins the process to UTC at
+  startup (`odoo/_monkeypatches/__init__.py` sets `TZ` and calls `time.tzset()`), so
+  `record.date_begin.astimezone(tz)` gives the right answer, and core writes exactly that in
+  `event.event._get_ics_file`. But the pin sits behind `hasattr(time, 'tzset')`, which Windows
+  lacks. Mark the value first, `pytz.UTC.localize(value).astimezone(tz)`, and test it by setting
+  `os.environ["TZ"]` to a POSIX string such as `JST-9` and calling `time.tzset()`, restored in a
+  cleanup. Added 2026-10-11.
+- **A constraint runs only when one of its own fields is written.** `@api.constrains` names the
+  fields that trigger it, not the ones it reads. Core's `event.slot._check_time_range` is triggered
+  by `date`, `start_hour` and `end_hour` and reads `end_datetime`; a field of ours that the end also
+  depends on changed it without the check ever running, so a slot could be moved outside its event.
+  When a compute of ours feeds something a core constraint reads, run that constraint from one of
+  our own, `@api.constrains("<our field>")` calling `self._check_time_range()`. Do not override
+  core's method to add the field: an override's decorator replaces the list rather than adding to it
+  (`_constraint_methods` reads `_constrains` from the final method), so core's fields have to be
+  restated and any it adds later are lost. Added 2026-10-11.
+- **A record rule does not follow a many2one.** A child model whose rows belong to a record of
+  another model is not covered by that model's rules. Through the parent's form the rows are reached
+  by way of a record the user can already read, which is why it looks protected; a direct
+  `search_read` on the child is answered from the child's access list alone. Rows of a contact need
+  core's contact rule, `base.res_partner_rule`, copied onto the child with each field reached
+  through the many2one, as `vmk_partner_email_multiple/security/` does. Rules are skipped under
+  `sudo()`, so code that reads the table as superuser is unaffected. Test it with a user of one
+  company and a parent in another, and compare the copy with core's file, not core's record, which
+  is `noupdate` and may have been edited. Added 2026-10-11.
+- **A public method is an RPC endpoint, whatever calls it in our own code.** Any method whose name
+  does not start with an underscore can be called on its model by any logged-in user
+  (`get_public_method` in `odoo/service/model.py` refuses only private names), with that user's
+  rights. A server action, a button's `groups`, or a menu nobody else sees restricts the interface,
+  not the method. So a public method that calls `sudo()` decides for itself who may run it: check
+  `self.env.is_system()`, or the group that fits, before the first privileged line, and raise
+  `AccessError`. Core's "Only administrators can execute this action." is already translated. Or
+  make the method private where nothing in the web client needs to call it. Added 2026-10-11.
 
 **Mail templates**
 
