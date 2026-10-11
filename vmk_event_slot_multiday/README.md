@@ -70,6 +70,13 @@ is the whole change as far as the rest of Odoo is concerned, because everything 
 None of those needed an override, and a test pins the registration's end. Core's `event` and
 `website_event` suites pass with this module installed.
 
+**One of them needed asking for.** Core runs `_check_time_range` when a slot's date or hours change,
+and a new end date alone is neither, so until 19.0.1.1.1 dragging only the end past the event's last
+day was accepted. `_check_vmk_time_range` calls core's check when the day count changes. It is a
+method of its own rather than an override of core's with our field added to its `@api.constrains`,
+which would mean restating core's list of fields and missing any it adds later; the cost is that the
+check runs twice when a date and the count change together.
+
 **Core's hour check still runs for one-day slots.** `_check_hours` hands one-day slots to core
 unchanged and checks a multi-day slot's hours only for being hours: across days, 13:00 on Sunday is
 later than 18:00 on Friday, which is exactly what core's check would refuse. An end before the start

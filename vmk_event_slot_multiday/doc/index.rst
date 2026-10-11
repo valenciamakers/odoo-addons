@@ -57,6 +57,10 @@ Russian, Spanish, Swedish, Turkish, and Ukrainian. If any translation seems inco
 
 **Changelog**
 
+*19.0.1.1.1 (11 October 2026)*
+
+- Recheck the event date range when a slot's end date alone is changed.
+
 *19.0.1.1.0 (5 October 2026)*
 
 - Translated into nineteen more languages: Chinese (Simplified and Traditional), Czech, Danish,

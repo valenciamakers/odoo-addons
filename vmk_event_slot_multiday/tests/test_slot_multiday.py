@@ -97,6 +97,15 @@ class TestSlotMultiday(TransactionCase):
         with self.assertRaises(ValidationError):
             self._slot(date="2026-10-17", vmk_end_date="2026-10-19", end_hour=13.0)
 
+    def test_moving_only_the_end_is_still_kept_inside_the_event(self):
+        """Core's range check runs on a change of date or hours, and a new
+        end date alone is neither: ours has to ask for it."""
+        slot = self._slot(date="2026-10-17", vmk_end_date="2026-10-18", end_hour=13.0)
+        with self.assertRaises(ValidationError):
+            slot.write({"vmk_end_date": "2026-10-19"})
+        with self.assertRaises(ValidationError):
+            slot.write({"vmk_end_day_offset": 2})
+
     def test_a_registration_ends_when_its_slot_does(self):
         """Core reads the slot's end for the registration: nothing of ours."""
         slot = self._slot(vmk_end_date="2026-10-11", end_hour=13.0)
