@@ -825,8 +825,10 @@ series    └──────────── major
   default, and the one to reach for whenever the change needs no upgrade to take effect.
 - **minor** — new behaviour that does not break existing use: a new field, a new view, an added
   option. Usually needs `-u` to take effect.
-- **major** — a breaking change: a removed or renamed field, altered data semantics, anything
-  needing a migration script.
+- **major** — a breaking change: a removed or renamed field, altered data semantics, or a migration
+  that changes what stored data means. A migration that only cleans data up, as
+  `vmk_partner_email_multiple` 19.0.1.3.2 does with rows the interface already showed as wrong, is a
+  patch like the fix it serves. Decided 11 October 2026.
 
 **Documentation-only changes do not bump.** A `README.md` edit is not a change to the module, and
 bumping for one makes the version stop meaning anything. The test is whether a file Odoo loads
