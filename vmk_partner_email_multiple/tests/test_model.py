@@ -46,6 +46,22 @@ class TestPartnerEmailModel(PartnerEmailCase):
         )
         self.assertTrue(shared.id)
 
+    def test_making_an_additional_address_primary_drops_its_row(self):
+        """Typing an additional address into the email field is the user's
+        call; what it must not leave is the address twice on one contact."""
+        self.alice.email = "Alice.Work@Example.com"
+        self.assertEqual(self.alice.email, "Alice.Work@Example.com", "the write stands")
+        rows = self.alice.vmk_email_ids.mapped("email_normalized")
+        self.assertNotIn("alice.work@example.com", rows, "compared on the normalized form")
+        self.assertIn("noreply@alice-shop.example.com", rows, "the other rows stay")
+        self.assertNotIn(
+            "alice@example.com", rows, "the old primary is not kept: the swap button does that"
+        )
+
+    def test_a_new_primary_held_by_no_row_drops_nothing(self):
+        self.alice.email = "alice.new@example.com"
+        self.assertEqual(len(self.alice.vmk_email_ids), 2)
+
     def test_rows_are_removed_with_the_contact(self):
         bob = self.Partner.create(
             {

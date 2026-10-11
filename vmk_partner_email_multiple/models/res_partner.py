@@ -6,6 +6,7 @@ from odoo.fields import Domain
 from odoo.tools import email_normalize
 
 from . import email_sync
+from .vmk_partner_email import SWAPPING
 
 
 class ResPartner(models.Model):
@@ -36,6 +37,9 @@ class ResPartner(models.Model):
 
         Only the email is dropped, and only for contacts that hold it as an
         additional address; the rest of the write goes through as asked.
+
+        Without the flag the write stands, and the additional row that now
+        repeats the primary is dropped (``_vmk_drop_rows_equal_to_primary``).
         """
         if "email" in vals and self.env.context.get(email_sync.KEEP_PRIMARY):
             keep = self.filtered(lambda partner: email_sync.is_additional(partner, vals["email"]))
@@ -45,9 +49,38 @@ class ResPartner(models.Model):
                     super(ResPartner, keep).write(others)
                 rest = self - keep
                 if rest:
-                    super(ResPartner, rest).write(vals)
+                    # Back through here: none of these holds the address as an
+                    # additional one, so the write lands and nothing is dropped.
+                    rest.write(vals)
                 return True
-        return super().write(vals)
+        result = super().write(vals)
+        if "email" in vals and not self.env.context.get(SWAPPING):
+            self._vmk_drop_rows_equal_to_primary()
+        return result
+
+    def _vmk_drop_rows_equal_to_primary(self):
+        """Remove the additional row an address leaves behind on becoming the primary.
+
+        Typing an additional address into the contact's email field is the
+        user's call, and core accepts it; what it must not leave is the same
+        address twice on one contact, as primary and as a row. The row is
+        dropped rather than the write refused: a refusal would also refuse the
+        same write arriving from CRM, Recruitment, or Helpdesk, in the middle
+        of their own flow. The old primary is not kept as a row, which is what
+        the swap button is for. Compared on the normalized form, as the
+        uniqueness constraint compares.
+
+        ``sudo()`` because the row is the written contact's own bookkeeping:
+        whoever may write the contact's email may clear what it made
+        redundant, whatever their rights on the table.
+        """
+        rows = self.env["vmk.partner.email"]
+        for partner in self.filtered("email_normalized"):
+            rows |= partner.vmk_email_ids.filtered(
+                lambda row: row.email_normalized == partner.email_normalized
+            )
+        if rows:
+            rows.sudo().unlink()
 
     # ------------------------------------------------------------
     # Matching

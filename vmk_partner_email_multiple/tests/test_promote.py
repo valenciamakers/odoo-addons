@@ -48,18 +48,21 @@ class TestPromoteToPrimary(PartnerEmailCase):
         self.assertEqual(bob.email, "bob@example.com")
         self.assertFalse(row.exists(), "no empty row is left behind")
 
-    def test_promote_when_the_demoted_address_is_already_held(self):
-        """Reachable if the primary was edited to an address already in the list."""
+    def test_promote_after_the_primary_was_edited_to_a_listed_address(self):
+        """Editing the primary to an address already in the list drops that
+        row (see test_model), so the swap afterwards has nothing to collide
+        with and keeps the demoted address as a row like any other."""
         bob = self.Partner.create({"name": "Bob Example", "email": "bob@example.com"})
         first = self.PartnerEmail.create({"partner_id": bob.id, "email": "bob.two@example.com"})
         second = self.PartnerEmail.create({"partner_id": bob.id, "email": "bob.three@example.com"})
         bob.email = "bob.three@example.com"
+        self.assertFalse(second.exists())
 
         first.action_promote_to_primary()
 
         self.assertEqual(bob.email, "bob.two@example.com")
-        self.assertFalse(first.exists())
-        self.assertTrue(second.exists(), "the row that already held it is the one kept")
+        self.assertEqual(first.email, "bob.three@example.com", "the demoted address is kept")
+        self.assertEqual(bob.vmk_email_ids, first)
 
     def test_promoting_is_tracked_in_the_chatter(self):
         # The fixture has to reach the database first. Tracking compares against
