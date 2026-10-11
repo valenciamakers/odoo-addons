@@ -261,6 +261,18 @@ change matching behaviour far outside the search panel.
 The Contacts app's own action points at that same search view (`contacts/views/contacts_views.xml`),
 so one inherited view fixes the search people actually use.
 
+#### An address is as visible as its contact
+
+A record rule on `res.partner` does not follow the `partner_id` many2one: on the contact form the
+addresses are reached through a contact the user can already read, but a direct `search_read` on
+`vmk.partner.email` was answered from the access list alone, which gives every internal user read
+access. In a multi-company database that showed the addresses of contacts another company keeps to
+itself. `security/vmk_partner_email_security.xml` (18.0.1.1.1) carries core's own contact rule,
+`base.res_partner_rule`, with each field reached through `partner_id`: an address is visible where
+its contact belongs to an internal user, to no company, or to one of the user's companies. Like any
+record rule it is skipped for the superuser, so matching, which reads the table with `sudo()`, is
+unchanged. If core changes its rule, this copy has to follow; a test compares the two.
+
 ### Known limitation: merging as a non-admin
 
 `_merge` refuses when the contacts differ by email (`base/wizard/base_partner_merge.py:413`) — which

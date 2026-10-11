@@ -4,13 +4,14 @@
 {
     "name": "Multiple Contact Emails",
     "summary": "Assign multiple email addresses to a contact, and Odoo matches mail from all of them",
-    "version": "18.0.1.1.0",
+    "version": "18.0.1.1.1",
     "author": "Valencia Makers",
     "license": "LGPL-3",
     "category": "Productivity/Discuss",
     "depends": ["mail"],
     "data": [
         "security/ir.model.access.csv",
+        "security/vmk_partner_email_security.xml",
         "views/res_partner_views.xml",
     ],
     "assets": {
