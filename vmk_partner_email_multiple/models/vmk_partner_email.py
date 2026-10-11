@@ -163,7 +163,8 @@ class VmkPartnerEmail(models.Model):
         # sudo() because deciding which contact owns an address is the same kind of
         # elevated bookkeeping as email_normalized's own compute_sudo=True, and
         # because callers include public/portal paths with no ACL on this model.
-        # The partners themselves are handed back in the caller's environment.
+        # The partners themselves are handed back in the caller's environment,
+        # and only those the caller may read (below).
         rows = self.sudo().search(
             [
                 ("email_normalized", "in", list(wanted)),
@@ -177,7 +178,11 @@ class VmkPartnerEmail(models.Model):
         Partner = self.env["res.partner"]
         # A contact holding the address as its PRIMARY always wins, so installing
         # this module never re-routes mail that core already matched. Searched in
-        # the caller's environment, exactly as core does.
+        # the caller's environment, exactly as core does: a primary holder the
+        # caller cannot see does not count, just as core, resolving the same
+        # address between two primary holders, takes the first one the caller
+        # can see. Who holds an address is answered per viewer in core, and so
+        # here.
         primary_holders = set(
             Partner.search([("email_normalized", "in", list(wanted))]).mapped(
                 "email_normalized"
@@ -193,8 +198,12 @@ class VmkPartnerEmail(models.Model):
         resolved = {}
         for normalized, partner_ids in candidate_ids.items():
             # sorted() reproduces the 'id ASC' core searches with; sort_key then
-            # re-orders exactly as _find_or_create_from_emails does.
-            partners = Partner.browse(sorted(partner_ids))
+            # re-orders exactly as _find_or_create_from_emails does. Only contacts
+            # the caller may read are handed back: core's own search runs under
+            # the caller's rules, so a contact it could not have found must not
+            # arrive by this side door -- reading it fails the moment core does,
+            # as mail.thread's resolution step does on every partner returned.
+            partners = Partner.browse(sorted(partner_ids))._filtered_access("read")
             if filter_found:
                 partners = partners.filtered(filter_found)
             if sort_key and len(partners) > 1:
