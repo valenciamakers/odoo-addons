@@ -40,6 +40,10 @@ Russian, Spanish, Swedish, Turkish, and Ukrainian. If any translation seems inco
 
 **Changelog**
 
+*19.0.1.3.1 (11 October 2026)*
+
+- Match additional-email access to Odoo's company visibility rule for contacts.
+
 *19.0.1.3.0 (5 October 2026)*
 
 - Translated into nineteen more languages: Chinese (Simplified and Traditional), Czech, Danish,

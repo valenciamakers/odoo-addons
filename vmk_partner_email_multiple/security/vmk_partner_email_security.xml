@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- A child record is not protected by res.partner's rules through a Many2one. -->
+    <record id="vmk_partner_email_company_rule" model="ir.rule">
+        <field name="name">Additional contact emails: company visibility</field>
+        <field name="model_id" ref="model_vmk_partner_email"/>
+        <field name="domain_force">['|', '|', ('partner_id.partner_share', '=', False), ('partner_id.company_id', 'parent_of', company_ids), ('partner_id.company_id', '=', False)]</field>
+        <field name="global" eval="True"/>
+    </record>
+</odoo>
