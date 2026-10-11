@@ -4,6 +4,7 @@
 from datetime import timedelta
 
 from odoo import fields
+from odoo.exceptions import ValidationError
 from odoo.tests import TransactionCase, tagged
 
 from odoo.addons.vmk_event_registration_deadline.models.res_config_settings import (
@@ -84,6 +85,20 @@ class TestRegistrationDeadline(TransactionCase):
         self.assertTrue(event.event_registrations_open)
         past = self._event(starts_in_hours=-1, vmk_deadline_custom=True, vmk_deadline_hours=0)
         self.assertFalse(past.event_registrations_open)
+
+    def test_a_negative_deadline_is_refused_on_an_event(self):
+        """It would close registration after the start, not before it."""
+        with self.assertRaises(ValidationError):
+            self._event(starts_in_hours=12, vmk_deadline_custom=True, vmk_deadline_hours=-1)
+        event = self._event(starts_in_hours=12, vmk_deadline_custom=True, vmk_deadline_hours=2)
+        with self.assertRaises(ValidationError):
+            event.vmk_deadline_hours = -0.5
+            event.flush_recordset()
+
+    def test_a_negative_deadline_is_refused_in_settings(self):
+        with self.assertRaises(ValidationError):
+            self.env["res.config.settings"].create({"vmk_registration_deadline_hours": -1})
+        self.env["res.config.settings"].create({"vmk_registration_deadline_hours": 0})
 
     def test_a_ticket_registration_end_wins(self):
         """A date somebody typed is a deliberate choice to sell late."""

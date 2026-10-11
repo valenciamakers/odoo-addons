@@ -3,7 +3,8 @@
 
 from datetime import timedelta
 
-from odoo import api, fields, models
+from odoo import _, api, fields, models
+from odoo.exceptions import ValidationError
 
 from .res_config_settings import DEADLINE_PARAM, ENABLED_PARAM
 
@@ -23,6 +24,12 @@ class EventEvent(models.Model):
     # its own, and Odoo hangs the `?` off a label, so anything here is never
     # seen. "Before Start" sits next to the value and says it anyway.
     vmk_deadline_hours = fields.Float(string="Time Before Start")
+
+    @api.constrains("vmk_deadline_hours")
+    def _check_vmk_deadline_hours(self):
+        """Refuse a negative time: it would close registration after the start."""
+        if any(event.vmk_deadline_hours < 0 for event in self):
+            raise ValidationError(_("The time before start cannot be negative."))
 
     def _vmk_deadline_hours(self):
         """This event's deadline in hours, or None where none applies.
