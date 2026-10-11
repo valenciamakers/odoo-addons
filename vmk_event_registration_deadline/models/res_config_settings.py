@@ -1,7 +1,8 @@
 # Copyright 2026 Valencia Makers, SL
 # License LGPL-3 (https://www.gnu.org/licenses/lgpl-3.0.html).
 
-from odoo import fields, models
+from odoo import _, api, fields, models
+from odoo.exceptions import ValidationError
 
 # The key is the module's own, not `event.`, so a future core setting cannot
 # collide with it.
@@ -30,3 +31,10 @@ class ResConfigSettings(models.TransientModel):
         string="Time Before Start",
         config_parameter=DEADLINE_PARAM,
     )
+
+    @api.constrains("vmk_registration_deadline_hours")
+    def _check_vmk_registration_deadline_hours(self):
+        """As on the event. Checked when the settings are saved, which is the
+        only place the default is typed; the stored parameter is not policed."""
+        if any(settings.vmk_registration_deadline_hours < 0 for settings in self):
+            raise ValidationError(_("The time before start cannot be negative."))

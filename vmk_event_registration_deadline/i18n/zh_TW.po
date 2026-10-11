@@ -79,6 +79,13 @@ msgid ""
 msgstr "報名只開放至活動開始，或開始前的指定時間。設為 0小時 則報名於活動開始時間截止。"
 
 #. module: vmk_event_registration_deadline
+#. odoo-python
+#: code:addons/vmk_event_registration_deadline/models/event_event.py:0
+#: code:addons/vmk_event_registration_deadline/models/res_config_settings.py:0
+msgid "The time before start cannot be negative."
+msgstr "開始前的時間不能為負數。"
+
+#. module: vmk_event_registration_deadline
 #: model:ir.model.fields,field_description:vmk_event_registration_deadline.field_event_event__vmk_deadline_hours
 #: model:ir.model.fields,field_description:vmk_event_registration_deadline.field_res_config_settings__vmk_registration_deadline_hours
 msgid "Time Before Start"

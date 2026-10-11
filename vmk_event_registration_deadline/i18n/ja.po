@@ -79,6 +79,13 @@ msgid ""
 msgstr "イベントの開始まで、または開始の一定時間前までのみ登録を受け付けます。イベントの開始時刻に登録を締め切るには、0hに設定します。"
 
 #. module: vmk_event_registration_deadline
+#. odoo-python
+#: code:addons/vmk_event_registration_deadline/models/event_event.py:0
+#: code:addons/vmk_event_registration_deadline/models/res_config_settings.py:0
+msgid "The time before start cannot be negative."
+msgstr "開始前の時間は負にすることはできません。"
+
+#. module: vmk_event_registration_deadline
 #: model:ir.model.fields,field_description:vmk_event_registration_deadline.field_event_event__vmk_deadline_hours
 #: model:ir.model.fields,field_description:vmk_event_registration_deadline.field_res_config_settings__vmk_registration_deadline_hours
 msgid "Time Before Start"
