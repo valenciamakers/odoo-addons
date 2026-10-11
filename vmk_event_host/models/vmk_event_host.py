@@ -65,26 +65,29 @@ class VmkEventHost(models.Model):
                 )
 
     @api.model
-    def _vmk_dedupe(self, partner):
+    def _vmk_dedupe(self, partner, keep=()):
         """Keep one line per event for ``partner``, after a contact merge.
 
         The merge wizard re-points the merged contacts' lines with one bulk
         ``UPDATE`` that compares no values and bypasses ``_check_partner_unique``,
         so an event two merged contacts both hosted holds the survivor twice.
-        Keeps the line that sorts first (lowest sequence, then oldest) and drops
-        the rest. Every event the survivor hosts then recomputes its mirror and
-        summary, since the raw SQL told the cache nothing.
+        ``keep`` names the lines that were the survivor's own before the merge:
+        on a shared event that one stays, with its role and position, and the
+        merged contact's goes. Where none of an event's lines is named, the one
+        that sorts first (lowest sequence, then oldest) stays. Every event the
+        survivor hosts then recomputes its mirror and summary, since the raw SQL
+        told the cache nothing.
         """
         self.invalidate_model()
         lines = self.search([("partner_id", "=", partner.id)])  # in _order
         events = lines.event_id
-        seen = set()
+        keep = set(keep)
         extra = self.browse()
-        for line in lines:
-            if line.event_id.id in seen:
-                extra |= line
-            else:
-                seen.add(line.event_id.id)
+        for event_lines in lines.grouped("event_id").values():
+            if len(event_lines) < 2:
+                continue
+            kept = event_lines.filtered(lambda line: line.id in keep)[:1] or event_lines[:1]
+            extra |= event_lines - kept
         if extra:
             extra.unlink()
         events.invalidate_recordset(["vmk_host_ids"])

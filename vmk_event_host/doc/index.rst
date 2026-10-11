@@ -44,7 +44,8 @@ Russian, Spanish, Swedish, Turkish, and Ukrainian. If any translation seems inco
 *20.0.1.1.1 (11 October 2026)*
 
 - Merging two contacts who both host an event no longer removes the merged contact from every
-  other event it hosted. The surviving contact is listed once on the shared event.
+  other event it hosted. The surviving contact is listed once on the shared event, with its own
+  role.
 
 *20.0.1.1.0 (5 October 2026)*
 

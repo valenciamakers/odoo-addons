@@ -113,10 +113,12 @@ co-hosted one event deleted every host line the merged contact had, on every eve
 many2many mirror, re-pointed by a different path, still listed the survivor there.
 `_check_partner_unique` refuses a duplicate as a `ValidationError` instead, and the bulk `UPDATE`,
 which compares no values, is followed by `_vmk_dedupe` from an override of the wizard's `_merge`: on
-a shared event the survivor keeps the line that sorts first, and every event it hosts recomputes its
-mirror and summary, which the raw SQL left stale. Upgrading drops the SQL constraint: Odoo reflects
-each one as an `ir.model.data` record, and `_process_end` unlinks any the module no longer declares.
-`tests/test_event_host.py` merges co-hosts to prove both.
+a shared event the survivor keeps the line that was its own before the merge, with its role and
+position, and the merged contact's goes, as the merge keeps the survivor's name and email; and every
+event it hosts recomputes its mirror and summary, which the raw SQL left stale. Which lines are
+whose is read before `super()`, since the SQL then points them all at the survivor. Upgrading drops
+the SQL constraint: Odoo reflects each one as an `ir.model.data` record, and `_process_end` unlinks
+any the module no longer declares. `tests/test_event_host.py` merges co-hosts to prove both.
 
 **Access rights mirror core's own event rules**: read for the registration desk, full rights for
 event users and managers. The multi-company rule mirrors the `ir_rule_event_event_ticket_company`

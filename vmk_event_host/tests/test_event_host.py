@@ -75,7 +75,7 @@ class TestEventHost(TransactionCase):
         )
         self.assertEqual(len(self.event.vmk_host_ids), 1)
         self.assertEqual(self.event.vmk_host_ids.partner_id, self.zoe)
-        self.assertEqual(self.event.vmk_host_ids.role, "Lead", "the line sorting first is kept")
+        self.assertEqual(self.event.vmk_host_ids.role, "Lead", "the survivor's own line is kept")
         self.assertEqual(self.event.vmk_host_partner_ids, self.zoe)
         self.assertEqual(self.event.vmk_host_names, "Zoe Zapata (Lead)")
         # The constraint sees a clean table again.
@@ -83,6 +83,28 @@ class TestEventHost(TransactionCase):
             self.env["vmk.event.host"].create(
                 {"event_id": self.event.id, "partner_id": self.zoe.id}
             )
+
+    def test_merging_keeps_the_surviving_contacts_own_line(self):
+        """Whichever line sorts first: the survivor's role and position stay,
+        as the merge keeps the survivor's name and email."""
+        zoe_line, ada_line = self.event.vmk_host_ids
+        ada_line.sequence = 5  # Ada's line now sorts before Zoe's
+        self.env["base.partner.merge.automatic.wizard"]._merge(
+            [self.zoe.id, self.ada.id], dst_partner=self.zoe
+        )
+        self.assertEqual(self.event.vmk_host_ids, zoe_line)
+        self.assertEqual(self.event.vmk_host_ids.role, "Lead")
+        self.assertFalse(ada_line.exists())
+
+    def test_merging_into_the_other_contact_keeps_its_line_instead(self):
+        zoe_line, ada_line = self.event.vmk_host_ids
+        self.env["base.partner.merge.automatic.wizard"]._merge(
+            [self.zoe.id, self.ada.id], dst_partner=self.ada
+        )
+        self.assertFalse(self.zoe.exists())
+        self.assertEqual(self.event.vmk_host_ids, ada_line)
+        self.assertFalse(self.event.vmk_host_ids.role, "Ada's own line had no role, and keeps none")
+        self.assertEqual(self.event.vmk_host_names, "Ada Lovelace")
 
     def test_role_is_optional_and_shown_in_the_name(self):
         lead, plain = self.event.vmk_host_ids
