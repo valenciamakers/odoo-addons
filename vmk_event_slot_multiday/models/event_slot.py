@@ -144,6 +144,16 @@ class EventSlot(models.Model):
                     )
                 )
 
+    @api.constrains("vmk_end_day_offset")
+    def _check_vmk_time_range(self):
+        """Recheck core's event bounds when only the end date changes.
+
+        Core's constraint is triggered by date and hour changes. The real end
+        datetime also depends on our offset, so changing only that field must
+        run the same core check.
+        """
+        self._check_time_range()
+
     @api.depends("date", "start_hour", "end_hour", "vmk_end_day_offset")
     def _compute_display_name(self):
         """Name a multi-day slot by both its days.
