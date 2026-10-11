@@ -4,7 +4,8 @@
 from pathlib import Path
 
 from odoo.addons.vmk_apps_menu_sort.models.ir_ui_menu import PINNED_LAST
-from odoo.tests.common import TransactionCase, tagged
+from odoo.exceptions import AccessError
+from odoo.tests.common import TransactionCase, new_test_user, tagged
 
 
 @tagged("post_install", "-at_install")
@@ -133,6 +134,19 @@ class TestAppMenuSort(TransactionCase):
         result = self.env["res.users.settings"].reset_app_grid_order()
         self.assertEqual(result["tag"], "display_notification")
         self.assertTrue(result["params"]["message"])
+
+    def test_only_an_administrator_resets_the_app_grid_order(self):
+        """The method is public, so RPC reaches it without the server action.
+
+        It clears every user's order as superuser, which an ordinary internal
+        user must not be able to trigger.
+        """
+        user = new_test_user(self.env, login="vmk_grid_user", groups="base.group_user")
+        with self.assertRaises(AccessError):
+            self.env["res.users.settings"].with_user(user).reset_app_grid_order()
+        admin = new_test_user(self.env, login="vmk_grid_admin", groups="base.group_system")
+        result = self.env["res.users.settings"].with_user(admin).reset_app_grid_order()
+        self.assertEqual(result["tag"], "display_notification")
 
     def test_the_server_action_runs(self):
         """Exercises the `safe_eval` string in the data file end to end."""

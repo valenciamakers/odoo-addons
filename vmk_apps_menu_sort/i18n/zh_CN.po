@@ -42,6 +42,12 @@ msgid "Nothing to reset: the app grid order is an Odoo Enterprise feature."
 msgstr "无需重置：应用网格顺序是 Odoo 企业版的功能。"
 
 #. module: vmk_apps_menu_sort
+#. odoo-python
+#: code:addons/vmk_apps_menu_sort/models/res_users_settings.py:0
+msgid "Only administrators can execute this action."
+msgstr "只有系统管理员可以执行此动作。"
+
+#. module: vmk_apps_menu_sort
 #: model:ir.actions.server,name:vmk_apps_menu_sort.action_reset_app_grid_order
 msgid "Reset per-user app grid order"
 msgstr "重置每个用户的应用网格顺序"
