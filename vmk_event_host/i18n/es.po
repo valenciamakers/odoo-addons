@@ -38,7 +38,8 @@ msgid "%s — show the Hosts tab"
 msgstr "%s — mostrar la pestaña Anfitriones"
 
 #. module: vmk_event_host
-#: model:ir.model.constraint,message:vmk_event_host.constraint_vmk_event_host_partner_event_uniq
+#. odoo-python
+#: code:addons/vmk_event_host/models/vmk_event_host.py:0
 msgid "A contact can only be listed once as a host of an event."
 msgstr "Un contacto solo puede figurar una vez como anfitrión de un evento."
 
@@ -63,6 +64,7 @@ msgid "Created on"
 msgstr "Creado el"
 
 #. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_base_partner_merge_automatic_wizard__display_name
 #: model:ir.model.fields,field_description:vmk_event_host.field_event_event__display_name
 #: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__display_name
 msgid "Display Name"
@@ -108,6 +110,7 @@ msgid "Hosts"
 msgstr "Anfitriones"
 
 #. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_base_partner_merge_automatic_wizard__id
 #: model:ir.model.fields,field_description:vmk_event_host.field_event_event__id
 #: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__id
 msgid "ID"
@@ -127,6 +130,11 @@ msgstr "Última actualización el"
 #: model_terms:ir.ui.view,arch_db:vmk_event_host.view_event_form_host
 msgid "Lead, Assistant, Guest speaker…"
 msgstr "Principal, Ayudante, Ponente invitado…"
+
+#. module: vmk_event_host
+#: model:ir.model,name:vmk_event_host.model_base_partner_merge_automatic_wizard
+msgid "Merge Partner Wizard"
+msgstr "Asistente de fusión de contactos"
 
 #. module: vmk_event_host
 #. odoo-javascript

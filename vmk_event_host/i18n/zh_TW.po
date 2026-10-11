@@ -36,7 +36,8 @@ msgid "%s — show the Hosts tab"
 msgstr "%s — 顯示「主持人」分頁"
 
 #. module: vmk_event_host
-#: model:ir.model.constraint,message:vmk_event_host.constraint_vmk_event_host_partner_event_uniq
+#. odoo-python
+#: code:addons/vmk_event_host/models/vmk_event_host.py:0
 msgid "A contact can only be listed once as a host of an event."
 msgstr "同一位聯絡人在同一活動中只能列為主持人一次。"
 
@@ -61,6 +62,7 @@ msgid "Created on"
 msgstr "建立於"
 
 #. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_base_partner_merge_automatic_wizard__display_name
 #: model:ir.model.fields,field_description:vmk_event_host.field_event_event__display_name
 #: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__display_name
 msgid "Display Name"
@@ -106,6 +108,7 @@ msgid "Hosts"
 msgstr "主持人"
 
 #. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_base_partner_merge_automatic_wizard__id
 #: model:ir.model.fields,field_description:vmk_event_host.field_event_event__id
 #: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__id
 msgid "ID"
@@ -125,6 +128,11 @@ msgstr "最後更新於"
 #: model_terms:ir.ui.view,arch_db:vmk_event_host.view_event_form_host
 msgid "Lead, Assistant, Guest speaker…"
 msgstr "主講人、助理、特邀講者⋯"
+
+#. module: vmk_event_host
+#: model:ir.model,name:vmk_event_host.model_base_partner_merge_automatic_wizard
+msgid "Merge Partner Wizard"
+msgstr "合併合作夥伴引導"
 
 #. module: vmk_event_host
 #. odoo-javascript

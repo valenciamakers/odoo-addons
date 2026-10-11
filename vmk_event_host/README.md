@@ -95,8 +95,20 @@ missing arrow actually costs anyone time.
 namespace: another module defining `host_ids` with a different type on `event.event` would break
 installs that have both.
 
-**A unique constraint on `(event_id, partner_id)`**, so the same contact cannot be listed twice on
-one event. It is a SQL constraint, so it surfaces as `IntegrityError`, not `ValidationError`.
+**One line per contact per event, enforced in Python, not SQL** (19.0.1.1.1). The obvious
+`unique(event_id, partner_id)` constraint shipped in the first release, and armed a trap in the
+contact merge wizard. `_update_foreign_keys_generic` (`base/wizard/base_partner_merge.py`) re-points
+every foreign key to `res_partner` in raw SQL and, where a `UNIQUE` or `CHECK` constraint touches
+the column it is updating, runs the `UPDATE` in a savepoint whose error handler falls back to
+`DELETE FROM vmk_event_host WHERE partner_id IN <every merged id>`. So merging two contacts who
+co-hosted one event deleted every host line the merged contact had, on every event, while the
+many2many mirror, re-pointed by a different path, still listed the survivor there.
+`_check_partner_unique` refuses a duplicate as a `ValidationError` instead, and the bulk `UPDATE`,
+which compares no values, is followed by `_vmk_dedupe` from an override of the wizard's `_merge`: on
+a shared event the survivor keeps the line that sorts first, and every event it hosts recomputes its
+mirror and summary, which the raw SQL left stale. Upgrading drops the SQL constraint: Odoo reflects
+each one as an `ir.model.data` record, and `_process_end` unlinks any the module no longer declares.
+`tests/test_event_host.py` merges co-hosts to prove both.
 
 **Access rights mirror core's own event rules**: read for the registration desk, full rights for
 event users and managers. The multi-company record rule mirrors
