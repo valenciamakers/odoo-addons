@@ -43,6 +43,7 @@ msgstr "Konfigurační nastavení"
 
 #. module: vmk_event_registration_deadline
 #: model:ir.model.fields,field_description:vmk_event_registration_deadline.field_event_event__display_name
+#: model:ir.model.fields,field_description:vmk_event_registration_deadline.field_event_event_ticket__display_name
 #: model:ir.model.fields,field_description:vmk_event_registration_deadline.field_event_slot__display_name
 #: model:ir.model.fields,field_description:vmk_event_registration_deadline.field_res_config_settings__display_name
 msgid "Display Name"
@@ -59,7 +60,13 @@ msgid "Event Slot"
 msgstr "Časový úsek události"
 
 #. module: vmk_event_registration_deadline
+#: model:ir.model,name:vmk_event_registration_deadline.model_event_event_ticket
+msgid "Event Ticket"
+msgstr "Vstupenka na událost"
+
+#. module: vmk_event_registration_deadline
 #: model:ir.model.fields,field_description:vmk_event_registration_deadline.field_event_event__id
+#: model:ir.model.fields,field_description:vmk_event_registration_deadline.field_event_event_ticket__id
 #: model:ir.model.fields,field_description:vmk_event_registration_deadline.field_event_slot__id
 #: model:ir.model.fields,field_description:vmk_event_registration_deadline.field_res_config_settings__id
 msgid "ID"

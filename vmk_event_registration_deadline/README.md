@@ -55,11 +55,29 @@ An event that sets its own deadline is opted in whatever the global switch says.
 "apply a deadline to events by default", and an event asking for one has answered for itself — so
 turning the feature off stops it applying everywhere it was implicit, and nowhere it was asked for.
 
-### What it deliberately leaves alone
+### Tickets take the deadline as their own Registration End
 
-**A ticket that defines its own Registration End.** Core's `is_expired` is False whenever
-`end_sale_datetime` is blank, so blank is the case this module is for. A date somebody typed is a
-deliberate choice to allow late registration, and it wins.
+**A ticket without a Registration End expires at the deadline** (20.0.1.3.0).
+`event.event.ticket._compute_is_expired` is extended: after core's own check, a ticket with no
+`end_sale_datetime` on a single-slot event is expired once the deadline has passed. Everything
+downstream then follows core with no further code of ours: `sale_available`, the event's own
+`event_registrations_open`, which closes once no ticket is on sale, the website page, which lists
+the ticket as _Expired_, and `website_event`'s confirm step, which refuses an expired ticket, so a
+form opened before the deadline cannot be submitted after it. A ticket with a typed Registration End
+keeps it, earlier or later than the deadline: an Early Bird ticket that ends a month early expires
+by its own date while the Regular ticket beside it still closes at the deadline, and a ticket ending
+at the event's start keeps selling past the deadline, which is what typing that date means.
+
+Until 20.0.1.3.0 the rule was per event, and it exempted the whole event when _any_ ticket had a
+Registration End, on the reasoning that a typed date is a choice to sell late. An Early Bird date is
+not that choice, and it kept the Regular ticket selling into the event start. Found in the security
+review of 11 October 2026.
+
+**Events without tickets keep the event-level rule** on `date_begin`, which closes the page only:
+core's confirm step has nothing to check without tickets, as with its own end-of-event rule, so a
+form opened before the deadline can still be submitted after it there.
+
+### What it deliberately leaves alone
 
 **Multi-slot events, at the event level.** Their `date_begin` is the earliest slot's start, so
 closing the event there would stop selling every later slot too. Core handles those per slot — and

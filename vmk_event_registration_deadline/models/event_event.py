@@ -63,12 +63,15 @@ class EventEvent(models.Model):
         adds the rule rather than replacing anything — core decides first, and
         this can only ever close what core left open.
 
-        One case is deliberately left alone, and one is judged by its slots:
+        One case is judged by its tickets, and one by its slots:
 
-        * **A ticket with its own Registration End.** Core's `is_expired` is
-          False whenever `end_sale_datetime` is blank, so blank is what this
-          rule is for; a date somebody typed is a deliberate choice to allow
-          late registration, and it wins.
+        * **An event with tickets.** Each ticket without a Registration End
+          takes the deadline as its own expiry (`event_ticket.py`), and one
+          with a typed end keeps it. Core's own compute then closes the event
+          once no ticket is on sale, so nothing is decided here. Until
+          20.0.1.3.0 this rule exempted the whole event when any ticket had an
+          end date, which let an Early Bird ticket's early end keep the Regular
+          ticket beside it selling into the event start.
         * **Multi-slot events.** Their `date_begin` is the earliest slot's
           start, so closing the event there would stop selling every later
           slot too. Core handles those per slot, and so does this module —
@@ -93,7 +96,7 @@ class EventEvent(models.Model):
                 if starts and all(start - lead <= now for start in starts):
                     event.event_registrations_open = False
                 continue
-            if any(ticket.end_sale_datetime for ticket in event.event_ticket_ids):
+            if event.event_ticket_ids:
                 continue
             if event.date_begin and event.date_begin - lead <= now:
                 event.event_registrations_open = False

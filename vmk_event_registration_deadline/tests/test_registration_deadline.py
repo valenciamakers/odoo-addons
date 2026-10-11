@@ -135,9 +135,70 @@ class TestRegistrationDeadline(TransactionCase):
 
     def test_a_ticket_without_an_end_does_not_win(self):
         event = self._event(starts_in_hours=-1)
-        self.env["event.event.ticket"].create({"name": "Standard", "event_id": event.id})
+        ticket = self.env["event.event.ticket"].create({"name": "Standard", "event_id": event.id})
         event.invalidate_recordset()
+        self.assertTrue(ticket.is_expired, "the deadline stands in for the missing end")
         self.assertFalse(event.event_registrations_open)
+
+    def test_an_early_bird_end_does_not_exempt_the_other_tickets(self):
+        """A date that ended a month ago is not a choice to sell late. Until
+        20.0.1.3.0 it exempted the whole event from the deadline."""
+        self._set_default(24)
+        event = self._event(starts_in_hours=12)
+        early, regular = self.env["event.event.ticket"].create(
+            [
+                {
+                    "name": "Early Bird",
+                    "event_id": event.id,
+                    "end_sale_datetime": self.now - timedelta(days=30),
+                },
+                {"name": "Regular", "event_id": event.id},
+            ]
+        )
+        event.invalidate_recordset()
+        self.assertTrue(early.is_expired, "by its own date")
+        self.assertTrue(regular.is_expired, "by the deadline")
+        self.assertFalse(event.event_registrations_open)
+
+    def test_a_ticket_ending_later_than_the_deadline_keeps_selling(self):
+        """Typing an end at the start is the choice to sell late, for that ticket alone."""
+        self._set_default(24)
+        event = self._event(starts_in_hours=12)
+        vip, regular = self.env["event.event.ticket"].create(
+            [
+                {"name": "VIP", "event_id": event.id, "end_sale_datetime": event.date_begin},
+                {"name": "Regular", "event_id": event.id},
+            ]
+        )
+        event.invalidate_recordset()
+        self.assertFalse(vip.is_expired)
+        self.assertTrue(regular.is_expired)
+        self.assertTrue(event.event_registrations_open, "the VIP ticket is still on sale")
+        self.assertEqual(event.event_ticket_ids.filtered("sale_available"), vip)
+
+    def test_a_ticket_is_not_expired_before_the_deadline(self):
+        self._set_default(24)
+        event = self._event(starts_in_hours=36)
+        ticket = self.env["event.event.ticket"].create({"name": "Regular", "event_id": event.id})
+        self.assertFalse(ticket.is_expired)
+        self.assertTrue(event.event_registrations_open)
+
+    def test_a_ticket_is_not_expired_while_the_feature_is_off(self):
+        self._enable(self.env, False)
+        event = self._event(starts_in_hours=-1)
+        ticket = self.env["event.event.ticket"].create({"name": "Regular", "event_id": event.id})
+        self.assertFalse(ticket.is_expired)
+        self.assertTrue(event.event_registrations_open)
+
+    def test_a_ticket_on_a_multi_slot_event_is_left_to_its_slots(self):
+        """A ticket says nothing about which slot it is sold for."""
+        self._set_default(24)
+        event = self._event(starts_in_hours=-1, length_hours=24 * 10, is_multi_slots=True)
+        self._slot(event, self.now + timedelta(days=2))
+        ticket = self.env["event.event.ticket"].create({"name": "Regular", "event_id": event.id})
+        event.invalidate_recordset()
+        self.assertFalse(ticket.is_expired)
+        self.assertTrue(event.event_registrations_open)
 
     def test_a_multi_slot_event_is_left_to_its_slots(self):
         """Closing the event would stop selling every later slot too."""
