@@ -212,6 +212,20 @@ change matching behaviour far outside the search panel.
 The Contacts app's own action points at that same search view (`contacts/views/contacts_views.xml`),
 so one inherited view fixes the search people actually use.
 
+#### An address is as visible as its contact
+
+A restriction on `res.partner` does not follow the `partner_id` many2one: on the contact form the
+addresses are reached through a contact the user can already read, but a direct `search_read` on
+`vmk.partner.email` was answered from this model's permissions alone, which give every internal user
+read access. In a multi-company database that showed the addresses of contacts another company keeps
+to itself. Since 20.0.1.1.1 `security/ir.access.csv` carries core's own contact restriction,
+`base.res_partner_rule`, as a row with no group and each field reached through `partner_id`: an
+address is visible where its contact belongs to an internal user, to no company, or to one of the
+user's companies. Odoo 20 keeps permissions and restrictions in one model, `ir.access`, where a row
+without a group restricts everyone and never grants. Like any restriction it is skipped for the
+superuser, so matching, which reads the table with `sudo()`, is unchanged. If core changes its row,
+this copy has to follow; a test compares the two.
+
 ### Known limitation: merging as a non-admin
 
 `_merge` refuses when the contacts differ by email (`base/wizard/base_partner_merge.py:473`) — which
