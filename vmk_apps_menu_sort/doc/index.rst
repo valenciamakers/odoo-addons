@@ -37,6 +37,10 @@ Russian, Spanish, Swedish, Turkish, and Ukrainian. If any translation seems inco
 
 **Changelog**
 
+*20.0.1.1.1 (11 October 2026)*
+
+- Restrict the global app-grid reset to system administrators.
+
 *20.0.1.1.0 (5 October 2026)*
 
 - Translated into nineteen more languages: Chinese (Simplified and Traditional), Czech, Danish,

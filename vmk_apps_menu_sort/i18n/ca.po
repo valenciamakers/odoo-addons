@@ -50,6 +50,12 @@ msgstr ""
 "d'Odoo Enterprise."
 
 #. module: vmk_apps_menu_sort
+#. odoo-python
+#: code:addons/vmk_apps_menu_sort/models/res_users_settings.py:0
+msgid "Only administrators can execute this action."
+msgstr "Només els administradors pot executar aquesta acció."
+
+#. module: vmk_apps_menu_sort
 #: model:ir.actions.server,name:vmk_apps_menu_sort.action_reset_app_grid_order
 msgid "Reset per-user app grid order"
 msgstr "Restablir l'ordre de la graella d'aplicacions per usuari"

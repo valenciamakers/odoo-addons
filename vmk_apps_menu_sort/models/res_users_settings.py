@@ -2,6 +2,7 @@
 # License LGPL-3 (https://www.gnu.org/licenses/lgpl-3.0.html).
 
 from odoo import _, api, models
+from odoo.exceptions import AccessError
 
 
 class ResUsersSettings(models.Model):
@@ -20,6 +21,11 @@ class ResUsersSettings(models.Model):
         install: silently deleting a per-user preference as a side effect of
         installing a module is not something we are willing to ship.
         """
+        # The server action is not the boundary: a public method is callable
+        # over RPC by any internal user, and what follows runs as superuser.
+        # The message is core's own (`ir.attachment`), translations included.
+        if not self.env.is_system():
+            raise AccessError(_("Only administrators can execute this action."))
         if "homemenu_config" not in self._fields:
             # Community, or Enterprise without the home menu. Nothing stored, and
             # nothing was overriding this module's order in the first place.

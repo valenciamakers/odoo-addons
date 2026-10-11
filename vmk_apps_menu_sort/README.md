@@ -154,6 +154,11 @@ env["res.users.settings"].reset_app_grid_order()
 env.cr.commit()
 ```
 
+**The method refuses anyone but a system administrator**, with core's own "Only administrators can
+execute this action." The server action is not what keeps it to administrators:
+`reset_app_grid_order` is a public method, so any internal user can call it over RPC, and it clears
+every user's order as superuser. Until 20.0.1.1.1 nothing stopped that.
+
 This module deliberately does **not** do that on install. `homemenu_config` is a user preference,
 and deleting it as a silent side effect of installing a module is not acceptable behaviour in
 something published. Users remain free to drag their own order back afterwards; the module sets the
