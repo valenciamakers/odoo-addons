@@ -26,7 +26,8 @@ msgid "%s — show the Hosts tab"
 msgstr "%s — 호스트 탭 표시"
 
 #. module: vmk_event_host
-#: model:ir.model.constraint,message:vmk_event_host.constraint_vmk_event_host_partner_event_uniq
+#. odoo-python
+#: code:addons/vmk_event_host/models/vmk_event_host.py:0
 msgid "A contact can only be listed once as a host of an event."
 msgstr "한 연락처는 한 행사의 호스트로 한 번만 추가할 수 있습니다."
 
@@ -51,6 +52,7 @@ msgid "Created on"
 msgstr "작성일자"
 
 #. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_base_partner_merge_automatic_wizard__display_name
 #: model:ir.model.fields,field_description:vmk_event_host.field_event_event__display_name
 #: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__display_name
 msgid "Display Name"
@@ -101,6 +103,7 @@ msgid "Hosts"
 msgstr "호스트"
 
 #. module: vmk_event_host
+#: model:ir.model.fields,field_description:vmk_event_host.field_base_partner_merge_automatic_wizard__id
 #: model:ir.model.fields,field_description:vmk_event_host.field_event_event__id
 #: model:ir.model.fields,field_description:vmk_event_host.field_vmk_event_host__id
 msgid "ID"
@@ -120,6 +123,11 @@ msgstr "최근 갱신 일자"
 #: model_terms:ir.ui.view,arch_db:vmk_event_host.view_event_form_host
 msgid "Lead, Assistant, Guest speaker…"
 msgstr "책임자, 보조, 초청 연사…"
+
+#. module: vmk_event_host
+#: model:ir.model,name:vmk_event_host.model_base_partner_merge_automatic_wizard
+msgid "Merge Partner Wizard"
+msgstr "협력사 병합 마법사"
 
 #. module: vmk_event_host
 #. odoo-javascript

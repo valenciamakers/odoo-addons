@@ -656,7 +656,11 @@ checked there yet.
   the FK column nor anything else it updates is invisible to the check and blows the transaction up
   instead. And where no constraint arms it, the bulk `UPDATE` compares no values: a row two merged
   contacts shared arrives twice on the survivor, unseen by any `@api.constrains`. Clean up after the
-  merge.
+  merge. `vmk_event_host` shipped the obvious constraint for three weeks after this bullet was
+  written, and lost every host line of a merged contact on the first co-hosted merge (found 11
+  October 2026): audit every model with a foreign key to `res_partner` against it, not only the one
+  that found it. On 20 the fallback is the same, in `_update_foreign_keys_generic`, and `_merge`
+  keeps its signature. Verified on 20 with `vmk_event_host`.
 - `_update_values` in the same wizard skips o2m/m2m and computed fields, and for plain fields takes
   the last truthy value with the destination last — so the destination wins and the merged-away
   values are simply dropped. It also refuses outright when contacts differ by email, except for

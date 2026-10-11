@@ -3,3 +3,4 @@
 
 from . import vmk_event_host
 from . import event_event
+from . import base_partner_merge
