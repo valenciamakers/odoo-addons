@@ -39,6 +39,12 @@ msgid "Nothing to reset: the app grid order is an Odoo Enterprise feature."
 msgstr ""
 
 #. module: vmk_apps_menu_sort
+#. odoo-python
+#: code:addons/vmk_apps_menu_sort/models/res_users_settings.py:0
+msgid "Only administrators can execute this action."
+msgstr ""
+
+#. module: vmk_apps_menu_sort
 #: model:ir.actions.server,name:vmk_apps_menu_sort.action_reset_app_grid_order
 msgid "Reset per-user app grid order"
 msgstr ""
