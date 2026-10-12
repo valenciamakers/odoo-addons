@@ -55,6 +55,8 @@ Russian, Spanish, Swedish, Turkish, and Ukrainian. If any translation seems inco
   weeks earlier, kept every other ticket of the event selling until the event started.
 - On an event with tickets, a registration started before the deadline can no longer be completed
   after it.
+- A slot's deadline reads the clock through Odoo's own helper, so it is the same on every platform.
+  No change in behaviour where the server already ran in UTC.
 
 *19.0.1.2.1 (11 October 2026)*
 
