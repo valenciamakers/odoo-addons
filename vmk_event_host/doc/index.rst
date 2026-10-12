@@ -43,6 +43,7 @@ Russian, Spanish, Swedish, Turkish, and Ukrainian. If any translation seems inco
 
 *18.0.1.1.1 (12 October 2026)*
 
+- The hosts summary on an event's form updates when only a host's role is edited.
 - Merging two contacts who both host an event no longer removes the merged contact from every
   other event it hosted. The surviving contact is listed once on the shared event, with its own
   role.

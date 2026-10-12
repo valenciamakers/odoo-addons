@@ -45,7 +45,7 @@ class EventEvent(models.Model):
         for event in self:
             event.vmk_host_partner_ids = event.vmk_host_ids.partner_id
 
-    @api.depends("vmk_host_ids.partner_id", "vmk_host_ids.sequence")
+    @api.depends("vmk_host_ids.partner_id", "vmk_host_ids.sequence", "vmk_host_ids.role")
     def _compute_vmk_host_names(self):
         for event in self:
             # Sorted explicitly: a one2many keeps the order it was read in
