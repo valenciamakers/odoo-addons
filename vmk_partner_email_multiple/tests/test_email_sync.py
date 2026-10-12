@@ -1,7 +1,7 @@
 # Copyright 2026 Valencia Makers, SL
 # License LGPL-3 (https://www.gnu.org/licenses/lgpl-3.0.html).
 
-from odoo.tests import tagged
+from odoo.tests import new_test_user, tagged
 
 from ..models import email_sync
 from .common import PartnerEmailCase
@@ -45,6 +45,21 @@ class TestEmailSync(PartnerEmailCase):
             for name in methods:
                 method = getattr(type(self.env[model]), name)
                 self.assertTrue(getattr(method, email_sync.PATCHED, False), f"{model}.{name}")
+
+    def test_the_guard_answers_a_portal_user(self):
+        """CRM and Helpdesk compute the sync warning for portal users reading
+        their own records; the portal has no access to the addresses."""
+        portal = new_test_user(self.env, login="vmk_sync_portal", groups="base.group_portal")
+        # On 20 the ORM drops an unreadable one2many instead of raising, so the
+        # contact has to be one the portal user may read (their own, as on a
+        # ticket) for the missing access to show: without the fix the answer is
+        # False, not an error.
+        portal.partner_id.vmk_email_ids = [(0, 0, {"email": "alice.work@example.com"})]
+        self.env.invalidate_all()
+        contact = portal.partner_id.with_user(portal)
+        self.assertTrue(email_sync.is_additional(contact, "alice.work@example.com"))
+        self.assertFalse(email_sync.is_additional(contact, "stranger@example.com"))
+        self.assertFalse(email_sync.is_additional(contact, ""))
 
     def test_installing_again_does_not_wrap_twice(self):
         email_sync.install(self.env)
