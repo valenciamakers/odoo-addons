@@ -5,6 +5,10 @@ from odoo import api, fields, models
 from odoo.exceptions import ValidationError
 from odoo.tools import email_normalize
 
+# Set by the swap button around its write of the primary, so res.partner.write
+# leaves the row being swapped alone: the button rewrites or removes it itself.
+SWAPPING = "vmk_swapping_primary"
+
 
 class VmkPartnerEmail(models.Model):
     """An *additional* email address for a contact.
@@ -128,7 +132,10 @@ class VmkPartnerEmail(models.Model):
         demoted = (partner.email or "").strip()
         demoted_normalized = email_normalize(demoted, strict=False)
 
-        partner.email = self.email
+        # Flagged, or res.partner.write would drop this very row as the one
+        # repeating the new primary, before it is rewritten to the demoted
+        # address below.
+        partner.with_context(**{SWAPPING: True}).email = self.email
 
         already_held = partner.vmk_email_ids.filtered(
             lambda row: row != self

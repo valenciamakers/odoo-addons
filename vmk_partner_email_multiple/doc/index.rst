@@ -16,7 +16,9 @@ Open a contact and go to the **Additional Emails** tab.
   such as *Personal* or *Billing*. Drag the rows into any order.
 - **Hover over an address** to show an envelope, which opens it in your own mail client.
 - **Click the swap button** to swap an additional email address with the primary email. The old
-  primary address is moved to the additional email addresses list.
+  primary address is moved to the additional email addresses list. Typing an additional address
+  into the contact's **Email** field also makes it the primary, and removes it from the list; the
+  old primary is then not kept.
 
 Incoming mail from any of these email addresses is then matched to the contact, including mail that
 creates a lead, an applicant, or a ticket in CRM, Recruitment, or Helpdesk. The resulting record
@@ -46,6 +48,8 @@ Russian, Spanish, Swedish, Turkish, and Ukrainian. If any translation seems inco
   company writing to an address held by another company's contact no longer gets an access error.
 - Portal users and website visitors can search contacts by name again; they got an access error
   since 18.0.1.0.0.
+- Typing an additional address into a contact's Email field no longer leaves it listed as an
+  additional address as well.
 
 *18.0.1.1.1 (11 October 2026)*
 

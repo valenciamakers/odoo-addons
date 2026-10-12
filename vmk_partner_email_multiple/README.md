@@ -60,6 +60,14 @@ button somebody presses is the user editing their own contact, with the bookkeep
 `email` carries `tracking=1` (`mail/models/res_partner.py:20`), so the swap appears in the chatter
 by itself.
 
+**Typing an additional address into the email field is also the user's call** (18.0.1.1.2). Core
+accepts the write, and nothing here refuses it: a refusal would also refuse the same write arriving
+from CRM, Recruitment, or Helpdesk, in the middle of their own flow. What the write must not leave
+is the address twice on one contact, so `res.partner.write` drops the additional row that now
+repeats the primary, compared on the normalized form as the uniqueness constraint compares. The old
+primary is not kept as a row; the swap button is the way to keep it. Until then the row stayed,
+harmless to matching, which prefers the primary holder, but wrong on the tab.
+
 ### The envelope, and why it needs a widget
 
 Each row carries the same envelope the contact form puts beside the main email address, opening a
