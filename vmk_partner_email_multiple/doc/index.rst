@@ -44,6 +44,8 @@ Russian, Spanish, Swedish, Turkish, and Ukrainian. If any translation seems inco
 
 *18.0.1.1.2 (12 October 2026)*
 
+- A portal user reading a helpdesk ticket or a lead no longer gets an access error from the check
+  that keeps an additional address from replacing the contact's email.
 - Matching returns only contacts the current user may see, as standard Odoo does. A user of one
   company writing to an address held by another company's contact no longer gets an access error.
 - Portal users and website visitors can search contacts by name again; they got an access error

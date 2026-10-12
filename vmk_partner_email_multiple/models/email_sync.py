@@ -36,7 +36,13 @@ KEEP_PRIMARY = "vmk_keep_primary_email"
 def is_additional(partner, email):
     """Whether ``email`` is one of ``partner``'s own additional addresses."""
     normalized = email_normalize(email or "")
-    return bool(normalized) and normalized in partner.vmk_email_ids.mapped("email_normalized")
+    # As superuser: CRM and Helpdesk call this from computed fields that portal users
+    # read through their own tickets, and a portal user has no access to the
+    # addresses. The result is a boolean, and the rows belong to the record's own
+    # contact, so nothing about them leaves this function.
+    return bool(normalized) and normalized in partner.sudo().vmk_email_ids.mapped(
+        "email_normalized"
+    )
 
 
 def _no_update_for_additional(email_field):

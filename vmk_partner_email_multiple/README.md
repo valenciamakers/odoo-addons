@@ -381,7 +381,10 @@ installs on Community.
 
 - **CRM and Helpdesk** decide the sync in `_get_partner_email_update`, which the patch answers
   `False` when the record's email is one of the contact's additional addresses. The same answer
-  drives the form's warning that the contact's email will be updated, so both stop together.
+  drives the form's warning that the contact's email will be updated, so both stop together. The
+  guard reads the contact's addresses as superuser (18.0.1.1.2): those fields are computed for
+  portal users reading their own tickets, who have no access to the addresses, and the result is
+  only a boolean about the record's own contact.
 - **Recruitment** decides inline, in a loop that also syncs the name and phone, so its inverse runs
   under the `vmk_keep_primary_email` context flag instead. Under that flag `res.partner.write` drops
   an email that is one of that contact's own additional addresses, and writes the rest as asked.
