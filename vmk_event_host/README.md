@@ -128,6 +128,12 @@ event, not by the contact's own record rule. In a multi-company database a host 
 on a shared event is hidden from a user of company B, and the line's name and the event's host
 summary, which reads it, raised an AccessError, so the event form would not open.
 
+**A contact cannot be deleted while it hosts an event.** `partner_id` is required, so its `ondelete`
+defaults to `restrict` (`odoo/orm/fields_relational.py:278-282`), and the database refuses the
+delete until the host line is removed or the contact archived. Core's registrations behave
+differently: their `partner_id` is optional, so it is `set null`. Cascading instead would silently
+shorten an event's host list, which is a worse surprise than a refused delete.
+
 **Access rights mirror core's own event rules**: read for the registration desk, full rights for
 event users and managers. The multi-company record rule mirrors
 `event.ir_rule_event_event_ticket_company` — a host line is reachable exactly when its event is.
