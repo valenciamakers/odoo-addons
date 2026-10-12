@@ -1,8 +1,10 @@
 # Copyright 2026 Valencia Makers, SL
 # License LGPL-3 (https://www.gnu.org/licenses/lgpl-3.0.html).
 
+import importlib
 from pathlib import Path
 
+from odoo.modules.module import get_manifest
 from odoo.tests.common import TransactionCase, tagged
 from odoo.tools.binary import BinaryBytes
 
@@ -90,6 +92,15 @@ class TestLanguageFreeze(TransactionCase):
         restore_language_updates(self.env)
         self.assertFalse(self._noupdate(lang))
         self.assertFalse(self._noupdate(self.lang_en))
+
+    def test_the_manifest_hooks_are_importable_from_the_package(self):
+        """Odoo looks a hook up on the package, not on `hooks.py`: a hook missing
+        from `__init__.py` passes a direct call and fails on install or uninstall."""
+        package = importlib.import_module("odoo.addons.vmk_language_protect_settings")
+        manifest = get_manifest("vmk_language_protect_settings")
+        for key in ("post_init_hook", "uninstall_hook"):
+            with self.subTest(hook=key):
+                self.assertTrue(callable(getattr(package, manifest[key], None)))
 
     def test_the_flag_can_be_cleared_to_hand_control_back(self):
         self.assertTrue(self.lang_en.protect_from_updates)
