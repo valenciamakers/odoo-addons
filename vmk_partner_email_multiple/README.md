@@ -255,6 +255,14 @@ any `('partner_id', 'ilike', …)` domain on another model included, raised an A
 `_search_display_name` now adds its domain only where `has_access("read")` says so, which gives
 those users core's answer exactly.
 
+**Core's ban list is applied to the patched empties too** (20.0.1.1.2). `_partner_find_from_emails`
+passes `ban_emails` built by `mail.alias.domain._find_aliases` (bounce, catchall, default-from, and
+mail aliases) down to `_find_or_create_from_emails`, which our override honours. The resolution
+patch in `models/mail_thread.py` fills the slots that came back empty, and an address banned on the
+way in looks just like one nobody holds, so it builds the same list for the pending addresses and
+passes it on. Without it an alias held as an additional address resolved to its holder, which core
+never does for a primary one.
+
 ### Known limitation: merging as a non-admin
 
 `_merge` refuses when the contacts differ by email (`base/wizard/base_partner_merge.py:473`) — which

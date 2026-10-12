@@ -50,6 +50,8 @@ Russian, Spanish, Swedish, Turkish, and Ukrainian. If any translation seems inco
   since 20.0.1.0.0.
 - Typing an additional address into a contact's Email field no longer leaves it listed as an
   additional address as well.
+- An alias, catchall, or bounce address held as an additional address is no longer matched to its
+  contact, as standard Odoo does not match one held as a primary address.
 
 *20.0.1.1.1 (11 October 2026)*
 

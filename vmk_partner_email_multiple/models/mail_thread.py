@@ -21,9 +21,14 @@ class MailThread(models.AbstractModel):
         (:2234), which no additional address can satisfy. So the right partner is
         found, ends up in ``all_partners``, and is dropped on the way out.
 
-        Patching the empties after ``super()`` is enough, and cannot resurrect a
-        partner core deliberately excluded: an address banned as an alias, or
-        filtered out by ``filter_found``, is rejected by the resolver too.
+        Patching the empties after ``super()`` is enough, but the resolver does not
+        know what core banned on the way in. ``_partner_find_from_emails`` builds a
+        ban list with ``mail.alias.domain._find_aliases`` (bounce, catchall and
+        default-from addresses, and mail aliases) and hands it to
+        ``_find_or_create_from_emails`` as ``ban_emails``; an empty slot left by
+        that ban looks exactly like an address nobody holds. So the same list is
+        built here for the pending addresses and passed on, or an alias held as an
+        additional address would resolve to its holder after all.
         """
         results = super()._mail_find_partner_from_emails(
             emails, records=records, force_create=force_create, extra_domain=extra_domain
@@ -38,8 +43,11 @@ class MailThread(models.AbstractModel):
         if not pending:
             return results
 
+        pending_emails = [normalized for _index, normalized in pending]
+        # Core's own ban list, as _partner_find_from_emails builds it (avoid_alias).
+        alias_emails = self.env["mail.alias.domain"].sudo()._find_aliases(pending_emails)
         resolved = self.env["vmk.partner.email"]._resolve_partners(
-            [normalized for _index, normalized in pending]
+            pending_emails, ban_emails=alias_emails
         )
         for index, normalized in pending:
             if normalized in resolved:

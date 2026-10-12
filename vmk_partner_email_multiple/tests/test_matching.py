@@ -3,6 +3,7 @@
 
 from lxml import etree
 
+from odoo import Command
 from odoo.tests import tagged
 from odoo.tools.safe_eval import safe_eval
 
@@ -95,6 +96,41 @@ class TestPartnerEmailMatching(PartnerEmailCase):
             ["alice.work@example.com"]
         )
         self.assertEqual(found, [self.alice])
+
+    def test_mail_find_partner_from_emails_refuses_aliases_held_as_additional(self):
+        """Core never matches an alias, catchall or bounce address to a contact.
+
+        It builds a ban list with `_find_aliases` and passes it down as
+        `ban_emails`; filling the empty slots afterwards without it resolved the
+        banned address to whoever held it as an additional one.
+        """
+        domain = self.env["mail.alias.domain"].create({"name": "example.test"})
+        self.env.company.alias_domain_id = domain
+        alias = self.env["mail.alias"].create(
+            {
+                "alias_name": "zzcheck-alias",
+                "alias_model_id": self.env["ir.model"]._get_id("res.partner"),
+                "alias_domain_id": domain.id,
+            }
+        )
+        banned = [alias.alias_full_name, domain.catchall_email]
+        self.assertTrue(all(banned))
+        carol = self.Partner.create(
+            {
+                "name": "Carol Example",
+                "vmk_email_ids": [
+                    *(Command.create({"email": email}) for email in banned),
+                    Command.create({"email": "carol.work@example.com"}),
+                ],
+            }
+        )
+        self.env.invalidate_all()
+        thread = self.env["mail.thread"]
+        for email in banned:
+            with self.subTest(email=email):
+                self.assertFalse(thread._mail_find_partner_from_emails([email])[0])
+        # A control: an ordinary additional address of the same contact resolves.
+        self.assertEqual(thread._mail_find_partner_from_emails(["carol.work@example.com"]), [carol])
 
     def test_mail_find_partner_from_emails_keeps_order(self):
         found = self.env["mail.thread"]._mail_find_partner_from_emails(
