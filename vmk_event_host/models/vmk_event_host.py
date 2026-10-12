@@ -101,5 +101,11 @@ class VmkEventHost(models.Model):
     @api.depends("partner_id", "role")
     def _compute_display_name(self):
         for host in self:
-            name = host.partner_id.display_name or ""
+            # As superuser: whether a line's contact is visible depends on the
+            # line, not on the contact's own rules, exactly as for a many2one,
+            # whose display name the ORM reads with `value.sudo().display_name`
+            # (`Many2one.convert_to_read`, orm/fields_relational.py:370). A host of
+            # another company on a shared event would otherwise stop the event
+            # form opening, and the summary reads this name.
+            name = host.partner_id.sudo().display_name or ""
             host.display_name = f"{name} ({host.role})" if host.role else name
