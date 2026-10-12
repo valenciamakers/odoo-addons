@@ -561,6 +561,22 @@ checked there yet.
   `hr.applicant`'s fields are related to, which 19 merged back into the applicant.
   `hr.applicant.candidate_id` is required there, so create the candidate first, or go through
   `message_process`.
+- **A `sudo()` search that hands records back must filter them by the caller's access.** Reading a
+  table as superuser to learn which record of another model owns something is fine; returning that
+  record as a bare `browse()` in the caller's environment is not. Core's callers read it as the
+  caller the moment they get it, and an AccessError there surfaces in the middle of the operation.
+  On 19 that is posting a message: `mail.thread._mail_find_partner_from_emails` reads
+  `email_normalized` on every partner `_find_or_create_from_emails` returns. 18's version searches
+  by itself. `_filtered_access("read")` on the result gives what core's own `search()` would have
+  found. Found in `vmk_partner_email_multiple` with a user of one company and a contact of another,
+  11 October 2026.
+- **A domain added in `_search_display_name` runs for every user, portal and public included.** A
+  dotted path through a one2many is a subquery on the comodel under the caller's access: `_search`
+  checks read access on it unless `su` or `bypass_access`. A user with no access list on that model
+  then gets an AccessError from every `display_name` search on the parent, `name_search` and a
+  `('<many2one>', 'ilike', …)` domain on any other model included. Guard the addition with
+  `has_access("read")` on the comodel. Found in `vmk_partner_email_multiple` with a portal user, 11
+  October 2026.
 
 **Overriding a model you do not depend on**
 

@@ -40,6 +40,13 @@ Russian, Spanish, Swedish, Turkish, and Ukrainian. If any translation seems inco
 
 **Changelog**
 
+*18.0.1.1.2 (12 October 2026)*
+
+- Matching returns only contacts the current user may see, as standard Odoo does. A user of one
+  company writing to an address held by another company's contact no longer gets an access error.
+- Portal users and website visitors can search contacts by name again; they got an access error
+  since 18.0.1.0.0.
+
 *18.0.1.1.1 (11 October 2026)*
 
 - Match additional-email access to Odoo's company visibility rule for contacts.
