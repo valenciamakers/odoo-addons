@@ -1235,3 +1235,54 @@ another language. Added 2026-09-23.
 Documentation ships in the same commit as the code, and each module's `README.md` should explain
 _why the non-obvious parts are that way_ — which core method fights you, and where. That is the part
 nobody can reconstruct from the diff.
+
+## Reviewing a module for security and citizenship
+
+Every module gets this review before it is called done, and every series branch gets it again when a
+port lands: a new module, because its tests were written by whoever wrote the code, with that
+person's assumptions; a new series, because core changes under code that did not. The first full
+round, on 11 and 12 October 2026, found fourteen defects across modules that had shipped with
+passing suites, and taught the two rules below the hard way.
+
+**It is a full pass per series, never a diff against the previous one.** A diff shows what we
+changed. It shows nothing of what core changed under unchanged code, and nothing the earlier review
+missed. The 19 pass found seven items; a pass on 20 from scratch, by a reader with no memory of the
+19 pass, found seven more, every one of them on 19 all along. So a port is reviewed in full, against
+that series' source, and the reviewer starts from the code, not from the previous review's
+conclusions.
+
+**Reproduce every finding before reporting it, as the role it affects.** Reading the source gives a
+hypothesis. The test is a scratch database, `odoo shell`, and the least-privileged user that reaches
+the code: a partner manager with no Events group running the merge wizard, a registration-desk user
+on an event form, a user of one company reading a record of another, portal, public. Two of the
+fourteen looked fine until the shared cache was cleared first (the trap under **Models**), and one
+was a regression from a fix made the day before, whose tests had run as superuser. A fix that
+touches access gets a test as that role, shown to fail without the fix.
+
+What to check, module by module, with the core source of that series open:
+
+- **Access rows** against core's for the parent model, and that a child of a contact or an event
+  carries the parent's restriction through the many2one, since a rule does not follow one. Nothing
+  granted to portal, public, or everyone beyond what core grants on the parent and the README says.
+- **Every `sudo()`**: what it reads or writes, and whether its result is handed back to the caller
+  unfiltered, or decides something for the caller from data they cannot read.
+- **Every public method** as an RPC endpoint any logged-in user can call, and every controller's
+  `auth`; whether it checks a group or `is_system()` before the first privileged line.
+- **Raw SQL, and domains built from input**, negative operators included: a dotted path under a
+  negative operator reads as "has a row that does not match", not "has no row that matches".
+- **Output escaping** in QWeb, chatter bodies, and Owl templates.
+- **`_register_hook` patches**: the target still exists under that name and signature in this
+  series, the wrapper is idempotent, and a test asserts it is in place.
+- **Overrides of core's compute, `@api.depends`, and `@api.constrains`** (depends lists merge across
+  overrides, constraint lists replace), and any unique or check constraint on a column that is a
+  foreign key to `res_partner` (the merge wizard's `DELETE` fallback).
+- **`write()` and `create()`** against the data loader, and whether they refuse a contradiction.
+- **Cache clearing, what uninstall leaves, timezone handling, and config parameter reads** (under
+  `sudo()`; what each exposes and to whom).
+- **Every role core gives a surface to**, through our code: the wizard a partner manager runs, the
+  smart button a desk user clicks, the file a visitor downloads, the form a user of another company
+  opens. Four of the fourteen were a role the module's tests had never used.
+
+Findings go in an uncommitted `REVIEW.md` at the repository root, lettered, each with what the code
+does, what core does, how it was reproduced, and the decision; fixes are committed one per letter,
+and the file is not. Added 2026-10-12.
