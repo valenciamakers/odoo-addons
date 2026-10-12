@@ -143,6 +143,32 @@ class TestPartnerEmailMatching(PartnerEmailCase):
         results = self.Partner.name_search("Alice Example")
         self.assertIn(self.alice.id, [result[0] for result in results])
 
+    def test_negative_name_search_keeps_contacts_without_additional_addresses(self):
+        """`not ilike` means no address matches, not that some address does not."""
+        none, matching, other = self.Partner.create(
+            [
+                {"name": "ZZ Neg None"},
+                {
+                    "name": "ZZ Neg Match",
+                    "vmk_email_ids": [Command.create({"email": "zzneg.hit@example.com"})],
+                },
+                {
+                    "name": "ZZ Neg Other",
+                    "vmk_email_ids": [Command.create({"email": "zzneg.miss@example.org"})],
+                },
+            ]
+        )
+        scope = [("id", "in", (none + matching + other).ids)]
+        found = self.Partner.search(
+            scope + list(self.Partner._search_display_name("not ilike", "zzneg.hit"))
+        )
+        self.assertEqual(found, none + other)
+        # The positive case still finds a contact by an additional address.
+        found = self.Partner.search(
+            scope + list(self.Partner._search_display_name("ilike", "zzneg.hit"))
+        )
+        self.assertEqual(found, matching)
+
     def _search_view_domain(self, field_name, term):
         """Run a search view entry the way the interface does.
 

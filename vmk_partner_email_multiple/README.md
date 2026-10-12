@@ -312,6 +312,13 @@ out of what it resolves, so they fall through to `super()` and are excluded as u
 `mail.alias.domain._find_aliases` and bans nothing else here, so a catchall or bounce address is not
 excluded, as for a primary one.
 
+**A negative name search means "no address matches"** (18.0.1.1.2). `not ilike` through the dotted
+path `vmk_email_ids.email` becomes `vmk_email_ids ANY (email not ilike v)`: a contact with no rows
+drops out and one with a matching row beside another stays in. The negative operators therefore use
+`vmk_email_ids not any (email ilike v)`, taking the positive operator from
+`expression.TERM_OPERATORS_NEGATION` (`odoo/osv/expression.py:155`) and the list of negative
+operators from `expression.NEGATIVE_TERM_OPERATORS`, since 18 has no `odoo.fields.Domain`.
+
 ### Known limitation: merging as a non-admin
 
 `_merge` refuses when the contacts differ by email (`base/wizard/base_partner_merge.py:413`) — which

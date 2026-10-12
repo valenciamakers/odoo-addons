@@ -178,10 +178,20 @@ class ResPartner(models.Model):
         # ('partner_id', 'ilike', ...) domain on any other model.
         if not self.env["vmk.partner.email"].has_access("read"):
             return domain
-        extra = [("vmk_email_ids.email", operator, value)]
         if operator in expression.NEGATIVE_TERM_OPERATORS:
+            # "No additional address matches", not "some additional address does
+            # not": the dotted path `vmk_email_ids.email not ilike v` becomes
+            # `vmk_email_ids ANY (email not ilike v)`, which drops a contact with
+            # no rows and keeps one with a matching row beside another.
+            extra = [
+                (
+                    "vmk_email_ids",
+                    "not any",
+                    [("email", expression.TERM_OPERATORS_NEGATION[operator], value)],
+                )
+            ]
             return expression.AND([domain, extra])
-        return expression.OR([domain, extra])
+        return expression.OR([domain, [("vmk_email_ids.email", operator, value)]])
 
     # ------------------------------------------------------------
     # Merge
