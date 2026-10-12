@@ -5,7 +5,7 @@ from pathlib import Path
 
 from odoo.tests.common import TransactionCase, tagged
 
-from ..hooks import protect_enabled_languages
+from ..hooks import protect_enabled_languages, restore_language_updates
 
 
 @tagged("post_install", "-at_install")
@@ -69,6 +69,16 @@ class TestLanguageFreeze(TransactionCase):
         self.assertFalse(self._noupdate(lang))
         protect_enabled_languages(self.env)
         self.assertTrue(self._noupdate(lang))
+
+    def test_the_uninstall_hook_hands_the_languages_back(self):
+        """Nothing else clears the flag, so the languages would stay frozen."""
+        lang = self._a_disabled_lang()
+        lang.name = "Something Custom"
+        self.assertTrue(self._noupdate(lang))
+        self.assertTrue(self._noupdate(self.lang_en))
+        restore_language_updates(self.env)
+        self.assertFalse(self._noupdate(lang))
+        self.assertFalse(self._noupdate(self.lang_en))
 
     def test_the_flag_can_be_cleared_to_hand_control_back(self):
         self.assertTrue(self.lang_en.protect_from_updates)

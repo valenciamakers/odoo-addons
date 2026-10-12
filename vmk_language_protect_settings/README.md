@@ -55,6 +55,13 @@ Protection is per record and all-or-nothing — there is no per-field granularit
 language also stops receiving genuine Odoo corrections to its date formats or week start. That is
 the trade, and it is why disabled languages are left alone.
 
+**Uninstalling clears the flag** (18.0.1.1.1). The flag lives on `base`'s own external ids, which
+outlast the module, so nothing else would ever clear it and the languages would stay frozen against
+core corrections with no field left to untick. `uninstall_hook` (`restore_language_updates` in
+`hooks.py`) sets `noupdate` back to false on every `res.lang` external id in module `base`, the only
+rows this module touches. Unlike on 19, it has no module to stand aside for: the module this one was
+renamed from there, `vmk_language_freeze_meta`, never existed on 18.
+
 ### When it applies
 
 - **On install**, every **enabled** language is protected. Edits made before this module existed are
