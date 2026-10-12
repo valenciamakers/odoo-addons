@@ -1,9 +1,9 @@
 # Copyright 2026 Valencia Makers, SL
 # License LGPL-3 (https://www.gnu.org/licenses/lgpl-3.0.html).
 
-from datetime import datetime, timedelta
+from datetime import timedelta
 
-from odoo import models
+from odoo import fields, models
 
 
 class EventSlot(models.Model):
@@ -26,7 +26,7 @@ class EventSlot(models.Model):
         slots = super()._filter_open_slots()
         if not slots:
             return slots
-        now = datetime.now()
+        now = fields.Datetime.now()
 
         def still_open(slot):
             deadline = slot.event_id._vmk_deadline_hours()
