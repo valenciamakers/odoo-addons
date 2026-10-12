@@ -2,6 +2,7 @@
 # License LGPL-3 (https://www.gnu.org/licenses/lgpl-3.0.html).
 
 from odoo import api, fields, models
+from odoo.exceptions import ValidationError
 
 
 class VmkEventHost(models.Model):
@@ -37,13 +38,57 @@ class VmkEventHost(models.Model):
         index=True,
     )
 
-    _sql_constraints = [
-        (
-            "partner_event_uniq",
-            "unique(event_id, partner_id)",
-            "A contact can only be listed once as a host of an event.",
-        )
-    ]
+    # There is deliberately no SQL unique constraint on (event_id, partner_id).
+    # base/wizard/base_partner_merge.py re-points every foreign key to res_partner
+    # in raw SQL, this table's with one bulk UPDATE in a savepoint whose error
+    # handler falls back to
+    # `DELETE FROM vmk_event_host WHERE partner_id IN <every source id>`. A unique
+    # constraint made that UPDATE fail on the collision two co-hosts produce, and
+    # the merged contacts then lost every host line they had, on every event.
+    # Uniqueness lives in _check_partner_unique, which that raw SQL bypasses
+    # anyway; _vmk_dedupe removes the duplicate it can leave behind.
+
+    @api.constrains("event_id", "partner_id")
+    def _check_partner_unique(self):
+        for host in self:
+            duplicate = self.search(
+                [
+                    ("event_id", "=", host.event_id.id),
+                    ("partner_id", "=", host.partner_id.id),
+                    ("id", "!=", host.id),
+                ],
+                limit=1,
+            )
+            if duplicate:
+                raise ValidationError(
+                    self.env._("A contact can only be listed once as a host of an event.")
+                )
+
+    @api.model
+    def _vmk_dedupe(self, partner):
+        """Keep one line per event for ``partner``, after a contact merge.
+
+        The merge wizard re-points the merged contacts' lines with one bulk
+        ``UPDATE`` that compares no values and bypasses ``_check_partner_unique``,
+        so an event two merged contacts both hosted holds the survivor twice.
+        Keeps the line that sorts first (lowest sequence, then oldest) and drops
+        the rest. Every event the survivor hosts then recomputes its mirror and
+        summary, since the raw SQL told the cache nothing.
+        """
+        self.invalidate_model()
+        lines = self.search([("partner_id", "=", partner.id)])  # in _order
+        events = lines.event_id
+        seen = set()
+        extra = self.browse()
+        for line in lines:
+            if line.event_id.id in seen:
+                extra |= line
+            else:
+                seen.add(line.event_id.id)
+        if extra:
+            extra.unlink()
+        events.invalidate_recordset(["vmk_host_ids"])
+        events.modified(["vmk_host_ids"])
 
     @api.depends("partner_id", "role")
     def _compute_display_name(self):

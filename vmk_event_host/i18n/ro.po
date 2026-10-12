@@ -38,7 +38,8 @@ msgid "%s — show the Hosts tab"
 msgstr "%s — afișează fila Gazde"
 
 #. module: vmk_event_host
-#: model:ir.model.constraint,message:vmk_event_host.constraint_vmk_event_host_partner_event_uniq
+#. odoo-python
+#: code:addons/vmk_event_host/models/vmk_event_host.py:0
 msgid "A contact can only be listed once as a host of an event."
 msgstr "Un contact poate fi listat o singură dată ca gazdă a unui eveniment."
 
@@ -125,6 +126,11 @@ msgstr "Ultima actualizare la"
 #: model_terms:ir.ui.view,arch_db:vmk_event_host.view_event_form_host
 msgid "Lead, Assistant, Guest speaker…"
 msgstr "Coordonator, Asistent, Vorbitor invitat…"
+
+#. module: vmk_event_host
+#: model:ir.model,name:vmk_event_host.model_base_partner_merge_automatic_wizard
+msgid "Merge Partner Wizard"
+msgstr "Expert partener îmbinare"
 
 #. module: vmk_event_host
 #. odoo-javascript

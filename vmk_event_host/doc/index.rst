@@ -41,6 +41,11 @@ Russian, Spanish, Swedish, Turkish, and Ukrainian. If any translation seems inco
 
 **Changelog**
 
+*18.0.1.1.1 (12 October 2026)*
+
+- Merging two contacts who both host an event no longer removes the merged contact from every
+  other event it hosted. The surviving contact is listed once on the shared event.
+
 *18.0.1.1.0 (5 October 2026)*
 
 - Translated into nineteen more languages: Chinese (Simplified and Traditional), Czech, Danish,

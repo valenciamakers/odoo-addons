@@ -1,11 +1,9 @@
 # Copyright 2026 Valencia Makers, SL
 # License LGPL-3 (https://www.gnu.org/licenses/lgpl-3.0.html).
 
-from psycopg2 import IntegrityError
-
 from odoo import Command
+from odoo.exceptions import ValidationError
 from odoo.tests import Form, TransactionCase, tagged
-from odoo.tools import mute_logger
 
 
 @tagged("post_install", "-at_install")
@@ -42,13 +40,49 @@ class TestEventHost(TransactionCase):
         self.assertEqual(self.event.vmk_host_ids.partner_id, self.ada + self.zoe)
 
     def test_a_contact_cannot_host_the_same_event_twice(self):
-        # Odoo's assertRaises takes one class, not a tuple; the unique index
-        # surfaces as psycopg2's IntegrityError rather than a ValidationError.
-        with self.assertRaises(IntegrityError), mute_logger("odoo.sql_db"):
-            with self.env.cr.savepoint():
-                self.env["vmk.event.host"].create(
-                    {"event_id": self.event.id, "partner_id": self.zoe.id}
-                )
+        """A Python constraint, not a SQL one: see the merge tests below."""
+        with self.assertRaises(ValidationError):
+            self.env["vmk.event.host"].create(
+                {"event_id": self.event.id, "partner_id": self.zoe.id}
+            )
+
+    def test_merging_two_hosts_keeps_their_other_events(self):
+        """The merge wizard re-points partner foreign keys in raw SQL and, on a
+        table with a unique constraint on that column, deletes every merged
+        contact's row when one collides. With Zoe and Ada co-hosting this
+        event, merging them used to lose Ada's line on every other event."""
+        other = self.env["event.event"].create(
+            {
+                "name": "Advanced 3D Printing",
+                "date_begin": "2026-10-06 16:00:00",
+                "date_end": "2026-10-06 18:30:00",
+                "vmk_host_ids": [Command.create({"partner_id": self.ada.id})],
+            }
+        )
+        self.env["base.partner.merge.automatic.wizard"]._merge(
+            [self.zoe.id, self.ada.id], dst_partner=self.zoe
+        )
+        self.assertFalse(self.ada.exists())
+        self.assertEqual(other.vmk_host_ids.partner_id, self.zoe)
+        self.assertEqual(other.vmk_host_partner_ids, self.zoe, "the mirror follows")
+        self.assertEqual(other.vmk_host_names, "Zoe Zapata")
+
+    def test_merging_co_hosts_leaves_one_line(self):
+        """The bulk UPDATE compares no values, so the survivor held the event
+        twice until something deduplicated it."""
+        self.env["base.partner.merge.automatic.wizard"]._merge(
+            [self.zoe.id, self.ada.id], dst_partner=self.zoe
+        )
+        self.assertEqual(len(self.event.vmk_host_ids), 1)
+        self.assertEqual(self.event.vmk_host_ids.partner_id, self.zoe)
+        self.assertEqual(self.event.vmk_host_ids.role, "Lead", "the line sorting first is kept")
+        self.assertEqual(self.event.vmk_host_partner_ids, self.zoe)
+        self.assertEqual(self.event.vmk_host_names, "Zoe Zapata (Lead)")
+        # The constraint sees a clean table again.
+        with self.assertRaises(ValidationError):
+            self.env["vmk.event.host"].create(
+                {"event_id": self.event.id, "partner_id": self.zoe.id}
+            )
 
     def test_role_is_optional_and_shown_in_the_name(self):
         lead, plain = self.event.vmk_host_ids

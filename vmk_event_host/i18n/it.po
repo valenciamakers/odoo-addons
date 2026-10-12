@@ -36,7 +36,8 @@ msgid "%s — show the Hosts tab"
 msgstr "%s — mostra la scheda Ospitanti"
 
 #. module: vmk_event_host
-#: model:ir.model.constraint,message:vmk_event_host.constraint_vmk_event_host_partner_event_uniq
+#. odoo-python
+#: code:addons/vmk_event_host/models/vmk_event_host.py:0
 msgid "A contact can only be listed once as a host of an event."
 msgstr ""
 "Un contatto può essere indicato una sola volta come ospitante di un evento."
@@ -124,6 +125,11 @@ msgstr "Ultimo aggiornamento il"
 #: model_terms:ir.ui.view,arch_db:vmk_event_host.view_event_form_host
 msgid "Lead, Assistant, Guest speaker…"
 msgstr "Responsabile, Assistente, Relatore ospite…"
+
+#. module: vmk_event_host
+#: model:ir.model,name:vmk_event_host.model_base_partner_merge_automatic_wizard
+msgid "Merge Partner Wizard"
+msgstr "Procedura per unire i partner"
 
 #. module: vmk_event_host
 #. odoo-javascript

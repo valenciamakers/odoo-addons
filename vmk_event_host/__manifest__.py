@@ -4,7 +4,7 @@
 {
     "name": "Event Hosts",
     "summary": "Record who runs an event, as one or more contacts",
-    "version": "18.0.1.1.0",
+    "version": "18.0.1.1.1",
     "author": "Valencia Makers",
     "license": "LGPL-3",
     "category": "Marketing/Events",

@@ -541,7 +541,10 @@ checked there yet.
   instead. **On 18 there is no `_has_check_or_unique_constraint`**: a table with more than one other
   column always takes the savepoint branch, and stays safe only because an unconstrained `UPDATE`
   cannot fail. On both, the bulk `UPDATE` compares no values, so a row two merged contacts shared
-  arrives twice on the survivor; clean up after the merge.
+  arrives twice on the survivor; clean up after the merge. `vmk_event_host` shipped the obvious
+  constraint for three weeks after this bullet was written, and lost every host line of a merged
+  contact on the first co-hosted merge (found 11 October 2026): audit every model with a foreign key
+  to `res_partner` against it, not only the one that found it.
 - `_update_values` in the same wizard skips o2m/m2m and computed fields, and for plain fields takes
   the last truthy value with the destination last — so the destination wins and the merged-away
   values are simply dropped. It also refuses outright when contacts differ by email, except for
