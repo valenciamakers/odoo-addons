@@ -88,6 +88,12 @@ the only place it visibly does anything is `website_event`'s registration templa
 **Registrations Closed** and hide the **Register** button once it is false. Without `website_event`
 installed, closing the field changes nothing a user can see.
 
+**A hand-edited setting.** The deadline is stored as a float in `ir.config_parameter`, written by
+the Settings form. An administrator who edits the raw parameter to non-numeric text in Technical
+settings makes `float()` raise in the event and ticket computes, for every page that reads them.
+Recorded in the security review of 12 October 2026 and left as it is: it takes a developer-mode edit
+of a system parameter, and refusing the value there would mean guessing a deadline.
+
 ### What it does not depend on
 
 Nothing about sessions. The rule reads `date_begin` for an event. Where a module makes an event's
