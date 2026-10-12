@@ -87,6 +87,12 @@ after that, the page would offer Register over a pop-up saying "No Future Dates 
 the same gap from the last slot's start to the event's end, and a deadline widens it by its own
 length, on every multi-slot event. An event with no slots yet is left as core has it.
 
+**A hand-edited setting.** The deadline is stored as a float in `ir.config_parameter`, written by
+the Settings form. An administrator who edits the raw parameter to non-numeric text in Technical
+settings makes `float()` raise in both computes, for every page that reads them. Recorded in the
+security review of 12 October 2026 and left as it is: it takes a developer-mode edit of a system
+parameter, and refusing the value there would mean guessing a deadline.
+
 ### Slots get the same rule
 
 `website_event` retires a slot whose `start_datetime` has passed
