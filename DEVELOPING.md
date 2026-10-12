@@ -347,12 +347,21 @@ in `web/static/src/**`, not in Python. Half the surprises below live there.
   is `noupdate` and may have been edited. Added 2026-10-11.
 - **A public method is an RPC endpoint, whatever calls it in our own code.** Any method whose name
   does not start with an underscore can be called on its model by any logged-in user
-  (`get_public_method` in `odoo/service/model.py` refuses only private names), with that user's
-  rights. A server action, a button's `groups`, or a menu nobody else sees restricts the interface,
-  not the method. So a public method that calls `sudo()` decides for itself who may run it: check
-  `self.env.is_system()`, or the group that fits, before the first privileged line, and raise
-  `AccessError`. Core's "Only administrators can execute this action." is already translated. Or
-  make the method private where nothing in the web client needs to call it. Added 2026-10-11.
+  (`get_public_method` in `odoo/service/model.py` refuses names starting with an underscore, names
+  in `_UNSAFE_ATTRIBUTES`, classmethods and staticmethods, and any method carrying `@api.private`
+  anywhere in the MRO), with that user's rights. A server action, a button's `groups`, or a menu
+  nobody else sees restricts the interface, not the method. So a public method that calls `sudo()`
+  decides for itself who may run it: check `self.env.is_system()`, or the group that fits, before
+  the first privileged line, and raise `AccessError`. Core's "Only administrators can execute this
+  action." is already translated. Or make the method private where nothing in the web client needs
+  to call it. Added 2026-10-11.
+- **A shared cache hides an access error in a test.** Records created in a transaction sit in a
+  cache shared across users, so `record.with_user(other).field` returns the cached value without an
+  access check, and the test passes against code that raises in production. Call
+  `self.env.invalidate_all()` (after `flush_all()` if there is anything to write) between creating
+  the fixtures and reading as the other user, and break the code once to see the test fail. Found 12
+  October 2026, when two crashes, a public calendar download and an event form, had passed their
+  tests. Added 2026-10-12.
 
 **Mail templates**
 
