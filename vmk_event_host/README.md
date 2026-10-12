@@ -121,6 +121,13 @@ does its bookkeeping the same way (raw SQL for the foreign keys, `src_partners.s
 the capture and the dedupe go through `sudo()` too. `tests/test_access.py` merges as a partner
 manager outside Events and as an event user of another company.
 
+**A line's name is read as superuser** (19.0.1.1.1). `vmk.event.host._compute_display_name` reads
+`partner_id.sudo().display_name`, as the ORM does for any many2one (`Many2one.convert_to_read`,
+`odoo/orm/fields_relational.py:373`): whether a user may see a host is decided by the line and its
+event, not by the contact's own record rule. In a multi-company database a host contact of company A
+on a shared event is hidden from a user of company B, and the line's name and the event's host
+summary, which reads it, raised an AccessError, so the event form would not open.
+
 **Access rights mirror core's own event rules**: read for the registration desk, full rights for
 event users and managers. The multi-company record rule mirrors
 `event.ir_rule_event_event_ticket_company` — a host line is reachable exactly when its event is.
