@@ -54,6 +54,8 @@ Russian, Spanish, Swedish, Turkish, and Ukrainian. If any translation seems inco
   contact, as standard Odoo does not match one held as a primary address.
 - Searching contacts by name with "does not contain" keeps contacts that have no additional
   addresses, and drops those where any additional address contains the text.
+- An additional address is visible to exactly the users who can see its contact, by asking Odoo
+  itself, so it stays in step with Odoo's rules for contacts when they change.
 
 *20.0.1.1.1 (11 October 2026)*
 

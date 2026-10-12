@@ -480,13 +480,17 @@ checked there yet.
   another model is not covered by that model's restrictions. Through the parent's form the rows are
   reached by way of a record the user can already read, which is why it looks protected; a direct
   `search_read` on the child is answered from the child's own `ir.access` rows alone. Rows of a
-  contact need core's contact restriction, `base.res_partner_rule`, copied onto the child with each
-  field reached through the many2one, as `vmk_partner_email_multiple/security/ir.access.csv` does.
-  Odoo 20 has no `ir.rule`: a restriction is an `ir.access` row with a domain and **no group**,
-  which narrows every user and grants nothing, where a row with a group is a permission.
-  Restrictions are skipped under `sudo()`, so code that reads the table as superuser is unaffected.
-  Test it with a user of one company and a parent in another, and compare the copy with core's file,
-  not core's record, which may have been edited. Added 2026-10-11.
+  contact need core's contact restriction, `base.res_partner_rule`, carried onto the child. Odoo 20
+  has no `ir.rule`: a restriction is an `ir.access` row with a domain and **no group**, which
+  narrows every user and grants nothing, where a row with a group is a permission. And Odoo 20 has
+  an `access` operator that, for a many2one, applies the comodel's own access domain for the
+  operation (`_operator_access_rule_domain` in `odoo/orm/domains.py`): the row is
+  `[('partner_id', 'access', 'read')]`, as `vmk_partner_email_multiple/security/ir.access.csv` has
+  it, and follows core's rule instead of copying it. Where core's sibling models spell the domain
+  out, as `event.event.ticket` does, a row of ours may mirror it. Restrictions are skipped under
+  `sudo()`, so code that reads the table as superuser is unaffected. Test it with a user of one
+  company and a parent in another, and with a parent whose company changes. Added 2026-10-11,
+  revised 2026-10-12.
 - **A public method is an RPC endpoint, whatever calls it in our own code.** Any method whose name
   does not start with an underscore can be called on its model by any logged-in user
   (`get_public_method` in `odoo/orm/models.py` refuses names starting with an underscore, names in

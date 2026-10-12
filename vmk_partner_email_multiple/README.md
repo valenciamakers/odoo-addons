@@ -226,13 +226,25 @@ A restriction on `res.partner` does not follow the `partner_id` many2one: on the
 addresses are reached through a contact the user can already read, but a direct `search_read` on
 `vmk.partner.email` was answered from this model's permissions alone, which give every internal user
 read access. In a multi-company database that showed the addresses of contacts another company keeps
-to itself. Since 20.0.1.1.1 `security/ir.access.csv` carries core's own contact restriction,
-`base.res_partner_rule`, as a row with no group and each field reached through `partner_id`: an
-address is visible where its contact belongs to an internal user, to no company, or to one of the
-user's companies. Odoo 20 keeps permissions and restrictions in one model, `ir.access`, where a row
-without a group restricts everyone and never grants. Like any restriction it is skipped for the
-superuser, so matching, which reads the table with `sudo()`, is unchanged. If core changes its row,
-this copy has to follow; a test compares the two.
+to itself. Since 20.0.1.1.1 `security/ir.access.csv` carries a restriction row with no group:
+`vmk_partner_email_company_rule`. Odoo 20 keeps permissions and restrictions in one model,
+`ir.access`, where a row without a group restricts everyone and never grants. Like any restriction
+it is skipped for the superuser, so matching, which reads the table with `sudo()`, is unchanged.
+
+The row's domain is `[('partner_id', 'access', 'read')]` (20.0.1.1.2). It first restated core's
+contact restriction, `base.res_partner_rule`, with a `partner_id.` prefix on each field, which meant
+a test had to keep the copy in step with core's file. Odoo 20's `access` operator removes the copy:
+for a many2one it applies the comodel's own access domain for the operation
+(`_operator_access_rule_domain` in `odoo/orm/domains.py`), so an address is visible exactly where
+its contact is, whatever core's rule becomes or another module adds to it, and a contact the user
+cannot read has no readable addresses. Core uses it the same way in `mail` (`channel_id`) and
+`hr_expense` (`move_id`). The operation stays `read` for all four operations, as the copied domain
+applied to all four: the permission rows decide who may write, and a user who cannot read a contact
+could not have reached its addresses before either. The event modules do not follow suit, on
+purpose: their rows mirror core's rows on the sibling models (`event.event.ticket` and
+`event.registration`), which core 20 still spells out as a domain on a company field
+(`event/security/ir.access.csv`), and a row that reads the same as its neighbours is what a reader
+of core's file expects.
 
 **Matching hands back only contacts the caller may read** (20.0.1.1.2). Reading the table as
 superuser is right, but `_resolve_partners` then returned the owning contacts as bare `browse()`

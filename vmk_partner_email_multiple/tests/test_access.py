@@ -1,11 +1,11 @@
 # Copyright 2026 Valencia Makers, SL
 # License LGPL-3 (https://www.gnu.org/licenses/lgpl-3.0.html).
 
-import csv
+import ast
 
+from odoo import Command
 from odoo.exceptions import AccessError
 from odoo.tests import new_test_user, tagged
-from odoo.tools import file_open
 
 from .common import PartnerEmailCase
 
@@ -102,15 +102,75 @@ class TestPartnerEmailAccess(PartnerEmailCase):
                     "core's own rule keeps the contact from a portal or public user",
                 )
 
-    def test_the_rule_is_cores_contact_rule(self):
-        """Ours is a copy of `base.res_partner_rule`, reached through the
-        contact. Core's is read from its file, not the database, where it
-        may have been edited. Like core's it has no group, which is what
-        makes it a restriction on everyone and not a permission."""
-        with file_open("base/security/ir.access.csv") as source:
-            core = {row["id"]: row for row in csv.DictReader(source)}["res_partner_rule"]
+    def test_the_restriction_defers_to_the_contacts_own_access(self):
+        """The row states no company logic of its own: it asks for rows whose
+        contact the user may read, through the `access` operator, so it follows
+        core's contact restriction whatever that becomes. It keeps no group,
+        which is what makes it a restriction on everyone and not a permission."""
         ours = self.env.ref("vmk_partner_email_multiple.vmk_partner_email_company_rule")
-        self.assertEqual(ours.domain.replace("partner_id.", ""), core["domain"])
-        self.assertEqual(ours.operation, core["operation"])
+        self.assertEqual(ast.literal_eval(ours.domain), [("partner_id", "access", "read")])
+        self.assertEqual(ours.operation, "crud")
         self.assertFalse(ours.group_id)
-        self.assertFalse(core["group_id/id"])
+
+    def _company_user(self, login, company):
+        return new_test_user(
+            self.env,
+            login=login,
+            groups="base.group_user",
+            company_id=company.id,
+            company_ids=[Command.set(company.ids)],
+        )
+
+    def test_a_user_of_company_b_cannot_read_rows_of_a_share_contact_of_company_a(self):
+        company_a, company_b = self.env["res.company"].create(
+            [{"name": "Company A"}, {"name": "Company B"}]
+        )
+        user_b = self._company_user("vmk_email_user_b", company_b)
+        contact = self.Partner.create({"name": "Share A", "company_id": company_a.id})
+        row = self.PartnerEmail.create({"partner_id": contact.id, "email": "share.a@example.com"})
+        self.assertTrue(contact.partner_share, "the premise: a plain contact is a share one")
+        self.env.invalidate_all()
+        self.assertFalse(contact.with_user(user_b).has_access("read"))
+        self.assertFalse(row.with_user(user_b).has_access("read"))
+        self.assertFalse(self.PartnerEmail.with_user(user_b).search([("id", "=", row.id)]))
+        with self.assertRaises(AccessError):
+            row.with_user(user_b).read(["email"])
+
+    def test_a_user_can_read_rows_of_a_contact_with_no_company(self):
+        company_b = self.env["res.company"].create({"name": "Company B"})
+        user_b = self._company_user("vmk_email_user_b2", company_b)
+        contact = self.Partner.create({"name": "Nobody's", "company_id": False})
+        row = self.PartnerEmail.create({"partner_id": contact.id, "email": "nobody@example.com"})
+        self.env.invalidate_all()
+        self.assertTrue(contact.with_user(user_b).has_access("read"))
+        self.assertEqual(self.PartnerEmail.with_user(user_b).search([("id", "=", row.id)]), row)
+        self.assertEqual(row.with_user(user_b).email, "nobody@example.com")
+
+    def test_the_rows_of_a_contact_follow_its_visibility(self):
+        """Not a snapshot of core's rule: when the contact becomes readable, so
+        do its rows, and the other way round. An internal user's own contact
+        is readable by every company, as in core."""
+        company_a, company_b = self.env["res.company"].create(
+            [{"name": "Company A"}, {"name": "Company B"}]
+        )
+        user_a = self._company_user("vmk_email_user_a3", company_a)
+        user_b = self._company_user("vmk_email_user_b3", company_b)
+        contact = self.Partner.create({"name": "Moves", "company_id": company_a.id})
+        row = self.PartnerEmail.create({"partner_id": contact.id, "email": "moves@example.com"})
+        user_a_row = self.PartnerEmail.create(
+            {"partner_id": user_a.partner_id.id, "email": "user.a@example.com"}
+        )
+        self.assertFalse(user_a.partner_id.partner_share)
+        for expected, record_rows in (
+            (False, row),
+            (True, user_a_row),
+        ):
+            self.env.invalidate_all()
+            found = self.PartnerEmail.with_user(user_b).search([("id", "in", record_rows.ids)])
+            self.assertEqual(bool(found), expected, record_rows.email)
+        contact.company_id = company_b
+        self.env.invalidate_all()
+        self.assertEqual(self.PartnerEmail.with_user(user_b).search([("id", "=", row.id)]), row)
+        contact.company_id = company_a
+        self.env.invalidate_all()
+        self.assertFalse(self.PartnerEmail.with_user(user_b).search([("id", "=", row.id)]))

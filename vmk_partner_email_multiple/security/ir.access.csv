@@ -1,4 +1,4 @@
 id,name,model_id,group_id/id,operation,domain
 access_vmk_partner_email_user,vmk.partner.email user,vmk.partner.email,base.group_user,r,
 access_vmk_partner_email_manager,vmk.partner.email partner manager,vmk.partner.email,base.group_partner_manager,crud,
-vmk_partner_email_company_rule,Additional contact emails: company visibility,vmk.partner.email,,crud,"['|', '|', ('partner_id.partner_share', '=', False), ('partner_id.company_id', 'parent_of', company_ids), ('partner_id.company_id', '=', False)]"
+vmk_partner_email_company_rule,Additional contact emails: company visibility,vmk.partner.email,,crud,"[('partner_id', 'access', 'read')]"
