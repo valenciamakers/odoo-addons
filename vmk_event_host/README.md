@@ -115,6 +115,20 @@ at the survivor. Upgrading drops the SQL constraint: Odoo records each one as an
 log says `Dropped CONSTRAINT vmk_event_host_partner_event_uniq`). `tests/test_event_host.py` merges
 co-hosts to prove both.
 
+**The merge bookkeeping runs as superuser** (18.0.1.1.1). The wizard is granted to
+`base.group_partner_manager`, who need no Events group and have no access to `vmk.event.host`, so
+the override's search and `_vmk_dedupe` raised an AccessError on every contact merge once the module
+was installed. And a user in an Events group sees only their companies' events, so a dedupe run as
+them could miss the survivor's duplicate lines on an event of another company. Core's own `_merge`
+does its bookkeeping the same way (raw SQL for the foreign keys, and `.sudo()` searches and writes
+in `_update_reference_fields_generic`, `base_partner_merge.py:175-183`), so the capture and the
+dedupe go through `sudo()` too. `tests/test_access.py` merges as a partner manager outside Events
+and as an event user of another company. Both also hold `base.group_erp_manager`, because 18's
+`_update_values` (`base_partner_merge.py:337`) reads every field of the contacts, and `signup_type`
+(`auth_signup`, `groups="base.group_erp_manager"`) raises an AccessError for anyone else: on 18 a
+partner manager who is not also an administrator cannot merge at all. 19 skips fields that are not
+copied.
+
 **Access rights mirror core's own event rules**: read for the registration desk, full rights for
 event users and managers. The multi-company record rule mirrors
 `event.ir_rule_event_event_ticket_company` — a host line is reachable exactly when its event is.

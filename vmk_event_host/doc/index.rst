@@ -46,6 +46,8 @@ Russian, Spanish, Swedish, Turkish, and Ukrainian. If any translation seems inco
 - Merging two contacts who both host an event no longer removes the merged contact from every
   other event it hosted. The surviving contact is listed once on the shared event, with its own
   role.
+- Merging contacts no longer fails for a contact manager outside the Events groups, and tidies a
+  shared event of another company too.
 
 *18.0.1.1.0 (5 October 2026)*
 
