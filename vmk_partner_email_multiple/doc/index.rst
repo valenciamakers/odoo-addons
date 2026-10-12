@@ -42,6 +42,11 @@ Russian, Spanish, Swedish, Turkish, and Ukrainian. If any translation seems inco
 
 **Changelog**
 
+*19.0.1.3.3 (12 October 2026)*
+
+- A portal user reading a helpdesk ticket or a lead no longer gets an access error from the check
+  that keeps an additional address from replacing the contact's email.
+
 *19.0.1.3.2 (11 October 2026)*
 
 - Matching returns only contacts the current user may see, as standard Odoo does. A user of one
