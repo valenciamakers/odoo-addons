@@ -276,6 +276,28 @@ This is left alone deliberately. Relaxing it means forcing `extra_checks=False`,
 pre-disable any future check Odoo puts behind that flag. Revisit when someone other than an
 administrator actually needs to do contact cleanup.
 
+### Known gaps, recorded in the security review of 12 October 2026
+
+None of these is a defect anyone has hit; each is a place where the module answers differently from
+core, found by reading, and left as it is:
+
+- **Two contacts holding the same additional address.** Core's own resolution of a primary address
+  prefers followers of the record, then the record's company, then an exact formatted match; among
+  additional-address holders this module picks the oldest contact (`_resolve_partners`), since the
+  additional path only runs where core found nobody. Matters only when two contacts share an
+  additional address, which the uniqueness check across contacts already discourages.
+- **The primary-holder check ignores `extra_domain`.** When core calls with an `extra_domain` that
+  hides a primary holder, the module still defers to core for that address, which then finds nobody
+  and, under `force_create`, creates a duplicate.
+- **The swap button is shown to users who cannot use it.** It carries no `groups`; a user without
+  write access to the contact gets core's own access error on clicking it. Nothing privileged runs.
+- **The context flags** `vmk_swapping_primary` and `vmk_keep_primary_email` can be passed by any RPC
+  client. They skip the row clean-up, never an access check, so the cost is data hygiene only.
+- **Public routes that match an address under `sudo()`** (website checkout, mail groups, the
+  helpdesk portal) now match an additional address as they match a primary one, since
+  `_filtered_access` returns everything under superuser. The same oracle already existed for the
+  primary address.
+
 ### Deliberate non-goals
 
 Each of these keeps reading the primary address only:
