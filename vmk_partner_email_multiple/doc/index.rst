@@ -52,6 +52,8 @@ Russian, Spanish, Swedish, Turkish, and Ukrainian. If any translation seems inco
   additional address as well.
 - An alias, catchall, or bounce address held as an additional address is no longer matched to its
   contact, as standard Odoo does not match one held as a primary address.
+- Searching contacts by name with "does not contain" keeps contacts that have no additional
+  addresses, and drops those where any additional address contains the text.
 
 *20.0.1.1.1 (11 October 2026)*
 

@@ -263,6 +263,11 @@ way in looks just like one nobody holds, so it builds the same list for the pend
 passes it on. Without it an alias held as an additional address resolved to its holder, which core
 never does for a primary one.
 
+**A negative name search means "no address matches"** (20.0.1.1.2). `not ilike` through the dotted
+path `vmk_email_ids.email` becomes `vmk_email_ids ANY (email not ilike v)`: a contact with no rows
+drops out and one with a matching row beside another stays in. The negative operators therefore use
+`vmk_email_ids not any (email ilike v)`.
+
 ### Known limitation: merging as a non-admin
 
 `_merge` refuses when the contacts differ by email (`base/wizard/base_partner_merge.py:473`) — which
