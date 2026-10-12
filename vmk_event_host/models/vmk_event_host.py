@@ -77,7 +77,12 @@ class VmkEventHost(models.Model):
         that sorts first (lowest sequence, then oldest) stays. Every event the
         survivor hosts then recomputes its mirror and summary, since the raw SQL
         told the cache nothing.
+
+        Runs as superuser whoever calls it: the merge belongs to partner managers,
+        who may have no access to this model, and a user's company rule would hide
+        the lines of an event of another company (see the wizard override).
         """
+        self = self.sudo()
         self.invalidate_model()
         lines = self.search([("partner_id", "=", partner.id)])  # in _order
         events = lines.event_id
