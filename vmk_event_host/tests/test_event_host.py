@@ -39,6 +39,14 @@ class TestEventHost(TransactionCase):
         first.sequence, second.sequence = 20, 10
         self.assertEqual(self.event.vmk_host_ids.partner_id, self.ada + self.zoe)
 
+    def test_editing_only_a_role_updates_the_summary(self):
+        """The summary prints each line's display name, which carries the role,
+        so a role edited alone has to recompute it."""
+        self.assertIn("Zoe Zapata (Lead)", self.event.vmk_host_names)
+        self.event.vmk_host_ids[0].role = "Assistant"
+        self.assertIn("Zoe Zapata (Assistant)", self.event.vmk_host_names)
+        self.assertNotIn("(Lead)", self.event.vmk_host_names)
+
     def test_a_contact_cannot_host_the_same_event_twice(self):
         """A Python constraint, not a SQL one: see the merge tests below."""
         with self.assertRaises(ValidationError):

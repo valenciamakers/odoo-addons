@@ -41,6 +41,10 @@ Russian, Spanish, Swedish, Turkish, and Ukrainian. If any translation seems inco
 
 **Changelog**
 
+*19.0.1.1.2 (12 October 2026)*
+
+- The hosts summary on an event's form updates when only a host's role is edited.
+
 *19.0.1.1.1 (11 October 2026)*
 
 - Merging two contacts who both host an event no longer removes the merged contact from every
