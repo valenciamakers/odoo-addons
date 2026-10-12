@@ -302,6 +302,16 @@ access list on `vmk.partner.email`. So every contact search by name, `name_searc
 `_search_display_name` now adds its domain only where `has_access("read")` says so, which gives
 those users core's answer exactly.
 
+**Core's alias exclusion is applied before our own resolution** (18.0.1.1.2). Step 0 of core's
+`_mail_find_partner_from_emails` (`mail_thread.py:2060-2062`) removes every address that is a
+`mail.alias`'s `alias_full_name` before searching, so an alias is never taken for a contact's email.
+Our override in `models/mail_thread.py` resolves additional addresses _before_ calling `super()`,
+which skipped that step: an alias held as an additional address resolved to its holder, which core
+never does for a primary one. It now searches `mail.alias` the same way and leaves those addresses
+out of what it resolves, so they fall through to `super()` and are excluded as usual. 18 has no
+`mail.alias.domain._find_aliases` and bans nothing else here, so a catchall or bounce address is not
+excluded, as for a primary one.
+
 ### Known limitation: merging as a non-admin
 
 `_merge` refuses when the contacts differ by email (`base/wizard/base_partner_merge.py:413`) — which

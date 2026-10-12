@@ -25,10 +25,26 @@ class MailThread(models.AbstractModel):
         within ``extra_domain``, and only the rest go to ``super()``. An address
         a primary holder owns is never resolved here, so core's own tie-break
         still decides those.
+
+        Core's step 0 (``:2060-2062``) drops every address that is a mail alias's
+        ``alias_full_name`` before it searches anything, so an alias is never set as
+        a partner's email. Resolving first would skip that, and an alias held as an
+        additional address would resolve to its holder. So the same set is built
+        here and those addresses are left out of what the resolver is asked; they
+        fall through to ``super()``, which excludes them as it always does. 18 bans
+        nothing else at this point: no bounce or catchall address (that is a 19
+        ``mail.alias.domain._find_aliases`` addition), so none is excluded here.
         """
         normalized_inputs = [email_normalize(email, strict=False) for email in emails]
+        candidates = [normalized for normalized in normalized_inputs if normalized]
+        aliases = {
+            alias.alias_full_name
+            for alias in self.env["mail.alias"]
+            .sudo()
+            .search([("alias_full_name", "in", candidates)])
+        }
         resolved = self.env["vmk.partner.email"]._resolve_partners(
-            [normalized for normalized in normalized_inputs if normalized]
+            [normalized for normalized in candidates if normalized not in aliases]
         )
         if extra_domain and resolved:
             # Reproduce core's own domain, which it ANDs onto each internal search,

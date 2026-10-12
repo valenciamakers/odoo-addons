@@ -3,6 +3,7 @@
 
 from lxml import etree
 
+from odoo import Command
 from odoo.tests import tagged
 from odoo.tools.safe_eval import safe_eval
 
@@ -72,6 +73,38 @@ class TestPartnerEmailMatching(PartnerEmailCase):
             ["alice.work@example.com"]
         )
         self.assertEqual(found, [self.alice])
+
+    def test_mail_find_partner_from_emails_refuses_aliases_held_as_additional(self):
+        """Core never matches a mail alias's address to a contact.
+
+        Its step 0 drops every `alias_full_name` before searching; resolving the
+        additional addresses first, without that, matched the alias to whoever held
+        it as an additional one. 18 bans nothing else here (no catchall or bounce).
+        """
+        domain = self.env["mail.alias.domain"].create({"name": "example.test"})
+        self.env.company.alias_domain_id = domain
+        alias = self.env["mail.alias"].create(
+            {
+                "alias_name": "zzcheck-alias",
+                "alias_model_id": self.env["ir.model"]._get_id("res.partner"),
+                "alias_domain_id": domain.id,
+            }
+        )
+        self.assertTrue(alias.alias_full_name)
+        carol = self.Partner.create(
+            {
+                "name": "Carol Example",
+                "vmk_email_ids": [
+                    Command.create({"email": alias.alias_full_name}),
+                    Command.create({"email": "carol.work@example.com"}),
+                ],
+            }
+        )
+        self.env.invalidate_all()
+        thread = self.env["mail.thread"]
+        self.assertFalse(thread._mail_find_partner_from_emails([alias.alias_full_name])[0])
+        # A control: an ordinary additional address of the same contact resolves.
+        self.assertEqual(thread._mail_find_partner_from_emails(["carol.work@example.com"]), [carol])
 
     def test_mail_find_partner_from_emails_keeps_order(self):
         found = self.env["mail.thread"]._mail_find_partner_from_emails(
