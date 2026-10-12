@@ -69,8 +69,10 @@ the trade, and it is why disabled languages are left alone.
 outlast the module, so nothing else would ever clear it and the languages would stay frozen against
 core corrections with no field left to untick. `uninstall_hook` (`restore_language_updates` in
 `hooks.py`) sets `noupdate` back to false on every `res.lang` external id in module `base`, the only
-rows this module touches. Like the install hook it stands aside while `vmk_language_freeze_meta`,
-the module this one was renamed from, is still installed, since its protections are still wanted.
+rows this module touches. That includes a language an administrator had marked by hand before the
+module was installed, since the module keeps no record of which were its own. Like the install hook
+it stands aside while `vmk_language_freeze_meta`, the module this one was renamed from, is still
+installed, since its protections are still wanted.
 
 ### When it applies
 
