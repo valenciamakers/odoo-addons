@@ -120,6 +120,15 @@ whose is read before `super()`, since the SQL then points them all at the surviv
 the SQL constraint: Odoo reflects each one as an `ir.model.data` record, and `_process_end` unlinks
 any the module no longer declares. `tests/test_event_host.py` merges co-hosts to prove both.
 
+**The merge bookkeeping runs as superuser** (20.0.1.1.1). The wizard is granted to
+`base.group_partner_manager`, who need no Events group and have no access to `vmk.event.host`, so
+the override's search and `_vmk_dedupe` raised an AccessError on every contact merge once the module
+was installed. And a user in an Events group sees only their companies' events, so a dedupe run as
+them could miss the survivor's duplicate lines on an event of another company. Core's own `_merge`
+does its bookkeeping the same way (raw SQL for the foreign keys, `src_partners.sudo().unlink()`), so
+the capture and the dedupe go through `sudo()` too. `tests/test_access.py` merges as a partner
+manager outside Events and as an event user of another company.
+
 **Access rights mirror core's own event rules**: read for the registration desk, full rights for
 event users and managers. The multi-company rule mirrors the `ir_rule_event_event_ticket_company`
 row of `event/security/ir.access.csv` — a host line is reachable exactly when its event is.

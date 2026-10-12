@@ -23,7 +23,13 @@ class BasePartnerMergeAutomaticWizard(models.TransientModel):
         asked for after.
         """
         partners = self.env["res.partner"].browse(partner_ids).exists()
-        Host = self.env["vmk.event.host"]
+        # As superuser, like core's own bookkeeping in this method (the raw SQL
+        # for the foreign keys, `src_partners.sudo().unlink()`). The wizard is
+        # granted to `base.group_partner_manager`, who need no Events group and
+        # would get an AccessError on every merge otherwise; and an Events user
+        # sees only their own companies' lines, so the dedupe could miss the
+        # survivor's duplicates on an event of another company.
+        Host = self.env["vmk.event.host"].sudo()
         own_lines = {
             partner.id: Host.search([("partner_id", "=", partner.id)]).ids for partner in partners
         }
