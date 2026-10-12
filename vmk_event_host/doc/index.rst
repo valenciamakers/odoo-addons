@@ -48,6 +48,8 @@ Russian, Spanish, Swedish, Turkish, and Ukrainian. If any translation seems inco
   role.
 - Merging contacts no longer fails for a contact manager outside the Events groups, and tidies a
   shared event of another company too.
+- An event opens for a user who cannot see one of its hosts' contact records, as in a database with
+  several companies.
 
 *18.0.1.1.0 (5 October 2026)*
 

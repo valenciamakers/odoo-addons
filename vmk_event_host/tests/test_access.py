@@ -90,3 +90,18 @@ class TestHostAccess(TransactionCase):
         )
         self.assertEqual(len(event.vmk_host_ids), 1)
         self.assertEqual(event.vmk_host_ids.partner_id, zoe)
+
+    def test_the_form_opens_for_a_user_who_cannot_read_a_host_contact(self):
+        """A many2one shows its display name whatever the target's own rules say;
+        the line's name and the summary have to do the same."""
+        user_b = self._user("vmk_host_viewer_b", self.company_b, "event.group_event_user")
+        host = self.env["res.partner"].create(
+            {"name": "Hidden Host", "company_id": self.company_a.id}
+        )
+        event = self._event("Shared", None, hosts=(host,))
+        line = event.vmk_host_ids
+        self.env.invalidate_all()
+        self.assertFalse(host.with_user(user_b).has_access("read"))
+        self.assertEqual(event.with_user(user_b).vmk_host_names, "Hidden Host")
+        self.env.invalidate_all()
+        self.assertEqual(line.with_user(user_b).display_name, "Hidden Host")

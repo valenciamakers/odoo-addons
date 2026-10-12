@@ -129,6 +129,13 @@ and as an event user of another company. Both also hold `base.group_erp_manager`
 partner manager who is not also an administrator cannot merge at all. 19 skips fields that are not
 copied.
 
+**A line's name is read as superuser** (18.0.1.1.1). `vmk.event.host._compute_display_name` reads
+`partner_id.sudo().display_name`, as the ORM does for any many2one (`Many2one.convert_to_read`,
+`odoo/fields.py:3356`): whether a user may see a host is decided by the line and its event, not by
+the contact's own record rule. In a multi-company database a host contact of company A on a shared
+event is hidden from a user of company B, and the line's name and the event's host summary, which
+reads it, raised an AccessError, so the event form would not open.
+
 **Access rights mirror core's own event rules**: read for the registration desk, full rights for
 event users and managers. The multi-company record rule mirrors
 `event.ir_rule_event_event_ticket_company` — a host line is reachable exactly when its event is.
