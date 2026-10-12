@@ -55,6 +55,11 @@ msgid "Event"
 msgstr "행사"
 
 #. module: vmk_event_registration_deadline
+#: model:ir.model,name:vmk_event_registration_deadline.model_event_event_ticket
+msgid "Event Ticket"
+msgstr "행사 티켓"
+
+#. module: vmk_event_registration_deadline
 #: model:ir.model.fields,field_description:vmk_event_registration_deadline.field_event_event__vmk_deadline_custom
 #: model:ir.model.fields,field_description:vmk_event_registration_deadline.field_res_config_settings__vmk_registration_deadline_enabled
 msgid "Registration Deadline"

@@ -23,13 +23,18 @@ Once the deadline passes, the event's website page shows **Registrations Closed*
 **An event can be given its own deadline even when the global setting is off.**
 
 **Tickets with their own Registration End keep it**; the deadline applies only to tickets without
-one.
+one. A ticket without one is no longer offered once the deadline passes, and cannot be bought from
+a page opened before it.
 
 **Limits**
 
 - **Only online registration closes.** The deadline governs the event's website page; your team can
   still add attendees from the backend.
 - **A deadline cannot reopen registrations.** It only ever closes them earlier than Odoo would.
+- **On an event without tickets, the deadline governs the page.** A registration form opened
+  before the deadline can still be submitted after it, as with Odoo's own end-of-event rule. On an
+  event with tickets each ticket expires, and Odoo refuses the expired ticket when the form is
+  submitted.
 - **No per-slot deadline on Odoo 18.** Multi-slot events are new in Odoo 19, so this build applies
   the rule to a single event's own start only.
 
@@ -41,6 +46,14 @@ Russian, Spanish, Swedish, Turkish, and Ukrainian. If any translation seems inco
 `contact us <mailto:info@valenciamakers.es>`_ and we will fix it.
 
 **Changelog**
+
+*18.0.1.2.0 (12 October 2026)*
+
+- Each ticket without a Registration End now closes at the deadline on its own, and is no longer
+  offered. Before, one ticket with a Registration End, such as an Early Bird ticket that ended weeks
+  earlier, kept every other ticket of the event selling until the event started.
+- On an event with tickets, a registration started before the deadline can no longer be completed
+  after it.
 
 *18.0.1.1.1 (11 October 2026)*
 

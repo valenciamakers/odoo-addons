@@ -58,11 +58,13 @@ class EventEvent(models.Model):
         adds the rule rather than replacing anything — core decides first, and
         this can only ever close what core left open.
 
-        One case is deliberately left alone: **a ticket with its own
-        Registration End.** Core's `is_expired` is False whenever
-        `end_sale_datetime` is blank, so blank is what this rule is for; a
-        date somebody typed is a deliberate choice to allow late
-        registration, and it wins.
+        One case is judged by its tickets: **an event with tickets.** Each
+        ticket without a Registration End takes the deadline as its own expiry
+        (`event_ticket.py`), and one with a typed end keeps it. Core's own
+        compute then closes the event once no ticket is on sale, so nothing is
+        decided here. Until 18.0.1.2.0 this rule exempted the whole event when
+        any ticket had an end date, which let an Early Bird ticket's early end
+        keep the Regular ticket beside it selling into the event start.
 
         Odoo 18 has no `event.slot` model — slots and `is_multi_slots` are new
         in 19 — so there is no multi-slot case to leave alone here, and no
@@ -73,7 +75,7 @@ class EventEvent(models.Model):
         for event in self:
             if not event.event_registrations_open:
                 continue
-            if any(ticket.end_sale_datetime for ticket in event.event_ticket_ids):
+            if event.event_ticket_ids:
                 continue
             deadline = event._vmk_deadline_hours()
             if deadline is None or not event.date_begin:
