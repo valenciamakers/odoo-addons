@@ -13,13 +13,22 @@ class BasePartnerMergeAutomaticWizard(models.TransientModel):
         ``_update_foreign_keys`` (base/wizard/base_partner_merge.py) re-points
         ``vmk_event_host.partner_id`` with one bulk ``UPDATE`` that compares no
         values, so an event two merged contacts both hosted holds the survivor
-        twice, unseen by ``_check_partner_unique``. The destination cannot be
-        read before ``super()``: when the wizard passes none, core picks it
-        itself. So every candidate is captured, and the survivor asked for after.
+        twice, unseen by ``_check_partner_unique``. On that event the line that
+        was the survivor's own is the one to keep, with its role and position,
+        and the merged contact's goes: the merge keeps the survivor's name and
+        email the same way. Which lines are whose has to be read before
+        ``super()``, since the raw SQL then points them all at the survivor; and
+        the destination cannot, because when the wizard passes none core picks
+        it itself. So every candidate's lines are captured, and the survivor
+        asked for after.
         """
         partners = self.env["res.partner"].browse(partner_ids).exists()
+        Host = self.env["vmk.event.host"]
+        own_lines = {
+            partner.id: Host.search([("partner_id", "=", partner.id)]).ids for partner in partners
+        }
         result = super()._merge(partner_ids, dst_partner=dst_partner, extra_checks=extra_checks)
         survivor = partners.exists()
         if len(survivor) == 1:
-            self.env["vmk.event.host"]._vmk_dedupe(survivor)
+            Host._vmk_dedupe(survivor, keep=own_lines.get(survivor.id, ()))
         return result
