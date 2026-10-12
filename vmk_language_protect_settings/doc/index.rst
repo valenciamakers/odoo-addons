@@ -19,6 +19,8 @@ There is nothing to configure.
   format, first day of the week, or flag, it will be protected automatically.
 - **The Protect From Updates switch** on the language form shows the status. Switch it off to
   disable protection and start receiving Odoo updates again.
+- **On uninstall**, protection is removed from every language, so they receive Odoo's corrections
+  again.
 
 Enabling, disabling, or reordering a language does not protect it. Translations still update as
 usual; only the language settings are protected.
@@ -38,6 +40,11 @@ Russian, Spanish, Swedish, Turkish, and Ukrainian. If any translation seems inco
 `contact us <mailto:info@valenciamakers.es>`_ and we will fix it.
 
 **Changelog**
+
+*19.0.1.2.1 (12 October 2026)*
+
+- Uninstalling the module now removes protection from the languages. Before, they stayed frozen
+  against Odoo's corrections for good, with no switch left to turn it off.
 
 *19.0.1.2.0 (5 October 2026)*
 

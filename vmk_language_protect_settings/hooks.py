@@ -25,3 +25,23 @@ def protect_enabled_languages(env):
         # blanket protect here would wrongly freeze.
         return
     env["res.lang"].search([])._set_update_protection(True)
+
+
+def restore_language_updates(env):
+    """Hand the languages back to Odoo's updates when this module goes.
+
+    Protection is the ``noupdate`` flag on ``base``'s own ``res.lang`` external ids
+    (``models/res_lang.py``, ``_set_update_protection``), which nothing clears when
+    the module is uninstalled: the languages would stay frozen against core
+    corrections for good, with no field left to untick. So clear it on the same
+    rows. Only ``base``'s ``res.lang`` records ever carry it, and no other module
+    sets it there. Skipped while the module this one was renamed from is still
+    installed, whose protections are still wanted.
+    """
+    if env["ir.module.module"].search_count(
+        [("name", "=", RENAMED_FROM), ("state", "in", ["installed", "to upgrade", "to remove"])]
+    ):
+        return
+    env["ir.model.data"].sudo().search(
+        [("model", "=", "res.lang"), ("module", "=", "base"), ("noupdate", "=", True)]
+    ).noupdate = False
