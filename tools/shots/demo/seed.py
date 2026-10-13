@@ -7,7 +7,7 @@ same state as running it once. Works on both Odoo 18 and 19 -- the two differ in
 slots, handled below by branching on ``odoo.release.series``. For 20, ``commit()`` allows for the
 one difference known so far; it has not been run there yet.
 
-    cd "Odoo Addons - Custom (18.0)"                     # or the 19.0 checkout
+    cd "Odoo Addons - Custom (18.0)"                     # or another series' checkout, with its SERIES
     SERIES=18.0 DB=shots ../../Tech\\ Stack/odoo/dev/odev shell < tools/shots/demo/seed.py
 
 Odoo 18 has no ``event.slot`` model and no demo contacts (``without_demo = all`` in both series'

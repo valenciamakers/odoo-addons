@@ -29,7 +29,7 @@ a Chrome started with remote debugging on port 9222, which had to be running and
 it:
 
 ```bash
-DB=shots ../Tech\ Stack/odoo/dev/odev shell < tools/shots/demo/seed.py   # from the repo root; SERIES=18.0 for 18
+DB=shots ../Tech\ Stack/odoo/dev/odev shell < tools/shots/demo/seed.py   # from the repo root
 ```
 
 It works on both Odoo 18 and 19, branching on `odoo.release.series` where they differ — see the
@@ -81,11 +81,13 @@ uv run tools/shots/recipes/vmk_event_host.py --out /tmp/trial    # a trial run, 
 uv run tools/make_cover.py vmk_event_host                        # then re-render the cover
 ```
 
-For another Odoo series, point the tools at that stack and run them from its checkout — for 18,
-`ODOO_URL=http://localhost:8169`, from `Odoo Addons - Custom (18.0)` — so a recipe writes into the
-18.0 worktree and finds the private repo's 18.0 worktree beside it. Navigation waits for the page to
-load and then up to five seconds of network quiet (`shots.goto`), since Odoo 18's backend never goes
-quiet at all.
+For another Odoo series, run the tools from that series' checkout — `Odoo Addons - Custom (18.0)`
+for 18 — so a recipe writes into the 18.0 worktree and finds the private repo's 18.0 worktree beside
+it. Each checkout's tools default to its own series' stack, which the harness serves on the port
+ending in the series' number (`http://localhost:8020` here); `ODOO_URL` points them elsewhere. The
+harness runs Odoo 20 unless told the series, so only the other checkouts' commands carry a
+`SERIES=`. Navigation waits for the page to load and then up to five seconds of network quiet
+(`shots.goto`), since Odoo 18's backend never goes quiet at all.
 
 Each recipe's docstring lists what it writes. Run against the current demo data they reproduce the
 published images, to within a pixel of cropping.
