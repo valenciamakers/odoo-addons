@@ -32,7 +32,7 @@ from pathlib import Path
 from PIL import Image, ImageOps
 
 import repos
-LUCIDE = "https://cdn.jsdelivr.net/npm/lucide-static@1.47.0/icons/{}.svg"
+LUCIDE = "https://cdn.jsdelivr.net/npm/lucide-static@1.57.0/icons/{}.svg"
 
 SIZE = 256  # the icon, and the glyph's 24px box; Lucide leaves ~2px of the box empty on each side
 PURPLE = (0x53, 0x1B, 0x93, 255)
