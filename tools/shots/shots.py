@@ -6,8 +6,8 @@ See README.md for what the recipes expect to find in the database.
 import os
 import re
 
-# The harness serves each Odoo series on the port ending in its number (8018, 8019, 8020); ODOO_URL picks another.
-BASE = os.environ.get("ODOO_URL", "http://localhost:8020")
+# The harness serves each Odoo series' main stack on its hundred (1800, 1900, 2000); ODOO_URL picks another.
+BASE = os.environ.get("ODOO_URL", "http://localhost:2000")
 
 # Screenshot-only polish, applied after a backend page loads:
 # - hide the unread-messages counter;

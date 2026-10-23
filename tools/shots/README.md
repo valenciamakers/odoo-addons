@@ -83,8 +83,8 @@ uv run tools/make_cover.py vmk_event_host                        # then re-rende
 
 For another Odoo series, run the tools from that series' checkout — `Odoo Addons - Custom (18.0)`
 for 18 — so a recipe writes into the 18.0 worktree and finds the private repo's 18.0 worktree beside
-it. Each checkout's tools default to its own series' stack, which the harness serves on the port
-ending in the series' number (`http://localhost:8020` here); `ODOO_URL` points them elsewhere. The
+it. Each checkout's tools default to its own series' main stack, which the harness serves at the
+start of the series' hundred (`http://localhost:2000` here); `ODOO_URL` points them elsewhere. The
 harness runs Odoo 20 unless told the series, so only the other checkouts' commands carry a
 `SERIES=`. Navigation waits for the page to load and then up to five seconds of network quiet
 (`shots.goto`), since Odoo 18's backend never goes quiet at all.
