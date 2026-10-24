@@ -36,7 +36,9 @@ of the traps below in context.
 This repository follows Odoo's and the OCA's convention: **a branch per Odoo series, named for it**,
 and no `main`. `19.0` holds the Odoo 19 modules and is the default branch; it replaced `main` on 24
 September 2026, with the same commits. The Apps Store reads a repository by its series branches.
-Another series starts as a branch of `19.0`, which then carries fixes for Odoo 19 installs only.
+Another series starts as a branch of `19.0`. A fix lands on `20.0` first and is carried back here
+where it applies, with a version bump of its own (since 24 October 2026; before that, fixes landed
+here first).
 
 **A module that is not ready for a series is `"installable": False` on that branch.** The Apps Store
 scans every series branch by itself and lists what it finds installable, so pushing a branch
