@@ -1,9 +1,10 @@
-"""Where a module and its store-asset sources live: this repo, or the private one beside it.
+"""Where a module and its store-asset sources live: this repo, or a private one beside it.
 
 The tools are published here, but not every module they serve is. The Private repo's modules sit in
 ../Odoo Addons - Private (20.0), and their icon, cover, and screenshot sources in that repo's own tools/, in
-the same layout as ours, since they describe modules we do not publish. Every lookup tries this repo
-first, then that one, and a machine without the Private repo simply never finds it.
+the same layout as ours, since they describe modules we do not publish. The Internal repo, beside it,
+holds modules we never release, laid out the same way. Every lookup tries this repo first, then
+Private, then Internal, and a machine without either simply never finds it.
 
 A cover in the Private repo takes the shared stylesheet from here, by relative path:
 <link rel="stylesheet" href="../../../Odoo%20Addons%20-%20Custom/tools/covers/cover.css">
@@ -15,7 +16,8 @@ PUBLIC = Path(__file__).resolve().parent.parent
 # The same checkout series as this one: "Odoo Addons - Custom (18.0)" pairs with
 # "Odoo Addons - Private (18.0)", and so on for each series.
 PRIVATE = PUBLIC.parent / PUBLIC.name.replace("Custom", "Private", 1)
-REPOS = [repo for repo in (PUBLIC, PRIVATE) if repo.is_dir()]
+INTERNAL = PUBLIC.parent / PUBLIC.name.replace("Custom", "Internal", 1)
+REPOS = [repo for repo in (PUBLIC, PRIVATE, INTERNAL) if repo.is_dir()]
 
 
 def module_dir(module):
