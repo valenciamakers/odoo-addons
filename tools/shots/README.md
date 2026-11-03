@@ -10,13 +10,13 @@ where a recipe needs one. Recipes add their own capture-only CSS, such as hiding
 field.
 
 **The tools serve the Private repo's modules too.** `tools/repos.py` finds a module, and its icon,
-cover, and recipe sources, in this repo or in `../Odoo Addons - Private (20.0)`, whose `tools/`
-keeps the same layout. Those sources stay there because they describe modules we do not publish; a
-Private recipe imports `shots.py` from here.
+cover, and recipe sources, in this repo or in `../Private`, whose `tools/` keeps the same layout.
+Those sources stay there because they describe modules we do not publish; a Private recipe imports
+`shots.py` from here.
 
 ## What the recipes need
 
-**A local Odoo with these modules installed**, from `../Tech Stack/odoo/dev`, serving the scratch
+**A local Odoo with these modules installed**, from `Tech Stack/odoo/dev`, serving the scratch
 database the demo data lives in (`./odev db use shots && ./odev up`).
 
 **Nothing else to start.** Backend captures run in a headless Chromium of their own, logged in as
@@ -29,7 +29,7 @@ a Chrome started with remote debugging on port 9222, which had to be running and
 it:
 
 ```bash
-DB=shots ../Tech\ Stack/odoo/dev/odev shell < tools/shots/demo/seed.py   # from the repo root
+DB=shots odev shell < tools/shots/demo/seed.py   # from the repo root
 ```
 
 It works on both Odoo 18 and 19, branching on `odoo.release.series` where they differ — see the
@@ -53,7 +53,7 @@ ordinary event rather than a multi-slot one. What it makes:
 
 ```bash
 (cat tools/shots/demo/seed.py; echo "open_studio_evening(env)") | \
-    DB=shots ../Tech\ Stack/odoo/dev/odev shell
+    DB=shots odev shell
 ```
 
 - for the sort modules, a spread of Odoo's own apps: CRM, Sales, Invoicing, Inventory, Purchase,
@@ -81,13 +81,13 @@ uv run tools/shots/recipes/vmk_event_host.py --out /tmp/trial    # a trial run, 
 uv run tools/make_cover.py vmk_event_host                        # then re-render the cover
 ```
 
-For another Odoo series, run the tools from that series' checkout — `Odoo Addons - Custom (18.0)`
-for 18 — so a recipe writes into the 18.0 worktree and finds the private repo's 18.0 worktree beside
-it. Each checkout's tools default to its own series' main stack, which the harness serves at the
-start of the series' hundred (`http://localhost:2000` here); `ODOO_URL` points them elsewhere. The
-harness runs Odoo 20 unless told the series, so only the other checkouts' commands carry a
-`SERIES=`. Navigation waits for the page to load and then up to five seconds of network quiet
-(`shots.goto`), since Odoo 18's backend never goes quiet at all.
+For another Odoo series, run the tools from that series' checkout —
+`Odoo/Versions/18.0/Addons/Custom` for 18 — so a recipe writes into the 18.0 worktree and finds the
+private repo's 18.0 worktree beside it. Each checkout's tools default to its own series' main stack,
+which the harness serves at the start of the series' hundred (`http://localhost:2000` here);
+`ODOO_URL` points them elsewhere. The harness runs Odoo 20 unless told the series, so only the other
+checkouts' commands carry a `SERIES=`. Navigation waits for the page to load and then up to five
+seconds of network quiet (`shots.goto`), since Odoo 18's backend never goes quiet at all.
 
 Each recipe's docstring lists what it writes. Run against the current demo data they reproduce the
 published images, to within a pixel of cropping.
