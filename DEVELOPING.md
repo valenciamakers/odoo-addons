@@ -25,6 +25,8 @@ was verified against the series of the branch you are reading.
   registration modal; `auto_install`.
 - **`vmk_partner_email_multiple`** — several email addresses per contact, matched by Odoo's own
   machinery, and kept rather than dropped when contacts are merged.
+- **`vmk_website_disable_tracking`** — switches off Odoo's website visitor tracking on every website
+  when installed, with a Track Visitors setting to turn it back on per website.
 - **`tools/`** — not a module. `make_icon.py` renders each module's store icon from the glyphs in
   `tools/icons/`; see _Store icons_ under the authoring conventions.
 

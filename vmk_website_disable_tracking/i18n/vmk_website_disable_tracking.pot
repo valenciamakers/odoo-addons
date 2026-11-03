@@ -1,0 +1,70 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* vmk_website_disable_tracking
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 20.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-03 18:25+0000\n"
+"PO-Revision-Date: 2026-11-03 18:25+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: vmk_website_disable_tracking
+#: model:ir.model,name:vmk_website_disable_tracking.model_res_config_settings
+msgid "Config Settings"
+msgstr ""
+
+#. module: vmk_website_disable_tracking
+#: model:ir.module.module,shortdesc:base.module_vmk_website_disable_tracking
+msgid "Disable Visitor Tracking"
+msgstr ""
+
+#. module: vmk_website_disable_tracking
+#: model:ir.model.fields,field_description:vmk_website_disable_tracking.field_ir_http__display_name
+#: model:ir.model.fields,field_description:vmk_website_disable_tracking.field_res_config_settings__display_name
+#: model:ir.model.fields,field_description:vmk_website_disable_tracking.field_website__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: vmk_website_disable_tracking
+#: model:ir.model,name:vmk_website_disable_tracking.model_ir_http
+msgid "HTTP Routing"
+msgstr ""
+
+#. module: vmk_website_disable_tracking
+#: model:ir.model.fields,field_description:vmk_website_disable_tracking.field_ir_http__id
+#: model:ir.model.fields,field_description:vmk_website_disable_tracking.field_res_config_settings__id
+#: model:ir.model.fields,field_description:vmk_website_disable_tracking.field_website__id
+msgid "ID"
+msgstr ""
+
+#. module: vmk_website_disable_tracking
+#: model:ir.model.fields,help:vmk_website_disable_tracking.field_res_config_settings__website_vmk_track_visitors
+#: model:ir.model.fields,help:vmk_website_disable_tracking.field_website__vmk_track_visitors
+#: model_terms:ir.ui.view,arch_db:vmk_website_disable_tracking.res_config_settings_view_form
+msgid ""
+"Record each visitor and the pages they view, under Website › Reporting › "
+"Visitors. Off, the website records no visitors at all."
+msgstr ""
+
+#. module: vmk_website_disable_tracking
+#: model:ir.module.module,summary:base.module_vmk_website_disable_tracking
+msgid "Switch off Odoo's website visitor tracking, per website"
+msgstr ""
+
+#. module: vmk_website_disable_tracking
+#: model:ir.model.fields,field_description:vmk_website_disable_tracking.field_res_config_settings__website_vmk_track_visitors
+#: model:ir.model.fields,field_description:vmk_website_disable_tracking.field_website__vmk_track_visitors
+msgid "Track Visitors"
+msgstr ""
+
+#. module: vmk_website_disable_tracking
+#: model:ir.model,name:vmk_website_disable_tracking.model_website
+msgid "Website"
+msgstr ""

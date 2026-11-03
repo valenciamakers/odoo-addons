@@ -35,6 +35,9 @@ They depend only on Odoo Community modules, so they work on Community and Enterp
 - **[`vmk_website_event_slot_multiday`](vmk_website_event_slot_multiday)** — show both days of a
   multi-day slot to a visitor picking it on the event page. Installs itself alongside Website
   Events.
+- **[`vmk_website_disable_tracking`](vmk_website_disable_tracking)** — switch off Odoo's website
+  visitor tracking on every website the moment the module is installed, with a Track Visitors
+  setting to turn it back on for any one website.
 
 Each module's own `README.md` explains why it is built the way it is — which core method fights you,
 and where. That is usually the interesting part.
