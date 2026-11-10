@@ -91,8 +91,14 @@ const pickRange = ({ from, to, startTime, endTime }) => [
     },
 ];
 
-/** Pick a day by its date in the slot calendar's month view. */
-const dayCell = (isoDate) => `.o_calendar_widget .fc-day[data-date="${isoDate}"]`;
+/**
+ * Pick a day of the month the slot calendar shows, by its number. The test
+ * puts the event in the month the suite runs in, which the calendar opens on;
+ * `:not(.fc-day-other)` keeps the neighbouring months' days, drawn at the
+ * month view's edges, from matching the same number.
+ */
+const dayCell = (day) =>
+    `.o_calendar_widget .fc-day:not(.fc-day-other)[data-date$="-${String(day).padStart(2, "0")}"]`;
 
 // An existing one-day slot is given a three-day range on its own form.
 registry.category("web_tour.tours").add("vmk_event_slot_multiday_edit_range", {
@@ -174,15 +180,15 @@ registry.category("web_tour.tours").add("vmk_event_slot_multiday_calendar_multi_
         ...openSlotCalendar,
         {
             content: "Select the 13th",
-            trigger: dayCell("2026-10-13"),
+            trigger: dayCell(13),
             run: "click",
         },
         {
             content: "Add the 14th to the selection, with Ctrl held",
-            trigger: dayCell("2026-10-14"),
+            trigger: dayCell(14),
             async run({ click }) {
                 await hoot.keyDown("Control");
-                await click(dayCell("2026-10-14"));
+                await click(dayCell(14));
                 await hoot.keyUp("Control");
             },
         },
@@ -190,7 +196,7 @@ registry.category("web_tour.tours").add("vmk_event_slot_multiday_calendar_multi_
             // The box counts existing slots under the selection, so on two
             // empty days it reads "0 selected": check the days instead.
             content: "Both days are highlighted and the Add button shows",
-            trigger: `${dayCell("2026-10-13")}.o-highlight, ${dayCell("2026-10-14")}.o-highlight`,
+            trigger: `${dayCell(13)}.o-highlight, ${dayCell(14)}.o-highlight`,
         },
         {
             content: "The selection box is shown",
@@ -218,7 +224,7 @@ registry.category("web_tour.tours").add("vmk_event_slot_multiday_calendar_multi_
         },
         {
             content: "Both slots are drawn",
-            trigger: `body:not(:has(.o_multi_create_popover)) ${dayCell("2026-10-14")} .fc-event`,
+            trigger: `body:not(:has(.o_multi_create_popover)) ${dayCell(14)} .fc-event`,
         },
     ],
 });
