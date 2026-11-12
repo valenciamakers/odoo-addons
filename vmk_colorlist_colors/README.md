@@ -25,6 +25,24 @@ In **Settings › General Settings › Colors**, **Edit Colors** opens the eleve
 
 Only users with the Settings access right (Administration › Settings) reach the list.
 
+### Colors some apps give a meaning
+
+Most colors are only what someone picked for a tag, a stage, or a calendar, and any of them can be
+replaced. A few of Odoo's apps, though, set a record's color themselves, as a traffic light. A color
+replaced with one of another kind loses that meaning there: keep Red a red, Orange an orange, and
+Green a green, tuned to your palette, if you run any of these apps.
+
+| Color        | Means              | Where Odoo sets it                                                                                                        |
+| ------------ | ------------------ | ------------------------------------------------------------------------------------------------------------------------- |
+| Red          | Something is wrong | Attendances: a shift over 16 hours, or a missed check-out. Helpdesk: an SLA failed. Helpdesk timesheets: hours overspent. |
+| Orange       | A warning          | Helpdesk timesheets: hours used up. Gamification: a goal failed. ESG: data out of date.                                   |
+| Green        | All is well        | Attendances: checked in now. Helpdesk: an SLA reached.                                                                    |
+| Purple, Teal | Done, up to date   | Gamification: a goal reached (Purple). ESG: data up to date (Teal).                                                       |
+
+A few screens also draw a label in a fixed color: in Point of Sale for restaurants, a table in Red
+and the selected course in Green; some ShipStation shipping labels; a recipient in Mail in Cyan.
+Checked against Odoo 20 Community and Enterprise on 12 November 2026.
+
 ## For developers
 
 ### Where Odoo's colors come from
