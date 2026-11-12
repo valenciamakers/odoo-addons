@@ -18,8 +18,8 @@ msgstr ""
 
 #. module: vmk_event_series
 #: model_terms:ir.ui.view,arch_db:vmk_event_series.vmk_event_series_view_form
-msgid "<span class=\"o_stat_text\">Upcoming</span>"
-msgstr "<span class=\"o_stat_text\">Propers</span>"
+msgid "<span class=\"o_stat_text\">Upcoming Events</span>"
+msgstr "<span class=\"o_stat_text\">Propers esdeveniments</span>"
 
 #. module: vmk_event_series
 #: model_terms:ir.ui.view,arch_db:vmk_event_series.vmk_event_series_view_kanban
@@ -61,6 +61,15 @@ msgstr "Actiu"
 #: model_terms:ir.ui.view,arch_db:vmk_event_series.vmk_event_series_view_search
 msgid "Archived"
 msgstr "Arxivat"
+
+#. module: vmk_event_series
+#: model:ir.model.fields,help:vmk_event_series.field_vmk_event_series__event_type_id
+msgid ""
+"Choose a template to auto-fill tickets, communications, descriptions and "
+"other fields."
+msgstr ""
+"Trieu una plantilla per completar automàticament les entrades, les "
+"comunicacions, les descripcions i altres camps."
 
 #. module: vmk_event_series
 #: model:ir.model.fields,field_description:vmk_event_series.field_vmk_event_series__company_id
@@ -141,11 +150,6 @@ msgid "Last Updated on"
 msgstr "Última actualització el"
 
 #. module: vmk_event_series
-#: model:ir.model.fields,field_description:vmk_event_series.field_vmk_event_series__name
-msgid "Name"
-msgstr "Nom"
-
-#. module: vmk_event_series
 #. odoo-python
 #: code:addons/vmk_event_series/models/vmk_event_series.py:0
 #: model_terms:ir.ui.view,arch_db:vmk_event_series.vmk_event_series_view_form
@@ -170,6 +174,11 @@ msgid "Series"
 msgstr "Sèries"
 
 #. module: vmk_event_series
+#: model:ir.model.fields,field_description:vmk_event_series.field_vmk_event_series__name
+msgid "Series Name"
+msgstr "Nom de la sèrie"
+
+#. module: vmk_event_series
 #: model:ir.model.fields,field_description:vmk_event_series.field_vmk_event_series__subtitle
 msgid "Subtitle"
 msgstr "Subtítol"
@@ -178,15 +187,6 @@ msgstr "Subtítol"
 #: model:ir.model.fields,field_description:vmk_event_series.field_vmk_event_series__event_type_id
 msgid "Template"
 msgstr "Plantilla"
-
-#. module: vmk_event_series
-#: model:ir.model.fields,help:vmk_event_series.field_vmk_event_series__event_type_id
-msgid ""
-"The template a new date starts from: its tickets, communications, and the "
-"rest."
-msgstr ""
-"La plantilla de la qual parteix una data nova: les seves entrades, "
-"comunicacions i la resta."
 
 #. module: vmk_event_series
 #: model:ir.model.fields,field_description:vmk_event_series.field_vmk_event_series__upcoming_event_count

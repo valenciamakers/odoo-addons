@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 20.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-12 20:01+0000\n"
-"PO-Revision-Date: 2026-11-12 20:01+0000\n"
+"POT-Creation-Date: 2026-11-12 20:10+0000\n"
+"PO-Revision-Date: 2026-11-12 20:10+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -17,7 +17,7 @@ msgstr ""
 
 #. module: vmk_event_series
 #: model_terms:ir.ui.view,arch_db:vmk_event_series.vmk_event_series_view_form
-msgid "<span class=\"o_stat_text\">Upcoming</span>"
+msgid "<span class=\"o_stat_text\">Upcoming Events</span>"
 msgstr ""
 
 #. module: vmk_event_series
@@ -54,6 +54,13 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:vmk_event_series.vmk_event_series_view_form
 #: model_terms:ir.ui.view,arch_db:vmk_event_series.vmk_event_series_view_search
 msgid "Archived"
+msgstr ""
+
+#. module: vmk_event_series
+#: model:ir.model.fields,help:vmk_event_series.field_vmk_event_series__event_type_id
+msgid ""
+"Choose a template to auto-fill tickets, communications, descriptions and "
+"other fields."
 msgstr ""
 
 #. module: vmk_event_series
@@ -135,11 +142,6 @@ msgid "Last Updated on"
 msgstr ""
 
 #. module: vmk_event_series
-#: model:ir.model.fields,field_description:vmk_event_series.field_vmk_event_series__name
-msgid "Name"
-msgstr ""
-
-#. module: vmk_event_series
 #. odoo-python
 #: code:addons/vmk_event_series/models/vmk_event_series.py:0
 #: model_terms:ir.ui.view,arch_db:vmk_event_series.vmk_event_series_view_form
@@ -164,6 +166,11 @@ msgid "Series"
 msgstr ""
 
 #. module: vmk_event_series
+#: model:ir.model.fields,field_description:vmk_event_series.field_vmk_event_series__name
+msgid "Series Name"
+msgstr ""
+
+#. module: vmk_event_series
 #: model:ir.model.fields,field_description:vmk_event_series.field_vmk_event_series__subtitle
 msgid "Subtitle"
 msgstr ""
@@ -171,13 +178,6 @@ msgstr ""
 #. module: vmk_event_series
 #: model:ir.model.fields,field_description:vmk_event_series.field_vmk_event_series__event_type_id
 msgid "Template"
-msgstr ""
-
-#. module: vmk_event_series
-#: model:ir.model.fields,help:vmk_event_series.field_vmk_event_series__event_type_id
-msgid ""
-"The template a new date starts from: its tickets, communications, and the "
-"rest."
 msgstr ""
 
 #. module: vmk_event_series

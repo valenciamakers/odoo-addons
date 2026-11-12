@@ -12,7 +12,7 @@ tours.add("vmk_event_series_new_event_tour", {
     steps: () => [
         {
             content: "the series counts its upcoming events",
-            trigger: `.o_form_view button[name="action_view_events"] .o_stat_value:contains("1")`,
+            trigger: `.o_form_view button[name="action_view_events"]:contains("Upcoming Events") .o_stat_value:contains("1")`,
         },
         {
             content: "add an event",

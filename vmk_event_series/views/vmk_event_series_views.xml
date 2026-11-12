@@ -16,7 +16,7 @@
                                 class="oe_stat_button" icon="event">
                             <div class="o_stat_info">
                                 <field name="upcoming_event_count" class="o_stat_value"/>
-                                <span class="o_stat_text">Upcoming</span>
+                                <span class="o_stat_text">Upcoming Events</span>
                             </div>
                         </button>
                     </div>

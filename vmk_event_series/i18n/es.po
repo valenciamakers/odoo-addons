@@ -18,8 +18,8 @@ msgstr ""
 
 #. module: vmk_event_series
 #: model_terms:ir.ui.view,arch_db:vmk_event_series.vmk_event_series_view_form
-msgid "<span class=\"o_stat_text\">Upcoming</span>"
-msgstr "<span class=\"o_stat_text\">Próximos</span>"
+msgid "<span class=\"o_stat_text\">Upcoming Events</span>"
+msgstr "<span class=\"o_stat_text\">Próximos eventos</span>"
 
 #. module: vmk_event_series
 #: model_terms:ir.ui.view,arch_db:vmk_event_series.vmk_event_series_view_kanban
@@ -60,6 +60,15 @@ msgstr "Activo"
 #: model_terms:ir.ui.view,arch_db:vmk_event_series.vmk_event_series_view_search
 msgid "Archived"
 msgstr "Archivado"
+
+#. module: vmk_event_series
+#: model:ir.model.fields,help:vmk_event_series.field_vmk_event_series__event_type_id
+msgid ""
+"Choose a template to auto-fill tickets, communications, descriptions and "
+"other fields."
+msgstr ""
+"Elija una plantilla para completar sus entradas, comunicaciones, "
+"descripciones y otros campos automáticamente."
 
 #. module: vmk_event_series
 #: model:ir.model.fields,field_description:vmk_event_series.field_vmk_event_series__company_id
@@ -140,11 +149,6 @@ msgid "Last Updated on"
 msgstr "Última actualización el"
 
 #. module: vmk_event_series
-#: model:ir.model.fields,field_description:vmk_event_series.field_vmk_event_series__name
-msgid "Name"
-msgstr "Nombre"
-
-#. module: vmk_event_series
 #. odoo-python
 #: code:addons/vmk_event_series/models/vmk_event_series.py:0
 #: model_terms:ir.ui.view,arch_db:vmk_event_series.vmk_event_series_view_form
@@ -169,6 +173,11 @@ msgid "Series"
 msgstr "Series"
 
 #. module: vmk_event_series
+#: model:ir.model.fields,field_description:vmk_event_series.field_vmk_event_series__name
+msgid "Series Name"
+msgstr "Nombre de la serie"
+
+#. module: vmk_event_series
 #: model:ir.model.fields,field_description:vmk_event_series.field_vmk_event_series__subtitle
 msgid "Subtitle"
 msgstr "Subtítulo"
@@ -177,15 +186,6 @@ msgstr "Subtítulo"
 #: model:ir.model.fields,field_description:vmk_event_series.field_vmk_event_series__event_type_id
 msgid "Template"
 msgstr "Plantilla"
-
-#. module: vmk_event_series
-#: model:ir.model.fields,help:vmk_event_series.field_vmk_event_series__event_type_id
-msgid ""
-"The template a new date starts from: its tickets, communications, and the "
-"rest."
-msgstr ""
-"La plantilla de la que parte una fecha nueva: sus entradas, comunicaciones y"
-" lo demás."
 
 #. module: vmk_event_series
 #: model:ir.model.fields,field_description:vmk_event_series.field_vmk_event_series__upcoming_event_count

@@ -15,7 +15,7 @@ class VmkEventSeries(models.Model):
     _description = "Event Series"
     _order = "sequence, name, id"
 
-    name = fields.Char(required=True, translate=True)
+    name = fields.Char(string="Series Name", required=True, translate=True)
     subtitle = fields.Char(translate=True)
     description = fields.Html(
         translate=html_translate, sanitize_attributes=False, sanitize_form=False
@@ -29,7 +29,8 @@ class VmkEventSeries(models.Model):
     event_type_id = fields.Many2one(
         "event.type",
         string="Template",
-        help="The template a new date starts from: its tickets, communications, and the rest.",
+        # Core's own help for an event's template, word for word.
+        help="Choose a template to auto-fill tickets, communications, descriptions and other fields.",
     )
     event_ids = fields.One2many("event.event", "series_id", string="Events")
     event_count = fields.Integer(string="Event Count", compute="_compute_event_counts")

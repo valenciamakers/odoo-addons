@@ -17,7 +17,7 @@ LGPL-3, © 2026 Valencia Makers, SL.
   event.
 - **An event's Series field**, beside Template on the event form, puts an existing event in a
   series. It fills nothing in: unlike the template, it is only a link.
-- **The Upcoming button** on a series opens its events. Upcoming counts the current and upcoming
+- **The Upcoming Events button** on a series opens its events. It counts the current and upcoming
   dates: events that have not yet ended.
 - **Events can be searched and grouped by series**, and the events list has a Series column.
 - **A series with events cannot be deleted**, only archived, so no event is left pointing at
