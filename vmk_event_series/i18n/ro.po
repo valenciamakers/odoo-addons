@@ -1,0 +1,205 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* vmk_event_series
+#
+# Generated, and written afresh on every run: do not edit by hand. Core's
+# wording where core has the same English, ours otherwise. See DEVELOPING.md.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 20.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-12 18:12+0000\n"
+"PO-Revision-Date: 2026-11-12 18:12+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ro\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < 20)) ? 1 : 2;\n"
+
+#. module: vmk_event_series
+#: model_terms:ir.ui.view,arch_db:vmk_event_series.vmk_event_series_view_form
+msgid "<span class=\"o_stat_text\">Upcoming</span>"
+msgstr ""
+
+#. module: vmk_event_series
+#: model_terms:ir.ui.view,arch_db:vmk_event_series.vmk_event_series_view_kanban
+msgid "<span class=\"text-muted\">Next: </span>"
+msgstr ""
+
+#. module: vmk_event_series
+#: model_terms:ir.ui.view,arch_db:vmk_event_series.vmk_event_series_view_kanban
+msgid "<span class=\"text-muted\">Upcoming: </span>"
+msgstr ""
+
+#. module: vmk_event_series
+#: model_terms:ir.actions.act_window,help:vmk_event_series.vmk_event_series_action
+msgid ""
+"A series is an event you run again and again, such as a monthly workshop. "
+"Each date is an event of its own; the series holds what they share."
+msgstr ""
+
+#. module: vmk_event_series
+#. odoo-python
+#: code:addons/vmk_event_series/models/vmk_event_series.py:0
+msgid ""
+"A series with events cannot be deleted. Archive it instead, or move its "
+"events to another series first."
+msgstr ""
+
+#. module: vmk_event_series
+#: model:ir.model.fields,field_description:vmk_event_series.field_vmk_event_series__active
+msgid "Active"
+msgstr "Activ"
+
+#. module: vmk_event_series
+#: model_terms:ir.ui.view,arch_db:vmk_event_series.vmk_event_series_view_form
+#: model_terms:ir.ui.view,arch_db:vmk_event_series.vmk_event_series_view_search
+msgid "Archived"
+msgstr "Arhivat"
+
+#. module: vmk_event_series
+#: model:ir.model.fields,field_description:vmk_event_series.field_vmk_event_series__company_id
+msgid "Company"
+msgstr "Companie"
+
+#. module: vmk_event_series
+#: model_terms:ir.actions.act_window,help:vmk_event_series.vmk_event_series_action
+msgid "Create a series"
+msgstr ""
+
+#. module: vmk_event_series
+#: model:ir.model.fields,field_description:vmk_event_series.field_vmk_event_series__create_uid
+msgid "Created by"
+msgstr "Creat de"
+
+#. module: vmk_event_series
+#: model:ir.model.fields,field_description:vmk_event_series.field_vmk_event_series__create_date
+msgid "Created on"
+msgstr "Creat în"
+
+#. module: vmk_event_series
+#: model:ir.model.fields,field_description:vmk_event_series.field_vmk_event_series__description
+#: model_terms:ir.ui.view,arch_db:vmk_event_series.vmk_event_series_view_form
+msgid "Description"
+msgstr "Descriere"
+
+#. module: vmk_event_series
+#: model:ir.model.fields,field_description:vmk_event_series.field_event_event__display_name
+#: model:ir.model.fields,field_description:vmk_event_series.field_vmk_event_series__display_name
+msgid "Display Name"
+msgstr "Nume afișat"
+
+#. module: vmk_event_series
+#: model:ir.model,name:vmk_event_series.model_event_event
+msgid "Event"
+msgstr "Eveniment"
+
+#. module: vmk_event_series
+#: model:ir.model.fields,field_description:vmk_event_series.field_vmk_event_series__event_count
+msgid "Event Count"
+msgstr ""
+
+#. module: vmk_event_series
+#: model:ir.actions.act_window,name:vmk_event_series.vmk_event_series_action
+#: model:ir.model,name:vmk_event_series.model_vmk_event_series
+#: model:ir.module.module,shortdesc:base.module_vmk_event_series
+#: model:ir.ui.menu,name:vmk_event_series.vmk_event_series_menu
+#: model_terms:ir.ui.view,arch_db:vmk_event_series.vmk_event_series_view_form
+#: model_terms:ir.ui.view,arch_db:vmk_event_series.vmk_event_series_view_list
+#: model_terms:ir.ui.view,arch_db:vmk_event_series.vmk_event_series_view_search
+msgid "Event Series"
+msgstr ""
+
+#. module: vmk_event_series
+#: model:ir.model.fields,field_description:vmk_event_series.field_vmk_event_series__event_ids
+msgid "Events"
+msgstr "Evenimente"
+
+#. module: vmk_event_series
+#: model:ir.module.module,summary:base.module_vmk_event_series
+msgid "Group the dates of an event you run again and again into one series"
+msgstr ""
+
+#. module: vmk_event_series
+#: model:ir.model.fields,field_description:vmk_event_series.field_event_event__id
+#: model:ir.model.fields,field_description:vmk_event_series.field_vmk_event_series__id
+msgid "ID"
+msgstr "ID"
+
+#. module: vmk_event_series
+#: model:ir.model.fields,field_description:vmk_event_series.field_vmk_event_series__write_uid
+msgid "Last Updated by"
+msgstr "Ultima actualizare făcută de"
+
+#. module: vmk_event_series
+#: model:ir.model.fields,field_description:vmk_event_series.field_vmk_event_series__write_date
+msgid "Last Updated on"
+msgstr "Ultima actualizare pe"
+
+#. module: vmk_event_series
+#: model:ir.model.fields,field_description:vmk_event_series.field_vmk_event_series__name
+msgid "Name"
+msgstr "Nume"
+
+#. module: vmk_event_series
+#. odoo-python
+#: code:addons/vmk_event_series/models/vmk_event_series.py:0
+#: model_terms:ir.ui.view,arch_db:vmk_event_series.vmk_event_series_view_form
+msgid "New Date"
+msgstr ""
+
+#. module: vmk_event_series
+#: model:ir.model.fields,field_description:vmk_event_series.field_vmk_event_series__next_event_id
+msgid "Next Event"
+msgstr ""
+
+#. module: vmk_event_series
+#: model:ir.model.fields,field_description:vmk_event_series.field_vmk_event_series__sequence
+msgid "Sequence"
+msgstr "Secvență"
+
+#. module: vmk_event_series
+#: model:ir.model.fields,field_description:vmk_event_series.field_event_event__series_id
+#: model_terms:ir.ui.view,arch_db:vmk_event_series.view_event_search_series
+msgid "Series"
+msgstr "Serii"
+
+#. module: vmk_event_series
+#: model:ir.model.fields,field_description:vmk_event_series.field_vmk_event_series__subtitle
+msgid "Subtitle"
+msgstr "Subtitlu"
+
+#. module: vmk_event_series
+#: model:ir.model.fields,field_description:vmk_event_series.field_vmk_event_series__event_type_id
+msgid "Template"
+msgstr "Șablon"
+
+#. module: vmk_event_series
+#: model:ir.model.fields,help:vmk_event_series.field_vmk_event_series__event_type_id
+msgid ""
+"The template a new date starts from: its tickets, communications, and the "
+"rest."
+msgstr ""
+
+#. module: vmk_event_series
+#: model:ir.model.fields,field_description:vmk_event_series.field_vmk_event_series__upcoming_event_count
+msgid "Upcoming Events"
+msgstr "Evenimente Viitoare"
+
+#. module: vmk_event_series
+#: model_terms:ir.ui.view,arch_db:vmk_event_series.vmk_event_series_view_form
+msgid "What every date of this series is about"
+msgstr ""
+
+#. module: vmk_event_series
+#: model_terms:ir.ui.view,arch_db:vmk_event_series.vmk_event_series_view_form
+msgid "e.g. From a blank screen to a finished print in one evening"
+msgstr ""
+
+#. module: vmk_event_series
+#: model_terms:ir.ui.view,arch_db:vmk_event_series.vmk_event_series_view_form
+msgid "e.g. Intro to 3D Printing"
+msgstr ""

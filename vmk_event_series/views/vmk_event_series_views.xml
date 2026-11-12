@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="vmk_event_series_view_form" model="ir.ui.view">
+        <field name="name">vmk.event.series.form</field>
+        <field name="model">vmk.event.series</field>
+        <field name="arch" type="xml">
+            <form string="Event Series">
+                <header>
+                    <button name="action_new_date" type="object" string="New Date"
+                            class="btn-primary" invisible="not id"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_events" type="object"
+                                class="oe_stat_button" icon="event">
+                            <div class="o_stat_info">
+                                <field name="upcoming_event_count" class="o_stat_value"/>
+                                <span class="o_stat_text">Upcoming</span>
+                            </div>
+                        </button>
+                    </div>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger"
+                            invisible="active"/>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="e.g. Intro to 3D Printing"/></h1>
+                        <field name="subtitle" placeholder="e.g. From a blank screen to a finished print in one evening"/>
+                    </div>
+                    <group>
+                        <group name="series_details">
+                            <field name="event_type_id"/>
+                            <field name="next_event_id"/>
+                        </group>
+                        <group name="series_other">
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="active" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description" name="description">
+                            <field name="description" placeholder="What every date of this series is about"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="vmk_event_series_view_list" model="ir.ui.view">
+        <field name="name">vmk.event.series.list</field>
+        <field name="model">vmk.event.series</field>
+        <field name="arch" type="xml">
+            <list string="Event Series">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="next_event_id"/>
+                <field name="upcoming_event_count"/>
+                <field name="event_type_id" optional="hide"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="vmk_event_series_view_kanban" model="ir.ui.view">
+        <field name="name">vmk.event.series.kanban</field>
+        <field name="model">vmk.event.series</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <templates>
+                    <t t-name="card">
+                        <field name="name" class="fw-bold fs-5"/>
+                        <field name="subtitle" class="text-muted"/>
+                        <div class="mt-2">
+                            <span class="text-muted">Next: </span>
+                            <field name="next_event_id"/>
+                        </div>
+                        <footer>
+                            <span class="text-muted">Upcoming: </span><field name="upcoming_event_count"/>
+                        </footer>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="vmk_event_series_view_search" model="ir.ui.view">
+        <field name="name">vmk.event.series.search</field>
+        <field name="model">vmk.event.series</field>
+        <field name="arch" type="xml">
+            <search string="Event Series">
+                <field name="name"/>
+                <field name="event_type_id"/>
+                <separator/>
+                <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="vmk_event_series_action" model="ir.actions.act_window">
+        <field name="name">Event Series</field>
+        <field name="res_model">vmk.event.series</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="path">event-series</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create a series</p>
+            <p>A series is an event you run again and again, such as a monthly workshop. Each date is an event of its own; the series holds what they share.</p>
+        </field>
+    </record>
+
+    <menuitem id="vmk_event_series_menu"
+              name="Event Series"
+              action="vmk_event_series_action"
+              parent="event.event_main_menu"
+              sequence="2"
+              groups="event.group_event_user"/>
+
+</odoo>

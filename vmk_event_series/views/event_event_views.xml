@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Beside the template, which a series also names: each fills a field
+         of its own, and only the template fills in anything else. -->
+    <record id="view_event_form_series" model="ir.ui.view">
+        <field name="name">event.event.form.series</field>
+        <field name="model">event.event</field>
+        <field name="inherit_id" ref="event.view_event_form"/>
+        <field name="arch" type="xml">
+            <field name="event_type_id" position="after">
+                <field name="series_id"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_event_tree_series" model="ir.ui.view">
+        <field name="name">event.event.list.series</field>
+        <field name="model">event.event</field>
+        <field name="inherit_id" ref="event.view_event_tree"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="series_id" optional="show"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_event_search_series" model="ir.ui.view">
+        <field name="name">event.event.search.series</field>
+        <field name="model">event.event</field>
+        <field name="inherit_id" ref="event.view_event_search"/>
+        <field name="arch" type="xml">
+            <field name="event_type_id" position="after">
+                <field name="series_id"/>
+            </field>
+            <filter name="event_type_id" position="after">
+                <filter string="Series" name="series_id" context="{'group_by': 'series_id'}"/>
+            </filter>
+        </field>
+    </record>
+
+</odoo>
