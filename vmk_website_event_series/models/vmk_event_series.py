@@ -19,10 +19,21 @@ class VmkEventSeries(models.Model):
         "website.cover_properties.mixin",
     ]
 
+    def _default_description(self):
+        # As event.event's: rendering_bundle=True keeps the template's
+        # branding out of the stored HTML.
+        return self.env["ir.ui.view"].with_context(rendering_bundle=True)._render_template(
+            "vmk_website_event_series.series_default_description"
+        )
+
     # Written on the series' page in the website editor, as an event's is:
-    # neither form shows it.
+    # neither form shows it. A new series starts with a sample block, as a
+    # new event does.
     description = fields.Html(
-        translate=html_translate, sanitize_attributes=False, sanitize_form=False
+        translate=html_translate,
+        sanitize_attributes=False,
+        sanitize_form=False,
+        default=_default_description,
     )
 
     def _compute_website_url(self):

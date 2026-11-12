@@ -93,4 +93,15 @@
     </t>
 </template>
 
+<!-- A new series' description, as event.event_default_descripton is a new
+     event's: one text block, edited on the page. Sample copy rather than
+     instructions, true of any series, so it reads right if published as it
+     is. -->
+<template id="series_default_description" name="Event Series default description">
+    <section class="s_text_block">
+        <h5>One event, many dates</h5>
+        <p>This event is repeated again and again, so you can join on the date that suits you. Each date has its own tickets and seats. Pick one from the dates below and register.</p>
+    </section>
+</template>
+
 </odoo>

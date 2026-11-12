@@ -15,8 +15,10 @@ LGPL-3, © 2026 Valencia Makers, SL.
   to one website.
 - **Its page**, at `/event/series/<series>`, shows its cover, name, and subtitle, its description,
   and its current and upcoming events, in the same list as the `/event` listing's. The cover, name,
-  subtitle, and description are edited on the page, in the website editor. The description, as an
-  event's, is written only there: no form shows it. With no dates scheduled, the page says so.
+  subtitle, and description are edited on the page, in the website editor. A new series starts with
+  a sample description, as a new event does, saying that the event is repeated and each date has its
+  own tickets. The description, as an event's, is written only there: no form shows it. With no
+  dates scheduled, the page says so.
 - **`/events/series`** lists every published series on the website, each with its next event. The
   list is in the plural and each series in the singular, as `/events` lists events and
   `/event/<event>` is one.
@@ -80,6 +82,6 @@ ours follows core's for the field beside it.
 ### Testing
 
 `tests/test_website.py` checks the page's dates (current and upcoming, published, in order), the
-page without dates, a 404 for an unpublished series, the index, the event page's link, the listing's
-filter, and the sitemap. `tests/test_tours.py` filters the listing by series in a browser, opens the
-event, and follows its link to the series' page.
+page without dates, a new series' sample description, a 404 for an unpublished series, the index,
+the event page's link, the listing's filter, and the sitemap. `tests/test_tours.py` filters the
+listing by series in a browser, opens the event, and follows its link to the series' page.

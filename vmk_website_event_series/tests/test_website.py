@@ -82,6 +82,14 @@ class TestSeriesWebsite(HttpCase):
         )
         self.assertEqual(len(cards), 2)
 
+    def test_new_series_starts_with_sample_description(self):
+        """As a new event does: one text block, without template branding."""
+        series = self.env["vmk.event.series"].create({"name": "Fresh Series"})
+        block = html.fromstring(str(series.description))
+        self.assertEqual(block.xpath("//section/@class"), ["s_text_block"])
+        self.assertEqual(block.xpath("//h5")[0].text_content(), "One event, many dates")
+        self.assertNotIn("data-oe-", str(series.description))
+
     def test_series_page_without_dates(self):
         empty = self.env["vmk.event.series"].create({"name": "Nothing Yet", "is_published": True})
         page = self._get(empty.website_url)
