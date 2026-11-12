@@ -126,7 +126,11 @@ These are properties of Odoo, not of any one harness.
   in the browser's disk cache (`orm.cache({ type: "disk" })` around `get_views` in
   `web/static/src/views/view_service.js`), shows that copy at once and refreshes it in the
   background. After an upgrade, the first opening shows the old view even after a restart and a
-  reload. Open it again before debugging. Added 2026-09-24.
+  reload. Open it again before debugging. Added 2026-09-24. **Actions are cached the same way**
+  (`/web/action/load` with `cache: { type: "disk" }`,
+  `web/static/src/webclient/actions/action_plugin.js`), so a changed domain or context takes effect
+  the second time the action is opened too. Found on 12 November 2026, when a list kept a row its
+  action's new domain left out.
 
 ## Deploying an update
 
