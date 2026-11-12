@@ -17,10 +17,11 @@ In **Settings › General Settings › Colors**, **Edit Colors** opens the twelv
   translatable like any other, so a name changed in one language only shows in that language and in
   those with no name of their own. “No color” keeps its name, since Odoo gives it a meaning of its
   own: an event tag without a color is hidden from the website, for one.
-- **The × at the end of a row**, shown once its color or name differs from the default, puts both
-  back, and **Reset to Defaults** does it for all twelve, after asking. Both reload the page, so the
-  change shows everywhere at once. A color picked or a name typed in the list shows elsewhere after
-  the next reload.
+- **The undo arrow at the end of a row**, shown once its color or name differs from the default,
+  puts both back, as core's Replenishment list puts back a quantity typed over the computed one, and
+  **Reset to Defaults** does it for all twelve, after asking. Both reload the page, so the change
+  shows everywhere at once. A color picked or a name typed in the list shows elsewhere after the
+  next reload.
 
 Only users with the Settings access right (Administration › Settings) reach the list.
 
@@ -93,8 +94,8 @@ hundredths of Odoo's lightness for every shade, which `tests/test_palette.py` ch
 Each record's name is an ordinary translatable field, which the module's data fills with Odoo's
 name. Its translations are in our own catalogues, as core's wording copied from `web`'s, so a
 language activated later gets its names as any module's data does. The data is `noupdate`, so an
-update keeps a name someone changed. Core leaves two names untranslated in Catalan, _Almond_ and
-_Teal_; ours has _Ametlla_ and _Verd blavós_.
+update keeps a name someone changed. Core leaves two names untranslated in Catalan, “Almond” and
+“Teal”; ours has “Ametlla” and “Verd blavós”.
 
 The same twelve names are also Python terms of the module (`palette.TRANSLATED_NAMES`, one catalogue
 entry with both references), which is how `_odoo_names()` knows the default in any language, for the

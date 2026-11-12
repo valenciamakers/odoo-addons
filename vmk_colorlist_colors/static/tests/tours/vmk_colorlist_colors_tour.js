@@ -6,6 +6,9 @@ import { registry } from "@web/core/registry";
 const tours = registry.category("web_tour.tours");
 
 const PURPLE = ".o_list_renderer .o_data_row:nth-child(6)";
+// The reset button, not the invisible stand-in rows without one carry.
+const RESET = "button[name='action_reset']:not(.disabled)";
+const STAND_IN = "button[name='action_reset'].disabled.opacity-0";
 
 // From General Settings to the list, renaming Purple and choosing another
 // color for it.
@@ -25,8 +28,8 @@ tours.add("vmk_colorlist_colors_edit_tour", {
             trigger: ".o_list_renderer .o_data_row:nth-child(12):last-child",
         },
         {
-            content: "each color starts with Odoo's name, and no reset button",
-            trigger: `${PURPLE}:not(:has(button[name='action_reset'])) td[name='name']:contains("Purple")`,
+            content: "each color starts with Odoo's name, and no reset button but its stand-in",
+            trigger: `${PURPLE}:not(:has(${RESET})):has(${STAND_IN}) td[name='name']:contains("Purple")`,
         },
         {
             content: "No color cannot be renamed",
@@ -65,7 +68,7 @@ tours.add("vmk_colorlist_colors_edit_tour", {
         },
         {
             content: "the reset button's tooltip says what it does",
-            trigger: `${PURPLE} button[name='action_reset'][data-tooltip="Reset to default values"]`,
+            trigger: `${PURPLE}:not(:has(${STAND_IN})) ${RESET}[data-tooltip="Reset to default values"]:has([data-icon='undo'])`,
         },
     ],
 });
@@ -79,13 +82,13 @@ tours.add("vmk_colorlist_colors_reset_tour", {
         },
         {
             content: "reset it",
-            trigger: `${PURPLE} button[name='action_reset']`,
+            trigger: `${PURPLE} ${RESET}`,
             run: "click",
             expectUnloadPage: true,
         },
         {
             content: "after the reload, the row has Odoo's name back, and no reset button",
-            trigger: `${PURPLE}:not(:has(button[name='action_reset'])) td[name='name']:contains("Purple")`,
+            trigger: `${PURPLE}:not(:has(${RESET})) td[name='name']:contains("Purple")`,
         },
     ],
 });

@@ -18,12 +18,17 @@
             <field name="is_custom" column_invisible="1"/>
             <field name="color" widget="color"/>
             <field name="name" readonly="slot == 0"/>
-            <!-- A list row passes a button its title, as a tooltip, and no
-                 other attribute, so an aria-label here would never reach the
-                 page. -->
-            <button name="action_reset" type="object" icon="close"
+            <!-- An undo arrow, as core's Replenishment list puts back a
+                 computed quantity typed over (stock_orderpoint_views.xml),
+                 with the same invisible stand-in on rows without it, so the
+                 column keeps its width. A list row passes a button its
+                 title, as a tooltip, and no other attribute, so an
+                 aria-label here would never reach the page. -->
+            <button name="action_reset" type="object" icon="undo"
                     title="Reset to default values"
                     invisible="not is_custom"/>
+            <button name="action_reset" type="object" icon="undo" title="-"
+                    class="disabled opacity-0" invisible="is_custom"/>
         </list>
     </field>
 </record>
