@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<!-- In General Settings, after Languages: a block of its own, with a link to
+     the list of colors, as Languages has one to the list of languages. -->
+<record id="res_config_settings_view_form" model="ir.ui.view">
+    <field name="name">res.config.settings.view.form.inherit.vmk_colorlist_colors</field>
+    <field name="model">res.config.settings</field>
+    <field name="inherit_id" ref="base_setup.res_config_settings_view_form"/>
+    <field name="arch" type="xml">
+        <xpath expr="//div[@id='languages']" position="after">
+            <div id="vmk_colorlist_colors">
+                <block title="Colors" name="vmk_colorlist_colors_setting_container">
+                    <!-- A setting shows its help only under a label
+                         (web/static/src/views/form/setting/setting.xml),
+                         so it needs a string even with no field. -->
+                    <setting id="vmk_colorlist_colors_setting" string="Custom Colors"
+                             help="Set the colors used for tags, cards, calendars, etc.">
+                        <button name="%(vmk_colorlist_color_action)d" icon="east" type="action"
+                                string="Edit Colors" class="btn-link"/>
+                    </setting>
+                </block>
+            </div>
+        </xpath>
+    </field>
+</record>
+
+</odoo>

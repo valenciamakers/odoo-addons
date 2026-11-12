@@ -27,6 +27,8 @@ was verified against the series of the branch you are reading.
   machinery, and kept rather than dropped when contacts are merged.
 - **`vmk_website_disable_tracking`** — switches off Odoo's website visitor tracking on every website
   when installed, with a Track Visitors setting to turn it back on per website.
+- **`vmk_colorlist_colors`** — change the twelve colors Odoo offers for tags, kanban cards, and
+  calendars, and rename them, from Settings. Not yet released.
 - **`tools/`** — not a module. `make_icon.py` renders each module's store icon from the glyphs in
   `tools/icons/`; see _Store icons_ under the authoring conventions.
 

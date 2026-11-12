@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+<!-- One record per slot of Odoo's color list, 0 being "No color". Each starts
+     empty, meaning Odoo's own color and name. -->
+<record id="color_0" model="vmk.colorlist.color"><field name="slot">0</field></record>
+<record id="color_1" model="vmk.colorlist.color"><field name="slot">1</field></record>
+<record id="color_2" model="vmk.colorlist.color"><field name="slot">2</field></record>
+<record id="color_3" model="vmk.colorlist.color"><field name="slot">3</field></record>
+<record id="color_4" model="vmk.colorlist.color"><field name="slot">4</field></record>
+<record id="color_5" model="vmk.colorlist.color"><field name="slot">5</field></record>
+<record id="color_6" model="vmk.colorlist.color"><field name="slot">6</field></record>
+<record id="color_7" model="vmk.colorlist.color"><field name="slot">7</field></record>
+<record id="color_8" model="vmk.colorlist.color"><field name="slot">8</field></record>
+<record id="color_9" model="vmk.colorlist.color"><field name="slot">9</field></record>
+<record id="color_10" model="vmk.colorlist.color"><field name="slot">10</field></record>
+<record id="color_11" model="vmk.colorlist.color"><field name="slot">11</field></record>
+
+</odoo>

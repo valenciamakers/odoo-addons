@@ -1,0 +1,169 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* vmk_colorlist_colors
+#
+# Generated, and written afresh on every run: do not edit by hand. Core's
+# wording where core has the same English, ours otherwise. See DEVELOPING.md.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 20.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-12 16:16+0000\n"
+"PO-Revision-Date: 2026-11-12 16:16+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: id\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. module: vmk_colorlist_colors
+#: model:ir.module.module,summary:base.module_vmk_colorlist_colors
+msgid ""
+"Change the colors used for tags, kanban cards, and calendars, and their "
+"names"
+msgstr ""
+
+#. module: vmk_colorlist_colors
+#. odoo-python
+#: code:addons/vmk_colorlist_colors/models/vmk_colorlist_color.py:0
+msgid ""
+"Choose a color with the color picker. %(value)s is not a color in the form "
+"#rrggbb."
+msgstr ""
+
+#. module: vmk_colorlist_colors
+#: model:ir.model.fields,help:vmk_colorlist_colors.field_vmk_colorlist_color__color
+msgid "Choosing Odoo's own color again removes the custom one."
+msgstr ""
+
+#. module: vmk_colorlist_colors
+#: model:ir.model,name:vmk_colorlist_colors.model_vmk_colorlist_color
+#: model:ir.model.fields,field_description:vmk_colorlist_colors.field_vmk_colorlist_color__color
+msgid "Color"
+msgstr "Warna"
+
+#. module: vmk_colorlist_colors
+#: model:ir.actions.act_window,name:vmk_colorlist_colors.vmk_colorlist_color_action
+#: model_terms:ir.ui.view,arch_db:vmk_colorlist_colors.res_config_settings_view_form
+#: model_terms:ir.ui.view,arch_db:vmk_colorlist_colors.vmk_colorlist_color_view_list
+msgid "Colors"
+msgstr "Warna"
+
+#. module: vmk_colorlist_colors
+#: model:ir.model.fields,field_description:vmk_colorlist_colors.field_vmk_colorlist_color__create_uid
+msgid "Created by"
+msgstr "Dibuat oleh"
+
+#. module: vmk_colorlist_colors
+#: model:ir.model.fields,field_description:vmk_colorlist_colors.field_vmk_colorlist_color__create_date
+msgid "Created on"
+msgstr "Dibuat pada"
+
+#. module: vmk_colorlist_colors
+#: model:ir.model.fields,field_description:vmk_colorlist_colors.field_vmk_colorlist_color__custom_color
+msgid "Custom Color"
+msgstr "Warna Kustom"
+
+#. module: vmk_colorlist_colors
+#: model:ir.module.module,shortdesc:base.module_vmk_colorlist_colors
+#: model_terms:ir.ui.view,arch_db:vmk_colorlist_colors.res_config_settings_view_form
+msgid "Custom Colors"
+msgstr "Warna Kustom"
+
+#. module: vmk_colorlist_colors
+#: model:ir.model.fields,field_description:vmk_colorlist_colors.field_vmk_colorlist_color__odoo_color
+msgid "Default Color"
+msgstr "Warna Default"
+
+#. module: vmk_colorlist_colors
+#: model:ir.model.fields,field_description:vmk_colorlist_colors.field_vmk_colorlist_color__odoo_name
+msgid "Default Name"
+msgstr "Nama Default"
+
+#. module: vmk_colorlist_colors
+#: model:ir.model.fields,field_description:vmk_colorlist_colors.field_ir_http__display_name
+#: model:ir.model.fields,field_description:vmk_colorlist_colors.field_vmk_colorlist_color__display_name
+msgid "Display Name"
+msgstr "Nama Tampilan"
+
+#. module: vmk_colorlist_colors
+#: model:ir.model.constraint,message:vmk_colorlist_colors.constraint_vmk_colorlist_color_slot_unique
+msgid "Each color appears once."
+msgstr ""
+
+#. module: vmk_colorlist_colors
+#: model_terms:ir.ui.view,arch_db:vmk_colorlist_colors.res_config_settings_view_form
+msgid "Edit Colors"
+msgstr ""
+
+#. module: vmk_colorlist_colors
+#: model:ir.model.fields,help:vmk_colorlist_colors.field_vmk_colorlist_color__name
+msgid "Empty, the color keeps Odoo's name, translated as Odoo translates it."
+msgstr ""
+
+#. module: vmk_colorlist_colors
+#: model:ir.model,name:vmk_colorlist_colors.model_ir_http
+msgid "HTTP Routing"
+msgstr "HTTP routing"
+
+#. module: vmk_colorlist_colors
+#: model:ir.model.fields,field_description:vmk_colorlist_colors.field_ir_http__id
+#: model:ir.model.fields,field_description:vmk_colorlist_colors.field_vmk_colorlist_color__id
+msgid "ID"
+msgstr "ID"
+
+#. module: vmk_colorlist_colors
+#: model:ir.model.fields,field_description:vmk_colorlist_colors.field_vmk_colorlist_color__is_custom
+msgid "Is Custom"
+msgstr ""
+
+#. module: vmk_colorlist_colors
+#: model:ir.model.fields,field_description:vmk_colorlist_colors.field_vmk_colorlist_color__write_uid
+msgid "Last Updated by"
+msgstr "Terakhir Diperbarui oleh"
+
+#. module: vmk_colorlist_colors
+#: model:ir.model.fields,field_description:vmk_colorlist_colors.field_vmk_colorlist_color__write_date
+msgid "Last Updated on"
+msgstr "Terakhir Diperbarui pada"
+
+#. module: vmk_colorlist_colors
+#: model:ir.model.fields,field_description:vmk_colorlist_colors.field_vmk_colorlist_color__name
+msgid "Name"
+msgstr "Nama"
+
+#. module: vmk_colorlist_colors
+#. odoo-python
+#: code:addons/vmk_colorlist_colors/models/vmk_colorlist_color.py:0
+msgid ""
+"No color keeps its name: Odoo gives it a meaning of its own, such as hiding "
+"an event tag from the website."
+msgstr ""
+
+#. module: vmk_colorlist_colors
+#: model_terms:ir.ui.view,arch_db:vmk_colorlist_colors.vmk_colorlist_color_view_list
+msgid "Reset all colors to the default values provided by Odoo."
+msgstr ""
+
+#. module: vmk_colorlist_colors
+#: model_terms:ir.ui.view,arch_db:vmk_colorlist_colors.vmk_colorlist_color_view_list
+msgid "Reset to Defaults"
+msgstr ""
+
+#. module: vmk_colorlist_colors
+#: model_terms:ir.ui.view,arch_db:vmk_colorlist_colors.vmk_colorlist_color_view_list
+msgid "Reset to Odoo's color and name"
+msgstr ""
+
+#. module: vmk_colorlist_colors
+#: model_terms:ir.ui.view,arch_db:vmk_colorlist_colors.res_config_settings_view_form
+msgid "Set the colors used for tags, cards, calendars, etc."
+msgstr ""
+
+#. module: vmk_colorlist_colors
+#: model:ir.model.fields,field_description:vmk_colorlist_colors.field_vmk_colorlist_color__slot
+msgid "Slot"
+msgstr "Slot"

@@ -38,6 +38,9 @@ They depend only on Odoo Community modules, so they work on Community and Enterp
 - **[`vmk_website_disable_tracking`](vmk_website_disable_tracking)** — switch off Odoo's website
   visitor tracking on every website the moment the module is installed, with a Track Visitors
   setting to turn it back on for any one website.
+- **[`vmk_colorlist_colors`](vmk_colorlist_colors)** — change the twelve colors Odoo offers for
+  tags, kanban cards, and calendars, and rename them, from Settings, in the backend and on the
+  website alike. Not yet released.
 
 Each module's own `README.md` explains why it is built the way it is — which core method fights you,
 and where. That is usually the interesting part.
