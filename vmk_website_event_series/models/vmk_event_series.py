@@ -4,6 +4,7 @@
 import json
 
 from odoo import fields, models
+from odoo.tools.translate import html_translate
 
 
 class VmkEventSeries(models.Model):
@@ -17,6 +18,12 @@ class VmkEventSeries(models.Model):
         "website.published.multi.mixin",
         "website.cover_properties.mixin",
     ]
+
+    # Written on the series' page in the website editor, as an event's is:
+    # neither form shows it.
+    description = fields.Html(
+        translate=html_translate, sanitize_attributes=False, sanitize_form=False
+    )
 
     def _compute_website_url(self):
         super()._compute_website_url()

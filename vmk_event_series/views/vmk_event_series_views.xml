@@ -37,11 +37,6 @@
                             <field name="active" invisible="1"/>
                         </group>
                     </group>
-                    <notebook>
-                        <page string="Description" name="description">
-                            <field name="description" placeholder="What every date of this series is about"/>
-                        </page>
-                    </notebook>
                 </sheet>
             </form>
         </field>

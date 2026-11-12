@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 20.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-12 20:05+0000\n"
-"PO-Revision-Date: 2026-11-12 20:05+0000\n"
+"POT-Creation-Date: 2026-11-12 20:19+0000\n"
+"PO-Revision-Date: 2026-11-12 20:19+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -49,6 +49,11 @@ msgstr ""
 #. module: vmk_website_event_series
 #: model:ir.model.fields,field_description:vmk_website_event_series.field_vmk_event_series__cover_properties
 msgid "Cover Properties"
+msgstr ""
+
+#. module: vmk_website_event_series
+#: model:ir.model.fields,field_description:vmk_website_event_series.field_vmk_event_series__description
+msgid "Description"
 msgstr ""
 
 #. module: vmk_website_event_series
@@ -110,6 +115,16 @@ msgid "No series are on the website yet."
 msgstr ""
 
 #. module: vmk_website_event_series
+#: model_terms:ir.ui.view,arch_db:vmk_website_event_series.vmk_event_series_view_form
+msgid "Publish on"
+msgstr ""
+
+#. module: vmk_website_event_series
+#: model_terms:ir.ui.view,arch_db:vmk_website_event_series.vmk_event_series_view_form
+msgid "Published"
+msgstr ""
+
+#. module: vmk_website_event_series
 #: model:ir.model.fields,field_description:vmk_website_event_series.field_vmk_event_series__published_date
 msgid "Published date"
 msgstr ""
@@ -153,6 +168,11 @@ msgstr ""
 #. module: vmk_website_event_series
 #: model:ir.model.fields,help:vmk_website_event_series.field_vmk_event_series__website_url
 msgid "The full relative URL to access the document through the website."
+msgstr ""
+
+#. module: vmk_website_event_series
+#: model_terms:ir.ui.view,arch_db:vmk_website_event_series.vmk_event_series_view_form
+msgid "Unschedule"
 msgstr ""
 
 #. module: vmk_website_event_series

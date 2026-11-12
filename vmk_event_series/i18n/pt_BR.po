@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 20.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-12 20:10+0000\n"
-"PO-Revision-Date: 2026-11-12 20:10+0000\n"
+"POT-Creation-Date: 2026-11-12 20:19+0000\n"
+"PO-Revision-Date: 2026-11-12 20:19+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: pt_BR\n"
@@ -91,7 +91,6 @@ msgstr "Criado em"
 
 #. module: vmk_event_series
 #: model:ir.model.fields,field_description:vmk_event_series.field_vmk_event_series__description
-#: model_terms:ir.ui.view,arch_db:vmk_event_series.vmk_event_series_view_form
 msgid "Description"
 msgstr "Descrição"
 
@@ -190,11 +189,6 @@ msgstr "Modelo"
 #: model:ir.model.fields,field_description:vmk_event_series.field_vmk_event_series__upcoming_event_count
 msgid "Upcoming Events"
 msgstr "Próximos eventos"
-
-#. module: vmk_event_series
-#: model_terms:ir.ui.view,arch_db:vmk_event_series.vmk_event_series_view_form
-msgid "What every date of this series is about"
-msgstr ""
 
 #. module: vmk_event_series
 #: model_terms:ir.ui.view,arch_db:vmk_event_series.vmk_event_series_view_form

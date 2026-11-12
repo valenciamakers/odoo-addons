@@ -55,6 +55,11 @@ msgid "Cover Properties"
 msgstr "Propiedades de la portada"
 
 #. module: vmk_website_event_series
+#: model:ir.model.fields,field_description:vmk_website_event_series.field_vmk_event_series__description
+msgid "Description"
+msgstr "Descripción"
+
+#. module: vmk_website_event_series
 #: model:ir.model.fields,field_description:vmk_website_event_series.field_event_event__display_name
 #: model:ir.model.fields,field_description:vmk_website_event_series.field_vmk_event_series__display_name
 msgid "Display Name"
@@ -113,6 +118,16 @@ msgid "No series are on the website yet."
 msgstr "Todavía no hay series en el sitio web."
 
 #. module: vmk_website_event_series
+#: model_terms:ir.ui.view,arch_db:vmk_website_event_series.vmk_event_series_view_form
+msgid "Publish on"
+msgstr "Publicar el"
+
+#. module: vmk_website_event_series
+#: model_terms:ir.ui.view,arch_db:vmk_website_event_series.vmk_event_series_view_form
+msgid "Published"
+msgstr "Publicado"
+
+#. module: vmk_website_event_series
 #: model:ir.model.fields,field_description:vmk_website_event_series.field_vmk_event_series__published_date
 msgid "Published date"
 msgstr "Fecha de publicación"
@@ -159,6 +174,11 @@ msgstr ""
 msgid "The full relative URL to access the document through the website."
 msgstr ""
 "La URL relativa completa para acceder al documento a través del sitio web."
+
+#. module: vmk_website_event_series
+#: model_terms:ir.ui.view,arch_db:vmk_website_event_series.vmk_event_series_view_form
+msgid "Unschedule"
+msgstr "Desprogramar"
 
 #. module: vmk_website_event_series
 #: model:ir.model.fields,field_description:vmk_website_event_series.field_vmk_event_series__website_published

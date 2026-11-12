@@ -10,8 +10,8 @@ LGPL-3, © 2026 Valencia Makers, SL.
 
 ## How to use it
 
-- **Events › Series** lists the series. A series has a name, a subtitle, a description, and
-  optionally an event template.
+- **Events › Series** lists the series. A series has a name, a subtitle, and optionally an event
+  template. Its description belongs to its page on the website, and comes with the website module.
 - **New Event in Series**, on a series, opens a new event already in the series, named after it and
   on its template, so the template fills in tickets, communications, and the rest as it does for any
   event.

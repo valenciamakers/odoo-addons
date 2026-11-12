@@ -55,6 +55,11 @@ msgid "Cover Properties"
 msgstr "Propietats de la coberta"
 
 #. module: vmk_website_event_series
+#: model:ir.model.fields,field_description:vmk_website_event_series.field_vmk_event_series__description
+msgid "Description"
+msgstr "Descripció"
+
+#. module: vmk_website_event_series
 #: model:ir.model.fields,field_description:vmk_website_event_series.field_event_event__display_name
 #: model:ir.model.fields,field_description:vmk_website_event_series.field_vmk_event_series__display_name
 msgid "Display Name"
@@ -113,6 +118,16 @@ msgid "No series are on the website yet."
 msgstr "Encara no hi ha sèries al lloc web."
 
 #. module: vmk_website_event_series
+#: model_terms:ir.ui.view,arch_db:vmk_website_event_series.vmk_event_series_view_form
+msgid "Publish on"
+msgstr "Publicar el"
+
+#. module: vmk_website_event_series
+#: model_terms:ir.ui.view,arch_db:vmk_website_event_series.vmk_event_series_view_form
+msgid "Published"
+msgstr "Publicat"
+
+#. module: vmk_website_event_series
 #: model:ir.model.fields,field_description:vmk_website_event_series.field_vmk_event_series__published_date
 msgid "Published date"
 msgstr "Data de publicació"
@@ -157,6 +172,11 @@ msgstr "L'URL absolut complet per accedir al document per mitjà del lloc web."
 #: model:ir.model.fields,help:vmk_website_event_series.field_vmk_event_series__website_url
 msgid "The full relative URL to access the document through the website."
 msgstr "L'URL relatiu complet per accedir al document per mitjà del lloc web."
+
+#. module: vmk_website_event_series
+#: model_terms:ir.ui.view,arch_db:vmk_website_event_series.vmk_event_series_view_form
+msgid "Unschedule"
+msgstr "Desprogramar"
 
 #. module: vmk_website_event_series
 #: model:ir.model.fields,field_description:vmk_website_event_series.field_vmk_event_series__website_published

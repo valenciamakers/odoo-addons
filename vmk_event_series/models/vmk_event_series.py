@@ -3,7 +3,6 @@
 
 from odoo import api, fields, models
 from odoo.exceptions import UserError
-from odoo.tools.translate import html_translate
 
 
 class VmkEventSeries(models.Model):
@@ -17,9 +16,6 @@ class VmkEventSeries(models.Model):
 
     name = fields.Char(string="Series Name", required=True, translate=True)
     subtitle = fields.Char(translate=True)
-    description = fields.Html(
-        translate=html_translate, sanitize_attributes=False, sanitize_form=False
-    )
     sequence = fields.Integer(default=10)
     active = fields.Boolean(default=True)
     company_id = fields.Many2one(

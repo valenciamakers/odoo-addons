@@ -139,6 +139,14 @@ class TestSeriesWebsite(HttpCase):
         self.assertEqual([" ".join(a.text_content().split()) for a in active], ["All"])
         self.assertNotIn("Secret Series", page.text_content())
 
+    def test_publish_on_schedules_publishing(self):
+        """Website's own cron publishes a series whose Publish on has come,
+        as it does an event."""
+        self.hidden.publish_on = fields.Datetime.now() - timedelta(minutes=1)
+        self.env.ref("website.ir_cron_publish_scheduled_pages").method_direct_trigger()
+        self.assertTrue(self.hidden.is_published)
+        self.assertFalse(self.hidden.publish_on)
+
     def test_sitemap(self):
         response = self.url_open("/sitemap.xml")
         self.assertEqual(response.status_code, 200)

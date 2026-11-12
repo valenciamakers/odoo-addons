@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- The series' website settings on its form, where an event's form has
-         them: the Go to Website button, and the website it is on. -->
+    <!-- The series' website settings on its form, as website_event puts an
+         event's on its form (website_event/views/event_event_views.xml): the
+         Go to Website button, the website, the Published toggle, and Publish
+         on, which website's own cron honours for any model with the field. -->
     <record id="vmk_event_series_view_form" model="ir.ui.view">
         <field name="name">vmk.event.series.form.website</field>
         <field name="model">vmk.event.series</field>
@@ -15,6 +17,14 @@
                 <field name="website_id" options="{'no_create': True}"
                        domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]"
                        groups="website.group_multi_website"/>
+                <field name="publish_on" invisible="1"/>
+                <field string="Published" name="website_published" widget="boolean_toggle"
+                       readonly="publish_on"/>
+                <label invisible="website_published" for="publish_on" string="Publish on"/>
+                <div invisible="website_published" class="o_row">
+                    <field name="publish_on" widget="datetime"/>
+                    <button name="action_unschedule" type="object" invisible="not publish_on">Unschedule</button>
+                </div>
             </field>
         </field>
     </record>

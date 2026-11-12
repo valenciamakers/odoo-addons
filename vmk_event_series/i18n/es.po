@@ -92,7 +92,6 @@ msgstr "Creado el"
 
 #. module: vmk_event_series
 #: model:ir.model.fields,field_description:vmk_event_series.field_vmk_event_series__description
-#: model_terms:ir.ui.view,arch_db:vmk_event_series.vmk_event_series_view_form
 msgid "Description"
 msgstr "Descripción"
 
@@ -191,11 +190,6 @@ msgstr "Plantilla"
 #: model:ir.model.fields,field_description:vmk_event_series.field_vmk_event_series__upcoming_event_count
 msgid "Upcoming Events"
 msgstr "Próximos eventos"
-
-#. module: vmk_event_series
-#: model_terms:ir.ui.view,arch_db:vmk_event_series.vmk_event_series_view_form
-msgid "What every date of this series is about"
-msgstr "De qué trata cada fecha de esta serie"
 
 #. module: vmk_event_series
 #: model_terms:ir.ui.view,arch_db:vmk_event_series.vmk_event_series_view_form
