@@ -118,6 +118,11 @@ msgid "No series are on the website yet."
 msgstr "Encara no hi ha sèries al lloc web."
 
 #. module: vmk_website_event_series
+#: model_terms:ir.ui.view,arch_db:vmk_website_event_series.series_default_description
+msgid "One event, many dates"
+msgstr "Un esdeveniment, moltes dates"
+
+#. module: vmk_website_event_series
 #: model_terms:ir.ui.view,arch_db:vmk_website_event_series.vmk_event_series_view_form
 msgid "Publish on"
 msgstr "Publicar el"
@@ -172,6 +177,17 @@ msgstr "L'URL absolut complet per accedir al document per mitjà del lloc web."
 #: model:ir.model.fields,help:vmk_website_event_series.field_vmk_event_series__website_url
 msgid "The full relative URL to access the document through the website."
 msgstr "L'URL relatiu complet per accedir al document per mitjà del lloc web."
+
+#. module: vmk_website_event_series
+#: model_terms:ir.ui.view,arch_db:vmk_website_event_series.series_default_description
+msgid ""
+"This event is repeated again and again, so you can join on the date that "
+"suits you. Each date has its own tickets and seats. Pick one from the dates "
+"below and register."
+msgstr ""
+"Aquest esdeveniment es repeteix una vegada i una altra, així que podeu "
+"unir-vos-hi en la data que us vagi millor. Cada data té els seus propis "
+"tiquets i seients. Trieu una de les dates de sota i inscriviu-vos."
 
 #. module: vmk_website_event_series
 #: model_terms:ir.ui.view,arch_db:vmk_website_event_series.vmk_event_series_view_form
