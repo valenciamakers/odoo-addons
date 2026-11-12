@@ -5,7 +5,7 @@ import { registry } from "@web/core/registry";
 
 const tours = registry.category("web_tour.tours");
 
-const PURPLE = ".o_list_renderer .o_data_row:nth-child(6)";
+const PURPLE = ".o_list_renderer .o_data_row:nth-child(5)";
 // The reset button, not the invisible stand-in rows without one carry.
 const RESET = "button[name='action_reset']:not(.disabled)";
 const STAND_IN = "button[name='action_reset'].disabled.opacity-0";
@@ -24,26 +24,16 @@ tours.add("vmk_colorlist_colors_edit_tour", {
             run: "click",
         },
         {
-            content: "the list has Odoo's twelve colors",
-            trigger: ".o_list_renderer .o_data_row:nth-child(12):last-child",
+            content: "the list has Odoo's eleven colors, starting with Red: No color is left out",
+            trigger: ".o_list_renderer .o_data_row:nth-child(11):last-child",
+        },
+        {
+            content: "the first row is Red",
+            trigger: ".o_list_renderer .o_data_row:first-child td[name='name']:contains('Red')",
         },
         {
             content: "each color starts with Odoo's name, and no reset button but its stand-in",
             trigger: `${PURPLE}:not(:has(${RESET})):has(${STAND_IN}) td[name='name']:contains("Purple")`,
-        },
-        {
-            content: "No color's row is greyed out, its name and color fixed",
-            trigger: ".o_list_renderer .o_data_row:nth-child(1).text-muted td[name='name'].o_readonly_modifier",
-        },
-        {
-            content: "and its swatch is empty with an outline, as Odoo's picker draws it",
-            trigger: ".o_list_renderer .o_data_row:nth-child(1) td[name='color'].o_readonly_modifier .o_field_color",
-            run() {
-                const style = getComputedStyle(this.anchor);
-                if (style.backgroundColor !== "rgba(0, 0, 0, 0)" || style.boxShadow === "none") {
-                    throw new Error(`No color's swatch is ${style.backgroundColor}, ${style.boxShadow}.`);
-                }
-            },
         },
         {
             content: "edit Purple's row",

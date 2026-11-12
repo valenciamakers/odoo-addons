@@ -1,27 +1,25 @@
 # Custom Colors (`vmk_colorlist_colors`)
 
-Change the twelve colors Odoo offers wherever a record has a color — tags, kanban cards, calendars,
+Change the eleven colors Odoo offers wherever a record has a color — tags, kanban cards, calendars,
 and the color picker itself — and rename them. The slots and what each one means stay Odoo's: this
-changes how each color looks and what it is called, not how many there are.
+changes how each color looks and what it is called, not how many there are. Odoo's twelfth choice,
+“No color”, stays as it is.
 
 It depends only on `base_setup`, so it works on Community and Enterprise alike. LGPL-3, © 2026
 Valencia Makers, SL.
 
 ## How to use it
 
-In **Settings › General Settings › Colors**, **Edit Colors** opens the twelve colors in a list.
+In **Settings › General Settings › Colors**, **Edit Colors** opens the eleven colors in a list.
 
 - **Pick a color** with the color picker on its row. Picking Odoo's own color again removes the
   custom one.
 - **Rename a color** by typing over its name, which starts as Odoo's, in each language. A name is
   translatable like any other, so a name changed in one language only shows in that language and in
   those with no name of their own.
-- **“No color” stays as Odoo has it**, its name and its color, since Odoo gives it a meaning of its
-  own: an event tag without a color is hidden from the website, for one. Its row is greyed out, and
-  its swatch drawn empty with a grey outline, as Odoo's color picker draws it.
 - **The undo arrow at the end of a row**, shown once its color or name differs from the default,
   puts both back, as core's Replenishment list puts back a quantity typed over the computed one, and
-  **Reset to Defaults** does it for all twelve, after asking. Both reload the page, so the change
+  **Reset to Defaults** does it for all eleven, after asking. Both reload the page, so the change
   shows everywhere at once. A color picked or a name typed in the list shows elsewhere after the
   next reload.
 
@@ -90,6 +88,14 @@ so `palette.shades()` computes a custom color's shades in Python by that rule an
 values. A shade outside sRGB loses chroma until it fits, keeping its lightness and hue, as CSS's own
 gamut mapping does. Put through the same function, Odoo's own colors come out within a few
 hundredths of Odoo's lightness for every shade, which `tests/test_palette.py` checks.
+
+### No color
+
+Slot 0 is Odoo's "No color". Odoo's picker draws it as an empty circle whatever its color, and Odoo
+gives it a meaning of its own: an event tag without a color is not shown on the website. So it stays
+Odoo's, color and name. Its record exists like the others, and the stylesheets and the session carry
+it, but the list leaves it out (the action's domain), and `write()` refuses any change to it, with a
+message saying why, except a reset writing its own name back.
 
 ### The names
 
