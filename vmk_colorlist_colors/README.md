@@ -13,13 +13,14 @@ In **Settings › General Settings › Colors**, **Edit Colors** opens the twelv
 
 - **Pick a color** with the color picker on its row. Picking Odoo's own color again removes the
   custom one.
-- **Rename a color** by typing a name over Odoo's, which shows in the field until you do. A name is
-  translatable, like any other. Left empty, the color keeps Odoo's name, in Odoo's translations. “No
-  color” keeps its name, since Odoo gives it a meaning of its own: an event tag without a color is
-  hidden from the website, for one.
-- **The × at the end of a row** puts that color's Odoo color and name back, and **Reset to
-  Defaults** does it for all twelve, after asking. Both reload the page, so the change shows
-  everywhere at once. A color picked in the list shows elsewhere after the next reload.
+- **Rename a color** by typing over its name, which starts as Odoo's, in each language. A name is
+  translatable like any other, so a name changed in one language only shows in that language and in
+  those with no name of their own. “No color” keeps its name, since Odoo gives it a meaning of its
+  own: an event tag without a color is hidden from the website, for one.
+- **The × at the end of a row**, shown once its color or name differs from the default, puts both
+  back, and **Reset to Defaults** does it for all twelve, after asking. Both reload the page, so the
+  change shows everywhere at once. A color picked or a name typed in the list shows elsewhere after
+  the next reload.
 
 Only users with the Settings access right (Administration › Settings) reach the list.
 
@@ -89,17 +90,22 @@ hundredths of Odoo's lightness for every shade, which `tests/test_palette.py` ch
 
 ### The names
 
-A custom name is stored on the record, translatable, and empty until someone types one, so an
-untouched color keeps Odoo's name and Odoo's translations of it. The custom names reach the web
-client in the session, in the user's language (`ir.http.session_info`, `models/ir_http.py`), and
-`static/src/colorlist.js` writes them into `ColorList.COLORS` when the backend loads. It changes the
-array in place rather than replacing it: the kanban record takes `const { COLORS } = ColorList` when
-its module loads, and would keep the old array.
+Each record's name is an ordinary translatable field, which the module's data fills with Odoo's
+name. Its translations are in our own catalogues, as core's wording copied from `web`'s, so a
+language activated later gets its names as any module's data does. The data is `noupdate`, so an
+update keeps a name someone changed. Core leaves two names untranslated in Catalan, _Almond_ and
+_Teal_; ours has _Ametlla_ and _Verd blavós_.
 
-The list shows Odoo's name as the name field's placeholder, through web's `placeholder_field`
-option. Odoo's names are JavaScript terms of `web`, so their translations are web's JavaScript
-catalogue, which Python's `_()` does not read: `_odoo_names()` takes them from
-`code_translations.get_web_translations`, the same source the web client loads.
+The same twelve names are also Python terms of the module (`palette.TRANSLATED_NAMES`, one catalogue
+entry with both references), which is how `_odoo_names()` knows the default in any language, for the
+reset and for telling a renamed color from an untouched one. Odoo's own names are JavaScript terms
+of `web`, which Python's `_()` does not read.
+
+All twelve names reach the web client in the session, in the user's language
+(`ir.http.session_info`, `models/ir_http.py`), and `static/src/colorlist.js` writes them into
+`ColorList.COLORS` when the backend loads, so every picker shows the names the list shows, including
+the two Catalan ones core lacks. It changes the array in place rather than replacing it: the kanban
+record takes `const { COLORS } = ColorList` when its module loads, and would keep the old array.
 
 ### Translations
 

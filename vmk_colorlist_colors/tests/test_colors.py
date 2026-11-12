@@ -42,8 +42,16 @@ class TestColors(ColorsCase):
         self.assertEqual(colors.mapped("slot"), list(range(12)))
         self.assertEqual(tuple(colors.mapped("color")), palette.COLORS)
         self.assertEqual(tuple(colors.mapped("odoo_name")), palette.NAMES)
+        self.assertEqual(tuple(colors.mapped("name")), palette.NAMES)
         self.assertEqual(tuple(colors.mapped("display_name")), palette.NAMES)
         self.assertFalse(any(colors.mapped("is_custom")))
+
+    def test_odoos_names_in_every_active_language(self):
+        """A reset writes Odoo's name in every active language, as Odoo
+        translates it."""
+        self.assertEqual(self.purple.with_context(lang="es_ES").name, "Morado")
+        self.assertEqual(self.purple.with_context(lang="ca_ES").name, "Morat")
+        self.assertFalse(self.purple.with_context(lang="es_ES").is_custom)
 
     def test_odoos_names_in_the_users_language(self):
         """Odoo's names are JavaScript terms of web, read from web's own
@@ -79,14 +87,30 @@ class TestColors(ColorsCase):
         self.assertEqual(self.purple.display_name, "Brand")
         self.assertTrue(self.purple.is_custom)
 
+    def test_names_come_translated_from_our_catalogues(self):
+        """Loading a language gives each color its name in it, from our own
+        catalogues, which carry core's translations of the names."""
+        self.purple.update_field_translations("name", {"es_ES": False})
+        self.env["ir.module.module"]._load_module_terms(
+            ["vmk_colorlist_colors"], ["es_ES"], overwrite=True
+        )
+        self.purple.invalidate_recordset(["name"])
+        self.assertEqual(self.purple.with_context(lang="es_ES").name, "Morado")
+
+    def test_typing_odoos_name_again_is_not_custom(self):
+        self.purple.name = "Brand"
+        self.purple.name = "Purple"
+        self.assertFalse(self.purple.is_custom)
+
     def test_reset_puts_back_odoos_color_and_name(self):
         self.purple.write({"color": "#7b2cbf", "name": "Brand"})
         self.purple.with_context(lang="es_ES").name = "Marca"
         action = self.purple.action_reset()
         self.assertEqual(action["tag"], "reload")
         self.assertFalse(self.purple.custom_color)
-        self.assertFalse(self.purple.with_context(lang="es_ES").name)
-        self.assertEqual(self.purple.display_name, "Purple")
+        self.assertEqual(self.purple.name, "Purple")
+        self.assertEqual(self.purple.with_context(lang="es_ES").name, "Morado")
+        self.assertFalse(self.purple.is_custom)
 
     def test_reset_all(self):
         self.purple.color = "#7b2cbf"
@@ -103,7 +127,7 @@ class TestColors(ColorsCase):
         self.purple.with_user(admin).color = "#7b2cbf"
         self.assertEqual(self.purple.custom_color, "#7b2cbf")
         with self.assertRaises(AccessError):
-            self.Color.with_user(admin).create({"slot": 12})
+            self.Color.with_user(admin).create({"slot": 12, "name": "Extra"})
         with self.assertRaises(AccessError):
             self.purple.with_user(admin).unlink()
 
@@ -200,10 +224,11 @@ class TestStylesheets(ColorsCase):
 
 @tagged("post_install", "-at_install")
 class TestSessionInfo(HttpCase):
-    """The renamed colors reach the web client in the user's language."""
+    """The colors' names reach the web client in the user's language."""
 
-    def test_renamed_colors_in_the_session(self):
-        self.env["res.lang"]._activate_lang("es_ES")
+    def test_names_in_the_session(self):
+        for lang in ("es_ES", "ca_ES"):
+            self.env["res.lang"]._activate_lang(lang)
         Color = self.env["vmk.colorlist.color"]
         Color.search([]).action_reset()
         purple = self.env.ref("vmk_colorlist_colors.color_5")
@@ -211,16 +236,21 @@ class TestSessionInfo(HttpCase):
         purple.with_context(lang="es_ES").name = "Marca"
 
         self.authenticate("admin", "admin")
-        info = self.make_jsonrpc_request("/web/session/get_session_info")
-        self.assertEqual(info["vmk_colorlist_names"], {"5": "Brand"})
+        names = self.make_jsonrpc_request("/web/session/get_session_info")["vmk_colorlist_names"]
+        self.assertEqual(len(names), 12)
+        self.assertEqual((names["1"], names["5"]), ("Red", "Brand"))
 
         self.env.ref("base.user_admin").lang = "es_ES"
         self.authenticate("admin", "admin")
-        info = self.make_jsonrpc_request("/web/session/get_session_info")
-        self.assertEqual(info["vmk_colorlist_names"], {"5": "Marca"})
+        names = self.make_jsonrpc_request("/web/session/get_session_info")["vmk_colorlist_names"]
+        self.assertEqual((names["1"], names["5"]), ("Rojo", "Marca"))
 
-    def test_nothing_in_the_session_while_no_color_is_renamed(self):
+    def test_names_core_leaves_in_english(self):
+        """Core's Catalan has no Almond or Teal; ours does, and the pickers
+        show it."""
+        self.env["res.lang"]._activate_lang("ca_ES")
         self.env["vmk.colorlist.color"].search([]).action_reset()
+        self.env.ref("base.user_admin").lang = "ca_ES"
         self.authenticate("admin", "admin")
-        info = self.make_jsonrpc_request("/web/session/get_session_info")
-        self.assertNotIn("vmk_colorlist_names", info)
+        names = self.make_jsonrpc_request("/web/session/get_session_info")["vmk_colorlist_names"]
+        self.assertEqual((names["6"], names["7"]), ("Ametlla", "Verd blavós"))

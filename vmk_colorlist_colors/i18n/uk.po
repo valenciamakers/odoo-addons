@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 20.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-12 16:16+0000\n"
-"PO-Revision-Date: 2026-11-12 16:16+0000\n"
+"POT-Creation-Date: 2026-11-12 16:28+0000\n"
+"PO-Revision-Date: 2026-11-12 16:28+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -18,6 +18,20 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
+
+#. module: vmk_colorlist_colors
+#. odoo-python
+#: code:addons/vmk_colorlist_colors/models/palette.py:0
+#: model:vmk.colorlist.color,name:vmk_colorlist_colors.color_6
+msgid "Almond"
+msgstr "Мигдалевий"
+
+#. module: vmk_colorlist_colors
+#. odoo-python
+#: code:addons/vmk_colorlist_colors/models/palette.py:0
+#: model:vmk.colorlist.color,name:vmk_colorlist_colors.color_8
+msgid "Blue"
+msgstr "Синій"
 
 #. module: vmk_colorlist_colors
 #: model:ir.module.module,summary:base.module_vmk_colorlist_colors
@@ -74,6 +88,13 @@ msgid "Custom Colors"
 msgstr "Кастомні кольори"
 
 #. module: vmk_colorlist_colors
+#. odoo-python
+#: code:addons/vmk_colorlist_colors/models/palette.py:0
+#: model:vmk.colorlist.color,name:vmk_colorlist_colors.color_4
+msgid "Cyan"
+msgstr "Блакитний"
+
+#. module: vmk_colorlist_colors
 #: model:ir.model.fields,field_description:vmk_colorlist_colors.field_vmk_colorlist_color__odoo_color
 msgid "Default Color"
 msgstr ""
@@ -100,9 +121,11 @@ msgid "Edit Colors"
 msgstr ""
 
 #. module: vmk_colorlist_colors
-#: model:ir.model.fields,help:vmk_colorlist_colors.field_vmk_colorlist_color__name
-msgid "Empty, the color keeps Odoo's name, translated as Odoo translates it."
-msgstr ""
+#. odoo-python
+#: code:addons/vmk_colorlist_colors/models/palette.py:0
+#: model:vmk.colorlist.color,name:vmk_colorlist_colors.color_10
+msgid "Green"
+msgstr "Зелений"
 
 #. module: vmk_colorlist_colors
 #: model:ir.model,name:vmk_colorlist_colors.model_ir_http
@@ -137,11 +160,46 @@ msgstr "Назва"
 
 #. module: vmk_colorlist_colors
 #. odoo-python
+#: code:addons/vmk_colorlist_colors/models/palette.py:0
+#: model:vmk.colorlist.color,name:vmk_colorlist_colors.color_0
+msgid "No color"
+msgstr "Немає кольору"
+
+#. module: vmk_colorlist_colors
+#. odoo-python
 #: code:addons/vmk_colorlist_colors/models/vmk_colorlist_color.py:0
 msgid ""
 "No color keeps its name: Odoo gives it a meaning of its own, such as hiding "
 "an event tag from the website."
 msgstr ""
+
+#. module: vmk_colorlist_colors
+#. odoo-python
+#: code:addons/vmk_colorlist_colors/models/palette.py:0
+#: model:vmk.colorlist.color,name:vmk_colorlist_colors.color_2
+msgid "Orange"
+msgstr "Помаранчевий"
+
+#. module: vmk_colorlist_colors
+#. odoo-python
+#: code:addons/vmk_colorlist_colors/models/palette.py:0
+#: model:vmk.colorlist.color,name:vmk_colorlist_colors.color_5
+msgid "Purple"
+msgstr "Пурпур"
+
+#. module: vmk_colorlist_colors
+#. odoo-python
+#: code:addons/vmk_colorlist_colors/models/palette.py:0
+#: model:vmk.colorlist.color,name:vmk_colorlist_colors.color_9
+msgid "Raspberry"
+msgstr "Raspberry"
+
+#. module: vmk_colorlist_colors
+#. odoo-python
+#: code:addons/vmk_colorlist_colors/models/palette.py:0
+#: model:vmk.colorlist.color,name:vmk_colorlist_colors.color_1
+msgid "Red"
+msgstr "Червоний"
 
 #. module: vmk_colorlist_colors
 #: model_terms:ir.ui.view,arch_db:vmk_colorlist_colors.vmk_colorlist_color_view_list
@@ -155,7 +213,7 @@ msgstr ""
 
 #. module: vmk_colorlist_colors
 #: model_terms:ir.ui.view,arch_db:vmk_colorlist_colors.vmk_colorlist_color_view_list
-msgid "Reset to Odoo's color and name"
+msgid "Reset to default values"
 msgstr ""
 
 #. module: vmk_colorlist_colors
@@ -167,3 +225,24 @@ msgstr ""
 #: model:ir.model.fields,field_description:vmk_colorlist_colors.field_vmk_colorlist_color__slot
 msgid "Slot"
 msgstr "Інтервал"
+
+#. module: vmk_colorlist_colors
+#. odoo-python
+#: code:addons/vmk_colorlist_colors/models/palette.py:0
+#: model:vmk.colorlist.color,name:vmk_colorlist_colors.color_7
+msgid "Teal"
+msgstr "Блакитний"
+
+#. module: vmk_colorlist_colors
+#. odoo-python
+#: code:addons/vmk_colorlist_colors/models/palette.py:0
+#: model:vmk.colorlist.color,name:vmk_colorlist_colors.color_11
+msgid "Violet"
+msgstr "Фіолетовий"
+
+#. module: vmk_colorlist_colors
+#. odoo-python
+#: code:addons/vmk_colorlist_colors/models/palette.py:0
+#: model:vmk.colorlist.color,name:vmk_colorlist_colors.color_3
+msgid "Yellow"
+msgstr "Жовтий"

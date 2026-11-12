@@ -18,20 +18,27 @@ lightness and cap Odoo's own values show for each role.
 
 import math
 
-NAMES = (
-    "No color",
-    "Red",
-    "Orange",
-    "Yellow",
-    "Cyan",
-    "Purple",
-    "Almond",
-    "Teal",
-    "Blue",
-    "Raspberry",
-    "Green",
-    "Violet",
+from odoo.tools import LazyTranslate
+
+_lt = LazyTranslate(__name__)
+
+# The names, translated by our own catalogues: core's translations of them,
+# copied, and ours where core has none (Catalan has no Almond or Teal).
+TRANSLATED_NAMES = (
+    _lt("No color"),
+    _lt("Red"),
+    _lt("Orange"),
+    _lt("Yellow"),
+    _lt("Cyan"),
+    _lt("Purple"),
+    _lt("Almond"),
+    _lt("Teal"),
+    _lt("Blue"),
+    _lt("Raspberry"),
+    _lt("Green"),
+    _lt("Violet"),
 )
+NAMES = tuple(name._source for name in TRANSLATED_NAMES)
 
 COLORS = (
     "#a2a2a2", "#ee2d2d", "#dc8534", "#e8bb1d", "#5794dd", "#9f628f",

@@ -25,8 +25,8 @@ tours.add("vmk_colorlist_colors_edit_tour", {
             trigger: ".o_list_renderer .o_data_row:nth-child(12):last-child",
         },
         {
-            content: "each row shows Odoo's own name",
-            trigger: `${PURPLE} td[name='odoo_name']:contains("Purple")`,
+            content: "each color starts with Odoo's name, and no reset button",
+            trigger: `${PURPLE}:not(:has(button[name='action_reset'])) td[name='name']:contains("Purple")`,
         },
         {
             content: "No color cannot be renamed",
@@ -38,8 +38,8 @@ tours.add("vmk_colorlist_colors_edit_tour", {
             run: "click",
         },
         {
-            content: "its name shows Odoo's as the placeholder, and takes ours",
-            trigger: `${PURPLE} td[name='name'] input[placeholder="Purple"]`,
+            content: "rename it",
+            trigger: `${PURPLE} td[name='name'] input`,
             run: "edit Brand",
         },
         {
@@ -65,7 +65,7 @@ tours.add("vmk_colorlist_colors_edit_tour", {
         },
         {
             content: "the reset button's tooltip says what it does",
-            trigger: `${PURPLE} button[name='action_reset'][data-tooltip="Reset to Odoo's color and name"]`,
+            trigger: `${PURPLE} button[name='action_reset'][data-tooltip="Reset to default values"]`,
         },
     ],
 });
@@ -84,8 +84,8 @@ tours.add("vmk_colorlist_colors_reset_tour", {
             expectUnloadPage: true,
         },
         {
-            content: "after the reload, the row has no reset button and no name of its own",
-            trigger: `${PURPLE}:not(:has(button[name='action_reset'])) td[name='name']:not(:contains("Brand"))`,
+            content: "after the reload, the row has Odoo's name back, and no reset button",
+            trigger: `${PURPLE}:not(:has(button[name='action_reset'])) td[name='name']:contains("Purple")`,
         },
     ],
 });

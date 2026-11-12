@@ -5,7 +5,6 @@ import re
 
 from odoo import api, fields, models
 from odoo.exceptions import ValidationError
-from odoo.tools.translate import code_translations
 
 from . import palette
 
@@ -20,11 +19,14 @@ DARK_URL = "/_custom/vmk_colorlist_colors/colors.dark.scss"
 
 class VmkColorlistColor(models.Model):
     """One of the twelve colors Odoo offers wherever a record has a color:
-    tags, kanban cards, calendars. A record stores only what was changed;
-    empty, a field means Odoo's own color or name.
+    tags, kanban cards, calendars.
 
     The records are made by data/vmk_colorlist_color_data.xml, one per slot,
-    and are never created or deleted otherwise.
+    and are never created or deleted otherwise. Each starts with Odoo's name,
+    translated from our catalogues, which carry core's own translations of
+    the names, so a language activated later gets its name too. The data is
+    noupdate, so an update keeps a name someone changed. The color stores
+    only a custom one; empty, it is Odoo's.
     """
 
     _name = "vmk.colorlist.color"
@@ -38,10 +40,7 @@ class VmkColorlistColor(models.Model):
         inverse="_inverse_color",
         help="Choosing Odoo's own color again removes the custom one.",
     )
-    name = fields.Char(
-        translate=True,
-        help="Empty, the color keeps Odoo's name, translated as Odoo translates it.",
-    )
+    name = fields.Char(required=True, translate=True)
     odoo_color = fields.Char(string="Default Color", compute="_compute_odoo")
     odoo_name = fields.Char(string="Default Name", compute="_compute_odoo")
     is_custom = fields.Boolean(compute="_compute_is_custom")
@@ -51,7 +50,7 @@ class VmkColorlistColor(models.Model):
     @api.depends("slot")
     @api.depends_context("lang")
     def _compute_odoo(self):
-        names = self._odoo_names()
+        names = self._odoo_names(self.env.lang)
         for record in self:
             record.odoo_color = palette.COLORS[record.slot]
             record.odoo_name = names[record.slot]
@@ -66,17 +65,11 @@ class VmkColorlistColor(models.Model):
             color = (record.color or "").lower() or False
             record.custom_color = False if color == palette.COLORS[record.slot] else color
 
-    @api.depends("custom_color", "name")
+    @api.depends("custom_color", "name", "odoo_name")
+    @api.depends_context("lang")
     def _compute_is_custom(self):
         for record in self:
-            record.is_custom = bool(record.custom_color or record.name)
-
-    @api.depends("name", "slot")
-    @api.depends_context("lang")
-    def _compute_display_name(self):
-        names = self._odoo_names()
-        for record in self:
-            record.display_name = record.name or names[record.slot]
+            record.is_custom = bool(record.custom_color) or record.name != record.odoo_name
 
     @api.constrains("custom_color")
     def _check_custom_color(self):
@@ -88,39 +81,54 @@ class VmkColorlistColor(models.Model):
                     value=record.custom_color,
                 ))
 
-    @api.constrains("name", "slot")
-    def _check_no_color_name(self):
-        for record in self:
-            if record.slot == 0 and record.name:
-                raise ValidationError(self.env._(
-                    "No color keeps its name: Odoo gives it a meaning of its own, such as "
-                    "hiding an event tag from the website."
-                ))
+    @api.model
+    def _odoo_names(self, lang):
+        """The default names of the twelve colors, in a language.
 
-    def _odoo_names(self):
-        """Odoo's names for the twelve colors, in the current language.
-
-        They are JavaScript terms of `web` (colorlist.js), so their
-        translations are web's JavaScript translations, which Python's `_()`
-        does not reach.
+        Odoo's own are JavaScript terms of `web` (colorlist.js). Ours are
+        Python terms of this module (palette.TRANSLATED_NAMES), in our
+        catalogues: core's translations copied, and ours where core has none,
+        so a name is never English beside a translated list.
         """
-        lang = self.env.lang or "en_US"
-        if lang == "en_US":
-            return palette.NAMES
-        messages = code_translations.get_web_translations("web", lang)["messages"]
-        translated = {message["id"]: message["string"] for message in messages}
-        return tuple(translated.get(name, name) for name in palette.NAMES)
+        env = self.with_context(lang=lang or "en_US").env
+        return tuple(env._(name) for name in palette.TRANSLATED_NAMES)
+
+    @api.model
+    def _renames_no_color(self, value):
+        """Whether a value written to No color's name differs from Odoo's.
+        A write in one language gives a string, in that language; one from
+        update_field_translations gives every language's, as a dict."""
+        if isinstance(value, dict):
+            return any(
+                text and text != self._odoo_names(lang)[0] for lang, text in value.items()
+            )
+        return value != self._odoo_names(self.env.lang)[0]
 
     def action_reset(self):
-        """Back to Odoo's color and name. The page reloads, so the new colors
-        show everywhere at once."""
-        self.write({"custom_color": False, "name": False})
+        """Back to Odoo's color, and its name in every active language. The
+        page reloads, so the new colors show everywhere at once."""
+        self.write({"custom_color": False})
+        langs = [code for code, _name in self.env["res.lang"].get_installed()]
+        for record in self:
+            record.update_field_translations("name", {
+                "en_US": palette.NAMES[record.slot],
+                **{lang: self._odoo_names(lang)[record.slot] for lang in langs},
+            })
         return {"type": "ir.actions.client", "tag": "reload"}
 
     def action_reset_all(self):
         return self.search([]).action_reset()
 
     def write(self, vals):
+        if (
+            "name" in vals
+            and any(record.slot == 0 for record in self)
+            and self._renames_no_color(vals["name"])
+        ):
+            raise ValidationError(self.env._(
+                "No color keeps its name: Odoo gives it a meaning of its own, such as "
+                "hiding an event tag from the website."
+            ))
         result = super().write(vals)
         # A new color arrives as custom_color, written by color's inverse.
         if "custom_color" in vals:

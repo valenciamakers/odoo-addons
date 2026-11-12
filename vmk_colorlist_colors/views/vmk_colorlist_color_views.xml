@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-<!-- The twelve colors, in an editable list: the color picker on each row, the
-     name with Odoo's as its placeholder, and a button putting Odoo's back.
-     There is no adding or deleting a color: Odoo has twelve slots. -->
+<!-- The twelve colors, in an editable list: the color picker and the name on
+     each row, and a button putting Odoo's back once either is changed. There
+     is no adding or deleting a color: Odoo has twelve slots. -->
 <record id="vmk_colorlist_color_view_list" model="ir.ui.view">
     <field name="name">vmk.colorlist.color.list</field>
     <field name="model">vmk.colorlist.color</field>
@@ -17,14 +17,12 @@
             <field name="slot" column_invisible="1"/>
             <field name="is_custom" column_invisible="1"/>
             <field name="color" widget="color"/>
-            <field name="odoo_name"/>
-            <field name="name" options="{'placeholder_field': 'odoo_name'}"
-                   readonly="slot == 0"/>
+            <field name="name" readonly="slot == 0"/>
             <!-- A list row passes a button its title, as a tooltip, and no
                  other attribute, so an aria-label here would never reach the
                  page. -->
             <button name="action_reset" type="object" icon="close"
-                    title="Reset to Odoo's color and name"
+                    title="Reset to default values"
                     invisible="not is_custom"/>
         </list>
     </field>
