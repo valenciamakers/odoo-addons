@@ -44,14 +44,13 @@ This branch, `20.0`, holds the Odoo 20 versions, branched from `19.0` on 30 Sept
 lands here first**, and is carried back to `19.0` and `18.0` where it applies, each with a version
 bump of its own (since 24 October 2026; before that, fixes landed on `19.0` first).
 
-**A module that is not ready for a series is `"installable": False` on that branch.** The Apps Store
-scans every series branch by itself and lists what it finds installable, so pushing a branch
-publishes it: there is no separate step to hold back. So a new series branch starts with every
-module switched off, beside the version reset; each module's port turns its own back on, in the
-commit that finishes it; and a new module stays off until it is ready to launch. Odoo ignores an
-uninstallable module on the addons path, so the others install and test beside it. Decided 1 October
-2026, after a branch nearly went out carrying modules with a new series' version and the old series'
-code.
+**A pushed branch is listed, and a listing not ready to go live is unpublished by hand.** The Apps
+Store scans every series branch by itself and lists every installable module it finds, so there is
+no step before a push to hold one back. A module that is not ready stays installable all the same,
+since an uninstallable module cannot be installed or tested, and Felix unpublishes its listing after
+the scan; it stays unpublished on later scans. Before a push, check which modules on the branch are
+not ready, so their listings get unpublished. From 1 October to 12 November 2026 this said to keep
+such modules at `"installable": False`, which only made them impossible to test.
 
 ## Testing locally
 
