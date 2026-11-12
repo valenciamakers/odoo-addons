@@ -1,0 +1,200 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* vmk_website_event_series
+#
+# Generated, and written afresh on every run: do not edit by hand. Core's
+# wording where core has the same English, ours otherwise. See DEVELOPING.md.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 20.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-12 18:19+0000\n"
+"PO-Revision-Date: 2026-11-12 18:19+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : ((n != 0 && n % 1000000 == 0) ? 1 : 2);\n"
+
+#. module: vmk_website_event_series
+#: model_terms:ir.ui.view,arch_db:vmk_website_event_series.series_index
+msgid "<span class=\"text-muted\">Next date:</span>"
+msgstr ""
+
+#. module: vmk_website_event_series
+#: model:ir.module.module,summary:base.module_vmk_website_event_series
+msgid ""
+"A page for each event series on the website, listing its upcoming dates"
+msgstr ""
+
+#. module: vmk_website_event_series
+#: model_terms:ir.ui.view,arch_db:vmk_website_event_series.event_series_filter
+msgid "All Series"
+msgstr ""
+
+#. module: vmk_website_event_series
+#: model:ir.model.fields,field_description:vmk_website_event_series.field_vmk_event_series__publish_on
+msgid "Auto publish on"
+msgstr "Publication automatique le"
+
+#. module: vmk_website_event_series
+#: model:ir.model.fields,help:vmk_website_event_series.field_vmk_event_series__publish_on
+msgid "Automatically publish the page on the chosen date and time."
+msgstr "Publier automatiquement la page à la date et à l’heure choisies."
+
+#. module: vmk_website_event_series
+#: model:ir.model.fields,field_description:vmk_website_event_series.field_vmk_event_series__can_publish
+msgid "Can Publish"
+msgstr "Peut publier"
+
+#. module: vmk_website_event_series
+#: model:ir.model.fields,field_description:vmk_website_event_series.field_vmk_event_series__cover_properties
+msgid "Cover Properties"
+msgstr "Propriétés de la couverture"
+
+#. module: vmk_website_event_series
+#: model:ir.model.fields,field_description:vmk_website_event_series.field_event_event__display_name
+#: model:ir.model.fields,field_description:vmk_website_event_series.field_vmk_event_series__display_name
+msgid "Display Name"
+msgstr "Nom d'affichage"
+
+#. module: vmk_website_event_series
+#: model:ir.model,name:vmk_website_event_series.model_event_event
+msgid "Event"
+msgstr "Événement"
+
+#. module: vmk_website_event_series
+#: model:ir.model,name:vmk_website_event_series.model_vmk_event_series
+#: model_terms:ir.ui.view,arch_db:vmk_website_event_series.series_index
+msgid "Event Series"
+msgstr ""
+
+#. module: vmk_website_event_series
+#: model:ir.module.module,shortdesc:base.module_vmk_website_event_series
+msgid "Event Series (Website)"
+msgstr ""
+
+#. module: vmk_website_event_series
+#: model_terms:ir.ui.view,arch_db:vmk_website_event_series.event_series_filter
+msgid "Filter by Series"
+msgstr ""
+
+#. module: vmk_website_event_series
+#: model_terms:ir.ui.view,arch_db:vmk_website_event_series.event_series_filter
+msgid "Filter by series"
+msgstr ""
+
+#. module: vmk_website_event_series
+#: model:ir.model.fields,field_description:vmk_website_event_series.field_event_event__id
+#: model:ir.model.fields,field_description:vmk_website_event_series.field_vmk_event_series__id
+msgid "ID"
+msgstr "ID"
+
+#. module: vmk_website_event_series
+#: model:ir.model.fields,field_description:vmk_website_event_series.field_vmk_event_series__is_published
+msgid "Is Published"
+msgstr "Est publié"
+
+#. module: vmk_website_event_series
+#: model_terms:ir.ui.view,arch_db:vmk_website_event_series.series_page
+msgid "No dates are scheduled right now."
+msgstr ""
+
+#. module: vmk_website_event_series
+#: model_terms:ir.ui.view,arch_db:vmk_website_event_series.series_index
+msgid "No series are on the website yet."
+msgstr ""
+
+#. module: vmk_website_event_series
+#: model:ir.model.fields,field_description:vmk_website_event_series.field_vmk_event_series__published_date
+msgid "Published date"
+msgstr "Date de publication"
+
+#. module: vmk_website_event_series
+#: model:ir.model.fields,help:vmk_website_event_series.field_vmk_event_series__website_id
+msgid "Restrict to a specific website."
+msgstr "Restreindre à un site Web spécifique"
+
+#. module: vmk_website_event_series
+#: model:ir.model.fields,field_description:vmk_website_event_series.field_vmk_event_series__is_seo_optimized
+msgid "SEO optimized"
+msgstr "SEO optimisé"
+
+#. module: vmk_website_event_series
+#: model:ir.model.fields,field_description:vmk_website_event_series.field_vmk_event_series__seo_name
+msgid "Seo name"
+msgstr "SEO nom"
+
+#. module: vmk_website_event_series
+#: model_terms:ir.ui.view,arch_db:vmk_website_event_series.event_series_filter
+#: model_terms:ir.ui.view,arch_db:vmk_website_event_series.event_series_link
+msgid "Series"
+msgstr "Série"
+
+#. module: vmk_website_event_series
+#: model_terms:ir.ui.view,arch_db:vmk_website_event_series.series_page
+msgid "Series Subtitle"
+msgstr ""
+
+#. module: vmk_website_event_series
+#: model_terms:ir.ui.view,arch_db:vmk_website_event_series.series_page
+msgid "Series Title"
+msgstr ""
+
+#. module: vmk_website_event_series
+#: model:ir.model.fields,help:vmk_website_event_series.field_vmk_event_series__website_absolute_url
+msgid "The full absolute URL to access the document through the website."
+msgstr "L'URL absolue complète pour accéder au document via le site web."
+
+#. module: vmk_website_event_series
+#: model:ir.model.fields,help:vmk_website_event_series.field_vmk_event_series__website_url
+msgid "The full relative URL to access the document through the website."
+msgstr "L'URL relative complète pour accéder au document via le site web."
+
+#. module: vmk_website_event_series
+#: model_terms:ir.ui.view,arch_db:vmk_website_event_series.series_page
+msgid "Upcoming Dates"
+msgstr ""
+
+#. module: vmk_website_event_series
+#: model:ir.model.fields,field_description:vmk_website_event_series.field_vmk_event_series__website_published
+msgid "Visible on current website"
+msgstr "Visible sur le site web actuel"
+
+#. module: vmk_website_event_series
+#: model:ir.model.fields,field_description:vmk_website_event_series.field_vmk_event_series__website_id
+msgid "Website"
+msgstr "Site Web"
+
+#. module: vmk_website_event_series
+#: model:ir.model.fields,field_description:vmk_website_event_series.field_vmk_event_series__website_absolute_url
+msgid "Website Absolute URL"
+msgstr "URL absolue du site web"
+
+#. module: vmk_website_event_series
+#: model:ir.model.fields,field_description:vmk_website_event_series.field_vmk_event_series__website_url
+msgid "Website URL"
+msgstr "URL de site web"
+
+#. module: vmk_website_event_series
+#: model:ir.model.fields,field_description:vmk_website_event_series.field_vmk_event_series__website_meta_description
+msgid "Website meta description"
+msgstr "Méta-description du site web"
+
+#. module: vmk_website_event_series
+#: model:ir.model.fields,field_description:vmk_website_event_series.field_vmk_event_series__website_meta_keywords
+msgid "Website meta keywords"
+msgstr "Méta mots-clés site web"
+
+#. module: vmk_website_event_series
+#: model:ir.model.fields,field_description:vmk_website_event_series.field_vmk_event_series__website_meta_title
+msgid "Website meta title"
+msgstr "Méta titre site web"
+
+#. module: vmk_website_event_series
+#: model:ir.model.fields,field_description:vmk_website_event_series.field_vmk_event_series__website_meta_og_img
+msgid "Website opengraph image"
+msgstr "Image opengraph site web"

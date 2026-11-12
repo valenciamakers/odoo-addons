@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<!-- A series' page, at /event/series/<slug>: its cover, title, and subtitle,
+     its description, and its current and upcoming dates, each drawn as the
+     /event listing draws an event (website_event.event_card). Everything
+     here is plain markup for a theme to style. -->
+<template id="series_page" name="Event Series">
+    <t t-call="website.layout">
+        <div id="wrap" class="o_vmk_event_series">
+            <t t-call="website.record_cover"
+               _record="series"
+               use_filters="True"
+               use_size="True"
+               use_text_align="True"
+               additionnal_classes.f="o_vmk_event_series_cover overflow-hidden h-auto">
+                <div class="container d-flex flex-grow-1 h-100 w-100">
+                    <div class="d-flex flex-column w-100 py-3">
+                        <div class="w-100 mt-auto">
+                            <t t-if="not series.website_published" t-call="website.unpublished_badge" groups="base.group_user"/>
+                            <h1 t-field="series.name" placeholder="Series Title" class="mt-3"/>
+                            <p class="lead" t-field="series.subtitle" placeholder="Series Subtitle"/>
+                        </div>
+                    </div>
+                </div>
+            </t>
+            <section class="o_vmk_event_series_description">
+                <div class="container py-4">
+                    <div t-field="series.description"/>
+                </div>
+            </section>
+            <section class="o_vmk_event_series_dates">
+                <div class="container pb-5">
+                    <h2 class="h4 mb-3">Upcoming Dates</h2>
+                    <t t-if="events">
+                        <t t-set="opt_events_list_cards" t-value="is_view_active('website_event.opt_events_list_cards')"/>
+                        <t t-set="opt_events_list_columns" t-value="True"/>
+                        <t t-set="opt_events_event_location" t-value="is_view_active('website_event.event_location')"/>
+                        <div class="row g-4 g-lg-3 g-xxl-4">
+                            <div t-foreach="events" t-as="event" class="col-md-6 col-lg-4 col-xl-3">
+                                <t t-call="website_event.event_card"/>
+                            </div>
+                        </div>
+                    </t>
+                    <p t-else="" class="o_vmk_event_series_no_dates text-muted">No dates are scheduled right now.</p>
+                </div>
+            </section>
+        </div>
+    </t>
+</template>
+
+<!-- Every published series of the website, at /event/series. -->
+<template id="series_index" name="Event Series List">
+    <t t-call="website.layout">
+        <div id="wrap" class="o_vmk_event_series_index">
+            <div id="oe_structure_vmk_event_series_index_0" class="oe_structure oe_empty"/>
+            <div class="container py-4">
+                <h1>Event Series</h1>
+                <div t-if="series_list" class="row g-4 mt-1">
+                    <div t-foreach="series_list" t-as="series" class="col-md-6 col-lg-4">
+                        <t t-set="next_event" t-value="series._website_events()[:1]"/>
+                        <a t-att-href="series.website_url"
+                           class="o_vmk_event_series_card card h-100 text-decoration-none text-reset">
+                            <div t-if="series._get_background() != 'none'"
+                                 class="o_vmk_event_series_card_cover card-img-top"
+                                 t-attf-style="background-image: #{series._get_background(height=400)}; background-size: cover; background-position: center; aspect-ratio: 16 / 9;"/>
+                            <div class="card-body">
+                                <h2 class="card-title h5" t-out="series.name"/>
+                                <p t-if="series.subtitle" class="card-text text-muted" t-out="series.subtitle"/>
+                                <p t-if="next_event" class="card-text small mb-0">
+                                    <span class="text-muted">Next date:</span>
+                                    <span t-out="next_event.date_begin"
+                                          t-options="{'widget': 'date', 'tz_name': next_event.date_tz}"/>
+                                </p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <p t-else="" class="text-muted mt-3">No series are on the website yet.</p>
+            </div>
+            <div id="oe_structure_vmk_event_series_index_1" class="oe_structure oe_empty"/>
+        </div>
+    </t>
+</template>
+
+</odoo>

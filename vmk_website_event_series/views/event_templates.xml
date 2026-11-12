@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<!-- On an event's page, a sidebar block linking to its series, as the
+     sidebar's Location and Organizer blocks do theirs. Read as superuser,
+     since a visitor may not read an unpublished series, and shown only for
+     a published one on this website. -->
+<template id="event_series_link" inherit_id="website_event.event_description_full" name="Event Series Link">
+    <xpath expr="//div[@t-if='opt_event_location_block and event.address_id']" position="before">
+        <t t-set="vmk_series" t-value="event.sudo().series_id"/>
+        <div t-if="vmk_series and vmk_series.website_published and vmk_series._is_on_current_website()"
+             class="o_wevent_sidebar_block o_wevent_bordered_block o_vmk_event_series_link pb-3 mb-4">
+            <h6 class="o_wevent_sidebar_title">Series</h6>
+            <a t-att-href="vmk_series.website_url" t-out="vmk_series.name"/>
+        </div>
+    </xpath>
+</template>
+
+<!-- The /event listing's Series filter, beside its Date filter: a dropdown on
+     large screens, and an entry in the filters panel on small ones. Shown
+     once the website has a published series. -->
+<template id="event_series_filter" inherit_id="website_event.index_topbar" name="Filter by Series">
+    <xpath expr="//div[hasclass('o_wevent_search')]" position="before">
+        <div t-if="vmk_series" class="dropdown d-none d-lg-block o_vmk_event_series_filter">
+            <button class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown"
+                    title="Filter by Series" aria-label="Filter by series" aria-expanded="false">
+                <t t-if="vmk_current_series" t-out="vmk_current_series.name"/>
+                <t t-else="">All Series</t>
+            </button>
+            <div class="dropdown-menu">
+                <a t-att-href="keep_event_url(series='all')"
+                   t-attf-class="dropdown-item #{'active' if not vmk_current_series else ''}">All Series</a>
+                <t t-foreach="vmk_series" t-as="series">
+                    <a t-att-href="keep_event_url(series=series.id)"
+                       t-attf-class="dropdown-item #{'active' if series == vmk_current_series else ''}"
+                       t-out="series.name"/>
+                </t>
+            </div>
+        </div>
+    </xpath>
+    <xpath expr="//div[hasclass('accordion-item')]" position="after">
+        <div t-if="vmk_series" class="accordion-item o_vmk_event_series_filter">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse" data-bs-target=".o_vmk_offcanvas_series"
+                        aria-expanded="false" aria-controls="o_vmk_offcanvas_series">
+                    Series
+                </button>
+            </h2>
+            <div id="o_vmk_offcanvas_series" class="o_vmk_offcanvas_series accordion-collapse collapse">
+                <div class="accordion-body pt-0">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item px-0 border-0">
+                            <a t-att-href="keep_event_url(series='all')"
+                               class="d-flex align-items-center text-reset text-decoration-none">
+                                <div class="form-check">
+                                    <input class="form-check-input pe-none" type="radio" name="vmk_series" t-att-checked="not vmk_current_series"/>
+                                    <label class="form-check-label">All Series</label>
+                                </div>
+                            </a>
+                        </li>
+                        <li t-foreach="vmk_series" t-as="series" class="list-group-item px-0 border-0">
+                            <a t-att-href="keep_event_url(series=series.id)"
+                               class="d-flex align-items-center text-reset text-decoration-none">
+                                <div class="form-check">
+                                    <input class="form-check-input pe-none" type="radio" name="vmk_series" t-att-checked="series == vmk_current_series"/>
+                                    <label class="form-check-label" t-out="series.name"/>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </xpath>
+</template>
+
+</odoo>

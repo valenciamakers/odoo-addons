@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- The series' website settings on its form, where an event's form has
+         them: the Go to Website button, and the website it is on. -->
+    <record id="vmk_event_series_view_form" model="ir.ui.view">
+        <field name="name">vmk.event.series.form.website</field>
+        <field name="model">vmk.event.series</field>
+        <field name="inherit_id" ref="vmk_event_series.vmk_event_series_view_form"/>
+        <field name="arch" type="xml">
+            <div name="button_box" position="inside">
+                <field name="is_published" widget="website_redirect_button"/>
+            </div>
+            <field name="company_id" position="after">
+                <field name="website_id" options="{'no_create': True}"
+                       domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]"
+                       groups="website.group_multi_website"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="vmk_event_series_view_list" model="ir.ui.view">
+        <field name="name">vmk.event.series.list.website</field>
+        <field name="model">vmk.event.series</field>
+        <field name="inherit_id" ref="vmk_event_series.vmk_event_series_view_list"/>
+        <field name="arch" type="xml">
+            <field name="upcoming_event_count" position="after">
+                <field name="website_id" groups="website.group_multi_website" optional="show"/>
+                <field name="is_published" optional="show"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>

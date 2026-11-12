@@ -23,6 +23,10 @@ was verified against the series of the branch you are reading.
 - **`vmk_event_slot_multiday`** — an end date on event slots, so a slot can span several days.
 - **`vmk_website_event_slot_multiday`** — both days of a multi-day slot in the website's
   registration modal; `auto_install`.
+- **`vmk_event_series`** — a series grouping the dates of an event run again and again; each date
+  stays an event. Not yet released.
+- **`vmk_website_event_series`** — a page per series listing its upcoming dates, an index, a link
+  from each event's page, and a Series filter on `/event`; `auto_install`. Not yet released.
 - **`vmk_partner_email_multiple`** — several email addresses per contact, matched by Odoo's own
   machinery, and kept rather than dropped when contacts are merged.
 - **`vmk_website_disable_tracking`** — switches off Odoo's website visitor tracking on every website

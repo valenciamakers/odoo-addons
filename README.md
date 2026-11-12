@@ -35,6 +35,11 @@ They depend only on Odoo Community modules, so they work on Community and Enterp
 - **[`vmk_website_event_slot_multiday`](vmk_website_event_slot_multiday)** — show both days of a
   multi-day slot to a visitor picking it on the event page. Installs itself alongside Website
   Events.
+- **[`vmk_event_series`](vmk_event_series)** — group the dates of an event you run again and again,
+  such as a monthly workshop, into a series; each date stays an ordinary event. Not yet released.
+- **[`vmk_website_event_series`](vmk_website_event_series)** — give each series a page that always
+  lists its upcoming dates, so visitors have one address to come back to. Installs itself alongside
+  Website Events. Not yet released.
 - **[`vmk_website_disable_tracking`](vmk_website_disable_tracking)** — switch off Odoo's website
   visitor tracking on every website the moment the module is installed, with a Track Visitors
   setting to turn it back on for any one website.

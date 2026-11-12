@@ -4,7 +4,7 @@ Group the dates of an event you run again and again, such as a monthly workshop,
 Each date stays an ordinary event, with its own tickets, seats, and registrations; the series holds
 what they share, and lists them.
 
-It depends only on `event` (_Events Organization_). Its website companion,
+It depends only on `event` (Events Organization). Its website companion,
 [`vmk_website_event_series`](../vmk_website_event_series), gives each series a page of its own.
 LGPL-3, © 2026 Valencia Makers, SL.
 
