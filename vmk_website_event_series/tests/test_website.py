@@ -70,6 +70,18 @@ class TestSeriesWebsite(HttpCase):
         self.assertNotIn("VMK Draft Date", dates)
         self.assertLess(dates.index("VMK Next Date"), dates.index("VMK Later Date"))
 
+    def test_series_page_uses_the_listings_list(self):
+        """The events are website_event's own list, set out as /event sets it
+        out, so its styles and layout options reach them."""
+        page = self._get(self.series.website_url)
+        section = page.xpath("//section[contains(@class, 'o_vmk_event_series_dates')]")[0]
+        self.assertEqual(" ".join(section.xpath(".//h2")[0].text_content().split()), "Events")
+        cards = section.xpath(
+            ".//div[contains(@class, 'o_wevent_events_list')]//div[@id='o_wevent_index_main_col']"
+            "//a[contains(@href, '/event/')]"
+        )
+        self.assertEqual(len(cards), 2)
+
     def test_series_page_without_dates(self):
         empty = self.env["vmk.event.series"].create({"name": "Nothing Yet", "is_published": True})
         page = self._get(empty.website_url)
@@ -81,12 +93,14 @@ class TestSeriesWebsite(HttpCase):
         self._get(self.hidden.website_url)
 
     def test_index_lists_published_series(self):
-        page = self._get("/event/series")
+        page = self._get("/events/series")
         text = page.text_content()
         self.assertIn("Intro to 3D Printing", text)
         self.assertNotIn("Secret Series", text)
         links = page.xpath("//a[contains(@class, 'o_vmk_event_series_card')]/@href")
         self.assertIn(self.series.website_url, links)
+        card = page.xpath("//a[contains(@class, 'o_vmk_event_series_card')]")[0]
+        self.assertIn("Next event:", card.text_content())
 
     def test_event_page_links_to_its_series(self):
         page = self._get(self.soon.website_url)
@@ -103,18 +117,26 @@ class TestSeriesWebsite(HttpCase):
         text = page.xpath("//div[contains(@class, 'o_wevent_events_list')]")[0].text_content()
         self.assertIn("VMK Next Date", text)
         self.assertNotIn("VMK Unrelated Event", text)
-        filter_ = page.xpath("//div[contains(@class, 'o_vmk_event_series_filter')]//button")[0]
-        self.assertIn("Intro to 3D Printing", filter_.text_content())
+        # Titled Series, with a count, as a tag category's filter is; the
+        # chosen series is the active entry.
+        filter_ = page.xpath("//div[contains(@class, 'o_vmk_event_series_filter')]")[0]
+        button = filter_.xpath(".//button")[0]
+        self.assertEqual(" ".join(button.text_content().split()), "Series 1")
+        active = filter_.xpath(".//a[contains(@class, 'active')]")
+        self.assertEqual([" ".join(a.text_content().split()) for a in active], ["Intro to 3D Printing"])
 
     def test_listing_unfiltered(self):
         page = self._get("/event?country=all")
         text = page.xpath("//div[contains(@class, 'o_wevent_events_list')]")[0].text_content()
         self.assertIn("VMK Next Date", text)
         self.assertIn("VMK Unrelated Event", text)
-        filter_ = page.xpath("//div[contains(@class, 'o_vmk_event_series_filter')]//button")[0]
-        self.assertIn("All Series", filter_.text_content())
-        options = page.xpath("//div[contains(@class, 'o_vmk_event_series_filter')]//a")
-        self.assertIn("Intro to 3D Printing", [" ".join(a.text_content().split()) for a in options])
+        filter_ = page.xpath("//div[contains(@class, 'o_vmk_event_series_filter')]")[0]
+        self.assertEqual(" ".join(filter_.xpath(".//button")[0].text_content().split()), "Series")
+        options = [" ".join(a.text_content().split()) for a in filter_.xpath(".//a")]
+        self.assertEqual(options[0], "All")
+        self.assertIn("Intro to 3D Printing", options)
+        active = filter_.xpath(".//a[contains(@class, 'active')]")
+        self.assertEqual([" ".join(a.text_content().split()) for a in active], ["All"])
         self.assertNotIn("Secret Series", page.text_content())
 
     def test_sitemap(self):

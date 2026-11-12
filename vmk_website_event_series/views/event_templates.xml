@@ -16,23 +16,25 @@
     </xpath>
 </template>
 
-<!-- The /event listing's Series filter, beside its Date filter: a dropdown on
-     large screens, and an entry in the filters panel on small ones. Shown
-     once the website has a published series. -->
+<!-- The /event listing's Series filter, beside its Date filter, drawn as its
+     tag categories' filters are: titled Series, with a count once one is
+     chosen, and All first. A dropdown on large screens, and an entry in the
+     filters panel on small ones. Shown once the website has a published
+     series. -->
 <template id="event_series_filter" inherit_id="website_event.index_topbar" name="Filter by Series">
     <xpath expr="//div[hasclass('o_wevent_search')]" position="before">
         <div t-if="vmk_series" class="dropdown d-none d-lg-block o_vmk_event_series_filter">
             <button class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown"
                     title="Filter by Series" aria-label="Filter by series" aria-expanded="false">
-                <t t-if="vmk_current_series" t-out="vmk_current_series.name"/>
-                <t t-else="">All Series</t>
+                Series
+                <span t-if="vmk_current_series" class="badge bg-primary ms-1">1</span>
             </button>
             <div class="dropdown-menu">
                 <a t-att-href="keep_event_url(series='all')"
-                   t-attf-class="dropdown-item #{'active' if not vmk_current_series else ''}">All Series</a>
+                   t-attf-class="dropdown-item d-flex align-items-center justify-content-between #{'active' if not vmk_current_series else ''}">All</a>
                 <t t-foreach="vmk_series" t-as="series">
                     <a t-att-href="keep_event_url(series=series.id)"
-                       t-attf-class="dropdown-item #{'active' if series == vmk_current_series else ''}"
+                       t-attf-class="dropdown-item d-flex align-items-center justify-content-between #{'active' if series == vmk_current_series else ''}"
                        t-out="series.name"/>
                 </t>
             </div>
@@ -55,7 +57,7 @@
                                class="d-flex align-items-center text-reset text-decoration-none">
                                 <div class="form-check">
                                     <input class="form-check-input pe-none" type="radio" name="vmk_series" t-att-checked="not vmk_current_series"/>
-                                    <label class="form-check-label">All Series</label>
+                                    <label class="form-check-label">All</label>
                                 </div>
                             </a>
                         </li>

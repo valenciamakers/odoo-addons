@@ -108,7 +108,6 @@ msgstr "Nombre d'esdeveniments"
 #: model:ir.actions.act_window,name:vmk_event_series.vmk_event_series_action
 #: model:ir.model,name:vmk_event_series.model_vmk_event_series
 #: model:ir.module.module,shortdesc:base.module_vmk_event_series
-#: model:ir.ui.menu,name:vmk_event_series.vmk_event_series_menu
 #: model_terms:ir.ui.view,arch_db:vmk_event_series.vmk_event_series_view_form
 #: model_terms:ir.ui.view,arch_db:vmk_event_series.vmk_event_series_view_list
 #: model_terms:ir.ui.view,arch_db:vmk_event_series.vmk_event_series_view_search
@@ -150,8 +149,8 @@ msgstr "Nom"
 #. odoo-python
 #: code:addons/vmk_event_series/models/vmk_event_series.py:0
 #: model_terms:ir.ui.view,arch_db:vmk_event_series.vmk_event_series_view_form
-msgid "New Date"
-msgstr "Nova data"
+msgid "New Event in Series"
+msgstr "Nou esdeveniment a la sèrie"
 
 #. module: vmk_event_series
 #: model:ir.model.fields,field_description:vmk_event_series.field_vmk_event_series__next_event_id
@@ -165,9 +164,10 @@ msgstr "Seqüència"
 
 #. module: vmk_event_series
 #: model:ir.model.fields,field_description:vmk_event_series.field_event_event__series_id
+#: model:ir.ui.menu,name:vmk_event_series.vmk_event_series_menu
 #: model_terms:ir.ui.view,arch_db:vmk_event_series.view_event_search_series
 msgid "Series"
-msgstr "Sèrie"
+msgstr "Sèries"
 
 #. module: vmk_event_series
 #: model:ir.model.fields,field_description:vmk_event_series.field_vmk_event_series__subtitle

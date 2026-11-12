@@ -7,7 +7,7 @@
         <field name="arch" type="xml">
             <form string="Event Series">
                 <header>
-                    <button name="action_new_date" type="object" string="New Date"
+                    <button name="action_new_event" type="object" string="New Event in Series"
                             class="btn-primary" invisible="not id"/>
                 </header>
                 <sheet>
@@ -109,7 +109,7 @@
     </record>
 
     <menuitem id="vmk_event_series_menu"
-              name="Event Series"
+              name="Series"
               action="vmk_event_series_action"
               parent="event.event_main_menu"
               sequence="2"

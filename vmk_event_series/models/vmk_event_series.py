@@ -95,12 +95,12 @@ class VmkEventSeries(models.Model):
         })
         return action
 
-    def action_new_date(self):
+    def action_new_event(self):
         """A new event in the series, from its template and with its name."""
         self.ensure_one()
         return {
             "type": "ir.actions.act_window",
-            "name": self.env._("New Date"),
+            "name": self.env._("New Event in Series"),
             "res_model": "event.event",
             "view_mode": "form",
             "views": [(False, "form")],

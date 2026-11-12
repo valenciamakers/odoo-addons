@@ -17,8 +17,8 @@ def _published_series(env):
 
 
 def sitemap_series(env, rule, qs):
-    if not qs or qs.lower() in "/event/series":
-        yield {"loc": "/event/series"}
+    if not qs or qs.lower() in "/events/series":
+        yield {"loc": "/events/series"}
     for series in _published_series(env):
         loc = series.website_url
         if not qs or qs.lower() in loc.lower():
@@ -46,9 +46,10 @@ class WebsiteEventSeriesController(WebsiteEventController):
             })
         return response
 
-    # The series' own pages
+    # The series' own pages: the list in the plural, as /events lists events,
+    # and each series in the singular, as /event/<slug> is one event.
 
-    @http.route("/event/series", type="http", auth="public", website=True,
+    @http.route("/events/series", type="http", auth="public", website=True,
                 sitemap=sitemap_series, readonly=True)
     def series_index(self, **kwargs):
         return request.render("vmk_website_event_series.series_index", {

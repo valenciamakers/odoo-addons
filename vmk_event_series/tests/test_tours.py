@@ -10,7 +10,7 @@ from odoo.tests import HttpCase, tagged
 @tagged("post_install", "-at_install")
 class TestTours(HttpCase):
 
-    def test_new_date(self):
+    def test_new_event_in_series(self):
         template = self.env["event.type"].create({"name": "Tour Template"})
         series = self.env["vmk.event.series"].create({
             "name": "Tour Series", "event_type_id": template.id,
@@ -22,5 +22,5 @@ class TestTours(HttpCase):
             "date_end": fields.Datetime.now() + timedelta(days=5, hours=2),
         })
         self.start_tour(
-            f"/odoo/event-series/{series.id}", "vmk_event_series_new_date_tour", login="admin"
+            f"/odoo/event-series/{series.id}", "vmk_event_series_new_event_tour", login="admin"
         )

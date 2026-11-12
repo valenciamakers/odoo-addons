@@ -54,8 +54,8 @@ class TestSeries(TransactionCase):
         self.assertFalse(self.soon.event_type_id)
         self.assertEqual(self.soon.name, "Next date")
 
-    def test_new_date_starts_from_the_series(self):
-        action = self.series.action_new_date()
+    def test_new_event_starts_from_the_series(self):
+        action = self.series.action_new_event()
         self.assertEqual(action["res_model"], "event.event")
         context = action["context"]
         self.assertEqual(context["default_series_id"], self.series.id)

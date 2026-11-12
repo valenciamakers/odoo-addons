@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 20.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-12 18:12+0000\n"
-"PO-Revision-Date: 2026-11-12 18:12+0000\n"
+"POT-Creation-Date: 2026-11-12 20:01+0000\n"
+"PO-Revision-Date: 2026-11-12 20:01+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: pt_BR\n"
@@ -106,7 +106,6 @@ msgstr ""
 #: model:ir.actions.act_window,name:vmk_event_series.vmk_event_series_action
 #: model:ir.model,name:vmk_event_series.model_vmk_event_series
 #: model:ir.module.module,shortdesc:base.module_vmk_event_series
-#: model:ir.ui.menu,name:vmk_event_series.vmk_event_series_menu
 #: model_terms:ir.ui.view,arch_db:vmk_event_series.vmk_event_series_view_form
 #: model_terms:ir.ui.view,arch_db:vmk_event_series.vmk_event_series_view_list
 #: model_terms:ir.ui.view,arch_db:vmk_event_series.vmk_event_series_view_search
@@ -148,7 +147,7 @@ msgstr "Nome"
 #. odoo-python
 #: code:addons/vmk_event_series/models/vmk_event_series.py:0
 #: model_terms:ir.ui.view,arch_db:vmk_event_series.vmk_event_series_view_form
-msgid "New Date"
+msgid "New Event in Series"
 msgstr ""
 
 #. module: vmk_event_series
@@ -163,6 +162,7 @@ msgstr "Sequência"
 
 #. module: vmk_event_series
 #: model:ir.model.fields,field_description:vmk_event_series.field_event_event__series_id
+#: model:ir.ui.menu,name:vmk_event_series.vmk_event_series_menu
 #: model_terms:ir.ui.view,arch_db:vmk_event_series.view_event_search_series
 msgid "Series"
 msgstr "Séries"

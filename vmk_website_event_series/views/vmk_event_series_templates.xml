@@ -2,9 +2,10 @@
 <odoo>
 
 <!-- A series' page, at /event/series/<slug>: its cover, title, and subtitle,
-     its description, and its current and upcoming dates, each drawn as the
-     /event listing draws an event (website_event.event_card). Everything
-     here is plain markup for a theme to style. -->
+     its description, and its current and upcoming events, in the /event
+     listing's own list (website_event.events_list), wrapped as the listing
+     wraps it so its styles and layout options apply. Everything here is
+     plain markup for a theme to style. -->
 <template id="series_page" name="Event Series">
     <t t-call="website.layout">
         <div id="wrap" class="o_vmk_event_series">
@@ -29,27 +30,36 @@
                     <div t-field="series.description"/>
                 </div>
             </section>
-            <section class="o_vmk_event_series_dates">
-                <div class="container pb-5">
-                    <h2 class="h4 mb-3">Upcoming Dates</h2>
-                    <t t-if="events">
-                        <t t-set="opt_events_list_cards" t-value="is_view_active('website_event.opt_events_list_cards')"/>
-                        <t t-set="opt_events_list_columns" t-value="True"/>
-                        <t t-set="opt_events_event_location" t-value="is_view_active('website_event.event_location')"/>
-                        <div class="row g-4 g-lg-3 g-xxl-4">
-                            <div t-foreach="events" t-as="event" class="col-md-6 col-lg-4 col-xl-3">
-                                <t t-call="website_event.event_card"/>
+            <section class="o_vmk_event_series_dates o_wevent_index">
+                <div class="container">
+                    <h2 class="h4 mb-3">Events</h2>
+                    <p t-if="not events" class="o_vmk_event_series_no_dates text-muted pb-5">No dates are scheduled right now.</p>
+                </div>
+                <!-- As website_event.index sets the list out. The list's
+                     search and pager have nothing to do here: an empty
+                     search, and a pager of one page, which draws nothing. -->
+                <div t-if="events" class="o_wevent_events_list">
+                    <t t-set="opt_events_list_columns" t-value="is_view_active('website_event.opt_events_list_columns')"/>
+                    <t t-set="event_ids" t-value="events"/>
+                    <t t-set="searches" t-value="{'search': '', 'tags': ''}"/>
+                    <t t-set="pager" t-value="{'page_count': 1}"/>
+                    <div class="container">
+                        <div class="row">
+                            <div id="o_wevent_index_main_col"
+                                 t-attf-class="col-md mb-3 #{opt_events_list_columns and 'opt_events_list_columns' or 'opt_events_list_rows'}">
+                                <div class="row g-4 g-lg-3 g-xxl-4">
+                                    <t t-call="website_event.events_list"/>
+                                </div>
                             </div>
                         </div>
-                    </t>
-                    <p t-else="" class="o_vmk_event_series_no_dates text-muted">No dates are scheduled right now.</p>
+                    </div>
                 </div>
             </section>
         </div>
     </t>
 </template>
 
-<!-- Every published series of the website, at /event/series. -->
+<!-- Every published series of the website, at /events/series. -->
 <template id="series_index" name="Event Series List">
     <t t-call="website.layout">
         <div id="wrap" class="o_vmk_event_series_index">
@@ -68,7 +78,7 @@
                                 <h2 class="card-title h5" t-out="series.name"/>
                                 <p t-if="series.subtitle" class="card-text text-muted" t-out="series.subtitle"/>
                                 <p t-if="next_event" class="card-text small mb-0">
-                                    <span class="text-muted">Next date:</span>
+                                    <span class="text-muted">Next event:</span>
                                     <span t-out="next_event.date_begin"
                                           t-options="{'widget': 'date', 'tz_name': next_event.date_tz}"/>
                                 </p>

@@ -13,16 +13,20 @@ LGPL-3, © 2026 Valencia Makers, SL.
 - **Publish a series** with the Go to Website button on its form, as for an event. A series can be
   limited to one website.
 - **Its page**, at `/event/series/<series>`, shows its cover, name, and subtitle, its description,
-  and its current and upcoming dates, each drawn as the `/event` listing draws an event. The cover,
-  name, subtitle, and description are edited on the page, in the website editor. With no dates
-  scheduled, the page says so.
-- **`/event/series`** lists every published series on the website, with its next date.
+  and its current and upcoming events, in the same list as the `/event` listing's. The cover, name,
+  subtitle, and description are edited on the page, in the website editor. With no dates scheduled,
+  the page says so.
+- **`/events/series`** lists every published series on the website, each with its next event. The
+  list is in the plural and each series in the singular, as `/events` lists events and
+  `/event/<event>` is one.
 - **An event's page** has a Series block in its sidebar, beside Location and Organizer, linking to
   its series, once the series is published.
-- **The `/event` listing** has a Series filter beside its Date filter, once a series is published.
+- **The `/event` listing** has a Series filter beside its Date filter, once a series is published,
+  drawn as its tag categories' filters are: titled Series, All first, and a count once one is
+  chosen.
 - **To serve the pages at another address**, such as `/workshops`, add two redirects of type "308
   Redirect / Rewrite" in Website › Configuration › Redirects, one for each route: from
-  `/event/series` to `/workshops`, and from `/event/series/<model("vmk.event.series"):series>` to
+  `/events/series` to `/workshops`, and from `/event/series/<model("vmk.event.series"):series>` to
   `/workshops/<model("vmk.event.series"):series>`. Odoo then serves the pages at the new address,
   redirects the old one there, and rewrites the site's links to them.
 
@@ -33,8 +37,12 @@ LGPL-3, © 2026 Valencia Makers, SL.
 The series takes website's own mixins, as `event.event` does in `website_event`:
 `website.published.multi.mixin` (published, per website), `website.seo.metadata`, and
 `website.cover_properties.mixin`. Its `website_url` is `/event/series/<slug>`, and link previews
-take its cover and subtitle, as an event's do. The dates are `website_event.event_card`, called with
-the listing's own options, so a theme that styles the listing styles them too.
+take its cover and subtitle, as an event's do. Its events, under the heading Events, are the
+listing's own list, `website_event.events_list`, wrapped as `website_event.index` wraps it
+(`o_wevent_index`, `o_wevent_events_list`, `#o_wevent_index_main_col`), so the listing's styles, its
+layout options (columns or rows, cards), and a theme's styling of the listing all apply. The list's
+search and pager have nothing to do on this page, so they get an empty search and a pager of one
+page, which draws nothing.
 
 `_website_events()` is the series' events that have not ended, on the current website and visible to
 the visitor, soonest first: published ones to a visitor, and unpublished ones too to whoever may see

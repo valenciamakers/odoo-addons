@@ -6,17 +6,17 @@ import { stepUtils } from "@web_tour/tour_utils";
 
 const tours = registry.category("web_tour.tours");
 
-// From a series, New Date opens an event already in the series, named after
-// it and on its template.
-tours.add("vmk_event_series_new_date_tour", {
+// From a series, New Event in Series opens an event already in the series,
+// named after it and on its template.
+tours.add("vmk_event_series_new_event_tour", {
     steps: () => [
         {
-            content: "the series counts its upcoming dates",
+            content: "the series counts its upcoming events",
             trigger: `.o_form_view button[name="action_view_events"] .o_stat_value:contains("1")`,
         },
         {
-            content: "add a date",
-            trigger: `.o_form_view button[name="action_new_date"]`,
+            content: "add an event",
+            trigger: `.o_form_view button[name="action_new_event"]:contains("New Event in Series")`,
             run: "click",
         },
         {

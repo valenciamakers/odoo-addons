@@ -15,7 +15,7 @@ tours.add("vmk_website_event_series_filter_tour", {
         },
         {
             content: "open the Series filter",
-            trigger: `.o_vmk_event_series_filter button.dropdown-toggle:contains("All Series")`,
+            trigger: `.o_vmk_event_series_filter button.dropdown-toggle:contains("Series"):not(:has(.badge))`,
             run: "click",
         },
         {
@@ -29,8 +29,8 @@ tours.add("vmk_website_event_series_filter_tour", {
             trigger: `.o_wevent_events_list:contains("VMK Tour Date"):not(:contains("VMK Tour Other"))`,
         },
         {
-            content: "and the filter names it",
-            trigger: `.o_vmk_event_series_filter button.dropdown-toggle:contains("VMK Tour Series")`,
+            content: "and the filter counts one choice",
+            trigger: `.o_vmk_event_series_filter button.dropdown-toggle .badge:contains("1")`,
         },
         {
             content: "open the event",

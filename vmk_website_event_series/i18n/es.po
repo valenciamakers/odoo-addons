@@ -18,8 +18,8 @@ msgstr ""
 
 #. module: vmk_website_event_series
 #: model_terms:ir.ui.view,arch_db:vmk_website_event_series.series_index
-msgid "<span class=\"text-muted\">Next date:</span>"
-msgstr "<span class=\"text-muted\">Próxima fecha:</span>"
+msgid "<span class=\"text-muted\">Next event:</span>"
+msgstr "<span class=\"text-muted\">Próximo evento:</span>"
 
 #. module: vmk_website_event_series
 #: model:ir.module.module,summary:base.module_vmk_website_event_series
@@ -31,8 +31,8 @@ msgstr ""
 
 #. module: vmk_website_event_series
 #: model_terms:ir.ui.view,arch_db:vmk_website_event_series.event_series_filter
-msgid "All Series"
-msgstr "Todas las series"
+msgid "All"
+msgstr "Todos"
 
 #. module: vmk_website_event_series
 #: model:ir.model.fields,field_description:vmk_website_event_series.field_vmk_event_series__publish_on
@@ -75,6 +75,11 @@ msgstr "Series de eventos"
 #: model:ir.module.module,shortdesc:base.module_vmk_website_event_series
 msgid "Event Series (Website)"
 msgstr "Series de eventos (sitio web)"
+
+#. module: vmk_website_event_series
+#: model_terms:ir.ui.view,arch_db:vmk_website_event_series.series_page
+msgid "Events"
+msgstr "Eventos"
 
 #. module: vmk_website_event_series
 #: model_terms:ir.ui.view,arch_db:vmk_website_event_series.event_series_filter
@@ -154,11 +159,6 @@ msgstr ""
 msgid "The full relative URL to access the document through the website."
 msgstr ""
 "La URL relativa completa para acceder al documento a través del sitio web."
-
-#. module: vmk_website_event_series
-#: model_terms:ir.ui.view,arch_db:vmk_website_event_series.series_page
-msgid "Upcoming Dates"
-msgstr "Próximas fechas"
 
 #. module: vmk_website_event_series
 #: model:ir.model.fields,field_description:vmk_website_event_series.field_vmk_event_series__website_published
