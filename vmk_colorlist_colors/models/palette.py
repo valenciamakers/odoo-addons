@@ -92,6 +92,12 @@ DARK_ROLES = {
     "text_emphasis": (0.88, 0.09),
 }
 
+# A background takes its chroma in proportion to its color's, under the cap,
+# so a quiet color gets a quiet tag: a brown's beige stays apart from an
+# orange's peach, where both would reach the cap. Odoo's own colors, all
+# vivid, reach the cap either way.
+BG_CHROMA_SHARE = 0.45
+
 
 def _to_linear(channel):
     channel /= 255
@@ -152,6 +158,10 @@ def shades(hex_color, dark=False):
     _lightness, chroma, hue = to_oklch(hex_color)
     roles = DARK_ROLES if dark else ROLES
     return {
-        role: from_oklch(lightness, min(chroma, cap), hue)
+        role: from_oklch(
+            lightness,
+            min(chroma * (BG_CHROMA_SHARE if role == "bg_subtle" else 1), cap),
+            hue,
+        )
         for role, (lightness, cap) in roles.items()
     }

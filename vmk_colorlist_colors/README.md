@@ -101,8 +101,11 @@ saves a customized stylesheet.
 Odoo's comment on its three shade lists says they were made in OKLCH, and read in OKLCH they follow
 a rule: each shade keeps its color's hue, all the shades of one role share nearly one lightness (in
 light mode, 0.65 for borders, about 0.90 for backgrounds, and 0.36 for text; in dark, 0.76, about
-0.32, and 0.88), and each role caps the chroma. Odoo compiles SCSS with libsass, which has no OKLCH,
-so `palette.shades()` computes a custom color's shades in Python by that rule and writes the hex
+0.32, and 0.88), and each role caps the chroma. A background also takes its chroma in proportion to
+its color's (`BG_CHROMA_SHARE`), so a quiet color gets a quiet tag: at one lightness, a brown's and
+an orange's backgrounds would otherwise both reach the cap and look the same. Odoo's own colors, all
+vivid, reach the cap either way. Odoo compiles SCSS with libsass, which has no OKLCH, so
+`palette.shades()` computes a custom color's shades in Python by that rule and writes the hex
 values. A shade outside sRGB loses chroma until it fits, keeping its lightness and hue, as CSS's own
 gamut mapping does. Put through the same function, Odoo's own colors come out within a few
 hundredths of Odoo's lightness for every shade, which `tests/test_palette.py` checks.

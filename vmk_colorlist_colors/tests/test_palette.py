@@ -73,6 +73,13 @@ class TestPalette(TransactionCase):
                         odoo_lightness, _chroma, _hue = palette.to_oklch(odoo[slot])
                         self.assertAlmostEqual(lightness, odoo_lightness, delta=0.06)
 
+    def test_a_quiet_color_gets_a_quiet_background(self):
+        """A brown and an orange of nearly one hue get tag backgrounds of
+        clearly different chroma, where a cap alone would make them the same."""
+        _l, brown, _h = palette.to_oklch(palette.shades("#7b5b4a")["bg_subtle"])
+        _l, orange, _h = palette.to_oklch(palette.shades("#d78032")["bg_subtle"])
+        self.assertLess(brown, orange * 0.6)
+
     def test_out_of_gamut_keeps_lightness_and_hue(self):
         lightness, chroma, hue = 0.9, 0.3, 140.0
         color = palette.from_oklch(lightness, chroma, hue)
