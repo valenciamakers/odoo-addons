@@ -76,11 +76,14 @@ class TestColors(ColorsCase):
         with self.assertRaises(ValidationError):
             self.purple.custom_color = "purple"
 
-    def test_no_color_keeps_its_name(self):
+    def test_no_color_cannot_be_changed(self):
         with self.assertRaises(ValidationError):
             self.none.name = "Ours"
-        self.none.color = "#cccccc"
-        self.assertEqual(self.none.custom_color, "#cccccc")
+        with self.assertRaises(ValidationError):
+            self.none.color = "#cccccc"
+        # Its own name and grey, written again, are no change.
+        self.none.write({"name": "No color", "color": palette.COLORS[0]})
+        self.assertFalse(self.none.is_custom)
 
     def test_a_name_replaces_odoos(self):
         self.purple.name = "Brand"

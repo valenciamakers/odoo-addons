@@ -170,11 +170,11 @@ msgstr "Sense color"
 #. odoo-python
 #: code:addons/vmk_colorlist_colors/models/vmk_colorlist_color.py:0
 msgid ""
-"No color keeps its name: Odoo gives it a meaning of its own, such as hiding "
-"an event tag from the website."
+"No color cannot be changed: Odoo gives it a meaning of its own, such as "
+"hiding an event tag from the website."
 msgstr ""
-"«Sense color» conserva el seu nom: Odoo li dona un significat propi, com ara"
-" amagar una etiqueta d'esdeveniment al lloc web."
+"«Sense color» no es pot canviar: Odoo li dona un significat propi, com ara "
+"amagar una etiqueta d'esdeveniment al lloc web."
 
 #. module: vmk_colorlist_colors
 #. odoo-python

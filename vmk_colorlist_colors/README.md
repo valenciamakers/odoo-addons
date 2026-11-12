@@ -15,8 +15,10 @@ In **Settings › General Settings › Colors**, **Edit Colors** opens the twelv
   custom one.
 - **Rename a color** by typing over its name, which starts as Odoo's, in each language. A name is
   translatable like any other, so a name changed in one language only shows in that language and in
-  those with no name of their own. “No color” keeps its name, since Odoo gives it a meaning of its
-  own: an event tag without a color is hidden from the website, for one.
+  those with no name of their own.
+- **“No color” stays as Odoo has it**, its name and its color, since Odoo gives it a meaning of its
+  own: an event tag without a color is hidden from the website, for one. Its row is greyed out, and
+  its swatch drawn empty with a grey outline, as Odoo's color picker draws it.
 - **The undo arrow at the end of a row**, shown once its color or name differs from the default,
   puts both back, as core's Replenishment list puts back a quantity typed over the computed one, and
   **Reset to Defaults** does it for all twelve, after asking. Both reload the page, so the change

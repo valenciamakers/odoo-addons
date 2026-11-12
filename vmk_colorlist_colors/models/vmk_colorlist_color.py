@@ -120,13 +120,15 @@ class VmkColorlistColor(models.Model):
         return self.search([]).action_reset()
 
     def write(self, vals):
-        if (
-            "name" in vals
-            and any(record.slot == 0 for record in self)
-            and self._renames_no_color(vals["name"])
+        """No color stays Odoo's, its color and its name: Odoo gives it a
+        meaning of its own, and its picker draws it empty, whatever its
+        color. A reset may still write its name back, in every language."""
+        if any(record.slot == 0 for record in self) and (
+            vals.get("custom_color")
+            or ("name" in vals and self._renames_no_color(vals["name"]))
         ):
             raise ValidationError(self.env._(
-                "No color keeps its name: Odoo gives it a meaning of its own, such as "
+                "No color cannot be changed: Odoo gives it a meaning of its own, such as "
                 "hiding an event tag from the website."
             ))
         result = super().write(vals)

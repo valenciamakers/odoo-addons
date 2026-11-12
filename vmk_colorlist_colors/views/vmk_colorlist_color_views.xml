@@ -3,12 +3,16 @@
 
 <!-- The twelve colors, in an editable list: the color picker and the name on
      each row, and a button putting Odoo's back once either is changed. There
-     is no adding or deleting a color: Odoo has twelve slots. -->
+     is no adding or deleting a color: Odoo has twelve slots.
+
+     No color is shown but fixed, greyed out, its swatch drawn as Odoo's
+     color picker draws it (static/src/colorlist_colors.scss). -->
 <record id="vmk_colorlist_color_view_list" model="ir.ui.view">
     <field name="name">vmk.colorlist.color.list</field>
     <field name="model">vmk.colorlist.color</field>
     <field name="arch" type="xml">
-        <list string="Colors" editable="bottom" create="0" delete="0">
+        <list string="Colors" editable="bottom" create="0" delete="0"
+              class="o_vmk_colorlist_colors" decoration-muted="slot == 0">
             <header>
                 <button name="action_reset_all" type="object" string="Reset to Defaults"
                         display="always"
@@ -16,7 +20,7 @@
             </header>
             <field name="slot" column_invisible="1"/>
             <field name="is_custom" column_invisible="1"/>
-            <field name="color" widget="color"/>
+            <field name="color" widget="color" readonly="slot == 0"/>
             <field name="name" readonly="slot == 0"/>
             <!-- An undo arrow, as core's Replenishment list puts back a
                  computed quantity typed over (stock_orderpoint_views.xml),

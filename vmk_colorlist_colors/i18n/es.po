@@ -170,10 +170,10 @@ msgstr "Sin color"
 #. odoo-python
 #: code:addons/vmk_colorlist_colors/models/vmk_colorlist_color.py:0
 msgid ""
-"No color keeps its name: Odoo gives it a meaning of its own, such as hiding "
-"an event tag from the website."
+"No color cannot be changed: Odoo gives it a meaning of its own, such as "
+"hiding an event tag from the website."
 msgstr ""
-"«Sin color» conserva su nombre: Odoo le da un significado propio, como "
+"«Sin color» no se puede cambiar: Odoo le da un significado propio, como "
 "ocultar una etiqueta de evento en el sitio web."
 
 #. module: vmk_colorlist_colors

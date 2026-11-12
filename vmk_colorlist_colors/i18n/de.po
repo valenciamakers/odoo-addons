@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 20.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-12 16:34+0000\n"
-"PO-Revision-Date: 2026-11-12 16:34+0000\n"
+"POT-Creation-Date: 2026-11-12 16:40+0000\n"
+"PO-Revision-Date: 2026-11-12 16:40+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de\n"
@@ -169,8 +169,8 @@ msgstr "Keine Farbe"
 #. odoo-python
 #: code:addons/vmk_colorlist_colors/models/vmk_colorlist_color.py:0
 msgid ""
-"No color keeps its name: Odoo gives it a meaning of its own, such as hiding "
-"an event tag from the website."
+"No color cannot be changed: Odoo gives it a meaning of its own, such as "
+"hiding an event tag from the website."
 msgstr ""
 
 #. module: vmk_colorlist_colors
