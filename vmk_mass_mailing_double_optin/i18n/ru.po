@@ -1,0 +1,376 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* vmk_mass_mailing_double_optin
+#
+# Generated, and written afresh on every run: do not edit by hand. Core's
+# wording where core has the same English, ours otherwise. See DEVELOPING.md.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 20.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-13 16:15+0000\n"
+"PO-Revision-Date: 2026-11-13 16:15+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
+
+#. module: vmk_mass_mailing_double_optin
+#: model:mail.template,body_html:vmk_mass_mailing_double_optin.mail_template_confirmation
+msgid ""
+"<div>\n"
+"                <p>Please confirm that you'd like to receive <t t-out=\"object.list_id.name or ''\">Newsletter</t> from <t t-out=\"env.company.name or ''\">YourCompany</t>.</p>\n"
+"                <div style=\"margin: 32px 0px 32px 0px;\">\n"
+"                    <a t-att-href=\"ctx.get('vmk_confirmation_urls', {}).get(object.id, '')\" t-attf-style=\"background-color: {{ env.company.email_secondary_color or '#875A7B' }}; padding: 8px 16px 8px 16px; text-decoration: none; color: {{ env.company.email_primary_color or '#FFFFFF' }}; border-radius: 5px; font-size: 13px;\">\n"
+"                        Confirm Subscription\n"
+"                    </a>\n"
+"                </div>\n"
+"                <p>This link is valid for 7 days. If you did not sign up, you can ignore this email and you won't hear from us again.</p>\n"
+"            </div>"
+msgstr ""
+
+#. module: vmk_mass_mailing_double_optin
+#: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_vmk_mailing_consent_log__action
+#: model_terms:ir.ui.view,arch_db:vmk_mass_mailing_double_optin.vmk_mailing_consent_log_view_search
+msgid "Action"
+msgstr "Действие"
+
+#. module: vmk_mass_mailing_double_optin
+#: model:ir.model.fields.selection,name:vmk_mass_mailing_double_optin.selection__mailing_subscription__vmk_confirmation_state__pending
+msgid "Awaiting Confirmation"
+msgstr ""
+
+#. module: vmk_mass_mailing_double_optin
+#: model:ir.model.fields.selection,name:vmk_mass_mailing_double_optin.selection__vmk_mailing_consent_log__action__blacklisted
+msgid "Blacklisted"
+msgstr "Блокированные"
+
+#. module: vmk_mass_mailing_double_optin
+#: model_terms:ir.ui.view,arch_db:vmk_mass_mailing_double_optin.page_confirm_subscription
+msgid "Confirm Subscription"
+msgstr ""
+
+#. module: vmk_mass_mailing_double_optin
+#: model:ir.module.module,summary:base.module_vmk_mass_mailing_double_optin
+msgid ""
+"Confirm new mailing list subscribers by email, and log every consent change"
+msgstr ""
+
+#. module: vmk_mass_mailing_double_optin
+#. odoo-python
+#: code:addons/vmk_mass_mailing_double_optin/controllers/main.py:0
+msgid "Confirm your subscription to %(list)s for %(email)s."
+msgstr ""
+
+#. module: vmk_mass_mailing_double_optin
+#: model:mail.template,subject:vmk_mass_mailing_double_optin.mail_template_confirmation
+msgid "Confirm your subscription to {{ object.list_id.name }}"
+msgstr ""
+
+#. module: vmk_mass_mailing_double_optin
+#: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_mailing_subscription__vmk_confirmation_state
+msgid "Confirmation"
+msgstr "Подтверждение"
+
+#. module: vmk_mass_mailing_double_optin
+#: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_mailing_subscription__vmk_confirmation_date
+msgid "Confirmation Date"
+msgstr "Дата подтверждения"
+
+#. module: vmk_mass_mailing_double_optin
+#: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_mailing_subscription__vmk_confirmation_lang
+msgid "Confirmation Language"
+msgstr ""
+
+#. module: vmk_mass_mailing_double_optin
+#: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_mailing_subscription__vmk_confirmation_requested
+#: model:ir.model.fields.selection,name:vmk_mass_mailing_double_optin.selection__vmk_mailing_consent_log__action__requested
+#: model_terms:ir.ui.view,arch_db:vmk_mass_mailing_double_optin.vmk_mailing_consent_log_view_search
+msgid "Confirmation Requested"
+msgstr ""
+
+#. module: vmk_mass_mailing_double_optin
+#: model:ir.model.fields.selection,name:vmk_mass_mailing_double_optin.selection__mailing_subscription__vmk_confirmation_state__confirmed
+#: model:ir.model.fields.selection,name:vmk_mass_mailing_double_optin.selection__vmk_mailing_consent_log__action__confirmed
+#: model_terms:ir.ui.view,arch_db:vmk_mass_mailing_double_optin.vmk_mailing_consent_log_view_search
+msgid "Confirmed"
+msgstr "Подтверждена"
+
+#. module: vmk_mass_mailing_double_optin
+#. odoo-python
+#: code:addons/vmk_mass_mailing_double_optin/models/mailing_contact.py:0
+#: model:ir.actions.act_window,name:vmk_mass_mailing_double_optin.vmk_mailing_consent_log_action
+#: model:ir.model,name:vmk_mass_mailing_double_optin.model_vmk_mailing_consent_log
+#: model:ir.ui.menu,name:vmk_mass_mailing_double_optin.vmk_mailing_consent_log_menu
+#: model_terms:ir.ui.view,arch_db:vmk_mass_mailing_double_optin.mailing_contact_view_form
+#: model_terms:ir.ui.view,arch_db:vmk_mass_mailing_double_optin.vmk_mailing_consent_log_view_form
+#: model_terms:ir.ui.view,arch_db:vmk_mass_mailing_double_optin.vmk_mailing_consent_log_view_list
+#: model_terms:ir.ui.view,arch_db:vmk_mass_mailing_double_optin.vmk_mailing_consent_log_view_search
+msgid "Consent Log"
+msgstr ""
+
+#. module: vmk_mass_mailing_double_optin
+#: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_mailing_contact__vmk_consent_log_count
+msgid "Consent Log Count"
+msgstr ""
+
+#. module: vmk_mass_mailing_double_optin
+#: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_vmk_mailing_consent_log__create_uid
+msgid "Created by"
+msgstr "Создано:"
+
+#. module: vmk_mass_mailing_double_optin
+#: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_vmk_mailing_consent_log__create_date
+msgid "Created on"
+msgstr "Дата создания:"
+
+#. module: vmk_mass_mailing_double_optin
+#: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_vmk_mailing_consent_log__date
+#: model_terms:ir.ui.view,arch_db:vmk_mass_mailing_double_optin.vmk_mailing_consent_log_view_search
+msgid "Date"
+msgstr "Дата"
+
+#. module: vmk_mass_mailing_double_optin
+#: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_mail_blacklist__display_name
+#: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_mailing_contact__display_name
+#: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_mailing_list__display_name
+#: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_mailing_subscription__display_name
+#: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_vmk_mailing_consent_log__display_name
+msgid "Display Name"
+msgstr "Отображаемое имя"
+
+#. module: vmk_mass_mailing_double_optin
+#: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_mailing_list__vmk_double_optin
+msgid "Double Opt-In"
+msgstr ""
+
+#. module: vmk_mass_mailing_double_optin
+#: model:ir.module.module,shortdesc:base.module_vmk_mass_mailing_double_optin
+msgid "Double Opt-In for Email Marketing"
+msgstr ""
+
+#. module: vmk_mass_mailing_double_optin
+#: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_vmk_mailing_consent_log__email
+msgid "Email"
+msgstr "Email"
+
+#. module: vmk_mass_mailing_double_optin
+#: model:ir.model.fields.selection,name:vmk_mass_mailing_double_optin.selection__vmk_mailing_consent_log__source__email_link
+msgid "Email Link"
+msgstr ""
+
+#. module: vmk_mass_mailing_double_optin
+#: model:mail.template,name:vmk_mass_mailing_double_optin.mail_template_confirmation
+msgid "Email Marketing: Confirm Subscription"
+msgstr ""
+
+#. module: vmk_mass_mailing_double_optin
+#: model:ir.actions.server,name:vmk_mass_mailing_double_optin.ir_cron_expire_confirmations_ir_actions_server
+msgid "Email Marketing: Remove Unconfirmed Subscriptions"
+msgstr ""
+
+#. module: vmk_mass_mailing_double_optin
+#: model:ir.model.fields,help:vmk_mass_mailing_double_optin.field_mailing_subscription__vmk_confirmation_state
+msgid ""
+"Empty when no confirmation was asked for: the subscription was added by a "
+"user, or the mailing list does not require double opt-in."
+msgstr ""
+
+#. module: vmk_mass_mailing_double_optin
+#. odoo-python
+#: code:addons/vmk_mass_mailing_double_optin/models/vmk_mailing_consent_log.py:0
+msgid "Entries of the consent log cannot be changed."
+msgstr ""
+
+#. module: vmk_mass_mailing_double_optin
+#: model_terms:ir.actions.act_window,help:vmk_mass_mailing_double_optin.vmk_mailing_consent_log_action
+msgid ""
+"Every subscription, confirmation, unsubscription, and blacklisting is "
+"recorded here."
+msgstr ""
+
+#. module: vmk_mass_mailing_double_optin
+#: model:ir.model.fields.selection,name:vmk_mass_mailing_double_optin.selection__vmk_mailing_consent_log__action__expired
+#: model_terms:ir.ui.view,arch_db:vmk_mass_mailing_double_optin.vmk_mailing_consent_log_view_search
+msgid "Expired"
+msgstr "Истекший"
+
+#. module: vmk_mass_mailing_double_optin
+#: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_mail_blacklist__id
+#: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_mailing_contact__id
+#: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_mailing_list__id
+#: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_mailing_subscription__id
+#: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_vmk_mailing_consent_log__id
+msgid "ID"
+msgstr "ID"
+
+#. module: vmk_mass_mailing_double_optin
+#: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_vmk_mailing_consent_log__ip_address
+msgid "IP Address"
+msgstr "IP-адрес"
+
+#. module: vmk_mass_mailing_double_optin
+#: model:ir.model.fields.selection,name:vmk_mass_mailing_double_optin.selection__vmk_mailing_consent_log__source__import
+msgid "Imported"
+msgstr "Импортировано"
+
+#. module: vmk_mass_mailing_double_optin
+#: model:ir.model.fields.selection,name:vmk_mass_mailing_double_optin.selection__vmk_mailing_consent_log__source__backend
+#: model_terms:ir.ui.view,arch_db:vmk_mass_mailing_double_optin.vmk_mailing_consent_log_view_search
+msgid "Internal User"
+msgstr "Внутренний пользователь"
+
+#. module: vmk_mass_mailing_double_optin
+#: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_vmk_mailing_consent_log__write_uid
+msgid "Last Updated by"
+msgstr "Последнее обновление:"
+
+#. module: vmk_mass_mailing_double_optin
+#: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_vmk_mailing_consent_log__write_date
+msgid "Last Updated on"
+msgstr "Дата последнего обновления:"
+
+#. module: vmk_mass_mailing_double_optin
+#: model:ir.model,name:vmk_mass_mailing_double_optin.model_mail_blacklist
+msgid "Mail Blacklist"
+msgstr "Черный список email-адресов"
+
+#. module: vmk_mass_mailing_double_optin
+#: model:ir.model,name:vmk_mass_mailing_double_optin.model_mailing_contact
+#: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_vmk_mailing_consent_log__contact_id
+msgid "Mailing Contact"
+msgstr "Почтовый контакт"
+
+#. module: vmk_mass_mailing_double_optin
+#: model:ir.model,name:vmk_mass_mailing_double_optin.model_mailing_list
+#: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_vmk_mailing_consent_log__list_id
+#: model_terms:ir.ui.view,arch_db:vmk_mass_mailing_double_optin.vmk_mailing_consent_log_view_search
+msgid "Mailing List"
+msgstr "Список рассылки"
+
+#. module: vmk_mass_mailing_double_optin
+#: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_vmk_mailing_consent_log__list_name
+msgid "Mailing List Name"
+msgstr ""
+
+#. module: vmk_mass_mailing_double_optin
+#: model:ir.model,name:vmk_mass_mailing_double_optin.model_mailing_subscription
+msgid "Mailing List Subscription"
+msgstr "Подписка на рассылку"
+
+#. module: vmk_mass_mailing_double_optin
+#: model_terms:ir.actions.act_window,help:vmk_mass_mailing_double_optin.vmk_mailing_consent_log_action
+msgid "No consent changes yet"
+msgstr ""
+
+#. module: vmk_mass_mailing_double_optin
+#: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_vmk_mailing_consent_log__url
+msgid "Page"
+msgstr "Страница"
+
+#. module: vmk_mass_mailing_double_optin
+#: model:ir.model.fields,help:vmk_mass_mailing_double_optin.field_mailing_list__vmk_double_optin
+msgid ""
+"People who subscribe on the website receive an email, and only receive "
+"mailings from this list once they confirm through it."
+msgstr ""
+
+#. module: vmk_mass_mailing_double_optin
+#: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_vmk_mailing_consent_log__reason
+msgid "Reason"
+msgstr "Причина"
+
+#. module: vmk_mass_mailing_double_optin
+#: model:ir.model.fields.selection,name:vmk_mass_mailing_double_optin.selection__vmk_mailing_consent_log__action__reason
+msgid "Reason Given"
+msgstr ""
+
+#. module: vmk_mass_mailing_double_optin
+#: model:ir.model.fields.selection,name:vmk_mass_mailing_double_optin.selection__vmk_mailing_consent_log__action__removed
+msgid "Removed"
+msgstr "Удалено"
+
+#. module: vmk_mass_mailing_double_optin
+#: model_terms:ir.ui.view,arch_db:vmk_mass_mailing_double_optin.mailing_contact_view_form
+msgid "Request Confirmation"
+msgstr ""
+
+#. module: vmk_mass_mailing_double_optin
+#: model_terms:ir.ui.view,arch_db:vmk_mass_mailing_double_optin.mailing_contact_view_form
+msgid "Resend Confirmation"
+msgstr ""
+
+#. module: vmk_mass_mailing_double_optin
+#: model:mail.template,description:vmk_mass_mailing_double_optin.mail_template_confirmation
+msgid ""
+"Sent to people who subscribe to a mailing list requiring double opt-in, with"
+" the link that confirms their subscription"
+msgstr ""
+
+#. module: vmk_mass_mailing_double_optin
+#: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_vmk_mailing_consent_log__source
+#: model_terms:ir.ui.view,arch_db:vmk_mass_mailing_double_optin.vmk_mailing_consent_log_view_search
+msgid "Source"
+msgstr "Источник"
+
+#. module: vmk_mass_mailing_double_optin
+#: model:ir.model.fields.selection,name:vmk_mass_mailing_double_optin.selection__vmk_mailing_consent_log__action__subscribed
+#: model_terms:ir.ui.view,arch_db:vmk_mass_mailing_double_optin.vmk_mailing_consent_log_view_search
+msgid "Subscribed"
+msgstr "В подписках"
+
+#. module: vmk_mass_mailing_double_optin
+#: model:ir.model.fields.selection,name:vmk_mass_mailing_double_optin.selection__vmk_mailing_consent_log__source__system
+msgid "System"
+msgstr "Система"
+
+#. module: vmk_mass_mailing_double_optin
+#: model_terms:ir.ui.view,arch_db:vmk_mass_mailing_double_optin.mailing_contact_view_form
+msgid ""
+"They will stop receiving mailings from this list until they confirm. Send "
+"the request?"
+msgstr ""
+
+#. module: vmk_mass_mailing_double_optin
+#: model_terms:ir.ui.view,arch_db:vmk_mass_mailing_double_optin.page_subscription_link_invalid
+msgid ""
+"This link has expired or is not valid. Please sign up again to receive a new"
+" confirmation link."
+msgstr ""
+
+#. module: vmk_mass_mailing_double_optin
+#: model:ir.model.fields.selection,name:vmk_mass_mailing_double_optin.selection__vmk_mailing_consent_log__action__unblacklisted
+msgid "Unblacklisted"
+msgstr ""
+
+#. module: vmk_mass_mailing_double_optin
+#: model:ir.model.fields.selection,name:vmk_mass_mailing_double_optin.selection__vmk_mailing_consent_log__action__unsubscribed
+#: model_terms:ir.ui.view,arch_db:vmk_mass_mailing_double_optin.vmk_mailing_consent_log_view_search
+msgid "Unsubscribed"
+msgstr "Подписка отменена"
+
+#. module: vmk_mass_mailing_double_optin
+#: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_vmk_mailing_consent_log__user_id
+msgid "User"
+msgstr "Пользователь"
+
+#. module: vmk_mass_mailing_double_optin
+#: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_vmk_mailing_consent_log__user_agent
+msgid "User Agent"
+msgstr ""
+
+#. module: vmk_mass_mailing_double_optin
+#: model:ir.model.fields.selection,name:vmk_mass_mailing_double_optin.selection__vmk_mailing_consent_log__source__website
+#: model_terms:ir.ui.view,arch_db:vmk_mass_mailing_double_optin.vmk_mailing_consent_log_view_search
+msgid "Website"
+msgstr "Сайт"
+
+#. module: vmk_mass_mailing_double_optin
+#. odoo-python
+#: code:addons/vmk_mass_mailing_double_optin/controllers/main.py:0
+msgid "You are now subscribed to %(list)s from %(company)s."
+msgstr ""

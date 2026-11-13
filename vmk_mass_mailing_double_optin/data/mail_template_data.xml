@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="mail_template_confirmation" model="mail.template">
+            <field name="name">Email Marketing: Confirm Subscription</field>
+            <field name="model_id" ref="mass_mailing.model_mailing_subscription"/>
+            <field name="subject">Confirm your subscription to {{ object.list_id.name }}</field>
+            <field name="email_from">{{ (env.company.email_formatted or user.email_formatted) }}</field>
+            <field name="email_to">{{ object.contact_id.email }}</field>
+            <field name="use_default_to" eval="False"/>
+            <field name="description">Sent to people who subscribe to a mailing list requiring double opt-in, with the link that confirms their subscription</field>
+            <field name="email_layout_xmlid">mail.mail_notification_light</field>
+            <field name="body_html" type="html"><div>
+                <p>Please confirm that you'd like to receive <t t-out="object.list_id.name or ''">Newsletter</t> from <t t-out="env.company.name or ''">YourCompany</t>.</p>
+                <div style="margin: 32px 0px 32px 0px;">
+                    <a t-att-href="ctx.get('vmk_confirmation_urls', {}).get(object.id, '')"
+                        t-attf-style="background-color: {{ env.company.email_secondary_color or '#875A7B' }}; padding: 8px 16px 8px 16px; text-decoration: none; color: {{ env.company.email_primary_color or '#FFFFFF' }}; border-radius: 5px; font-size: 13px;">
+                        Confirm Subscription
+                    </a>
+                </div>
+                <p>This link is valid for 7 days. If you did not sign up, you can ignore this email and you won't hear from us again.</p>
+            </div></field>
+            <field name="lang">{{ object.vmk_confirmation_lang }}</field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+    </data>
+</odoo>

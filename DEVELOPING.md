@@ -33,6 +33,9 @@ was verified against the series of the branch you are reading.
   when installed, with a Track Visitors setting to turn it back on per website.
 - **`vmk_colorlist_colors`** — change the eleven colors Odoo offers for tags, kanban cards, and
   calendars, and rename them, from Settings. Not yet released.
+- **`vmk_mass_mailing_double_optin`** — website subscribers to a mailing list confirm by email
+  before they receive its mailings, and a consent log records every subscription change. Not yet
+  released.
 - **`tools/`** — not a module. `make_icon.py` renders each module's store icon from the glyphs in
   `tools/icons/`; see _Store icons_ under the authoring conventions.
 

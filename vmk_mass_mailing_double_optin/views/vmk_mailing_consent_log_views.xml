@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="vmk_mailing_consent_log_view_list" model="ir.ui.view">
+        <field name="name">vmk.mailing.consent.log.view.list</field>
+        <field name="model">vmk.mailing.consent.log</field>
+        <field name="arch" type="xml">
+            <list string="Consent Log" create="0" edit="0">
+                <field name="date"/>
+                <field name="email"/>
+                <field name="list_id"/>
+                <field name="action" widget="badge"
+                    decoration-success="action in ('subscribed', 'confirmed')"
+                    decoration-info="action == 'requested'"
+                    decoration-danger="action in ('unsubscribed', 'blacklisted')"
+                    decoration-muted="action in ('expired', 'removed', 'unblacklisted', 'reason')"/>
+                <field name="source"/>
+                <field name="reason" optional="show"/>
+                <field name="user_id" optional="hide" widget="many2one_avatar_user"/>
+                <field name="ip_address" optional="show"/>
+                <field name="user_agent" optional="hide"/>
+                <field name="url" optional="hide" widget="url"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="vmk_mailing_consent_log_view_form" model="ir.ui.view">
+        <field name="name">vmk.mailing.consent.log.view.form</field>
+        <field name="model">vmk.mailing.consent.log</field>
+        <field name="arch" type="xml">
+            <form string="Consent Log" create="0" edit="0">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="date"/>
+                            <field name="email"/>
+                            <field name="contact_id"/>
+                            <field name="list_id" invisible="not list_id"/>
+                            <field name="list_name" invisible="list_id or not list_name"/>
+                            <field name="action"/>
+                            <field name="reason" invisible="not reason"/>
+                        </group>
+                        <group>
+                            <field name="source"/>
+                            <field name="user_id" widget="many2one_avatar_user"/>
+                            <field name="ip_address"/>
+                            <field name="user_agent"/>
+                            <field name="url" widget="url"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="vmk_mailing_consent_log_view_search" model="ir.ui.view">
+        <field name="name">vmk.mailing.consent.log.view.search</field>
+        <field name="model">vmk.mailing.consent.log</field>
+        <field name="arch" type="xml">
+            <search string="Consent Log">
+                <field name="email"/>
+                <field name="list_id"/>
+                <field name="contact_id"/>
+                <field name="ip_address"/>
+                <filter string="Confirmation Requested" name="filter_requested" domain="[('action', '=', 'requested')]"/>
+                <filter string="Confirmed" name="filter_confirmed" domain="[('action', '=', 'confirmed')]"/>
+                <filter string="Subscribed" name="filter_subscribed" domain="[('action', '=', 'subscribed')]"/>
+                <filter string="Unsubscribed" name="filter_unsubscribed" domain="[('action', '=', 'unsubscribed')]"/>
+                <filter string="Expired" name="filter_expired" domain="[('action', '=', 'expired')]"/>
+                <separator/>
+                <filter string="Website" name="filter_website" domain="[('source', '=', 'website')]"/>
+                <filter string="Internal User" name="filter_backend" domain="[('source', '=', 'backend')]"/>
+                <separator/>
+                <filter string="Date" name="filter_date" date="date"/>
+                <group>
+                    <filter string="Mailing List" name="group_by_list_id" context="{'group_by': 'list_id'}"/>
+                    <filter string="Action" name="group_by_action" context="{'group_by': 'action'}"/>
+                    <filter string="Source" name="group_by_source" context="{'group_by': 'source'}"/>
+                    <filter string="Date" name="group_by_date" context="{'group_by': 'date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="vmk_mailing_consent_log_action" model="ir.actions.act_window">
+        <field name="name">Consent Log</field>
+        <field name="res_model">vmk.mailing.consent.log</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No consent changes yet
+            </p>
+            <p>
+                Every subscription, confirmation, unsubscription, and blacklisting is recorded here.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="vmk_mailing_consent_log_menu"
+              name="Consent Log"
+              sequence="3"
+              parent="mass_mailing.menu_mass_mailing_report"
+              action="vmk_mailing_consent_log_action"/>
+</odoo>

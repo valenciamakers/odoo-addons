@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Laid out as core's unsubscription pages are (page_mailing_confirm_unsubscribe). -->
+    <template id="page_confirm_subscription" name="Confirm Subscription">
+        <t t-call="mass_mailing.layout">
+            <div class="container o_vmk_confirm_subscription">
+                <div class="row">
+                    <div class="col-lg-6 offset-lg-3 mt-4">
+                        <div class="alert alert-info text-center" role="status">
+                            <form t-att-action="action_url" method="POST">
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                <input type="hidden" name="token" t-att-value="token"/>
+                                <p t-out="message"/>
+                                <button type="submit" class="btn btn-primary">Confirm Subscription</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="page_subscription_confirmed" name="Subscription Confirmed">
+        <t t-call="mass_mailing.layout">
+            <div class="container o_vmk_confirm_subscription">
+                <div class="row">
+                    <div class="col-lg-6 offset-lg-3 mt-4">
+                        <div class="alert alert-success text-center" role="status">
+                            <p class="mb-0" t-out="message"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="page_subscription_link_invalid" name="Confirmation Link Not Valid">
+        <t t-call="mass_mailing.layout">
+            <div class="container o_vmk_confirm_subscription">
+                <div class="row">
+                    <div class="col-lg-6 offset-lg-3 mt-4">
+                        <div class="alert alert-warning text-center" role="status">
+                            <p class="mb-0">This link has expired or is not valid. Please sign up again to receive a new confirmation link.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

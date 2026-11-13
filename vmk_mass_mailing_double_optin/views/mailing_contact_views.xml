@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="mailing_contact_view_form" model="ir.ui.view">
+        <field name="name">mailing.contact.view.form.inherit.vmk_double_optin</field>
+        <field name="model">mailing.contact</field>
+        <field name="inherit_id" ref="mass_mailing.mailing_contact_view_form"/>
+        <field name="arch" type="xml">
+            <div name="button_box" position="inside">
+                <button name="action_vmk_view_consent_log" type="object" class="oe_stat_button"
+                    icon="history" invisible="not email"
+                    groups="mass_mailing.group_mass_mailing_user">
+                    <field name="vmk_consent_log_count" string="Consent Log" widget="statinfo"/>
+                </button>
+            </div>
+            <xpath expr="//field[@name='subscription_ids']/list/field[@name='opt_out_reason_id']" position="after">
+                <field name="vmk_confirmation_state" widget="badge"
+                    decoration-info="vmk_confirmation_state == 'pending'"
+                    decoration-success="vmk_confirmation_state == 'confirmed'"/>
+                <field name="vmk_confirmation_date" optional="hide"/>
+                <button name="action_vmk_request_confirmation" type="object"
+                    string="Resend Confirmation" icon="send" class="btn-link"
+                    invisible="not id or opt_out or vmk_confirmation_state != 'pending'"/>
+                <button name="action_vmk_request_confirmation" type="object"
+                    string="Request Confirmation" icon="send" class="btn-link"
+                    invisible="not id or opt_out or vmk_confirmation_state"
+                    confirm="They will stop receiving mailings from this list until they confirm. Send the request?"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
