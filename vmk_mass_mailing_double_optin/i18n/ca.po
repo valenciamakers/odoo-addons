@@ -285,15 +285,6 @@ msgid "Page"
 msgstr "Pàgina"
 
 #. module: vmk_mass_mailing_double_optin
-#: model:ir.model.fields,help:vmk_mass_mailing_double_optin.field_mailing_list__vmk_double_optin
-msgid ""
-"People who subscribe on the website receive an email, and only receive "
-"mailings from this list once they confirm through it."
-msgstr ""
-"Qui se subscriu des del lloc web rep un correu electrònic, i només rep "
-"enviaments d'aquesta llista un cop confirma a través d'aquest correu."
-
-#. module: vmk_mass_mailing_double_optin
 #: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_vmk_mailing_consent_log__reason
 msgid "Reason"
 msgstr "Motiu"
@@ -324,7 +315,7 @@ msgid ""
 "Sent to people who subscribe to a mailing list requiring double opt-in, with"
 " the link that confirms their subscription"
 msgstr ""
-"S'envia a qui se subscriu a una llista d'enviament que requereix doble "
+"S'envia a qui es subscriu a una llista d'enviament que requereix doble "
 "confirmació, amb l'enllaç que confirma la subscripció"
 
 #. module: vmk_mass_mailing_double_optin
@@ -382,6 +373,15 @@ msgstr "Usuari"
 #: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_vmk_mailing_consent_log__user_agent
 msgid "User Agent"
 msgstr "Agent d'usuari"
+
+#. module: vmk_mass_mailing_double_optin
+#: model:ir.model.fields,help:vmk_mass_mailing_double_optin.field_mailing_list__vmk_double_optin
+msgid ""
+"Visitors who subscribe on the website will be required to confirm their "
+"subscription before they receive mailings from this list."
+msgstr ""
+"Qui es subscrigui des del lloc web haurà de confirmar la subscripció abans "
+"de rebre enviaments d'aquesta llista."
 
 #. module: vmk_mass_mailing_double_optin
 #: model:ir.model.fields.selection,name:vmk_mass_mailing_double_optin.selection__vmk_mailing_consent_log__source__website

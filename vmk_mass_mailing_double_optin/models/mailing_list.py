@@ -12,8 +12,8 @@ class MailingList(models.Model):
     vmk_double_optin = fields.Boolean(
         string="Double Opt-In",
         default=True,
-        help="People who subscribe on the website receive an email, and only receive mailings "
-        "from this list once they confirm through it.",
+        help="Visitors who subscribe on the website will be required to confirm their "
+        "subscription before they receive mailings from this list.",
     )
 
     def _mailing_get_opt_out_list(self, mailing):

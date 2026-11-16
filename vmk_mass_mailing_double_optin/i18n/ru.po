@@ -273,13 +273,6 @@ msgid "Page"
 msgstr "Страница"
 
 #. module: vmk_mass_mailing_double_optin
-#: model:ir.model.fields,help:vmk_mass_mailing_double_optin.field_mailing_list__vmk_double_optin
-msgid ""
-"People who subscribe on the website receive an email, and only receive "
-"mailings from this list once they confirm through it."
-msgstr ""
-
-#. module: vmk_mass_mailing_double_optin
 #: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_vmk_mailing_consent_log__reason
 msgid "Reason"
 msgstr "Причина"
@@ -361,6 +354,13 @@ msgstr "Пользователь"
 #. module: vmk_mass_mailing_double_optin
 #: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_vmk_mailing_consent_log__user_agent
 msgid "User Agent"
+msgstr ""
+
+#. module: vmk_mass_mailing_double_optin
+#: model:ir.model.fields,help:vmk_mass_mailing_double_optin.field_mailing_list__vmk_double_optin
+msgid ""
+"Visitors who subscribe on the website will be required to confirm their "
+"subscription before they receive mailings from this list."
 msgstr ""
 
 #. module: vmk_mass_mailing_double_optin

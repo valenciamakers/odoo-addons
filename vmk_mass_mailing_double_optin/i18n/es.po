@@ -286,15 +286,6 @@ msgid "Page"
 msgstr "Página"
 
 #. module: vmk_mass_mailing_double_optin
-#: model:ir.model.fields,help:vmk_mass_mailing_double_optin.field_mailing_list__vmk_double_optin
-msgid ""
-"People who subscribe on the website receive an email, and only receive "
-"mailings from this list once they confirm through it."
-msgstr ""
-"Quienes se suscriben desde el sitio web reciben un correo electrónico, y "
-"solo reciben envíos de esta lista una vez que confirman a través de él."
-
-#. module: vmk_mass_mailing_double_optin
 #: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_vmk_mailing_consent_log__reason
 msgid "Reason"
 msgstr "Motivo"
@@ -383,6 +374,15 @@ msgstr "Usuario"
 #: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_vmk_mailing_consent_log__user_agent
 msgid "User Agent"
 msgstr "Agente de usuario"
+
+#. module: vmk_mass_mailing_double_optin
+#: model:ir.model.fields,help:vmk_mass_mailing_double_optin.field_mailing_list__vmk_double_optin
+msgid ""
+"Visitors who subscribe on the website will be required to confirm their "
+"subscription before they receive mailings from this list."
+msgstr ""
+"Quienes se suscriban desde el sitio web deberán confirmar su suscripción "
+"antes de recibir envíos de esta lista."
 
 #. module: vmk_mass_mailing_double_optin
 #: model:ir.model.fields.selection,name:vmk_mass_mailing_double_optin.selection__vmk_mailing_consent_log__source__website

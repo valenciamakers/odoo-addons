@@ -63,6 +63,10 @@ English, Spanish, and Catalan. If any translation seems incorrect, please
 
 **Changelog**
 
+*20.0.1.0.1 (16 November 2026)*
+
+- Clearer help text on a mailing list's **Double Opt-In** setting.
+
 *20.0.1.0.0 (13 November 2026)*
 
 - First release.
