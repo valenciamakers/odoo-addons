@@ -127,12 +127,14 @@ class MailingSubscription(models.Model):
             lambda sub: sub.list_id.vmk_double_optin and sub.contact_id.email_normalized
         )
 
-    def _vmk_request_confirmation(self, resend=False):
+    def _vmk_request_confirmation(self, resend=False, lang=None):
         """Mark as awaiting confirmation, and email each a confirmation link.
 
         A subscription asked less than `RESEND_INTERVAL` ago gets no second
         email, unless `resend`: its first link still works, and a form
-        submitted repeatedly cannot flood an inbox.
+        submitted repeatedly cannot flood an inbox. `lang` is the email's
+        language where the subscription's own is unknown, in place of the
+        current user's.
         """
         subscriptions = self.sudo()
         if not subscriptions:
@@ -156,6 +158,7 @@ class MailingSubscription(models.Model):
                     "vmk_confirmation_lang": (visitor and self.env.lang)
                     or sub.vmk_confirmation_lang
                     or sub.contact_id.partner_id.lang
+                    or lang
                     or self.env.lang,
                 }
             )

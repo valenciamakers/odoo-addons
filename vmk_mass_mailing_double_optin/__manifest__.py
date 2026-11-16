@@ -4,7 +4,7 @@
 {
     "name": "Double Opt-In for Email Marketing",
     "summary": "Confirm new mailing list subscribers by email, and log every consent change",
-    "version": "20.0.1.0.1",
+    "version": "20.0.1.1.0",
     "author": "Valencia Makers",
     "license": "LGPL-3",
     "category": "Marketing/Email Marketing",
@@ -17,6 +17,7 @@
         "views/mailing_list_views.xml",
         "views/mailing_contact_views.xml",
         "views/mailing_subscription_templates.xml",
+        "wizard/vmk_mailing_request_confirmation_views.xml",
     ],
     "assets": {
         "web.assets_tests": [

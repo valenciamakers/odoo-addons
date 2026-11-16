@@ -26,3 +26,19 @@ class TestTours(HttpCase, DoubleOptInCommon):
         self.assertEqual(
             self._logs("tour.backend@example.com").mapped("source"), ["website", "backend"]
         )
+
+    def test_request_confirmation_from_the_recipients(self):
+        contact = self.env["mailing.contact"].with_user(self.marketer).create(
+            {
+                "name": "Tour Bulk",
+                "email": "tour.bulk@example.com",
+                "list_ids": [(6, 0, self.list_doi.ids)],
+            }
+        )
+        self.start_tour(
+            f"/odoo/mailing.list/{self.list_doi.id}",
+            "vmk_mass_mailing_double_optin_request",
+            login=self.marketer.login,
+        )
+        self.assertEqual(contact.subscription_ids.vmk_confirmation_state, "pending")
+        self.assertEqual(len(self._mails("tour.bulk@example.com")), 1)

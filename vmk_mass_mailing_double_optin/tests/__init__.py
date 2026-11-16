@@ -5,5 +5,6 @@ from . import test_access
 from . import test_confirmation
 from . import test_consent_log
 from . import test_controller
+from . import test_request_wizard
 from . import test_tours
 from . import test_translations

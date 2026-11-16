@@ -1,3 +1,4 @@
 id,name,model_id,group_id/id,operation,domain
 access_vmk_mailing_consent_log_user,vmk.mailing.consent.log email marketing user,vmk.mailing.consent.log,mass_mailing.group_mass_mailing_user,r,
 access_vmk_mailing_consent_log_system,vmk.mailing.consent.log settings administrator,vmk.mailing.consent.log,base.group_system,rd,
+access_vmk_mailing_request_confirmation_user,vmk.mailing.request.confirmation email marketing user,vmk.mailing.request.confirmation,mass_mailing.group_mass_mailing_user,crud,

@@ -6,14 +6,42 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 20.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-13 16:15+0000\n"
-"PO-Revision-Date: 2026-11-13 16:15+0000\n"
+"POT-Creation-Date: 2026-11-16 10:55+0000\n"
+"PO-Revision-Date: 2026-11-16 10:55+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
+
+#. module: vmk_mass_mailing_double_optin
+#. odoo-python
+#: code:addons/vmk_mass_mailing_double_optin/wizard/vmk_mailing_request_confirmation.py:0
+msgid ""
+"%(count)s confirmation emails will be sent. Until each contact confirms "
+"their subscription, they will not receive mailings from the list."
+msgstr ""
+
+#. module: vmk_mass_mailing_double_optin
+#. odoo-python
+#: code:addons/vmk_mass_mailing_double_optin/wizard/vmk_mailing_request_confirmation.py:0
+msgid "%(count)s confirmation requests sent."
+msgstr ""
+
+#. module: vmk_mass_mailing_double_optin
+#. odoo-python
+#: code:addons/vmk_mass_mailing_double_optin/wizard/vmk_mailing_request_confirmation.py:0
+msgid ""
+"1 confirmation email will be sent. Until the contact confirms their "
+"subscription, they will not receive mailings from the list."
+msgstr ""
+
+#. module: vmk_mass_mailing_double_optin
+#. odoo-python
+#: code:addons/vmk_mass_mailing_double_optin/wizard/vmk_mailing_request_confirmation.py:0
+msgid "1 confirmation request sent."
+msgstr ""
 
 #. module: vmk_mass_mailing_double_optin
 #: model:mail.template,body_html:vmk_mass_mailing_double_optin.mail_template_confirmation
@@ -115,12 +143,22 @@ msgid "Consent Log Count"
 msgstr ""
 
 #. module: vmk_mass_mailing_double_optin
+#. odoo-python
+#: code:addons/vmk_mass_mailing_double_optin/wizard/vmk_mailing_request_confirmation.py:0
+msgid ""
+"Contacts already confirmed, or awaiting confirmation, unsubscribed, "
+"blacklisted, or without an email address are skipped."
+msgstr ""
+
+#. module: vmk_mass_mailing_double_optin
 #: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_vmk_mailing_consent_log__create_uid
+#: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_vmk_mailing_request_confirmation__create_uid
 msgid "Created by"
 msgstr ""
 
 #. module: vmk_mass_mailing_double_optin
 #: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_vmk_mailing_consent_log__create_date
+#: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_vmk_mailing_request_confirmation__create_date
 msgid "Created on"
 msgstr ""
 
@@ -131,11 +169,17 @@ msgid "Date"
 msgstr ""
 
 #. module: vmk_mass_mailing_double_optin
+#: model_terms:ir.ui.view,arch_db:vmk_mass_mailing_double_optin.vmk_mailing_request_confirmation_view_form
+msgid "Discard"
+msgstr ""
+
+#. module: vmk_mass_mailing_double_optin
 #: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_mail_blacklist__display_name
 #: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_mailing_contact__display_name
 #: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_mailing_list__display_name
 #: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_mailing_subscription__display_name
 #: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_vmk_mailing_consent_log__display_name
+#: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_vmk_mailing_request_confirmation__display_name
 msgid "Display Name"
 msgstr ""
 
@@ -201,6 +245,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_mailing_list__id
 #: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_mailing_subscription__id
 #: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_vmk_mailing_consent_log__id
+#: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_vmk_mailing_request_confirmation__id
 msgid "ID"
 msgstr ""
 
@@ -221,12 +266,19 @@ msgid "Internal User"
 msgstr ""
 
 #. module: vmk_mass_mailing_double_optin
+#: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_vmk_mailing_request_confirmation__lang
+msgid "Language"
+msgstr ""
+
+#. module: vmk_mass_mailing_double_optin
 #: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_vmk_mailing_consent_log__write_uid
+#: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_vmk_mailing_request_confirmation__write_uid
 msgid "Last Updated by"
 msgstr ""
 
 #. module: vmk_mass_mailing_double_optin
 #: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_vmk_mailing_consent_log__write_date
+#: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_vmk_mailing_request_confirmation__write_date
 msgid "Last Updated on"
 msgstr ""
 
@@ -239,6 +291,11 @@ msgstr ""
 #: model:ir.model,name:vmk_mass_mailing_double_optin.model_mailing_contact
 #: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_vmk_mailing_consent_log__contact_id
 msgid "Mailing Contact"
+msgstr ""
+
+#. module: vmk_mass_mailing_double_optin
+#: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_vmk_mailing_request_confirmation__contact_ids
+msgid "Mailing Contacts"
 msgstr ""
 
 #. module: vmk_mass_mailing_double_optin
@@ -259,8 +316,21 @@ msgid "Mailing List Subscription"
 msgstr ""
 
 #. module: vmk_mass_mailing_double_optin
+#: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_vmk_mailing_request_confirmation__list_ids
+msgid "Mailing Lists"
+msgstr ""
+
+#. module: vmk_mass_mailing_double_optin
 #: model_terms:ir.actions.act_window,help:vmk_mass_mailing_double_optin.vmk_mailing_consent_log_action
 msgid "No consent changes yet"
+msgstr ""
+
+#. module: vmk_mass_mailing_double_optin
+#. odoo-python
+#: code:addons/vmk_mass_mailing_double_optin/wizard/vmk_mailing_request_confirmation.py:0
+msgid ""
+"None of these contacts has a subscription to these lists that can be asked "
+"for confirmation."
 msgstr ""
 
 #. module: vmk_mass_mailing_double_optin
@@ -284,13 +354,27 @@ msgid "Removed"
 msgstr ""
 
 #. module: vmk_mass_mailing_double_optin
+#: model:ir.actions.act_window,name:vmk_mass_mailing_double_optin.vmk_mailing_request_confirmation_action
+#: model:ir.model,name:vmk_mass_mailing_double_optin.model_vmk_mailing_request_confirmation
 #: model_terms:ir.ui.view,arch_db:vmk_mass_mailing_double_optin.mailing_contact_view_form
+#: model_terms:ir.ui.view,arch_db:vmk_mass_mailing_double_optin.mailing_contact_view_tree
+#: model_terms:ir.ui.view,arch_db:vmk_mass_mailing_double_optin.vmk_mailing_request_confirmation_view_form
 msgid "Request Confirmation"
 msgstr ""
 
 #. module: vmk_mass_mailing_double_optin
 #: model_terms:ir.ui.view,arch_db:vmk_mass_mailing_double_optin.mailing_contact_view_form
 msgid "Resend Confirmation"
+msgstr ""
+
+#. module: vmk_mass_mailing_double_optin
+#: model_terms:ir.ui.view,arch_db:vmk_mass_mailing_double_optin.vmk_mailing_request_confirmation_view_form
+msgid "Select lists..."
+msgstr ""
+
+#. module: vmk_mass_mailing_double_optin
+#: model_terms:ir.ui.view,arch_db:vmk_mass_mailing_double_optin.vmk_mailing_request_confirmation_view_form
+msgid "Send Requests"
 msgstr ""
 
 #. module: vmk_mass_mailing_double_optin
@@ -310,6 +394,21 @@ msgstr ""
 #: model:ir.model.fields.selection,name:vmk_mass_mailing_double_optin.selection__vmk_mailing_consent_log__action__subscribed
 #: model_terms:ir.ui.view,arch_db:vmk_mass_mailing_double_optin.vmk_mailing_consent_log_view_search
 msgid "Subscribed"
+msgstr ""
+
+#. module: vmk_mass_mailing_double_optin
+#: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_vmk_mailing_request_confirmation__subscription_count
+msgid "Subscription Count"
+msgstr ""
+
+#. module: vmk_mass_mailing_double_optin
+#: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_vmk_mailing_request_confirmation__subscription_ids
+msgid "Subscriptions"
+msgstr ""
+
+#. module: vmk_mass_mailing_double_optin
+#: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_vmk_mailing_request_confirmation__summary
+msgid "Summary"
 msgstr ""
 
 #. module: vmk_mass_mailing_double_optin
@@ -340,6 +439,11 @@ msgstr ""
 #: model:ir.model.fields.selection,name:vmk_mass_mailing_double_optin.selection__vmk_mailing_consent_log__action__unsubscribed
 #: model_terms:ir.ui.view,arch_db:vmk_mass_mailing_double_optin.vmk_mailing_consent_log_view_search
 msgid "Unsubscribed"
+msgstr ""
+
+#. module: vmk_mass_mailing_double_optin
+#: model:ir.model.fields,help:vmk_mass_mailing_double_optin.field_vmk_mailing_request_confirmation__lang
+msgid "Used for contacts whose language is unknown or unspecified."
 msgstr ""
 
 #. module: vmk_mass_mailing_double_optin

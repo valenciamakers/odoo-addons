@@ -61,3 +61,41 @@ registry.category("web_tour.tours").add("vmk_mass_mailing_double_optin_backend",
         },
     ],
 });
+
+// From a list's Recipients, selected contacts are asked to confirm at once;
+// the dialog comes with that list filled in and says what it will send.
+registry.category("web_tour.tours").add("vmk_mass_mailing_double_optin_request", {
+    steps: () => [
+        {
+            content: "open the list's recipients",
+            trigger: "button[name=action_view_contacts]",
+            run: "click",
+        },
+        {
+            content: "select the contact",
+            trigger: `.o_data_row:contains("tour.bulk@example.com") .o_list_record_selector input`,
+            run: "click",
+        },
+        {
+            content: "request confirmation",
+            trigger: "button[name=action_vmk_request_confirmation]:contains('Request Confirmation')",
+            run: "click",
+        },
+        {
+            content: "the dialog has the list and says what it will send",
+            trigger: `.modal .o_field_widget[name=list_ids]:contains("VMK Newsletter")`,
+        },
+        {
+            trigger: `.modal .o_vmk_request_summary:contains("1 confirmation email will be sent.")`,
+        },
+        {
+            content: "send",
+            trigger: ".modal button[name=action_request_confirmation]",
+            run: "click",
+        },
+        {
+            content: "it reports what it sent",
+            trigger: `.o_notification:contains("1 confirmation request sent.")`,
+        },
+    ],
+});

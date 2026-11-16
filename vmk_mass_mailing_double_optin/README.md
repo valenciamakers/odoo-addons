@@ -101,6 +101,25 @@ website the visitor signed up on (`website.get_base_url()`), so a database servi
 links each visitor back to theirs. It never takes the request's `Host` header, which the visitor
 controls, and which would let anyone have our email link to a site of their choosing.
 
+### Asking contacts added in the backend
+
+A subscription a user or an import made has no confirmation state, and receives mailings at once.
+**Request Confirmation** asks it to confirm all the same: on one subscription, from the contact
+form's Subscriptions tab, or on many, from the mailing contacts list, through the wizard
+`vmk.mailing.request.confirmation`. The list's button sits beside core's **Add to List** and opens
+its wizard the same way, from `mailing.contact.action_vmk_request_confirmation`; its field is named
+`list_ids`, as on `mailing.contact`, so the `default_list_ids` a list's **Recipients** button puts
+in the context fills it in. The wizard takes only subscriptions with no confirmation state, still
+subscribed, to an address that is set and not blacklisted, and says how many it will send before it
+sends. Its method checks write access on those subscriptions before the superuser part, since any
+user may call it over RPC with records of their choosing.
+
+A request from the backend has no visitor language or website to go by. The email takes, in order,
+the language the contact last used on the website (`vmk_confirmation_lang`), their partner's, the
+wizard's **Language** (`_vmk_request_confirmation`'s `lang`), and the requesting user's; the
+wizard's comes third so that a language someone chose themselves is never overridden. The link takes
+the database's base URL, since a mailing list belongs to no website.
+
 ### Expiry
 
 `ir_cron_expire_confirmations` deletes, daily, the subscriptions whose link expired unconfirmed,

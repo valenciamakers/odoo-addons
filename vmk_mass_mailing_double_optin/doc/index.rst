@@ -31,6 +31,13 @@ next subscribes.
   confirm; they receive no mailings from that list until they do.
 - **Contacts you add yourself**, or import, are subscribed at once, as in standard Odoo, and the
   log records who added them.
+- **To ask many contacts to confirm at once**, after an import for example, open the list's
+  **Recipients**, select the contacts, and click **Request Confirmation**. Choose the lists and the
+  email's language, and the dialog says how many emails it will send. Contacts already confirmed,
+  or awaiting confirmation, unsubscribed, blacklisted, or without an email address are skipped.
+  The language is for contacts whose own is not known: someone who signed up on the website gets
+  the email in the language they used there, and a contact linked to a contact with a language,
+  in that one.
 - **Changing preferences from a mailing's link** needs no confirmation, since only the address
   that received the mailing has that link.
 
@@ -52,7 +59,9 @@ when a contact or a list is deleted.
   link has expired.
 - **Subscriptions by phone number**, with SMS Marketing, have no email address to confirm, and are
   subscribed at once.
-- **The email and the pages** are in the language the person used on the website. Edit the email
+- **The email and the pages** are in the language the person used on the website, or for a request
+  from the backend, the contact's language, else the language chosen in the dialog, else yours.
+  Edit the email
   under **Settings › Technical › Email › Email Templates**, in developer mode: *Email Marketing:
   Confirm Subscription*.
 
@@ -63,8 +72,9 @@ English, Spanish, and Catalan. If any translation seems incorrect, please
 
 **Changelog**
 
-*20.0.1.0.1 (16 November 2026)*
+*20.0.1.1.0 (16 November 2026)*
 
+- **Request Confirmation** for many mailing contacts at once, from the contacts list.
 - Clearer help text on a mailing list's **Double Opt-In** setting.
 
 *20.0.1.0.0 (13 November 2026)*

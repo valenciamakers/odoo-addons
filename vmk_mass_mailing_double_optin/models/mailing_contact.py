@@ -80,6 +80,17 @@ class MailingContact(models.Model):
         # The environment stays the caller's, whose user decides about confirmation.
         new.with_env(self.env)._vmk_on_create()
 
+    def action_vmk_request_confirmation(self):
+        """Open the wizard asking these contacts to confirm, as core's Add to
+        List opens its own; from a list's Recipients, that list is filled in."""
+        action = self.env["ir.actions.act_window"]._for_xml_id(
+            "vmk_mass_mailing_double_optin.vmk_mailing_request_confirmation_action"
+        )
+        action["context"] = dict(
+            self.env.context, default_contact_ids=self.ids, dialog_size="medium"
+        )
+        return action
+
     def action_vmk_view_consent_log(self):
         self.ensure_one()
         action = self.env["ir.actions.act_window"]._for_xml_id(
