@@ -9,13 +9,15 @@ static/description/icons/: Lucide's SVG, pinned at the version make_icon.py uses
 mapping says `material:<name>`, a Material Symbols glyph, for an icon that must match Odoo's own.
 Where it says `fa:<name>`, the Font Awesome span stays, for an icon that must match a series whose
 backend still draws Font Awesome, in the same fixed colour as the other icons.
-Each SVG fixes its colour at #9B69F4, which reads on white and on the dark theme alike; an image
-cannot follow the page's colour scheme (see DEVELOPING.md). The licence of every family used ships
-beside the icons, and icon files the page no longer names are removed.
+Each SVG fixes its colour at #8D5CBE, the brand purple lightened just enough to read on the dark
+theme, which also reads on white; an image cannot follow the page's colour scheme (see
+DEVELOPING.md). The licence of every family used ships beside the icons, and icon files the page no
+longer names are removed.
 
 Which icon replaces which is tools/icons/feature_icons.json: a default per Font Awesome glyph, and
-per-module overrides where a sentence needs another. The page's remaining dark-mode purple,
-#B794F4 before 30 September 2026, becomes #9B69F4 in the same pass.
+per-module overrides where a sentence needs another. The same pass moves a page's text purples to
+the brand's: #531B93 becomes #502582, and the old dark-mode purples, #9B69F4 and #B794F4, become
+#B69BE6, the website's own dark-mode link colour.
 
     uv run tools/feature_icons.py vmk_event_host
     uv run tools/feature_icons.py --all
@@ -35,10 +37,12 @@ import repos  # noqa: E402
 
 LUCIDE = "https://cdn.jsdelivr.net/npm/lucide-static@1.57.0/icons/{}.svg"
 MATERIAL = "https://fonts.gstatic.com/s/i/short-term/release/materialsymbolsoutlined/{}/default/24px.svg"
-COLOR = "#9B69F4"
+COLOR = "#8D5CBE"
+# Text purples on a page, old to new: headings and links in light mode, then in dark mode.
+TEXT_PURPLES = {"#531B93": "#502582", "#9B69F4": "#B69BE6", "#B794F4": "#B69BE6"}
 STYLE = f"<style>:root{{color:{COLOR}}}</style>"
 SPAN = re.compile(r'<span class="fa fa-([a-z0-9-]+) fa-2x fa-fw" style="[^"]*"></span>')
-FA_SPAN = '<span class="fa fa-{} fa-2x fa-fw" style="color:#9B69F4; margin-right:16px;"></span>'
+FA_SPAN = '<span class="fa fa-{} fa-2x fa-fw" style="color:' + COLOR + '; margin-right:16px;"></span>'
 IMG = '<img src="icons/{}.svg" alt="" width="28" height="28" style="width:28px; max-width:28px; margin-right:16px;"/>'
 LICENSES = {"lucide": "LICENSE-lucide", "material": "LICENSE-material-symbols"}
 MAPPING = json.loads((Path(__file__).resolve().parent / "icons" / "feature_icons.json").read_text())
@@ -70,8 +74,9 @@ def convert(module):
     desc = repos.module_dir(module) / "static" / "description"
     page = desc / "index.html"
     html = page.read_text()
+    for old, new in TEXT_PURPLES.items():  # before the spans, which are then rewritten in COLOR
+        html = re.sub(old, new, html, flags=re.I)
     html = SPAN.sub(lambda m: replacement(icon_for(module, m.group(1))), html)
-    html = re.sub("#B794F4", COLOR, html, flags=re.I)
     page.write_text(html)
 
     used = sorted(set(re.findall(r'src="icons/([a-z0-9-]+)\.svg"', html)))

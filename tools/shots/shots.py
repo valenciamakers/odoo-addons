@@ -11,7 +11,7 @@ BASE = os.environ.get("ODOO_URL", "http://localhost:1900")
 
 # Screenshot-only polish, applied after a backend page loads:
 # - hide the unread-messages counter;
-# - repaint Odoo's Violet colour (index 11) in our purple, with core's subtle tint for the light parts;
+# - repaint Odoo's Violet colour (index 11) in our purple, #502582, with its 55% tint for the light parts;
 # - paint the calendar sidebar's current-date circle in the popover header's pale violet;
 # - repaint the signed-in user's letter avatar (Mitchell Admin, user 2, partner 3) in our purple.
 POLISH = r"""async (extraCss) => {
@@ -20,9 +20,9 @@ POLISH = r"""async (extraCss) => {
     .o-mail-MessagingMenu-counter, .o-mail-MessagingMenuInDropdown-counter { display: none !important; }
     .o_tour_pointer { display: none !important; }  /* an onboarding tour's bouncing pointer */
     .o_calendar_color_11, .o_calendar_renderer .o_calendar_color_11 {
-      --o-event-bg: #531B93 !important; --fc-event-bg-color: rgb(178,152,206) !important;
-      --o-event-bg--subtle-rgb: 178,152,206 !important; }
-    .o_field_color_picker .o_colorlist_item_color_11 { background-color: #531B93 !important; }
+      --o-event-bg: #502582 !important; --fc-event-bg-color: rgb(176,157,199) !important;
+      --o-event-bg--subtle-rgb: 176,157,199 !important; }
+    .o_field_color_picker .o_colorlist_item_color_11 { background-color: #502582 !important; }
     .o_calendar_sidebar .o_date_item_cell.o_selected, .o_datetime_picker .o_date_item_cell.o_selected { background: radial-gradient(circle,
       rgb(241, 235, 252) 0% calc(100% / sqrt(2)), transparent calc(100% / sqrt(2)) 100%) !important; }
   ` + (extraCss || '');
@@ -33,7 +33,7 @@ POLISH = r"""async (extraCss) => {
     try { svg = await (await fetch(img.src)).text(); } catch (e) { continue; }  // mid-reload: leave it
     if (!svg.trim().startsWith('<')) continue;
     img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(
-      svg.replace(/fill=['"](#?[0-9a-fA-F]{3,6}|hsl\([^)]*\)|rgb\([^)]*\))['"]/, "fill='#531B93'"));
+      svg.replace(/fill=['"](#?[0-9a-fA-F]{3,6}|hsl\([^)]*\)|rgb\([^)]*\))['"]/, "fill='#502582'"));
   }
 }"""
 
