@@ -5,21 +5,10 @@ and the pages they view by default, under Website › Reporting › Visitors. Th
 on every website the moment it is installed, and adds a **Track Visitors** setting to turn it back
 on for any website that wants it.
 
+**How to use it** is in the user documentation, [`doc/index.rst`](doc/index.rst), which the Odoo
+Apps Store also shows on the module's page, together with the changelog.
+
 It depends only on `website`. LGPL-3, © 2026 Valencia Makers, SL.
-
-## How to use it
-
-Install **Disable Visitor Tracking** from the Apps menu. There is nothing to configure: tracking is
-off on every website, the ones you already have and any you make afterwards.
-
-- **Website › Configuration › Settings › Track Visitors**, under Tracking & SEO beside the cookies
-  bar, for the website chosen at the top of the page. Tick it to record visitors on that website
-  again, as Odoo does without this module.
-- **Off, the website records no visitors at all**: no page views, and no visitor linked to what a
-  form creates, such as a CRM lead or an event registration, which are made without one.
-- **Visitors already recorded stay** until deleted, in Website › Reporting › Visitors. Deleting a
-  visitor deletes its page views.
-- **Uninstalling the module** puts Odoo's own behaviour back, with tracking on everywhere.
 
 ## For developers
 
