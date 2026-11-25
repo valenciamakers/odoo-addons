@@ -24,6 +24,7 @@
             "vmk_mass_mailing_double_optin/static/tests/tours/**/*",
         ],
     },
+    "images": ["static/description/cover.png"],
     "installable": True,
     "application": False,
 }

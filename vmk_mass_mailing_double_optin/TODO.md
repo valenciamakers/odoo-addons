@@ -3,13 +3,14 @@
 What is still ahead before the module's store listing is published. How it works now is in
 `README.md`.
 
-## Store page
+## Store page review
 
-_Added 13 November 2026._
+_Added 13 November 2026; the page built on 25 November 2026._
 
-The page, `static/description/index.html`, its screenshots (a recipe in `tools/shots/recipes/`), and
-the cover (`tools/covers/`), once the wording and the backend have been reviewed, so the screenshots
-are taken once. The icon is done.
+The page, `static/description/index.html`, its screenshots (`tools/shots/recipes/`), and the cover
+(`tools/covers/`) are built, ahead of the review of the module's wording and backend they were meant
+to wait for. Review the page's text with the module's, and if that changes anything a screenshot
+shows, retake them with the recipe and re-render the cover.
 
 ## The other nineteen languages
 

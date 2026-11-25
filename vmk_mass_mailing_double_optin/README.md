@@ -9,8 +9,7 @@ blacklisting, with the date, the page, the IP address, and the browser of whoeve
 Apps Store also shows on the module's page, together with the changelog.
 
 It depends only on `mass_mailing` (_Email Marketing_), and works on Community and Enterprise alike.
-LGPL-3, © 2026 Valencia Makers, SL. Not yet released: its store page, cover, and screenshots are
-still to come (`TODO.md`).
+LGPL-3, © 2026 Valencia Makers, SL. Not yet released: what is left before it is, is in `TODO.md`.
 
 ## For developers
 
