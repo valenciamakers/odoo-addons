@@ -23,6 +23,7 @@ right before capturing vmk_event_registration_deadline's public page:
     (cat tools/shots/demo/seed.py; echo "open_studio_evening(env)") | SERIES=18.0 DB=shots odev shell
 """
 import base64
+import json
 from datetime import datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
 
@@ -299,6 +300,196 @@ lead.write(
     }
 )
 assert rosa.email == "rosa.vidal@example.com" and lead.partner_id == rosa
+
+
+# ---------------------------------------------------------------------------
+# Event Series (20 only, like the modules): two published series, each with
+# dates on the coming Tuesdays or Saturdays, counted from the day this runs so
+# that they stay upcoming, and one past date. A template for the first.
+# ---------------------------------------------------------------------------
+if "vmk.event.series" in env:
+    Series = env["vmk.event.series"]
+    workshop = env["event.type"].search([("name", "=", "Hands-on Workshop")], limit=1)
+    if not workshop:
+        workshop = env["event.type"].create(
+            {
+                "name": "Hands-on Workshop",
+                "seats_max": 8,
+                "has_seats_limitation": True,
+                "event_type_ticket_ids": [(0, 0, {"name": "Workshop Place"})],
+            }
+        )
+
+    def find_or_create_series(name, **vals):
+        series = Series.search([("name", "=", name)], limit=1)
+        if not series:
+            series = Series.create({"name": name, **vals})
+        else:
+            series.write(vals)
+        return series
+
+    def next_weekday(weekday, weeks_ahead):
+        today = datetime.now(ZoneInfo(madrid)).date()
+        return today + timedelta(days=(weekday - today.weekday()) % 7 or 7, weeks=weeks_ahead)
+
+    studio = find_or_create_partner("Valencia Makers Studio", is_company=True)
+    studio.write({"city": "Valencia", "country_id": spain.id, "parent_id": company.partner_id.id})
+
+    def cover(image):
+        """Cover properties with one of website_event's stock images, on the dark preset (o_cc5) so
+        a series' title reads in white over it, at the mixin's default half-screen height."""
+        return json.dumps({"background_color_class": "o_cc5", "background-image": f"url('/website_event/static/src/img/{image}')",
+                           "opacity": "0.4", "resize_class": "o_half_screen_height"})
+
+    def series_dates(series, weekday, hour, hours, weeks, past=None):
+        """Dates on `weekday` (0 is Monday), `weeks` weeks apart, the first in the coming week;
+        and with `past`, one that ended `past` weeks ago. Recreated on every run, so they stay
+        upcoming however long after this the screenshots are retaken."""
+        Event.search([("series_id", "=", series.id)]).unlink()
+        days = [next_weekday(weekday, w) for w in weeks]
+        if past:
+            days.insert(0, next_weekday(weekday, 0) - timedelta(weeks=past + 1))
+        for day in days:
+            Event.create(
+                {
+                    "name": series.name,
+                    "series_id": series.id,
+                    "event_type_id": series.event_type_id.id,
+                    "user_id": admin.id,
+                    "date_tz": madrid,
+                    "date_begin": dt(day.year, day.month, day.day, hour),
+                    "date_end": dt(day.year, day.month, day.day, hour + hours),
+                    "address_id": studio.id,
+                    "website_published": True,
+                    "cover_properties": series.cover_properties,
+                }
+            )
+
+    intro = find_or_create_series(
+        "Intro to 3D Printing",
+        subtitle="From a file to your first print in one evening",
+        event_type_id=workshop.id,
+        website_published=True,
+        cover_properties=cover("event_training_0.jpg"),
+    )
+    series_dates(intro, 1, 18, 3, [0, 2, 4], past=2)
+    laser = find_or_create_series(
+        "Laser Cutting Basics",
+        subtitle="Design, cut, and engrave a project of your own",
+        website_published=True,
+        cover_properties=cover("training.jpg"),
+    )
+    series_dates(laser, 5, 10, 4, [1, 5])
+
+
+# ---------------------------------------------------------------------------
+# Custom Colors: three of Odoo's colors changed and renamed, as a makerspace
+# might tune them to its brand, and contact tags drawn in them. Violet (11) is
+# left alone: shots.py repaints it in our purple in every capture.
+# ---------------------------------------------------------------------------
+if "vmk.colorlist.color" in env:
+    Color = env["vmk.colorlist.color"]
+    for slot, color, name in [(4, "#5f6b7a", "Slate"), (6, "#8a5a3b", "Brown"), (7, "#502582", "Emphasis")]:
+        Color.search([("slot", "=", slot)]).write({"custom_color": color, "name": name})
+    Category = env["res.partner.category"]
+    for tag_name, color, partners in [
+        ("Member", 7, rosa | marc),
+        ("Instructor", 6, marc | edith),
+        ("Volunteer", 4, edith),
+        ("Student", 10, rosa),
+    ]:
+        tag = Category.search([("name", "=", tag_name)], limit=1) or Category.create({"name": tag_name})
+        tag.color = color
+        partners.write({"category_id": [(4, tag.id)]})
+
+
+# ---------------------------------------------------------------------------
+# Double Opt-In: two mailing lists, and subscribers who signed up on the
+# website (as the public user, as core's newsletter block does), some of them
+# confirmed from the email's link, one added by hand in the backend, and one
+# who later left. The log lines get a visitor's address, browser, and page and
+# are spread over the past fortnight, which a shell has no request to supply.
+# The link of a subscription still awaiting confirmation goes in a system
+# parameter, for the recipe's capture of the confirmation page.
+# ---------------------------------------------------------------------------
+if "vmk.mailing.consent.log" in env:
+    from odoo.addons.vmk_mass_mailing_double_optin.models.vmk_mailing_consent_log import CONTEXT_PROVEN
+
+    MailingList = env["mailing.list"]
+    MailingContact = env["mailing.contact"]
+    Log = env["vmk.mailing.consent.log"]
+    public = env.ref("base.public_user")
+
+    def find_or_create_list(name):
+        return MailingList.search([("name", "=", name)], limit=1) or MailingList.create(
+            {"name": name, "is_public": True, "vmk_double_optin": True}
+        )
+
+    # The confirmation email goes out from the company's address, which a fresh database lacks.
+    if not company.email:
+        company.email = "hello@example.com"
+    newsletter = find_or_create_list("Newsletter")
+    announcements = find_or_create_list("Workshop Announcements")
+    people = [
+        ("Rosa Vidal", "rosa.vidal@example.com"),
+        ("Jordi Puig", "jordi.puig@example.com"),
+        ("Ana Martínez", "ana.martinez@example.com"),
+        ("Lucía Ferrer", "lucia.ferrer@example.com"),
+        ("Tom Baker", "tom.baker@example.com"),
+    ]
+    MailingContact.search([("email", "in", [email for _name, email in people])]).unlink()
+    Log.search([]).unlink()
+    contacts = {}
+    for name, email in people:
+        contacts[name] = MailingContact.create({"name": name, "email": email})
+
+    def website_signup(name, mailing_list):
+        sub = env["mailing.subscription"].with_user(public).sudo().create(
+            {"contact_id": contacts[name].id, "list_id": mailing_list.id}
+        )
+        return sub.with_user(admin).sudo()
+
+    def confirm(sub):
+        sub.with_context(**{CONTEXT_PROVEN: True})._vmk_confirm()
+
+    confirm(website_signup("Rosa Vidal", newsletter))
+    confirm(website_signup("Rosa Vidal", announcements))
+    pending = website_signup("Jordi Puig", newsletter)
+    confirm(website_signup("Ana Martínez", newsletter))
+    ana_workshops = website_signup("Ana Martínez", announcements)
+    confirm(ana_workshops)
+    ana_workshops.with_context(**{CONTEXT_PROVEN: True}).write({"opt_out": True})
+    website_signup("Lucía Ferrer", announcements)
+    env["mailing.subscription"].with_user(admin).create(
+        {"contact_id": contacts["Tom Baker"].id, "list_id": newsletter.id}
+    )
+
+    # Spread the lines over the past fortnight, oldest first, an hour or two between steps of one
+    # person; and give the website's lines a visitor, as a real request would.
+    agents = [
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Safari/605.1.15",
+        "Mozilla/5.0 (iPhone; CPU iPhone OS 18_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Mobile/15E148 Safari/604.1",
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    ]
+    now = datetime.now().replace(microsecond=0)
+    lines = Log.search([], order="id")
+    for i, line in enumerate(lines):
+        values = {"date": now - timedelta(days=13 - i, hours=3 - (i % 4))}
+        if line.source in ("website", "email_link"):
+            values.update(
+                ip_address=f"203.0.113.{40 + i * 7}",
+                user_agent=agents[i % len(agents)],
+                url="https://www.example.com/newsletter"
+                if line.source == "website"
+                else f"https://www.example.com/mailing/subscription/{line.id}/confirm",
+            )
+        sets = ", ".join(f"{field} = %s" for field in values)
+        env.cr.execute(f"UPDATE vmk_mailing_consent_log SET {sets} WHERE id = %s", [*values.values(), line.id])
+    env.invalidate_all()
+    env["ir.config_parameter"].set_str("shots.double_optin_confirm_url", pending._vmk_confirmation_url())
+    # Send the confirmation emails now, to the stack's Mailpit, rather than at the mail queue's next
+    # run: the recipe captures one from there.
+    env["mail.mail"].search([("state", "=", "outgoing")]).send()
 
 commit(env)
 print("done.")

@@ -67,6 +67,24 @@ ordinary event rather than a multi-slot one. What it makes:
   purple (`demo/rosa_vidal.png`), and a lead that arrived by email from one of them. The lead goes
   through the mail gateway, so its contact is found the way real mail finds it; `seed.py` recreates
   the lead on every run, so it stays matched to Rosa even after an unrelated re-seed.
+- for Event Series and its website companion (20 only), two published series, **Intro to 3D
+  Printing** (on a **Hands-on Workshop** template) and **Laser Cutting Basics**, each with a stock
+  cover from `website_event` and dates at a **Valencia Makers Studio** venue in Valencia. The dates
+  are counted from the day the seed runs, on the coming Tuesdays and Saturdays, plus one past date,
+  and are recreated on every run, so they stay upcoming whenever the screenshots are retaken.
+- for Custom Colors, three of Odoo's colors changed and renamed (**Slate**, **Brown**, and
+  **Emphasis**, our purple), and contact tags drawn in them (**Member** on Rosa and Marc). Violet is
+  left alone, since `shots.py` repaints it in every capture. These colors show in any later capture
+  that draws slots 4, 6, or 7.
+- for Double Opt-In, two mailing lists, **Newsletter** and **Workshop Announcements**, and five
+  subscribers: four who signed up on the website as the public user, as core's newsletter block does
+  (Rosa and Ana confirmed, Ana later left one list, **Jordi Puig** and Lucía still awaiting
+  confirmation), and Tom Baker added in the backend. Their consent log lines are spread over the
+  fortnight before the seed runs, with a visitor's address (`203.0.113.x`, a documentation range),
+  browser, and page, which a shell has no request to supply. The company gets the address
+  `hello@example.com` to send from, the confirmation emails go to the stack's Mailpit straight away,
+  and Jordi's confirmation link is kept in the `shots.double_optin_confirm_url` system parameter for
+  the recipe.
 
 Recipes find records by these names, so ids do not matter. The three sort recipes uninstall their
 module over RPC for the "before" captures and install it again for the "after"; `_sorting.py` waits
@@ -87,7 +105,9 @@ private repo's 18.0 worktree beside it. Each checkout's tools default to its own
 which the harness serves at the start of the series' hundred (`http://localhost:2000` here);
 `ODOO_URL` points them elsewhere. The harness runs Odoo 20 unless told the series, so only the other
 checkouts' commands carry a `SERIES=`. Navigation waits for the page to load and then up to five
-seconds of network quiet (`shots.goto`), since Odoo 18's backend never goes quiet at all.
+seconds of network quiet (`shots.goto`), since Odoo 18's backend never goes quiet at all. The Double
+Opt-In recipe also reads the confirmation email from the stack's Mailpit, at `MAILPIT_URL`
+(`http://localhost:2002` by default, the stack's port +2).
 
 Each recipe's docstring lists what it writes. Run against the current demo data they reproduce the
 published images, to within a pixel of cropping.
