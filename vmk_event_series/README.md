@@ -4,29 +4,20 @@ Group the dates of an event you run again and again, such as a monthly workshop,
 Each date stays an ordinary event, with its own tickets, seats, and registrations; the series holds
 what they share, and lists them.
 
-It depends only on `event` (Events Organization). Its website companion,
-[`vmk_website_event_series`](../vmk_website_event_series), gives each series a page of its own.
-LGPL-3, © 2026 Valencia Makers, SL.
+**How to use it** is in the user documentation, [`doc/index.rst`](doc/index.rst), which the Odoo
+Apps Store also shows on the module's page, together with the changelog. A series' description
+belongs to its page on the website, and comes with the website module.
 
-## How to use it
-
-- **Events › Series** lists the series. A series has a name, a subtitle, and optionally an event
-  template. Its description belongs to its page on the website, and comes with the website module.
-- **New Event in Series**, on a series, opens a new event already in the series, named after it and
-  on its template, so the template fills in tickets, communications, and the rest as it does for any
-  event.
-- **An event's Series field**, beside Template on the event form, puts an existing event in a
-  series. It fills nothing in: unlike the template, it is only a link.
-- **The Upcoming Events button** on a series opens its events. It counts the current and upcoming
-  dates: events that have not yet ended.
-- **Events can be searched and grouped by series**, and the events list has a Series column.
-- **A series with events cannot be deleted**, only archived, so no event is left pointing at
-  nothing; a series without events can be.
-
-Event users create and edit series, event managers can also delete them, and the registration desk
-can read them.
+It depends only on `event` (_Events Organization_). The _Events_ app is `website_event`, which
+brings the website with it, so most databases have both; there the companion module
+[`vmk_website_event_series`](../vmk_website_event_series) installs itself from a clone of this repo
+and gives each series a page of its own. From the Apps Store, website users download the companion
+instead: it depends on this module, so the store includes both, while this module's own download
+does not include the companion. LGPL-3, © 2026 Valencia Makers, SL.
 
 ## For developers
+
+What follows is how the module works and why it is built this way.
 
 ### Why a model of its own, not the template
 
