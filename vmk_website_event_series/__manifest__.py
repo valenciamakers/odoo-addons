@@ -19,6 +19,9 @@
         "views/event_templates.xml",
     ],
     "assets": {
+        "web.assets_frontend": [
+            "vmk_website_event_series/static/src/scss/series_page.scss",
+        ],
         "web.assets_tests": [
             "vmk_website_event_series/static/tests/tours/**/*",
         ],

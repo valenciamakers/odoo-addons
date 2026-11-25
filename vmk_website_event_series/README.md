@@ -47,6 +47,13 @@ layout options (columns or rows, cards), and a theme's styling of the listing al
 search and pager have nothing to do on this page, so they get an empty search and a pager of one
 page, which draws nothing.
 
+**The cover lays its title over its image as an event's does.** `website.record_cover` positions the
+image and its darkening filter absolutely, which paints them over the title and subtitle, as these
+are not positioned. website_event gives its event cover a stacking context and puts those layers
+behind it (`event_templates_page.scss`, `.o_wevent_event .o_record_cover_container`);
+`static/src/scss/series_page.scss` does the same for ours. Without it, a series with a cover image
+showed no title at all, found taking the store screenshots on 25 November 2026.
+
 `_website_events()` is the series' events that have not ended, on the current website and visible to
 the visitor, soonest first: published ones to a visitor, and unpublished ones too to whoever may see
 those, as on `/event`.

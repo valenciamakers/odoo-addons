@@ -1,0 +1,10 @@
+// A series' cover, as website_event lays out an event's (event_templates_page.scss): the cover's
+// image and filter are absolutely positioned, so without a stacking context of their own they are
+// painted over the title and subtitle, which are not.
+.o_vmk_event_series_cover {
+    z-index: 0;
+
+    .o_record_cover_component {
+        z-index: -1;
+    }
+}
