@@ -8,24 +8,14 @@ changes how each color looks and what it is called, not how many there are. Odoo
 It depends only on `base_setup`, so it works on Community and Enterprise alike. LGPL-3, © 2026
 Valencia Makers, SL.
 
-## How to use it
-
-In **Settings › General Settings › Colors**, **Edit Colors** opens the eleven colors in a list.
-
-- **Pick a color** with the color picker on its row. Picking Odoo's own color again removes the
-  custom one.
-- **Rename a color** by typing over its name, which starts as Odoo's, in each language. A name is
-  translatable like any other, so a name changed in one language only shows in that language and in
-  those with no name of their own.
-- **The undo arrow at the end of a row**, shown once its color or name differs from the default,
-  puts both back, as core's Replenishment list puts back a quantity typed over the computed one, and
-  **Reset to Defaults** does it for all eleven, after asking. Both reload the page, so the change
-  shows everywhere at once. A color picked or a name typed in the list shows elsewhere after the
-  next reload.
-
-Only users with the Settings access right (Administration › Settings) reach the list.
+**How to use it** is in the user documentation, [`doc/index.rst`](doc/index.rst), which the Odoo
+Apps Store also shows on the module's page, together with the changelog. The list's undo arrow
+follows core's Replenishment list, which puts back a quantity typed over the computed one the same
+way.
 
 ### Colors some apps give a meaning
+
+The manual carries this as a list; the table here is the record of what was checked.
 
 Most colors are only what someone picked for a tag, a stage, or a calendar, and any of them can be
 replaced. A few of Odoo's apps, though, set a record's color themselves, as a traffic light. A color

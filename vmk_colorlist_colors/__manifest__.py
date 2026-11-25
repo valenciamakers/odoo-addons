@@ -24,6 +24,7 @@
         ],
     },
     "uninstall_hook": "_uninstall_hook",
+    "images": ["static/description/cover.png"],
     "installable": True,
     "application": False,
 }
