@@ -29,7 +29,7 @@ class TestModuleNameTranslation(TransactionCase):
     I18N = Path(__file__).resolve().parent.parent / "i18n"
     MODULE_METADATA = (
         "Custom Colors",
-        "Change the colors used for tags, kanban cards, and calendars, and their names",
+        "Change the colors (and their names) used for tags, kanban cards, and calendars",
     )
 
     def _translation(self, catalogue, msgid):

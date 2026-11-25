@@ -33,11 +33,11 @@ msgstr "Blau"
 #. module: vmk_colorlist_colors
 #: model:ir.module.module,summary:base.module_vmk_colorlist_colors
 msgid ""
-"Change the colors used for tags, kanban cards, and calendars, and their "
-"names"
+"Change the colors (and their names) used for tags, kanban cards, and "
+"calendars"
 msgstr ""
-"Canviar els colors de les etiquetes, les targetes kanban i els calendaris, i"
-" els seus noms"
+"Canviar els colors (i els seus noms) de les etiquetes, les targetes kanban i"
+" els calendaris"
 
 #. module: vmk_colorlist_colors
 #. odoo-python

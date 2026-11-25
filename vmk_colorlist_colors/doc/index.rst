@@ -1,4 +1,4 @@
-Change the colors used for tags, kanban cards, and calendars, and their names.
+Change the colors (and their names) used for tags, kanban cards, and calendars.
 
 In standard Odoo, the eleven colors you can give a tag, a kanban card, or a calendar are fixed, and
 so are their names. This module lets you change any of them to one of your own, such as your
