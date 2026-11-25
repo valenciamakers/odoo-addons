@@ -721,12 +721,13 @@ each linked to a search. The legal name stays in the copyright lines. Fixed 24 S
 `depends` minimal and honest — depend on `website` only if you override something it defines.
 
 **Store icons are rendered by `tools/make_icon.py`, never drawn or resized by hand.** Every module's
-`static/description/icon.png` is a 256px glyph in our purple, `#531B93`, on a transparent
-background, from [Lucide](https://lucide.dev/icons/) (ISC), chosen 24 September 2026 over Font
-Awesome, Phosphor, Tabler, and Material Symbols. The glyph's source is `tools/icons/<module>.svg`:
-either a Lucide icon as published, fetched with `--lucide <name>`, or our own composition on
-Lucide's 24px grid and stroke, which is how a family of modules, such as the three sort modules, is
-meant to read as one. So an icon can always be rebuilt, and restyling every module is one `--all`.
+`static/description/icon.png` is a 256px glyph in our brand purple, `#502582` (`#531B93` until 25
+November 2026), on a transparent background, from [Lucide](https://lucide.dev/icons/) (ISC), chosen
+24 September 2026 over Font Awesome, Phosphor, Tabler, and Material Symbols. The glyph's source is
+`tools/icons/<module>.svg`: either a Lucide icon as published, fetched with `--lucide <name>`, or
+our own composition on Lucide's 24px grid and stroke, which is how a family of modules, such as the
+three sort modules, is meant to read as one. So an icon can always be rebuilt, and restyling every
+module is one `--all`.
 
 ```bash
 uv run tools/make_icon.py --install-browser              # once: Playwright's own Chromium
@@ -742,7 +743,7 @@ paints the exact colours through those as masks.
 
 **The feature icons inside `index.html` are Lucide too**, as SVG files in
 `static/description/icons/`, shown with `<img src="icons/<name>.svg">`: Lucide's own SVG with a
-`<style>` fixing `color` at `#9B69F4`, whatever the colour scheme. They replaced Font Awesome on 30
+`<style>` fixing `color` at `#8D5CBE`, whatever the colour scheme. They replaced Font Awesome on 30
 September 2026, when Odoo 20 stopped loading it in the backend, so an `fa` icon on the Apps page
 there renders nothing; the store still has its own copy, but one family across every series and both
 surfaces is the point.
@@ -752,8 +753,9 @@ is `tools/icons/feature_icons.json`: a default per Font Awesome glyph, and per-m
 where a sentence needs another, as reviewed on 30 September 2026. To add a feature to a page, write
 the `fa` span as before and run the tool on the module, or place an `<img>` by hand and run it to
 fetch the file. It writes the SVGs, ships the licence of each family used (`LICENSE-lucide`, and
-`LICENSE-material-symbols` where needed), and removes icons the page no longer names. `--check`
-lists pages still carrying Font Awesome.
+`LICENSE-material-symbols` where needed), and removes icons the page no longer names. It also moves
+a page's older text purples to the current ones, so a run on an old page is the whole colour update.
+`--check` lists pages still carrying Font Awesome.
 
 ```bash
 uv run tools/feature_icons.py vmk_foo
@@ -763,7 +765,7 @@ uv run tools/feature_icons.py --all
 **One exception to Lucide: the systray's own globe.** Where the two language pages mean the Backend
 Language Menu's globe, they show the glyph that series' systray draws, so page and menu match. On 18
 and 19 that is Font Awesome's `fa-globe`, which both the store and those backends render, so the
-mapping says `fa:globe` and the tool keeps the span, in the same fixed `#9B69F4` as the icons beside
+mapping says `fa:globe` and the tool keeps the span, in the same fixed `#8D5CBE` as the icons beside
 it. On 20, whose backend no longer loads Font Awesome, it is Material Symbols' `public` (not
 `language`, which Odoo's font subset lacks), as `material:public`: filled where Lucide is outlined,
 by design.
@@ -775,10 +777,13 @@ as Odoo's backend does in dark mode, and the visitor's system setting when it do
 store. So a switching icon showed the dark-mode purple on the store's white page for every visitor
 on a dark system (checked on the live store, 30 September 2026). Nothing can fix that from our side:
 both sanitizers strip `<style>`, and an inline `color-scheme` on the `<img>` would override Odoo's
-dark mode in the backend. `#9B69F4` is the purple readable on both backgrounds, 3.67:1 on white and
-3.90:1 on the dark theme's `#262A36`, where no single colour can beat 3.78:1 on both; it clears the
-3:1 minimum for icons, not the 4.5:1 text needs, which is why text keeps `light-dark()`. It reads
-lighter than `#531B93` headings on a white page, a known compromise.
+dark mode in the backend. `#8D5CBE` is the colour closest to the brand purple, `#502582`, that still
+reads on the dark theme's `#262A36`: 3.00:1 there and 4.77:1 on white, measured by CIELAB distance
+from `#502582` among every colour reaching 3:1 on the dark background (25 November 2026). It clears
+the 3:1 minimum for icons, not the 4.5:1 text needs, which is why text keeps `light-dark()`. It
+reads lighter than the `#502582` headings on a white page, a known compromise. From 30 September to
+25 November 2026 it was `#9B69F4`, chosen to balance both backgrounds rather than to stay close to
+the brand.
 
 **Inline `<svg>` does not survive either.** `html_sanitize`, which the backend runs over every
 `index.html`, keeps the `<svg>` tag but strips its `<path>` children and lowercases `viewBox`
@@ -795,10 +800,10 @@ whatever the icon sits on.
 picture at the top of the module's page, filled into a 2:1 frame. A bare screenshot there looked
 poor next to other vendors' designed covers, and a module without one ranks lower in the default
 listing, per the vendor guidelines. Each cover is `tools/covers/<module>.html` on the shared
-`tools/covers/cover.css`: purple background, the module's name and summary on the left, cards cut
-from the module's own screenshots on the right, and the icon with "Valencia Makers" at the bottom.
-`tools/make_cover.py` renders it at 1760x880, 2x the 880x440 layout, with Chromium forced to sRGB so
-the purple stays `#531B93`.
+`tools/covers/cover.css`: a background in the brand purple, `#502582`, the module's name and summary
+on the left, cards cut from the module's own screenshots on the right, and the icon with "Valencia
+Makers" at the bottom. `tools/make_cover.py` renders it at 1760x880, 2x the 880x440 layout, with
+Chromium forced to sRGB so the purple stays `#502582`.
 
 ```bash
 uv run tools/make_cover.py vmk_foo
@@ -838,14 +843,15 @@ in a dark stylesheet and sets `color-scheme: dark` on the web client, but inline
 so near-black text vanished on its `#262A36` background. Odoo's light mode sets the invalid
 `color-scheme: bright`, which browsers read as light. So: body text `light-dark(#111827, #E4E4E4)`,
 subtitles `light-dark(#333333, #E4E4E4)` at 50% opacity, and headings and links
-`light-dark(#531B93, #9B69F4)`, the dark one also the feature icons' fixed colour; `#E4E4E4` is the
-dark theme's own text colour, and `#531B93` is unreadable on its background. `#9B69F4` replaced
-`#B794F4` as the dark purple on 30 September 2026; a page still carrying the old value switches when
-its module is next updated, not in a pass of its own. Screenshots stay light in both modes.
-Screenshots are taken at 2x in English (UK), with any polish (colours, widths, a drawn cursor)
-injected as CSS during capture only, never shipped. Each module's captures are a recipe in
-`tools/shots/recipes/`, which also holds a store preview and a dark-mode check; its README lists the
-demo data they expect. Write the recipe with the screenshots, so a later retake is one command.
+`light-dark(#502582, #B69BE6)`, the brand purple and the website's own dark-mode link colour, 6.0:1
+on the dark background; `#E4E4E4` is the dark theme's own text colour, and `#502582` is unreadable
+on its background. These replaced `light-dark(#531B93, #9B69F4)` on 25 November 2026 (and `#B794F4`
+was the dark purple before 30 September); `tools/feature_icons.py` moves an older page to them.
+Screenshots stay light in both modes. Screenshots are taken at 2x in English (UK), with any polish
+(colours, widths, a drawn cursor) injected as CSS during capture only, never shipped. Each module's
+captures are a recipe in `tools/shots/recipes/`, which also holds a store preview and a dark-mode
+check; its README lists the demo data they expect. Write the recipe with the screenshots, so a later
+retake is one command.
 
 **The manual, `doc/index.rst`, has no RST headings.** The store shows it in a Documentation tab with
 headings at 53px, 42px, and 31px against 16px text, and pure RST cannot set a size; top-level
