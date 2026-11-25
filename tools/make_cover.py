@@ -14,7 +14,7 @@ and icon by relative path, so re-rendering after a new screenshot picks it up.
     uv run tools/make_icon.py --install-browser     # once, if Playwright's Chromium is missing
 
 The manifest's `images` list must name cover.png first: the store takes the first image as the
-cover. Chromium is forced to sRGB so the purple comes out as #531B93 rather than the display's
+cover. Chromium is forced to sRGB so the purple comes out as #502582 rather than the display's
 profile.
 """
 

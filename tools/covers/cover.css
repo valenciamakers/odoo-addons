@@ -1,11 +1,12 @@
-/* Shared layout for Apps Store covers: 880x440 CSS px, rendered at 2x by tools/make_cover.py. */
+/* Shared layout for Apps Store covers: 880x440 CSS px, rendered at 2x by tools/make_cover.py.
+   The background is the brand purple, #502582, with a lighter glow and darker corner around it. */
 * { box-sizing: border-box; }
 html, body { margin: 0; }
 body { width: 880px; height: 440px; overflow: hidden; font-family: -apple-system, "Helvetica Neue", Arial, sans-serif; }
 .cover {
     position: relative; width: 880px; height: 440px; overflow: hidden; color: #fff;
-    background: radial-gradient(circle at 85% 10%, #7a3fc0 0%, rgba(122, 63, 192, 0) 45%),
-                linear-gradient(135deg, #5d22a3 0%, #531b93 45%, #3a1068 100%);
+    background: radial-gradient(circle at 85% 10%, #7648ac 0%, rgba(118, 72, 172, 0) 45%),
+                linear-gradient(135deg, #5a2d91 0%, #502582 45%, #38175c 100%);
 }
 .cover::after { /* a faint ring, for depth */
     content: ""; position: absolute; left: -160px; bottom: -220px; width: 520px; height: 520px;
@@ -31,5 +32,5 @@ h1 { margin: 0; font-size: 46px; line-height: 1.04; font-weight: 800; letter-spa
 .shot img { position: absolute; display: block; }
 .flag { /* marks a variant of a module, e.g. its website half, under the shared title */
     display: inline-block; margin-top: 14px; font-size: 15px; font-weight: 800; letter-spacing: 0.08em;
-    text-transform: uppercase; padding: 6px 14px; border-radius: 6px; background: #fff; color: #531b93;
+    text-transform: uppercase; padding: 6px 14px; border-radius: 6px; background: #fff; color: #502582;
 }

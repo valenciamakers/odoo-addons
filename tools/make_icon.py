@@ -17,8 +17,8 @@ Store frames an icon in its own white box, and Odoo's own app icons have no tile
 Chromium draws the glyph black on white; Pillow then paints it purple and takes its alpha from the
 render's inverted luminance. Drawing on white rather than on transparency is what lets a composition
 knock a gap out of a glyph with a white shape: white becomes transparent, as the background does.
-Screenshots pass through the browser's colour management, which shifted #531B93 to #4C1F8D when the
-colours were drawn in the page, so the page never draws them.
+Screenshots pass through the browser's colour management, which shifted the purple of the day (#531B93)
+to #4C1F8D when the colours were drawn in the page, so the page never draws them.
 """
 
 import argparse
@@ -35,7 +35,7 @@ import repos
 LUCIDE = "https://cdn.jsdelivr.net/npm/lucide-static@1.57.0/icons/{}.svg"
 
 SIZE = 256  # the icon, and the glyph's 24px box; Lucide leaves ~2px of the box empty on each side
-PURPLE = (0x53, 0x1B, 0x93, 255)
+PURPLE = (0x50, 0x25, 0x82, 255)  # #502582, the brand purple
 
 PAGE = """<!doctype html><html><head><style>
 html, body {{ margin: 0; background: transparent; }}
