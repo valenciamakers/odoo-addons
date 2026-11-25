@@ -145,6 +145,16 @@ async def rpc(page, model, method, args, kwargs=None):
 
     Always in English (UK), the screenshots' language, since demo names may be translated there."""
     kwargs = {**(kwargs or {}), "context": {"lang": "en_GB", **(kwargs or {}).get("context", {})}}
+    for attempt in range(3):  # the first call after a login is now and then cut short, empty
+        try:
+            return await _rpc(page, model, method, args, kwargs)
+        except Exception as e:
+            if "Unexpected end of JSON input" not in str(e) or attempt == 2:
+                raise
+            await page.wait_for_timeout(2000)
+
+
+async def _rpc(page, model, method, args, kwargs):
     return await page.evaluate("""async ([model, method, args, kwargs]) => {
         const r = await fetch(`/web/dataset/call_kw/${model}/${method}`, {method: 'POST',
             headers: {'Content-Type': 'application/json'},
