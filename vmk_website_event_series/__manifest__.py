@@ -26,6 +26,7 @@
             "vmk_website_event_series/static/tests/tours/**/*",
         ],
     },
+    "images": ["static/description/cover.png"],
     "installable": True,
     "application": False,
 }

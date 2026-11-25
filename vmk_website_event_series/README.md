@@ -5,37 +5,19 @@ the same address, describing the series and listing its current and upcoming dat
 every series; a link from each event's page to its series; and a Series filter on the `/event`
 listing.
 
+**How to use it** is in the user documentation, [`doc/index.rst`](doc/index.rst), which the Odoo
+Apps Store also shows on the module's page, together with the changelog.
+
 It depends on `vmk_event_series` and `website_event`, and installs itself once both are there.
 LGPL-3, © 2026 Valencia Makers, SL.
-
-## How to use it
-
-- **Publish a series** from its form, as an event is: the Published toggle, Publish on to schedule
-  it (website's own cron publishes it then), and the Go to Website button. A series can be limited
-  to one website.
-- **Its page**, at `/event/series/<series>`, shows its cover, name, and subtitle, its description,
-  and its current and upcoming events, in the same list as the `/event` listing's. The cover, name,
-  subtitle, and description are edited on the page, in the website editor. A new series starts with
-  a sample description, as a new event does, saying that the event is repeated and each date has its
-  own tickets. The description, as an event's, is written only there: no form shows it. With no
-  dates scheduled, the page says so.
-- **`/events/series`** lists every published series on the website, each with its next event. The
-  list is in the plural and each series in the singular, as `/events` lists events and
-  `/event/<event>` is one.
-- **An event's page** has a Series block in its sidebar, beside Location and Organizer, linking to
-  its series, once the series is published.
-- **The `/event` listing** has a Series filter beside its Date filter, once a series is published,
-  drawn as its tag categories' filters are: titled Series, All first, and a count once one is
-  chosen.
-- **To serve the pages at another address**, such as `/workshops`, add two redirects of type "308
-  Redirect / Rewrite" in Website › Configuration › Redirects, one for each route: from
-  `/events/series` to `/workshops`, and from `/event/series/<model("vmk.event.series"):series>` to
-  `/workshops/<model("vmk.event.series"):series>`. Odoo then serves the pages at the new address,
-  redirects the old one there, and rewrites the site's links to them.
 
 ## For developers
 
 ### What the page is built from
+
+The index is `/events/series` and each series `/event/series/<slug>`: the list in the plural and
+each series in the singular, as `/events` lists events and `/event/<event>` is one. A series'
+description, as an event's, is written only on its page: no form shows it.
 
 The series takes website's own mixins, as `event.event` does in `website_event`:
 `website.published.multi.mixin` (published, per website), `website.seo.metadata`, and
