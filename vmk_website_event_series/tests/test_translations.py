@@ -29,7 +29,7 @@ class TestModuleNameTranslation(TransactionCase):
     I18N = Path(__file__).resolve().parent.parent / "i18n"
     MODULE_METADATA = (
         "Event Series (Website)",
-        "A page for each event series on the website, listing its upcoming dates",
+        "Each event series gets a page on the website, listing its upcoming dates",
     )
 
     def _translation(self, catalogue, msgid):

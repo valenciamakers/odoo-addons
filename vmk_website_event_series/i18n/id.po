@@ -25,12 +25,6 @@ msgid "<span class=\"text-muted\">Next event:</span>"
 msgstr ""
 
 #. module: vmk_website_event_series
-#: model:ir.module.module,summary:base.module_vmk_website_event_series
-msgid ""
-"A page for each event series on the website, listing its upcoming dates"
-msgstr ""
-
-#. module: vmk_website_event_series
 #: model_terms:ir.ui.view,arch_db:vmk_website_event_series.event_series_filter
 msgid "All"
 msgstr "Semua"
@@ -66,6 +60,12 @@ msgstr "Deskripsi"
 #: model:ir.model.fields,field_description:vmk_website_event_series.field_vmk_event_series__display_name
 msgid "Display Name"
 msgstr "Nama Tampilan"
+
+#. module: vmk_website_event_series
+#: model:ir.module.module,summary:base.module_vmk_website_event_series
+msgid ""
+"Each event series gets a page on the website, listing its upcoming dates"
+msgstr ""
 
 #. module: vmk_website_event_series
 #: model:ir.model,name:vmk_website_event_series.model_event_event

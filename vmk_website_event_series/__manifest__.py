@@ -3,7 +3,7 @@
 
 {
     "name": "Event Series (Website)",
-    "summary": "A page for each event series on the website, listing its upcoming dates",
+    "summary": "Each event series gets a page on the website, listing its upcoming dates",
     "version": "20.0.1.0.0",
     "author": "Valencia Makers",
     "license": "LGPL-3",
