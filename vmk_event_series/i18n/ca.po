@@ -129,8 +129,8 @@ msgstr "Esdeveniments"
 
 #. module: vmk_event_series
 #: model:ir.module.module,summary:base.module_vmk_event_series
-msgid "Group the dates of an event you run again and again into one series"
-msgstr "Agrupar en una sèrie les dates d'un esdeveniment que es repeteix"
+msgid "Group events you run multiple times into one series"
+msgstr "Agrupar en una sèrie els esdeveniments que es repeteixen"
 
 #. module: vmk_event_series
 #: model:ir.model.fields,field_description:vmk_event_series.field_event_event__id

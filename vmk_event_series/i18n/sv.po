@@ -127,7 +127,7 @@ msgstr "Evenemang"
 
 #. module: vmk_event_series
 #: model:ir.module.module,summary:base.module_vmk_event_series
-msgid "Group the dates of an event you run again and again into one series"
+msgid "Group events you run multiple times into one series"
 msgstr ""
 
 #. module: vmk_event_series
