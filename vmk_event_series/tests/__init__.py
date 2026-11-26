@@ -1,0 +1,6 @@
+# Copyright 2026 Valencia Makers, SL
+# License LGPL-3 (https://www.gnu.org/licenses/lgpl-3.0.html).
+
+from . import test_series
+from . import test_tours
+from . import test_translations

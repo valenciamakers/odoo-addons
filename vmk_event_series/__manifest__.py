@@ -1,0 +1,26 @@
+# Copyright 2026 Valencia Makers, SL
+# License LGPL-3 (https://www.gnu.org/licenses/lgpl-3.0.html).
+
+{
+    "name": "Event Series",
+    "summary": "Group events that are offered multiple times into one series",
+    "version": "19.0.1.0.0",
+    "author": "Valencia Makers",
+    "license": "LGPL-3",
+    "category": "Marketing/Events",
+    "depends": ["event"],
+    "data": [
+        "security/ir.model.access.csv",
+        "security/vmk_event_series_security.xml",
+        "views/vmk_event_series_views.xml",
+        "views/event_event_views.xml",
+    ],
+    "assets": {
+        "web.assets_tests": [
+            "vmk_event_series/static/tests/tours/**/*",
+        ],
+    },
+    "images": ["static/description/cover.png"],
+    "installable": True,
+    "application": False,
+}
