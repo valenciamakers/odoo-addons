@@ -98,7 +98,7 @@ msgstr "Cian"
 #. module: vmk_colorlist_colors
 #: model:ir.model.fields,field_description:vmk_colorlist_colors.field_vmk_colorlist_color__odoo_color
 msgid "Default Color"
-msgstr "Color por defecto"
+msgstr "Color predeterminado"
 
 #. module: vmk_colorlist_colors
 #: model:ir.model.fields,field_description:vmk_colorlist_colors.field_vmk_colorlist_color__odoo_name
