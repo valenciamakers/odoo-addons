@@ -93,14 +93,6 @@ msgid "Confirm Subscription"
 msgstr "Confirmar suscripción"
 
 #. module: vmk_mass_mailing_double_optin
-#: model:ir.module.module,summary:base.module_vmk_mass_mailing_double_optin
-msgid ""
-"Confirm new mailing list subscribers by email, and log every consent change"
-msgstr ""
-"Confirme por correo electrónico a los nuevos suscriptores de las listas de "
-"correo y registre cada cambio de consentimiento"
-
-#. module: vmk_mass_mailing_double_optin
 #. odoo-python
 #: code:addons/vmk_mass_mailing_double_optin/controllers/main.py:0
 msgid "Confirm your subscription to %(list)s for %(email)s."
@@ -387,6 +379,15 @@ msgstr "Eliminado"
 #: model_terms:ir.ui.view,arch_db:vmk_mass_mailing_double_optin.vmk_mailing_request_confirmation_view_form
 msgid "Request Confirmation"
 msgstr "Solicitar confirmación"
+
+#. module: vmk_mass_mailing_double_optin
+#: model:ir.module.module,summary:base.module_vmk_mass_mailing_double_optin
+msgid ""
+"Require confirmation on new mailing list subscriptions, and log every "
+"consent change"
+msgstr ""
+"Requiera la confirmación de las nuevas suscripciones a las listas de correo "
+"y registre cada cambio de consentimiento"
 
 #. module: vmk_mass_mailing_double_optin
 #: model_terms:ir.ui.view,arch_db:vmk_mass_mailing_double_optin.mailing_contact_view_form

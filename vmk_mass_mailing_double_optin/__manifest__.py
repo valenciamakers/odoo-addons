@@ -3,7 +3,7 @@
 
 {
     "name": "Double Opt-In for Email Marketing",
-    "summary": "Confirm new mailing list subscribers by email, and log every consent change",
+    "summary": "Require confirmation on new mailing list subscriptions, and log every consent change",
     "version": "20.0.1.1.0",
     "author": "Valencia Makers",
     "license": "LGPL-3",

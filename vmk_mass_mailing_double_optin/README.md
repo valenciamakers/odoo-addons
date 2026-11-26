@@ -1,9 +1,10 @@
 # Double Opt-In for Email Marketing (`vmk_mass_mailing_double_optin`)
 
-Confirm new mailing list subscribers by email, and log every consent change. Someone who subscribes
-on the website receives an email with a confirmation link, and receives no mailings from that list
-until they confirm. A consent log records every subscription, confirmation, unsubscription, and
-blacklisting, with the date, the page, the IP address, and the browser of whoever made it.
+Require confirmation on new mailing list subscriptions, and log every consent change. Someone who
+subscribes on the website receives an email with a confirmation link, and receives no mailings from
+that list until they confirm. A consent log records every subscription, confirmation,
+unsubscription, and blacklisting, with the date, the page, the IP address, and the browser of
+whoever made it.
 
 **How to use it** is in the user documentation, [`doc/index.rst`](doc/index.rst), which the Odoo
 Apps Store also shows on the module's page, together with the changelog.

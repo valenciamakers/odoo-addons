@@ -1,4 +1,4 @@
-Confirm new mailing list subscribers by email, and log every consent change.
+Require confirmation on new mailing list subscriptions, and log every consent change.
 
 Someone who subscribes to a mailing list on your website receives an email with a confirmation
 link, and receives no mailings from that list until they confirm. Every subscription,

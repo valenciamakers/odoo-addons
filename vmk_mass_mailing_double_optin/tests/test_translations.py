@@ -29,7 +29,7 @@ class TestModuleNameTranslation(TransactionCase):
     I18N = Path(__file__).resolve().parent.parent / "i18n"
     MODULE_METADATA = (
         "Double Opt-In for Email Marketing",
-        "Confirm new mailing list subscribers by email, and log every consent change",
+        "Require confirmation on new mailing list subscriptions, and log every consent change",
     )
 
     def _translation(self, catalogue, msgid):
