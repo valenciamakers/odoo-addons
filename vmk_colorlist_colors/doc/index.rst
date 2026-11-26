@@ -26,9 +26,9 @@ shows Odoo's eleven colors.
   the next reload.
 
 A tag's and a badge's background and text are lighter and darker shades of its color, worked out by
-Odoo's own formulas, just like Odoo's colors. On Enterprise, dark mode draws your colors the way it
-draws Odoo's: it darkens each one, so what dark mode shows is a deeper version of the color you
-picked.
+Odoo's own formulas, just like the default colors. On Enterprise, dark mode draws your colors the
+same way it draws the default colors: it darkens each one, so what dark mode shows is a deeper
+version of the color you picked.
 
 Only users with the **Settings** access right (**Administration › Settings**) can open the list.
 
