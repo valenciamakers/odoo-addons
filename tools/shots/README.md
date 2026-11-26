@@ -73,6 +73,10 @@ ordinary event rather than a multi-slot one. What it makes:
   `website_event` and dates at a **Valencia Makers Studio** venue in Valencia. The dates are counted
   from the day the seed runs, on the coming Tuesdays and Saturdays, plus one past date, and are
   recreated on every run, so they stay upcoming whenever the screenshots are retaken.
+- for Custom Colors, three of Odoo's colors changed and renamed (**Slate**, **Brown**, and
+  **Emphasis**, our purple), and contact tags drawn in them (**Member** on Rosa and Marc). Violet is
+  left alone, since `shots.py` repaints it in every capture. These colors show in any later capture
+  that draws slots 4, 6, or 7.
 - for Double Opt-In, two mailing lists, **Newsletter** and **Workshop Announcements**, and five
   subscribers: four who signed up on the website as the public user, as core's newsletter block does
   (Rosa and Ana confirmed, Ana later left one list, **Jordi Puig** and Lucía still awaiting
