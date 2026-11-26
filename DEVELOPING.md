@@ -27,11 +27,13 @@ was verified against the series of the branch you are reading.
   link on each event.
 - **`vmk_website_event_series`** — a page on the website for each event series, an index of them, a
   link from each event's page, and a Series filter on the `/event` listing; `auto_install`. Ported
-  from 20.0 without scheduled publishing (see _Not ported_ below).
+  from 20.0 without scheduled publishing (see _Ported without a feature_ below).
 - **`vmk_mass_mailing_double_optin`** — confirmation by email for new mailing list subscriptions,
   and a log of every consent change.
 - **`vmk_partner_email_multiple`** — several email addresses per contact, matched by Odoo's own
   machinery, and kept rather than dropped when contacts are merged.
+- **`vmk_colorlist_colors`** — change the eleven colors Odoo draws for tags, kanban cards, and
+  calendars, and rename them; Odoo's own SCSS draws a custom color, shades and dark mode included.
 - **`tools/`** — not a module. `make_icon.py` renders each module's store icon from the glyphs in
   `tools/icons/`; see _Store icons_ under the authoring conventions.
 
@@ -43,12 +45,6 @@ publishing here. On 20 a series has `publish_on` and `action_unschedule`, which 
 website mixins together with a cron (`website/models/mixins.py`); 19's mixins have none and an event
 cannot be scheduled either, so a series has the Published toggle only, as an event does, and we do
 not reimplement what core lacks (decided 26 November 2026).
-
-**Not ported from 20.0, on purpose** (26 November 2026): `vmk_colorlist_colors` sets the lists
-`$o-colors-border`, `$o-colors-bg-subtle`, and `$o-colors-text-emphasis`, which only 20's SCSS
-reads; 19 derives a tag's and a badge's shades from `$o-colors` alone, with `adjust-color`
-(`core/tags_list/tags_list.scss`, `core/badge/badge.scss`), so the module's shade logic would have
-nothing to feed. Its port to this branch is still to come.
 
 ## Branches — one per Odoo series
 
@@ -597,6 +593,22 @@ in `web/static/src/**`, not in Python. Half the surprises below live there.
   and a list-row button likewise (`fa-paper-plane`, not `send`).
 - **`get_public_method` is `odoo.service.model.get_public_method` on 19**, in `odoo.orm.models`
   on 20.
+- **Odoo 19 has one color list, and derives everything from it** (verified 26 November 2026, porting
+  `vmk_colorlist_colors`). `$o-colors` is in `web/static/src/scss/secondary_variables.scss`, not
+  `primary_variables.scss`, and 20's `$o-colors-border`, `$o-colors-bg-subtle`, and
+  `$o-colors-text-emphasis` do not exist: a tag's and a badge's shades are `adjust-color` of the
+  color (`core/tags_list/tags_list.scss`, `core/badge/badge.scss`), and Enterprise's dark mode
+  derives its own from `$o-colors-original` (`saturate(mix(color, black, 50%), 60%)`, where 20 uses
+  80% and 65%). Overriding the list in `web._assets_primary_variables`, which precedes the secondary
+  variables, is therefore enough for every consumer, `$o-colors-complete` and the calendar included.
+- **A module ported from 20 loses its `ir.access.csv`**: `ir.model.access.csv` with one column per
+  permission, and an `ir.rule` record for a row that carried a domain. Typed `ir.config_parameter`
+  getters (`get_str`, `set_str`) are `get_param` and `set_param`. A `models.Constraint` stays.
+  Clearing the `assets` cache is `self.env.registry.clear_cache("assets")`, not 20's
+  `self.env.transaction.invalidate_ormcache`.
+- **Settings and list buttons take an `oi-` or `fa-` icon on 19**: `oi-arrow-right` where 20 says
+  `east`, `fa-undo` where it says `undo`, and a tour looks for `.fa-undo` and not
+  `[data-icon='undo']`.
 
 ## Authoring conventions
 

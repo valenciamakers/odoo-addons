@@ -383,6 +383,27 @@ if "vmk.event.series" in env:
 
 
 # ---------------------------------------------------------------------------
+# Custom Colors: three of Odoo's colors changed and renamed, as a makerspace
+# might tune them to its brand, and contact tags drawn in them. Violet (11) is
+# left alone: shots.py repaints it in our purple in every capture.
+# ---------------------------------------------------------------------------
+if "vmk.colorlist.color" in env:
+    Color = env["vmk.colorlist.color"]
+    for slot, color, name in [(4, "#5f6b7a", "Slate"), (6, "#8a5a3b", "Brown"), (7, "#502582", "Emphasis")]:
+        Color.search([("slot", "=", slot)]).write({"custom_color": color, "name": name})
+    Category = env["res.partner.category"]
+    for tag_name, color, partners in [
+        ("Member", 7, rosa | marc),
+        ("Instructor", 6, marc | edith),
+        ("Volunteer", 4, edith),
+        ("Student", 10, rosa),
+    ]:
+        tag = Category.search([("name", "=", tag_name)], limit=1) or Category.create({"name": tag_name})
+        tag.color = color
+        partners.write({"category_id": [(4, tag.id)]})
+
+
+# ---------------------------------------------------------------------------
 # Double Opt-In: two mailing lists, and subscribers who signed up on the
 # website (as the public user, as core's newsletter block does), some of them
 # confirmed from the email's link, one added by hand in the backend, and one
