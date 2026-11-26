@@ -1,14 +1,14 @@
 Change the colors (and their names) used for tags, kanban cards, and calendars.
 
-In standard Odoo, the eleven colors you can give a tag, a kanban card, or a calendar are fixed, and
-so are their names. This module lets you change any of them to one of your own, such as your
-brand's, and rename it. A changed color is used everywhere Odoo draws that color: tags and badges,
-kanban cards, calendars, the color picker itself, and the website.
+In standard Odoo, you can give a tag, a kanban card, or a calendar one of eleven colors, but they
+are fixed, and so are their names. This module lets you change any color, as well as rename them. An
+edited color is used everywhere Odoo draws that color: tags and badges, kanban cards, calendars, the
+color picker itself, and the website.
 
 **Installation**
 
-Install **Custom Colors** from the Apps menu. It requires nothing beyond Odoo's **Settings**, and
-works on both Community and Enterprise.
+Install **Custom Colors** from the Apps menu. It only requires Odoo's base module, and works on both
+Community and Enterprise.
 
 **Using it**
 
@@ -20,14 +20,14 @@ shows Odoo's eleven colors.
 - **Rename a color** by typing over its name, in each of your languages. A name is translatable like
   any other, so a name changed in one language shows only in that language, and in those with no
   name of their own.
-- **The undo arrow** at the end of a changed row puts back Odoo's color and name, and **Reset to
-  Defaults** does it for all eleven, after asking. Both reload the page, so the change shows
-  everywhere at once. A color picked or a name typed in the list shows elsewhere after the next
-  reload.
+- **The undo arrow** next to an edited color resets it to Odoo's default color and name for that
+  slot, and **Reset to Defaults** resets all eleven, after asking. Both reload the page, so the
+  change shows everywhere at once. A color picked or a name typed in the list shows elsewhere after
+  the next reload.
 
-A tag's border, background, and text are lighter and darker shades of its color. They are worked out
-from your color the way Odoo worked out its own, and on Enterprise, dark mode gets shades of its
-own.
+A tag's border, background, and text are lighter and darker shades of its color. They are
+calculated from the base color, just like Odoo's own, and on Enterprise, dark mode gets its own set
+of shades.
 
 Only users with the **Settings** access right (**Administration › Settings**) can open the list.
 
@@ -52,10 +52,10 @@ in Cyan. Checked against Odoo 20 Community and Enterprise on 12 November 2026.
 
 **Limits**
 
-- **The slots stay Odoo's.** This changes how each of the eleven colors looks and what it is called,
-  not how many there are.
-- **No color stays as it is.** Odoo draws it as an empty circle whatever its color, and gives it a
-  meaning of its own: an event tag with no color isn't shown on the website.
+- **The slots stay as in core Odoo.** This module changes how each of the eleven colors looks and
+  what it is called, not how many there are.
+- **The No color slot is not editable.** Odoo draws it as an empty circle whatever its color, and
+  gives it a meaning of its own: an event tag with no color isn't shown on the website.
 - **A record keeps its color's slot.** A tag set to Teal before the change shows the new color in
   Teal's place, under its new name.
 
