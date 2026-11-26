@@ -13,8 +13,8 @@ Install **Double Opt-In for Email Marketing** from the Apps menu. It only requir
 **Using it**
 
 Double opt-in is on for every mailing list once the module is installed, the lists you already have
-included. People already subscribed are not affected, and nobody is sent anything until someone
-next subscribes.
+included. Contacts already subscribed are not affected, and no one is sent a confirmation email
+until someone next subscribes.
 
 - **Switch it off for a list** with **Double Opt-In Confirmation** on the mailing list's form,
   beside **Show In Preferences**.
@@ -22,16 +22,16 @@ next subscribes.
   newsletter box at checkout, sends a confirmation email. Until the person confirms, the
   subscription shows **Awaiting Confirmation** on the contact's **Subscriptions** tab, and mailings
   to that list leave them out, listed as opted out in the mailing's statistics.
-- **Opening the link** shows a page with a **Confirm Subscription** button, and only the button
-  confirms. Mail security filters open the links in an email to check them, and would otherwise
-  confirm on the reader's behalf.
+- **Opening the link** shows a page with a **Confirm Subscription** button, and the user must
+  click it to confirm. Mail security filters open the links in an email to check them, and would
+  otherwise confirm on the reader's behalf.
 - **Links expire after seven days.** Subscriptions still unconfirmed then are removed, and so is a
   contact the website created for that signup alone.
 - **Resend Confirmation**, on a subscription awaiting it, sends a new link and stops the old one
   working. **Request Confirmation**, on any other subscription, asks someone already subscribed to
   confirm; they receive no mailings from that list until they do.
-- **Contacts you add yourself**, or import, are subscribed at once, as in standard Odoo, and the
-  log records who added them.
+- **Contacts you add or import yourself** are subscribed immediately, as in standard Odoo, and the
+  log records who added the contact.
 - **To ask many contacts to confirm at once**, after an import for example, open the list's
   **Recipients**, select the contacts, and click **Request Confirmation**. Choose the mailing lists
   and the email's language, and the dialog says how many emails it will send. Contacts already
@@ -40,8 +40,8 @@ next subscribes.
   The language is for contacts whose own is not known: someone who signed up on the website gets
   the email in the language they used there, and a contact linked to a contact with a language,
   in that one.
-- **Changing preferences from a mailing's link** needs no confirmation, since only the address
-  that received the mailing has that link.
+- **Changing preferences from a mailing's link** does not require confirmation, since
+  confirmation is assumed because they are responding to an email.
 
 **The consent log**
 
