@@ -1,8 +1,8 @@
 Group events that are offered multiple times, such as a monthly workshop, into one series.
 
-In standard Odoo, a workshop you run every month is a dozen unrelated events. This module groups
-them into one series. Each date stays an ordinary event, with its own tickets, seats, and
-registrations, and the series keeps them together.
+In standard Odoo, a workshop you run every month is a dozen unrelated events. This module solves
+this by grouping events into a series. Each individual date stays an ordinary event, with its own
+tickets, seats, and registrations, and the series simply groups them together.
 
 **Installation**
 
@@ -11,23 +11,24 @@ part of the **Events** app.
 
 If you publish events on your website, install `Event Series (Website)
 <https://apps.odoo.com/apps/modules/20.0/vmk_website_event_series>`_ instead: it includes this
-module, and also gives each series a page of its own on your website, listing its upcoming dates. If
-you start publishing events online later, install Event Series (Website) then.
+module, and also gives each event series a page on your website, listing all of the upcoming dates.
+If you start publishing events online later, install Event Series (Website) then.
 
 **Using it**
 
 #. Open **Events › Series** and click **New**.
-#. Give the series a name and, optionally, a subtitle and a **Template**. The template is what its
-   new dates start from, as for any event.
-#. Save, then click **New Event in Series**. It opens a new event already in the series, named after
-   it and filled in from its template, ready for its date.
+#. Give the series a name and, optionally, a subtitle and a **Template**. All new events in the
+   series will start from that template.
+#. Save, then click **New Event in Series**. It creates the next date in the series, named after the
+   series and using its template, ready for its date.
 
-**An event's Series field**, beside **Template** on the event form, adds an existing event to a
-series. Unlike the template, it fills nothing in: the event's tickets, communications, and
-everything else stay as they were. Moving an event to another series works the same way.
+**Add an existing event to a series** using the **Series** field on the Event form, beside
+**Template**. Templates fill in a new event with default tickets, communications, and more, but
+can't be used to group events. A series is only a link: adding an event to a series, or moving it to
+another one, leaves its tickets and everything else as they were.
 
-**The Upcoming Events button** on a series opens its events, and counts the current and upcoming
-dates: events that have not yet ended. The form also shows the series' **Next Event**.
+**The Upcoming Events button** on a series opens its events, and shows a count of dates that have
+not ended. The form also shows the series' **Next Event**.
 
 **Events can be searched and grouped by series**, and the events list has a **Series** column.
 
