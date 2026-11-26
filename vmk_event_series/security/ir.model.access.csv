@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_vmk_event_series_registration,vmk.event.series.registration,model_vmk_event_series,event.group_event_registration_desk,1,0,0,0
+access_vmk_event_series_user,vmk.event.series.user,model_vmk_event_series,event.group_event_user,1,1,1,0
+access_vmk_event_series_manager,vmk.event.series.manager,model_vmk_event_series,event.group_event_manager,1,1,1,1

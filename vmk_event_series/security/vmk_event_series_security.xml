@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Mirrors event.event_event_company_rule: a series of another
+             company is out of reach. Global, so it restricts every group. -->
+        <record id="ir_rule_vmk_event_series_company" model="ir.rule">
+            <field name="name">Event Series: multi-company</field>
+            <field name="model_id" ref="model_vmk_event_series"/>
+            <field name="domain_force">[('company_id', 'in', company_ids + [False])]</field>
+        </record>
+
+    </data>
+</odoo>
