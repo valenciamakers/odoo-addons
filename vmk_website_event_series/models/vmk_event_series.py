@@ -4,6 +4,7 @@
 import json
 
 from odoo import fields, models
+from odoo.exceptions import MissingError
 from odoo.tools.translate import html_translate
 
 
@@ -22,9 +23,16 @@ class VmkEventSeries(models.Model):
     def _default_description(self):
         # As event.event's: rendering_bundle=True keeps the template's
         # branding out of the stored HTML.
-        return self.env["ir.ui.view"].with_context(rendering_bundle=True)._render_template(
-            "vmk_website_event_series.series_default_description"
-        )
+        try:
+            return self.env["ir.ui.view"].with_context(rendering_bundle=True)._render_template(
+                "vmk_website_event_series.series_default_description"
+            )
+        except MissingError:
+            # Installing the module on a database that already has series:
+            # Odoo fills the new column for them with this default, before
+            # the module's views are loaded. Those series start with no
+            # description, to be written on their page.
+            return False
 
     # Written on the series' page in the website editor, as an event's is:
     # neither form shows it. A new series starts with a sample block, as a

@@ -90,6 +90,13 @@ class TestSeriesWebsite(HttpCase):
         self.assertEqual(block.xpath("//h5")[0].text_content(), "One event, many dates")
         self.assertNotIn("data-oe-", str(series.description))
 
+    def test_description_default_without_its_template(self):
+        """While the module installs over existing series, its views are not
+        loaded yet: the default gives no description rather than failing."""
+        self.env.ref("vmk_website_event_series.series_default_description").unlink()
+        series = self.env["vmk.event.series"].create({"name": "Before The Views"})
+        self.assertFalse(series.description)
+
     def test_series_page_without_dates(self):
         empty = self.env["vmk.event.series"].create({"name": "Nothing Yet", "is_published": True})
         page = self._get(empty.website_url)

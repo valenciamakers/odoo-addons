@@ -57,6 +57,14 @@ domain to the list's and to the counts' domains, as website_event's own filters 
 filters and the pager. The dropdown and the small screens' filter panel are inherited from
 `website_event.index_topbar`, beside the Date filter.
 
+### Installing on a database that already has series
+
+A new column's default is evaluated for existing rows while the module's tables are made, before its
+views are loaded, so the series description's default (a rendered template) finds no template and
+raises `MissingError`, which failed the install. `_default_description` catches it, and series that
+already exist start with no description, to be written on their page. Found porting to 19 on 26
+November 2026, and fixed in 20.0.1.0.1.
+
 ### Not yet
 
 Past dates are not listed on the page, and the `/event` listing still shows every date rather than

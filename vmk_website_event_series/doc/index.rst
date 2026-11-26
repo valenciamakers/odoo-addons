@@ -54,6 +54,10 @@ English, Spanish, and Catalan. If any translation seems incorrect, please
 
 **Changelog**
 
+*20.0.1.0.1 (26 November 2026)*
+
+- Installing on a database that already has event series no longer fails.
+
 *20.0.1.0.0 (25 November 2026)*
 
 - First release.

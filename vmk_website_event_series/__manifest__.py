@@ -4,7 +4,7 @@
 {
     "name": "Event Series (Website)",
     "summary": "Each event series gets a page on the website, listing its upcoming dates",
-    "version": "20.0.1.0.0",
+    "version": "20.0.1.0.1",
     "author": "Valencia Makers",
     "license": "LGPL-3",
     "category": "Marketing/Events",
