@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_vmk_colorlist_color_system,vmk.colorlist.color.system,model_vmk_colorlist_color,base.group_system,1,1,0,0

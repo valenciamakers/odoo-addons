@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<!-- The eleven colors, in an editable list: the color picker and the name on
+     each row, and a button putting Odoo's back once either is changed. There
+     is no adding or deleting a color: Odoo has twelve slots. The first, No
+     color, stays Odoo's and is left out of the list (the action's domain). -->
+<record id="vmk_colorlist_color_view_list" model="ir.ui.view">
+    <field name="name">vmk.colorlist.color.list</field>
+    <field name="model">vmk.colorlist.color</field>
+    <field name="arch" type="xml">
+        <list string="Colors" editable="bottom" create="0" delete="0">
+            <header>
+                <button name="action_reset_all" type="object" string="Reset to Defaults"
+                        display="always"
+                        confirm="Reset all colors to the default values provided by Odoo."/>
+            </header>
+            <field name="is_custom" column_invisible="1"/>
+            <field name="color" widget="color"/>
+            <field name="name"/>
+            <!-- An undo arrow, as core's Replenishment list puts back a
+                 computed quantity typed over (stock_orderpoint_views.xml),
+                 with the same invisible stand-in on rows without it, so the
+                 column keeps its width. A list row passes a button its
+                 title, as a tooltip, and no other attribute, so an
+                 aria-label here would never reach the page. -->
+            <button name="action_reset" type="object" icon="fa-undo"
+                    title="Reset to default values"
+                    invisible="not is_custom"/>
+            <button name="action_reset" type="object" icon="fa-undo" title="-"
+                    class="disabled opacity-0" invisible="is_custom"/>
+        </list>
+    </field>
+</record>
+
+<record id="vmk_colorlist_color_action" model="ir.actions.act_window">
+    <field name="name">Colors</field>
+    <field name="res_model">vmk.colorlist.color</field>
+    <field name="view_mode">list</field>
+    <field name="domain">[("slot", "!=", 0)]</field>
+    <field name="path">custom-colors</field>
+</record>
+
+</odoo>
