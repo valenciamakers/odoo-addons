@@ -69,6 +69,11 @@ what it changes is the input of those formulas. No shade is computed here. (Odoo
 lists of shades chosen by hand, which its module has to feed; 19 has no counterpart, and we do not
 reimplement what core lacks.)
 
+**A very dark color gives a low-contrast tag, and we leave it so.** A tag's background is the color
+with 25 points more lightness and its text the color with 40 points less (`tags_list.scss`), so
+`#502582`, at about 33% lightness, gives a bright background and text near black. Odoo would draw
+any color that dark the same way, and the manual's Limits say so (decided 26 November 2026).
+
 ### The stylesheets
 
 Odoo compiles SCSS when it builds a bundle, from files and from attachments: an `ir.asset` record
