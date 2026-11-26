@@ -34,7 +34,7 @@
                 <button name="action_vmk_request_confirmation" type="object"
                     string="Request Confirmation" icon="send" class="btn-link"
                     invisible="not id or opt_out or vmk_confirmation_state"
-                    confirm="They will stop receiving mailings from this list until they confirm. Send the request?"/>
+                    confirm="The contact will not receive mailings from this list until they confirm. Send the request for confirmation?"/>
             </xpath>
         </field>
     </record>

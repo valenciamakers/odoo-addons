@@ -8,7 +8,7 @@
                 <group>
                     <field name="list_ids" widget="many2many_tags"
                         options="{'no_create_edit': True, 'no_open': True, 'color_field': 'color'}"
-                        placeholder="Select lists..."/>
+                        placeholder="Select mailing lists..."/>
                     <field name="lang"/>
                     <field name="contact_ids" invisible="1"/>
                     <field name="subscription_count" invisible="1"/>
@@ -26,7 +26,7 @@
     </record>
 
     <record id="vmk_mailing_request_confirmation_action" model="ir.actions.act_window">
-        <field name="name">Request Confirmation</field>
+        <field name="name">Request Double Opt-In Email Confirmation</field>
         <field name="res_model">vmk.mailing.request.confirmation</field>
         <field name="view_mode">form</field>
         <field name="context">{"dialog_size": "medium"}</field>

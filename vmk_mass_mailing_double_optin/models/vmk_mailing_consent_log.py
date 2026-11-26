@@ -86,7 +86,7 @@ class VmkMailingConsentLog(models.Model):
     reason = fields.Char(string="Reason", readonly=True)
 
     def write(self, vals):
-        raise UserError(_("Entries of the consent log cannot be changed."))
+        raise UserError(_("Entries in the consent log cannot be changed."))
 
     # ------------------------------------------------------------
     # Writing the log

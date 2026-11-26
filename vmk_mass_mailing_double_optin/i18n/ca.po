@@ -20,11 +20,31 @@ msgstr ""
 #. odoo-python
 #: code:addons/vmk_mass_mailing_double_optin/wizard/vmk_mailing_request_confirmation.py:0
 msgid ""
-"%(count)s confirmation emails will be sent. Until each contact confirms "
-"their subscription, they will not receive mailings from the list."
+"%(count)s confirmation emails will be sent. The contact will not receive "
+"mailings from these lists until they confirm."
 msgstr ""
-"S'enviaran %(count)s correus de confirmació. Fins que cada contacte no "
-"confirmi la subscripció, no rebrà enviaments de la llista."
+"S'enviaran %(count)s correus de confirmació. El contacte no rebrà enviaments"
+" d'aquestes llistes fins que no confirmi."
+
+#. module: vmk_mass_mailing_double_optin
+#. odoo-python
+#: code:addons/vmk_mass_mailing_double_optin/wizard/vmk_mailing_request_confirmation.py:0
+msgid ""
+"%(count)s confirmation emails will be sent. The contacts will not receive "
+"mailings from these lists until they confirm."
+msgstr ""
+"S'enviaran %(count)s correus de confirmació. Els contactes no rebran "
+"enviaments d'aquestes llistes fins que no confirmin."
+
+#. module: vmk_mass_mailing_double_optin
+#. odoo-python
+#: code:addons/vmk_mass_mailing_double_optin/wizard/vmk_mailing_request_confirmation.py:0
+msgid ""
+"%(count)s confirmation emails will be sent. The contacts will not receive "
+"mailings from this list until they confirm."
+msgstr ""
+"S'enviaran %(count)s correus de confirmació. Els contactes no rebran "
+"enviaments d'aquesta llista fins que no confirmin."
 
 #. module: vmk_mass_mailing_double_optin
 #. odoo-python
@@ -36,11 +56,11 @@ msgstr "%(count)s sol·licituds de confirmació enviades."
 #. odoo-python
 #: code:addons/vmk_mass_mailing_double_optin/wizard/vmk_mailing_request_confirmation.py:0
 msgid ""
-"1 confirmation email will be sent. Until the contact confirms their "
-"subscription, they will not receive mailings from the list."
+"1 confirmation email will be sent. The contact will not receive mailings "
+"from this list until they confirm."
 msgstr ""
-"S'enviarà 1 correu de confirmació. Fins que el contacte no confirmi la "
-"subscripció, no rebrà enviaments de la llista."
+"S'enviarà 1 correu de confirmació. El contacte no rebrà enviaments d'aquesta"
+" llista fins que no confirmi."
 
 #. module: vmk_mass_mailing_double_optin
 #. odoo-python
@@ -52,23 +72,23 @@ msgstr "1 sol·licitud de confirmació enviada."
 #: model:mail.template,body_html:vmk_mass_mailing_double_optin.mail_template_confirmation
 msgid ""
 "<div>\n"
-"                <p>Please confirm that you'd like to receive <t t-out=\"object.list_id.name or ''\">Newsletter</t> from <t t-out=\"env.company.name or ''\">YourCompany</t>.</p>\n"
+"                <p>Please confirm that you would like to receive “<t t-out=\"object.list_id.name or ''\">Newsletter</t>” emails from <t t-out=\"env.company.name or ''\">YourCompany</t>.</p>\n"
 "                <div style=\"margin: 32px 0px 32px 0px;\">\n"
 "                    <a t-att-href=\"ctx.get('vmk_confirmation_urls', {}).get(object.id, '')\" t-attf-style=\"background-color: {{ env.company.email_secondary_color or '#875A7B' }}; padding: 8px 16px 8px 16px; text-decoration: none; color: {{ env.company.email_primary_color or '#FFFFFF' }}; border-radius: 5px; font-size: 13px;\">\n"
 "                        Confirm Subscription\n"
 "                    </a>\n"
 "                </div>\n"
-"                <p>This link is valid for 7 days. If you did not sign up, you can ignore this email and you won't hear from us again.</p>\n"
+"                <p>This link is valid for seven days. If you did not sign up for this list, you can ignore this email and we won't email you again.</p>\n"
 "            </div>"
 msgstr ""
 "<div>\n"
-"                <p>Confirmeu que voleu rebre <t t-out=\"object.list_id.name or ''\">Newsletter</t> de <t t-out=\"env.company.name or ''\">YourCompany</t>.</p>\n"
+"                <p>Confirmeu que voleu rebre els correus «<t t-out=\"object.list_id.name or ''\">Newsletter</t>» de <t t-out=\"env.company.name or ''\">YourCompany</t>.</p>\n"
 "                <div style=\"margin: 32px 0px 32px 0px;\">\n"
 "                    <a t-att-href=\"ctx.get('vmk_confirmation_urls', {}).get(object.id, '')\" t-attf-style=\"background-color: {{ env.company.email_secondary_color or '#875A7B' }}; padding: 8px 16px 8px 16px; text-decoration: none; color: {{ env.company.email_primary_color or '#FFFFFF' }}; border-radius: 5px; font-size: 13px;\">\n"
 "                        Confirmar la subscripció\n"
 "                    </a>\n"
 "                </div>\n"
-"                <p>Aquest enllaç és vàlid durant 7 dies. Si no us hi heu subscrit, podeu ignorar aquest correu electrònic i no tornareu a saber res de nosaltres.</p>\n"
+"                <p>Aquest enllaç és vàlid durant set dies. Si no us heu subscrit a aquesta llista, podeu ignorar aquest correu electrònic i no us tornarem a escriure.</p>\n"
 "            </div>"
 
 #. module: vmk_mass_mailing_double_optin
@@ -95,13 +115,13 @@ msgstr "Confirmar la subscripció"
 #. module: vmk_mass_mailing_double_optin
 #. odoo-python
 #: code:addons/vmk_mass_mailing_double_optin/controllers/main.py:0
-msgid "Confirm your subscription to %(list)s for %(email)s."
-msgstr "Confirmeu la subscripció a %(list)s per a %(email)s."
+msgid "Confirm your subscription to “%(list)s” for %(email)s."
+msgstr "Confirmeu la subscripció a «%(list)s» per a %(email)s."
 
 #. module: vmk_mass_mailing_double_optin
 #: model:mail.template,subject:vmk_mass_mailing_double_optin.mail_template_confirmation
-msgid "Confirm your subscription to {{ object.list_id.name }}"
-msgstr "Confirmeu la subscripció a {{ object.list_id.name }}"
+msgid "Confirm your subscription to “{{ object.list_id.name }}”"
+msgstr "Confirmeu la subscripció a «{{ object.list_id.name }}»"
 
 #. module: vmk_mass_mailing_double_optin
 #: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_mailing_subscription__vmk_confirmation_state
@@ -154,12 +174,11 @@ msgstr "Recompte del registre de consentiment"
 #. odoo-python
 #: code:addons/vmk_mass_mailing_double_optin/wizard/vmk_mailing_request_confirmation.py:0
 msgid ""
-"Contacts already confirmed, or awaiting confirmation, unsubscribed, "
+"Contacts already confirmed, awaiting confirmation, unsubscribed, "
 "blacklisted, or without an email address are skipped."
 msgstr ""
-"S'ometen els contactes ja confirmats o pendents de confirmació, els que "
-"s'han donat de baixa, els que són a la llista negra i els que no tenen "
-"adreça de correu electrònic."
+"S'ometen els contactes ja confirmats, pendents de confirmació, donats de "
+"baixa, a la llista negra o sense adreça de correu electrònic."
 
 #. module: vmk_mass_mailing_double_optin
 #: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_vmk_mailing_consent_log__create_uid
@@ -227,16 +246,16 @@ msgstr "Màrqueting per correu: eliminar les subscripcions no confirmades"
 #. module: vmk_mass_mailing_double_optin
 #: model:ir.model.fields,help:vmk_mass_mailing_double_optin.field_mailing_subscription__vmk_confirmation_state
 msgid ""
-"Empty when no confirmation was asked for: the subscription was added by a "
-"user, or the mailing list does not require double opt-in."
+"Empty when confirmation is not required: the subscription was added by a "
+"user, or the mailing list does not require double opt-in confirmation."
 msgstr ""
-"Buit quan no s'ha demanat cap confirmació: un usuari va afegir la "
-"subscripció, o la llista d'enviament no requereix doble confirmació."
+"Buit quan no es requereix confirmació: un usuari va afegir la subscripció, o"
+" la llista d'enviament no requereix doble confirmació."
 
 #. module: vmk_mass_mailing_double_optin
 #. odoo-python
 #: code:addons/vmk_mass_mailing_double_optin/models/vmk_mailing_consent_log.py:0
-msgid "Entries of the consent log cannot be changed."
+msgid "Entries in the consent log cannot be changed."
 msgstr "Les entrades del registre de consentiment no es poden modificar."
 
 #. module: vmk_mass_mailing_double_optin
@@ -337,18 +356,18 @@ msgstr "Llistes de correu"
 
 #. module: vmk_mass_mailing_double_optin
 #: model_terms:ir.actions.act_window,help:vmk_mass_mailing_double_optin.vmk_mailing_consent_log_action
-msgid "No consent changes yet"
-msgstr "Encara no hi ha canvis de consentiment"
+msgid "No consent changes have been logged yet"
+msgstr "Encara no s'ha registrat cap canvi de consentiment"
 
 #. module: vmk_mass_mailing_double_optin
 #. odoo-python
 #: code:addons/vmk_mass_mailing_double_optin/wizard/vmk_mailing_request_confirmation.py:0
 msgid ""
-"None of these contacts has a subscription to these lists that can be asked "
-"for confirmation."
+"None of these contacts has a subscription to these lists that needs to be "
+"confirmed."
 msgstr ""
-"Cap d'aquests contactes no té una subscripció a aquestes llistes a la qual "
-"es pugui sol·licitar la confirmació."
+"Cap d'aquests contactes no té una subscripció a aquestes llistes que s'hagi "
+"de confirmar."
 
 #. module: vmk_mass_mailing_double_optin
 #: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_vmk_mailing_consent_log__url
@@ -371,13 +390,17 @@ msgid "Removed"
 msgstr "Eliminat"
 
 #. module: vmk_mass_mailing_double_optin
-#: model:ir.actions.act_window,name:vmk_mass_mailing_double_optin.vmk_mailing_request_confirmation_action
 #: model:ir.model,name:vmk_mass_mailing_double_optin.model_vmk_mailing_request_confirmation
 #: model_terms:ir.ui.view,arch_db:vmk_mass_mailing_double_optin.mailing_contact_view_form
 #: model_terms:ir.ui.view,arch_db:vmk_mass_mailing_double_optin.mailing_contact_view_tree
 #: model_terms:ir.ui.view,arch_db:vmk_mass_mailing_double_optin.vmk_mailing_request_confirmation_view_form
 msgid "Request Confirmation"
 msgstr "Sol·licitar la confirmació"
+
+#. module: vmk_mass_mailing_double_optin
+#: model:ir.actions.act_window,name:vmk_mass_mailing_double_optin.vmk_mailing_request_confirmation_action
+msgid "Request Double Opt-In Email Confirmation"
+msgstr "Sol·licitar la doble confirmació per correu electrònic"
 
 #. module: vmk_mass_mailing_double_optin
 #: model:ir.module.module,summary:base.module_vmk_mass_mailing_double_optin
@@ -395,8 +418,8 @@ msgstr "Tornar a enviar la confirmació"
 
 #. module: vmk_mass_mailing_double_optin
 #: model_terms:ir.ui.view,arch_db:vmk_mass_mailing_double_optin.vmk_mailing_request_confirmation_view_form
-msgid "Select lists..."
-msgstr "Seleccioneu llistes..."
+msgid "Select mailing lists..."
+msgstr "Seleccioneu llistes d'enviament..."
 
 #. module: vmk_mass_mailing_double_optin
 #: model_terms:ir.ui.view,arch_db:vmk_mass_mailing_double_optin.vmk_mailing_request_confirmation_view_form
@@ -406,11 +429,11 @@ msgstr "Enviar les sol·licituds"
 #. module: vmk_mass_mailing_double_optin
 #: model:mail.template,description:vmk_mass_mailing_double_optin.mail_template_confirmation
 msgid ""
-"Sent to people who subscribe to a mailing list requiring double opt-in, with"
-" the link that confirms their subscription"
+"Sent to contacts who subscribe to a mailing list that requires double opt-in"
+" confirmation."
 msgstr ""
-"S'envia a qui es subscriu a una llista d'enviament que requereix doble "
-"confirmació, amb l'enllaç que confirma la subscripció"
+"S'envia als contactes que es subscriuen a una llista d'enviament que "
+"requereix doble confirmació."
 
 #. module: vmk_mass_mailing_double_optin
 #: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_vmk_mailing_consent_log__source
@@ -447,16 +470,16 @@ msgstr "Sistema"
 #. module: vmk_mass_mailing_double_optin
 #: model_terms:ir.ui.view,arch_db:vmk_mass_mailing_double_optin.mailing_contact_view_form
 msgid ""
-"They will stop receiving mailings from this list until they confirm. Send "
-"the request?"
+"The contact will not receive mailings from this list until they confirm. "
+"Send the request for confirmation?"
 msgstr ""
-"Deixarà de rebre enviaments d'aquesta llista fins que ho confirmi. Voleu "
-"enviar la sol·licitud?"
+"El contacte no rebrà enviaments d'aquesta llista fins que no ho confirmi. "
+"Voleu enviar la sol·licitud de confirmació?"
 
 #. module: vmk_mass_mailing_double_optin
 #: model_terms:ir.ui.view,arch_db:vmk_mass_mailing_double_optin.page_subscription_link_invalid
 msgid ""
-"This link has expired or is not valid. Please sign up again to receive a new"
+"This link has expired or is invalid. Please subscribe again to receive a new"
 " confirmation link."
 msgstr ""
 "Aquest enllaç ha caducat o no és vàlid. Torneu-vos a subscriure per rebre un"
@@ -475,7 +498,7 @@ msgstr "Donat de baixa"
 
 #. module: vmk_mass_mailing_double_optin
 #: model:ir.model.fields,help:vmk_mass_mailing_double_optin.field_vmk_mailing_request_confirmation__lang
-msgid "Used for contacts whose language is unknown or unspecified."
+msgid "Used with contacts whose language is unknown or unspecified."
 msgstr "S'utilitza per als contactes amb idioma desconegut o no especificat."
 
 #. module: vmk_mass_mailing_double_optin
@@ -506,5 +529,5 @@ msgstr "Lloc web"
 #. module: vmk_mass_mailing_double_optin
 #. odoo-python
 #: code:addons/vmk_mass_mailing_double_optin/controllers/main.py:0
-msgid "You are now subscribed to %(list)s from %(company)s."
-msgstr "La vostra subscripció a %(list)s de %(company)s ja és activa."
+msgid "You are now subscribed to “%(list)s” from %(company)s."
+msgstr "La vostra subscripció a «%(list)s» de %(company)s ja és activa."

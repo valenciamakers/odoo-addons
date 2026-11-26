@@ -25,7 +25,7 @@ next subscribes.
 - **Opening the link** shows a page with a **Confirm Subscription** button, and only the button
   confirms. Mail security filters open the links in an email to check them, and would otherwise
   confirm on the reader's behalf.
-- **Links expire after 7 days.** Subscriptions still unconfirmed then are removed, and so is a
+- **Links expire after seven days.** Subscriptions still unconfirmed then are removed, and so is a
   contact the website created for that signup alone.
 - **Resend Confirmation**, on a subscription awaiting it, sends a new link and stops the old one
   working. **Request Confirmation**, on any other subscription, asks someone already subscribed to
@@ -33,9 +33,10 @@ next subscribes.
 - **Contacts you add yourself**, or import, are subscribed at once, as in standard Odoo, and the
   log records who added them.
 - **To ask many contacts to confirm at once**, after an import for example, open the list's
-  **Recipients**, select the contacts, and click **Request Confirmation**. Choose the lists and the
-  email's language, and the dialog says how many emails it will send. Contacts already confirmed,
-  or awaiting confirmation, unsubscribed, blacklisted, or without an email address are skipped.
+  **Recipients**, select the contacts, and click **Request Confirmation**. Choose the mailing lists
+  and the email's language, and the dialog says how many emails it will send. Contacts already
+  confirmed, awaiting confirmation, unsubscribed, blacklisted, or without an email address are
+  skipped.
   The language is for contacts whose own is not known: someone who signed up on the website gets
   the email in the language they used there, and a contact linked to a contact with a language,
   in that one.

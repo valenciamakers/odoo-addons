@@ -10,7 +10,7 @@ from odoo.tests import HttpCase, tagged
 from .common import DoubleOptInCommon
 
 CSRF = re.compile(r'name="csrf_token" value="([^"]+)"')
-INVALID = "This link has expired or is not valid."
+INVALID = "This link has expired or is invalid."
 
 
 @tagged("post_install", "-at_install")
@@ -29,14 +29,14 @@ class TestConfirmationPage(HttpCase, DoubleOptInCommon):
         """Mail scanners open links: only the button confirms."""
         page = self.url_open(self.url)
         self.assertEqual(page.status_code, 200)
-        self.assertIn("Confirm your subscription to VMK Newsletter for pat@example.com.", page.text)
+        self.assertIn("Confirm your subscription to “VMK Newsletter” for pat@example.com.", page.text)
         self.assertEqual(self.subscription.vmk_confirmation_state, "pending")
 
     def test_the_button_confirms(self):
         token = self.subscription._vmk_confirmation_token()
         page = self._post(self.url, token)
         self.assertEqual(page.status_code, 200)
-        self.assertIn("You are now subscribed to VMK Newsletter from", page.text)
+        self.assertIn("You are now subscribed to “VMK Newsletter” from", page.text)
         self.assertEqual(self.subscription.vmk_confirmation_state, "confirmed")
 
         log = self._logs("pat@example.com")[-1]
@@ -48,7 +48,7 @@ class TestConfirmationPage(HttpCase, DoubleOptInCommon):
         self.assertNotIn("token", log.url)
 
         again = self.url_open(self.url)
-        self.assertIn("You are now subscribed to VMK Newsletter", again.text)
+        self.assertIn("You are now subscribed to “VMK Newsletter”", again.text)
 
     def test_posting_without_the_csrf_token_is_refused(self):
         self.url_open(

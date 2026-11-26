@@ -8,7 +8,7 @@ registry.category("web_tour.tours").add("vmk_mass_mailing_double_optin_confirm",
     steps: () => [
         {
             content: "the page asks before confirming",
-            trigger: `.o_vmk_confirm_subscription .alert-info:contains("Confirm your subscription to VMK Newsletter for tour@example.com.")`,
+            trigger: `.o_vmk_confirm_subscription .alert-info:contains("Confirm your subscription to “VMK Newsletter” for tour@example.com.")`,
         },
         {
             content: "confirm",
@@ -18,7 +18,7 @@ registry.category("web_tour.tours").add("vmk_mass_mailing_double_optin_confirm",
         },
         {
             content: "the subscription is confirmed",
-            trigger: `.o_vmk_confirm_subscription .alert-success:contains("You are now subscribed to VMK Newsletter from")`,
+            trigger: `.o_vmk_confirm_subscription .alert-success:contains("You are now subscribed to “VMK Newsletter” from")`,
         },
     ],
 });

@@ -85,7 +85,7 @@ class MailingDoubleOptInController(http.Controller):
             "vmk_mass_mailing_double_optin.page_confirm_subscription",
             {
                 "message": request.env._(
-                    "Confirm your subscription to %(list)s for %(email)s.",
+                    "Confirm your subscription to “%(list)s” for %(email)s.",
                     list=values["list_name"],
                     email=subscription.contact_id.email,
                 ),
@@ -99,7 +99,7 @@ class MailingDoubleOptInController(http.Controller):
             "vmk_mass_mailing_double_optin.page_subscription_confirmed",
             {
                 "message": request.env._(
-                    "You are now subscribed to %(list)s from %(company)s.",
+                    "You are now subscribed to “%(list)s” from %(company)s.",
                     list=values["list_name"],
                     company=values["company_name"],
                 ),

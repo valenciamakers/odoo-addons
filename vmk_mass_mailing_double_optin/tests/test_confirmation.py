@@ -27,9 +27,9 @@ class TestConfirmation(DoubleOptInCommon):
 
         mail = self._mails("ana@example.com")
         self.assertEqual(len(mail), 1)
-        self.assertEqual(mail.subject, "Confirm your subscription to VMK Newsletter")
+        self.assertEqual(mail.subject, "Confirm your subscription to “VMK Newsletter”")
         self.assertIn(sub._vmk_confirmation_url().split("/mailing/")[1], mail.body_html)
-        self.assertIn("This link is valid for 7 days.", mail.body_html)
+        self.assertIn("This link is valid for seven days.", mail.body_html)
 
         log = self._logs("ana@example.com")
         self.assertEqual(log.mapped("action"), ["requested"])

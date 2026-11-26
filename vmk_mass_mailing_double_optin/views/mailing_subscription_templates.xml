@@ -40,7 +40,7 @@
                 <div class="row">
                     <div class="col-lg-6 offset-lg-3 mt-4">
                         <div class="alert alert-warning text-center" role="status">
-                            <p class="mb-0">This link has expired or is not valid. Please sign up again to receive a new confirmation link.</p>
+                            <p class="mb-0">This link has expired or is invalid. Please subscribe again to receive a new confirmation link.</p>
                         </div>
                     </div>
                 </div>

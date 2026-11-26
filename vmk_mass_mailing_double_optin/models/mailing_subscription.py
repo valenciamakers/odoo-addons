@@ -31,8 +31,8 @@ class MailingSubscription(models.Model):
         readonly=True,
         copy=False,
         index="btree_not_null",
-        help="Empty when no confirmation was asked for: the subscription was added by a user, "
-        "or the mailing list does not require double opt-in.",
+        help="Empty when confirmation is not required: the subscription was added by a user, "
+        "or the mailing list does not require double opt-in confirmation.",
     )
     vmk_confirmation_requested = fields.Datetime(
         string="Confirmation Requested", readonly=True, copy=False

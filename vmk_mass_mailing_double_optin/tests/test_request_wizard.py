@@ -64,7 +64,11 @@ class TestRequestWizard(DoubleOptInCommon):
         form = self._wizard(self.contacts)
         self.assertEqual([ml.id for ml in form.list_ids], self.list_doi.ids)
         self.assertEqual(form.subscription_count, 2)
-        self.assertIn("2 confirmation emails will be sent.", form.summary)
+        self.assertIn(
+            "2 confirmation emails will be sent. The contacts will not receive mailings from this "
+            "list until they confirm.",
+            form.summary,
+        )
 
     def test_only_subscriptions_never_asked_are_sent(self):
         result = self._wizard(self.contacts).save().action_request_confirmation()
@@ -96,6 +100,11 @@ class TestRequestWizard(DoubleOptInCommon):
     def test_lists_chosen_in_the_dialog(self):
         form = self._wizard(self.ana, lists=self.list_doi | self.list_plain)
         self.assertEqual(form.subscription_count, 2)
+        self.assertIn(
+            "2 confirmation emails will be sent. The contact will not receive mailings from these "
+            "lists until they confirm.",
+            form.summary,
+        )
         result = form.save().action_request_confirmation()
         self.assertEqual(result["params"]["message"], "2 confirmation requests sent.")
         self.assertEqual(

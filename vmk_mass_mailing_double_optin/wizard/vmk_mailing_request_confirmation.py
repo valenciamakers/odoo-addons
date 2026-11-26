@@ -28,7 +28,7 @@ class VmkMailingRequestConfirmation(models.TransientModel):
         string="Language",
         required=True,
         default=lambda self: self.env.lang or self.env.user.lang,
-        help="Used for contacts whose language is unknown or unspecified.",
+        help="Used with contacts whose language is unknown or unspecified.",
     )
     subscription_ids = fields.Many2many(
         "mailing.subscription", compute="_compute_subscription_ids", string="Subscriptions"
@@ -53,25 +53,41 @@ class VmkMailingRequestConfirmation(models.TransientModel):
     @api.depends("subscription_count")
     def _compute_summary(self):
         skipped = _(
-            "Contacts already confirmed, or awaiting confirmation, unsubscribed, blacklisted, or "
+            "Contacts already confirmed, awaiting confirmation, unsubscribed, blacklisted, or "
             "without an email address are skipped."
         )
         for wizard in self:
             count = wizard.subscription_count
+            # One email per subscription: a contact on two of the lists gets two, so the
+            # contacts and the lists are counted apart, each sentence a string of its own.
+            several_contacts = len(wizard.subscription_ids.contact_id) > 1
+            several_lists = len(wizard.subscription_ids.list_id) > 1
             if not count:
                 text = _(
-                    "None of these contacts has a subscription to these lists that can be asked "
-                    "for confirmation."
+                    "None of these contacts has a subscription to these lists that needs to be "
+                    "confirmed."
                 )
             elif count == 1:
                 text = _(
-                    "1 confirmation email will be sent. Until the contact confirms their "
-                    "subscription, they will not receive mailings from the list."
+                    "1 confirmation email will be sent. The contact will not receive mailings "
+                    "from this list until they confirm."
+                )
+            elif not several_contacts:
+                text = _(
+                    "%(count)s confirmation emails will be sent. The contact will not receive "
+                    "mailings from these lists until they confirm.",
+                    count=count,
+                )
+            elif not several_lists:
+                text = _(
+                    "%(count)s confirmation emails will be sent. The contacts will not receive "
+                    "mailings from this list until they confirm.",
+                    count=count,
                 )
             else:
                 text = _(
-                    "%(count)s confirmation emails will be sent. Until each contact confirms "
-                    "their subscription, they will not receive mailings from the list.",
+                    "%(count)s confirmation emails will be sent. The contacts will not receive "
+                    "mailings from these lists until they confirm.",
                     count=count,
                 )
             wizard.summary = f"{text}\n\n{skipped}"
@@ -82,8 +98,8 @@ class VmkMailingRequestConfirmation(models.TransientModel):
         if not subscriptions:
             raise UserError(
                 _(
-                    "None of these contacts has a subscription to these lists that can be asked "
-                    "for confirmation."
+                    "None of these contacts has a subscription to these lists that needs to be "
+                    "confirmed."
                 )
             )
         # Everything after this runs as superuser.
