@@ -1,0 +1,18 @@
+<!-- Our composition, derived from lucide-static v1.57.0 (ISC): calendars, Event Series' own glyph,
+     at 0.9 scale, its stroke widened so it still draws at 2px, with the small globe badge of
+     Multi-Day Event Slots (Website) cut out of its bottom-right corner. The badge is drawn at 1.25px
+     rather than Lucide's 2px: at this size a 2px globe fills in to a disc. The knockout circle is
+     drawn in white, which tools/make_icon.py paints as transparency. -->
+<svg
+  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <g transform="translate(0.6 0.6) scale(0.9)" stroke-width="2.222">
+    <path d="M12 2v2" /><path d="M15.726 21.01A2 2 0 0 1 14 22H4a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2" />
+    <path d="M18 2v2" /><path d="M2 13h2" /><path d="M8 8h14" /><rect x="8" y="3" width="14" height="14" rx="2" />
+  </g>
+  <circle cx="18.5" cy="18.5" r="6.8" fill="#fff" stroke="none" />
+  <g stroke-width="1.25">
+  <circle cx="18.5" cy="18.5" r="4.6" />
+  <path d="M18.5 13.9A6.290 6.290 0 0 0 18.5 23.1A6.290 6.290 0 0 0 18.5 13.9" />
+  <path d="M13.9 18.5h9.2" />
+  </g>
+</svg>
