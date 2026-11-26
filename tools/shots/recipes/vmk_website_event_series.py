@@ -43,7 +43,10 @@ async def main(out):
         x, y = box["x"] + 40, box["y"] + box["height"] / 2
         await page.mouse.move(x, y, steps=6); await page.wait_for_timeout(400)
         await page.evaluate(shots.CURSOR, [x - 1, y - 1])
-        await page.screenshot(path=out / "series_filter.png", clip={"x": 0, "y": 0, "width": 1280, "height": 460})
+        # down to the first row of cards, stopping short of the next row's top edge
+        card = await page.locator(".o_wevent_events_list article").first.bounding_box()
+        await page.screenshot(path=out / "series_filter.png",
+                              clip={"x": 0, "y": 0, "width": 1280, "height": card["y"] + card["height"] + 12})
         # an event's page: its sidebar, from the date to the series' link
         await shots.goto(page, shots.BASE + event_url)
         link = page.locator(".o_vmk_event_series_link")
