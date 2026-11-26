@@ -9,6 +9,11 @@ tickets, seats, and registrations, and the series simply groups them together.
 Install **Event Series** from the Apps menu. It only requires **Events Organization**, the backend
 part of the **Events** app.
 
+If you publish events on your website, install `Event Series (Website)
+<https://apps.odoo.com/apps/modules/19.0/vmk_website_event_series>`_ instead: it includes this
+module, and also gives each event series a page on your website, listing all of the upcoming dates.
+If you start publishing events online later, install Event Series (Website) then.
+
 **Using it**
 
 #. Open **Events › Series** and click **New**.
@@ -38,7 +43,8 @@ the registration desk can read them.
   price, is made on each one, as in standard Odoo.
 - **A series with events can't be deleted**, only archived, so no event is left pointing at nothing.
   A series without events can be deleted.
-- **A series has no page on the website.** It exists in the backend only.
+- **On its own, this module doesn't change the website.** **Event Series (Website)** gives each
+  series a page.
 
 **Languages**
 

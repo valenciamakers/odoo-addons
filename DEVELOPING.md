@@ -24,8 +24,10 @@ was verified against the series of the branch you are reading.
 - **`vmk_website_event_slot_multiday`** — both days of a multi-day slot in the website's
   registration modal; `auto_install`.
 - **`vmk_event_series`** — group the dates of an event run again and again into one series; a plain
-  link on each event. Its website companion, `vmk_website_event_series`, and `vmk_colorlist_colors`
-  are on 20.0 only (see _Not ported_ below).
+  link on each event.
+- **`vmk_website_event_series`** — a page on the website for each event series, an index of them, a
+  link from each event's page, and a Series filter on the `/event` listing; `auto_install`. Ported
+  from 20.0 without scheduled publishing (see _Not ported_ below).
 - **`vmk_mass_mailing_double_optin`** — confirmation by email for new mailing list subscriptions,
   and a log of every consent change.
 - **`vmk_partner_email_multiple`** — several email addresses per contact, matched by Odoo's own
@@ -36,13 +38,17 @@ was verified against the series of the branch you are reading.
 Read the existing modules' `README.md` files before writing another; between them they document most
 of the traps below in context.
 
-**Not ported from 20.0, on purpose** (26 November 2026): `vmk_website_event_series` schedules a
-series' publishing with `publish_on` and `action_unschedule`, which Odoo 20 added to the website
-mixins together with a cron (`website/models/mixins.py`); 19's mixins have none, so a port would
-mean reimplementing that feature. `vmk_colorlist_colors` sets the lists `$o-colors-border`,
-`$o-colors-bg-subtle`, and `$o-colors-text-emphasis`, which only 20's SCSS reads; 19 derives a tag's
-and a badge's shades from `$o-colors` alone, with `adjust-color` (`core/tags_list/tags_list.scss`,
-`core/badge/badge.scss`), so the module's shade logic would have nothing to feed.
+**Ported without a feature** (26 November 2026): `vmk_website_event_series` has no scheduled
+publishing here. On 20 a series has `publish_on` and `action_unschedule`, which Odoo 20 added to the
+website mixins together with a cron (`website/models/mixins.py`); 19's mixins have none and an event
+cannot be scheduled either, so a series has the Published toggle only, as an event does, and we do
+not reimplement what core lacks (decided 26 November 2026).
+
+**Not ported from 20.0, on purpose** (26 November 2026): `vmk_colorlist_colors` sets the lists
+`$o-colors-border`, `$o-colors-bg-subtle`, and `$o-colors-text-emphasis`, which only 20's SCSS
+reads; 19 derives a tag's and a badge's shades from `$o-colors` alone, with `adjust-color`
+(`core/tags_list/tags_list.scss`, `core/badge/badge.scss`), so the module's shade logic would have
+nothing to feed. Its port to this branch is still to come.
 
 ## Branches — one per Odoo series
 

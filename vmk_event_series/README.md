@@ -5,12 +5,15 @@ Each date stays an ordinary event, with its own tickets, seats, and registration
 what they share, and lists them.
 
 **How to use it** is in the user documentation, [`doc/index.rst`](doc/index.rst), which the Odoo
-Apps Store also shows on the module's page, together with the changelog.
+Apps Store also shows on the module's page, together with the changelog. A series' description
+belongs to its page on the website, and comes with the website module.
 
-It depends only on `event` (_Events Organization_). **On Odoo 19 a series has no page on the
-website:** its website companion, `vmk_website_event_series`, is not ported to this series, because
-it relies on scheduled publishing (`publish_on`), which Odoo's website mixins only gained in 20.
-LGPL-3, © 2026 Valencia Makers, SL.
+It depends only on `event` (_Events Organization_). The _Events_ app is `website_event`, which
+brings the website with it, so most databases have both; there the companion module
+[`vmk_website_event_series`](../vmk_website_event_series) installs itself from a clone of this repo
+and gives each series a page of its own. From the Apps Store, website users download the companion
+instead: it depends on this module, so the store includes both, while this module's own download
+does not include the companion. LGPL-3, © 2026 Valencia Makers, SL.
 
 ## For developers
 

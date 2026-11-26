@@ -23,6 +23,7 @@ right before capturing vmk_event_registration_deadline's public page:
     (cat tools/shots/demo/seed.py; echo "open_studio_evening(env)") | SERIES=18.0 DB=shots odev shell
 """
 import base64
+import json
 from datetime import datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
 
@@ -302,10 +303,9 @@ assert rosa.email == "rosa.vidal@example.com" and lead.partner_id == rosa
 
 
 # ---------------------------------------------------------------------------
-# Event Series: two series, each with dates on the coming Tuesdays or Saturdays,
-# counted from the day this runs so that they stay upcoming, and one past date.
-# A template for the first. (Odoo 19 has no website page for a series, so there
-# is no cover or publishing to seed.)
+# Event Series: two published series, each with dates on the coming Tuesdays or
+# Saturdays, counted from the day this runs so that they stay upcoming, and one
+# past date. A template for the first.
 # ---------------------------------------------------------------------------
 if "vmk.event.series" in env:
     Series = env["vmk.event.series"]
@@ -335,6 +335,12 @@ if "vmk.event.series" in env:
     studio = find_or_create_partner("Valencia Makers Studio", is_company=True)
     studio.write({"city": "Valencia", "country_id": spain.id, "parent_id": company.partner_id.id})
 
+    def cover(image):
+        """Cover properties with one of website_event's stock images, on the dark preset (o_cc5) so
+        a series' title reads in white over it, at the mixin's default half-screen height."""
+        return json.dumps({"background_color_class": "o_cc5", "background-image": f"url('/website_event/static/src/img/{image}')",
+                           "opacity": "0.4", "resize_class": "o_half_screen_height"})
+
     def series_dates(series, weekday, hour, hours, weeks, past=None):
         """Dates on `weekday` (0 is Monday), `weeks` weeks apart, the first in the coming week;
         and with `past`, one that ended `past` weeks ago. Recreated on every run, so they stay
@@ -355,6 +361,7 @@ if "vmk.event.series" in env:
                     "date_end": dt(day.year, day.month, day.day, hour + hours),
                     "address_id": studio.id,
                     "website_published": True,
+                    "cover_properties": series.cover_properties,
                 }
             )
 
@@ -362,11 +369,15 @@ if "vmk.event.series" in env:
         "Intro to 3D Printing",
         subtitle="From a file to your first print in one evening",
         event_type_id=workshop.id,
+        website_published=True,
+        cover_properties=cover("event_training_0.jpg"),
     )
     series_dates(intro, 1, 18, 3, [0, 2, 4], past=2)
     laser = find_or_create_series(
         "Laser Cutting Basics",
         subtitle="Design, cut, and engrave a project of your own",
+        website_published=True,
+        cover_properties=cover("training.jpg"),
     )
     series_dates(laser, 5, 10, 4, [1, 5])
 
