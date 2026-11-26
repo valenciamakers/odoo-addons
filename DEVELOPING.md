@@ -957,11 +957,15 @@ backend's Apps page style Odoo's `oe_*` description classes differently: the sto
 grey 16px at weight 300, pulls the subtitle up under the title, and paints `oe_dark` sections grey,
 which Odoo 19's backend never matches. So every heading and paragraph carries the backend's own
 computed values inline — `vmk_event_slot_multiday`'s page is the model to copy — and no section uses
-`oe_dark`. Widths are fixed to two: 700px for paragraphs and supporting screenshots, 800px for
-two-column feature grids, with the main screenshot full width. Name our modules and Odoo's apps in
-bold, and link a mention of another of our modules to its store page with `target="_blank"`: the
-store's rules allow only `static/description`, YouTube, Teams, and `mailto:` links, but links to its
-own module pages survive in live descriptions.
+`oe_dark`. Widths are fixed: 700px for paragraphs; 800px for supporting screenshots, overhanging the
+text a little on each side, and for two-column feature grids; and the main screenshot full width. A
+screenshot narrower than its width keeps its own, never enlarged. Choose as the main screenshot one
+that reads well at full width: a short, sparse one looks enormous there, so make it a supporting
+screenshot and lead with another, as Event Series does with its form (decided 26 November 2026;
+supporting screenshots were 700px before). Name our modules and Odoo's apps in bold, and link a
+mention of another of our modules to its store page with `target="_blank"`: the store's rules allow
+only `static/description`, YouTube, Teams, and `mailto:` links, but links to its own module pages
+survive in live descriptions.
 
 **The store strips any inline style it does not allow,** silently. What survives on published pages
 is colour, font, margin, padding, border, `width`/`max-width`, `display`, `line-height`,
