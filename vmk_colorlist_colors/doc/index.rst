@@ -26,8 +26,8 @@ shows Odoo's eleven colors.
   the next reload.
 
 A tag's border, background, and text are lighter and darker shades of its color. They are
-calculated from the base color, just like Odoo's own, and on Enterprise, dark mode gets its own set
-of shades.
+calculated from the base color, just like the default colors, and on Enterprise, dark mode gets its
+own set of shades.
 
 Only users with the **Settings** access right (**Administration › Settings**) can open the list.
 
