@@ -1,0 +1,246 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* vmk_colorlist_colors
+#
+# Generated, and written afresh on every run: do not edit by hand. Core's
+# wording where core has the same English, ours otherwise. See DEVELOPING.md.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0+e-20261124\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-26 18:15+0000\n"
+"PO-Revision-Date: 2026-11-26 18:15+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: tr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#. module: vmk_colorlist_colors
+#. odoo-python
+#: code:addons/vmk_colorlist_colors/models/palette.py:0
+#: model:vmk.colorlist.color,name:vmk_colorlist_colors.color_6
+msgid "Almond"
+msgstr "Badem"
+
+#. module: vmk_colorlist_colors
+#. odoo-python
+#: code:addons/vmk_colorlist_colors/models/palette.py:0
+#: model:vmk.colorlist.color,name:vmk_colorlist_colors.color_8
+msgid "Blue"
+msgstr "Mavi"
+
+#. module: vmk_colorlist_colors
+#: model:ir.module.module,summary:base.module_vmk_colorlist_colors
+msgid ""
+"Change the colors (and their names) used for tags, kanban cards, and "
+"calendars"
+msgstr ""
+
+#. module: vmk_colorlist_colors
+#. odoo-python
+#: code:addons/vmk_colorlist_colors/models/vmk_colorlist_color.py:0
+msgid ""
+"Choose a color with the color picker. %(value)s is not a color in the form "
+"#rrggbb."
+msgstr ""
+
+#. module: vmk_colorlist_colors
+#: model:ir.model.fields,help:vmk_colorlist_colors.field_vmk_colorlist_color__color
+msgid "Choosing Odoo's own color again removes the custom one."
+msgstr ""
+
+#. module: vmk_colorlist_colors
+#: model:ir.model,name:vmk_colorlist_colors.model_vmk_colorlist_color
+#: model:ir.model.fields,field_description:vmk_colorlist_colors.field_vmk_colorlist_color__color
+msgid "Color"
+msgstr "Renk"
+
+#. module: vmk_colorlist_colors
+#: model:ir.actions.act_window,name:vmk_colorlist_colors.vmk_colorlist_color_action
+#: model_terms:ir.ui.view,arch_db:vmk_colorlist_colors.res_config_settings_view_form
+#: model_terms:ir.ui.view,arch_db:vmk_colorlist_colors.vmk_colorlist_color_view_list
+msgid "Colors"
+msgstr "Renk"
+
+#. module: vmk_colorlist_colors
+#: model:ir.model.fields,field_description:vmk_colorlist_colors.field_vmk_colorlist_color__create_uid
+msgid "Created by"
+msgstr "Tarafından oluşturuldu"
+
+#. module: vmk_colorlist_colors
+#: model:ir.model.fields,field_description:vmk_colorlist_colors.field_vmk_colorlist_color__create_date
+msgid "Created on"
+msgstr "Oluşturuldu"
+
+#. module: vmk_colorlist_colors
+#: model:ir.model.fields,field_description:vmk_colorlist_colors.field_vmk_colorlist_color__custom_color
+msgid "Custom Color"
+msgstr ""
+
+#. module: vmk_colorlist_colors
+#: model:ir.module.module,shortdesc:base.module_vmk_colorlist_colors
+#: model_terms:ir.ui.view,arch_db:vmk_colorlist_colors.res_config_settings_view_form
+msgid "Custom Colors"
+msgstr "Özel Renkler"
+
+#. module: vmk_colorlist_colors
+#. odoo-python
+#: code:addons/vmk_colorlist_colors/models/palette.py:0
+#: model:vmk.colorlist.color,name:vmk_colorlist_colors.color_4
+msgid "Cyan"
+msgstr "Camgöbeği"
+
+#. module: vmk_colorlist_colors
+#: model:ir.model.fields,field_description:vmk_colorlist_colors.field_vmk_colorlist_color__odoo_color
+msgid "Default Color"
+msgstr "Varsayılan Renk"
+
+#. module: vmk_colorlist_colors
+#: model:ir.model.fields,field_description:vmk_colorlist_colors.field_vmk_colorlist_color__odoo_name
+msgid "Default Name"
+msgstr "Varsayılan Ad"
+
+#. module: vmk_colorlist_colors
+#: model:ir.model.fields,field_description:vmk_colorlist_colors.field_vmk_colorlist_color__display_name
+msgid "Display Name"
+msgstr "İsim Göster"
+
+#. module: vmk_colorlist_colors
+#: model:ir.model.constraint,message:vmk_colorlist_colors.constraint_vmk_colorlist_color_slot_unique
+msgid "Each color appears once."
+msgstr ""
+
+#. module: vmk_colorlist_colors
+#: model_terms:ir.ui.view,arch_db:vmk_colorlist_colors.res_config_settings_view_form
+msgid "Edit Colors"
+msgstr ""
+
+#. module: vmk_colorlist_colors
+#. odoo-python
+#: code:addons/vmk_colorlist_colors/models/palette.py:0
+#: model:vmk.colorlist.color,name:vmk_colorlist_colors.color_10
+msgid "Green"
+msgstr "Yeşil"
+
+#. module: vmk_colorlist_colors
+#: model:ir.model,name:vmk_colorlist_colors.model_ir_http
+msgid "HTTP Routing"
+msgstr "HTTP Yönlendirme"
+
+#. module: vmk_colorlist_colors
+#: model:ir.model.fields,field_description:vmk_colorlist_colors.field_vmk_colorlist_color__id
+msgid "ID"
+msgstr "ID"
+
+#. module: vmk_colorlist_colors
+#: model:ir.model.fields,field_description:vmk_colorlist_colors.field_vmk_colorlist_color__is_custom
+msgid "Is Custom"
+msgstr ""
+
+#. module: vmk_colorlist_colors
+#: model:ir.model.fields,field_description:vmk_colorlist_colors.field_vmk_colorlist_color__write_uid
+msgid "Last Updated by"
+msgstr "Son Güncelleyen"
+
+#. module: vmk_colorlist_colors
+#: model:ir.model.fields,field_description:vmk_colorlist_colors.field_vmk_colorlist_color__write_date
+msgid "Last Updated on"
+msgstr "Son Güncelleme"
+
+#. module: vmk_colorlist_colors
+#: model:ir.model.fields,field_description:vmk_colorlist_colors.field_vmk_colorlist_color__name
+msgid "Name"
+msgstr "Adı"
+
+#. module: vmk_colorlist_colors
+#. odoo-python
+#: code:addons/vmk_colorlist_colors/models/palette.py:0
+#: model:vmk.colorlist.color,name:vmk_colorlist_colors.color_0
+msgid "No color"
+msgstr "Renk yok"
+
+#. module: vmk_colorlist_colors
+#. odoo-python
+#: code:addons/vmk_colorlist_colors/models/vmk_colorlist_color.py:0
+msgid ""
+"No color cannot be changed: Odoo gives it a meaning of its own, such as "
+"hiding an event tag from the website."
+msgstr ""
+
+#. module: vmk_colorlist_colors
+#. odoo-python
+#: code:addons/vmk_colorlist_colors/models/palette.py:0
+#: model:vmk.colorlist.color,name:vmk_colorlist_colors.color_2
+msgid "Orange"
+msgstr "Turuncu"
+
+#. module: vmk_colorlist_colors
+#. odoo-python
+#: code:addons/vmk_colorlist_colors/models/palette.py:0
+#: model:vmk.colorlist.color,name:vmk_colorlist_colors.color_5
+msgid "Purple"
+msgstr "Mor"
+
+#. module: vmk_colorlist_colors
+#. odoo-python
+#: code:addons/vmk_colorlist_colors/models/palette.py:0
+#: model:vmk.colorlist.color,name:vmk_colorlist_colors.color_9
+msgid "Raspberry"
+msgstr "Ahududu"
+
+#. module: vmk_colorlist_colors
+#. odoo-python
+#: code:addons/vmk_colorlist_colors/models/palette.py:0
+#: model:vmk.colorlist.color,name:vmk_colorlist_colors.color_1
+msgid "Red"
+msgstr "Kırmızı"
+
+#. module: vmk_colorlist_colors
+#: model_terms:ir.ui.view,arch_db:vmk_colorlist_colors.vmk_colorlist_color_view_list
+msgid "Reset all colors to the default values provided by Odoo."
+msgstr ""
+
+#. module: vmk_colorlist_colors
+#: model_terms:ir.ui.view,arch_db:vmk_colorlist_colors.vmk_colorlist_color_view_list
+msgid "Reset to Defaults"
+msgstr ""
+
+#. module: vmk_colorlist_colors
+#: model_terms:ir.ui.view,arch_db:vmk_colorlist_colors.vmk_colorlist_color_view_list
+msgid "Reset to default values"
+msgstr ""
+
+#. module: vmk_colorlist_colors
+#: model_terms:ir.ui.view,arch_db:vmk_colorlist_colors.res_config_settings_view_form
+msgid "Set the colors used for tags, cards, calendars, etc."
+msgstr ""
+
+#. module: vmk_colorlist_colors
+#: model:ir.model.fields,field_description:vmk_colorlist_colors.field_vmk_colorlist_color__slot
+msgid "Slot"
+msgstr "Slot"
+
+#. module: vmk_colorlist_colors
+#. odoo-python
+#: code:addons/vmk_colorlist_colors/models/palette.py:0
+#: model:vmk.colorlist.color,name:vmk_colorlist_colors.color_7
+msgid "Teal"
+msgstr "Deniz mavisi"
+
+#. module: vmk_colorlist_colors
+#. odoo-python
+#: code:addons/vmk_colorlist_colors/models/palette.py:0
+#: model:vmk.colorlist.color,name:vmk_colorlist_colors.color_11
+msgid "Violet"
+msgstr "Menekşe"
+
+#. module: vmk_colorlist_colors
+#. odoo-python
+#: code:addons/vmk_colorlist_colors/models/palette.py:0
+#: model:vmk.colorlist.color,name:vmk_colorlist_colors.color_3
+msgid "Yellow"
+msgstr "Sarı"
