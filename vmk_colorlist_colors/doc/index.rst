@@ -55,6 +55,9 @@ Checked against Odoo 18 Community and Enterprise on 26 November 2026.
   gives it a meaning of its own: an event tag with no color isn't shown on the website.
 - **A record keeps its color's slot.** A tag set to Teal before the change shows the new color in
   Teal's place, under its new name.
+- **A very dark color gives a low-contrast tag.** Odoo draws a tag's background lighter than its
+  color and its text darker, so a deep purple gives a bright purple tag with near-black text, as it
+  would for any color you pick that dark. Lighter colors give clearer tags.
 
 **Uninstalling** puts Odoo's own colors and names back.
 
