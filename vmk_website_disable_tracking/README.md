@@ -1,9 +1,9 @@
 # Disable Visitor Tracking (`vmk_website_disable_tracking`)
 
-Switch off Odoo's website visitor tracking, per website. Odoo's Website app records every visitor
-and the pages they view by default, under Website › Reporting › Visitors. This module turns that off
-on every website the moment it is installed, and adds a **Track Visitors** setting to turn it back
-on for any website that wants it.
+Disable Odoo’s website visitor tracking, per website. Odoo's Website app records every visitor and
+the pages they view by default, under Website › Reporting › Visitors. This module turns that off on
+every website the moment it is installed, and adds a **Track Visitors** setting to turn it back on
+for any website that wants it.
 
 **How to use it** is in the user documentation, [`doc/index.rst`](doc/index.rst), which the Odoo
 Apps Store also shows on the module's page, together with the changelog.

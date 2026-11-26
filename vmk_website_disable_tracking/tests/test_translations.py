@@ -29,7 +29,7 @@ class TestModuleNameTranslation(TransactionCase):
     I18N = Path(__file__).resolve().parent.parent / "i18n"
     MODULE_METADATA = (
         "Disable Visitor Tracking",
-        "Switch off Odoo's website visitor tracking, per website",
+        "Disable Odoo’s website visitor tracking, per website",
     )
 
     def _translation(self, catalogue, msgid):

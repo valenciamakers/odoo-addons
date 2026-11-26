@@ -3,7 +3,7 @@
 
 {
     "name": "Disable Visitor Tracking",
-    "summary": "Switch off Odoo's website visitor tracking, per website",
+    "summary": "Disable Odoo’s website visitor tracking, per website",
     "version": "20.0.1.0.0",
     "author": "Valencia Makers",
     "license": "LGPL-3",

@@ -31,6 +31,12 @@ msgid "Config Settings"
 msgstr "Ajustes de configuración"
 
 #. module: vmk_website_disable_tracking
+#: model:ir.module.module,summary:base.module_vmk_website_disable_tracking
+msgid "Disable Odoo’s website visitor tracking, per website"
+msgstr ""
+"Desactiva el seguimiento de visitantes de Odoo, sitio web por sitio web"
+
+#. module: vmk_website_disable_tracking
 #: model:ir.module.module,shortdesc:base.module_vmk_website_disable_tracking
 msgid "Disable Visitor Tracking"
 msgstr "Desactivar el seguimiento de visitantes"
@@ -64,12 +70,6 @@ msgid ""
 msgstr ""
 "Registra cada visitante y las páginas que visita, en Sitio web › Informes › "
 "Visitantes. Desactivado, el sitio web no registra ningún visitante."
-
-#. module: vmk_website_disable_tracking
-#: model:ir.module.module,summary:base.module_vmk_website_disable_tracking
-msgid "Switch off Odoo's website visitor tracking, per website"
-msgstr ""
-"Desactiva el seguimiento de visitantes de Odoo, sitio web por sitio web"
 
 #. module: vmk_website_disable_tracking
 #: model:ir.model.fields,field_description:vmk_website_disable_tracking.field_res_config_settings__website_vmk_track_visitors

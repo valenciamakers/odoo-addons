@@ -1,4 +1,4 @@
-Switch off Odoo's website visitor tracking, per website.
+Disable Odoo’s website visitor tracking, per website.
 
 In standard Odoo, the **Website** app records every visitor and each page they view, under
 **Website › Reporting › Visitors**: an id made from their IP address, browser, and session, the
