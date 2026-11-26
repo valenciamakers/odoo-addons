@@ -1,9 +1,10 @@
 Require confirmation on new mailing list subscriptions, and log every consent change.
 
-Someone who subscribes to a mailing list on your website receives an email with a confirmation
-link, and receives no mailings from that list until they confirm. Every subscription,
-confirmation, unsubscription, and blacklisting is recorded in a consent log, as proof of who
-agreed to what, and when.
+In standard Odoo, any email address typed into a website's newsletter form is subscribed
+immediately, regardless of who entered it. This module sends each new subscriber an email with a
+confirmation link, and sends them no mailings from that list until they have confirmed. A consent
+log records every subscription, confirmation, unsubscription, and blacklisting, with the date and
+where it came from.
 
 **Installation**
 
