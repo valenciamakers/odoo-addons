@@ -110,14 +110,10 @@ msgstr "Nombre d'esdeveniments"
 #. module: vmk_event_series
 #: model:ir.actions.act_window,name:vmk_event_series.vmk_event_series_action
 #: model:ir.model,name:vmk_event_series.model_vmk_event_series
+#: model:ir.module.module,shortdesc:base.module_vmk_event_series
 #: model_terms:ir.ui.view,arch_db:vmk_event_series.vmk_event_series_view_form
 #: model_terms:ir.ui.view,arch_db:vmk_event_series.vmk_event_series_view_list
 #: model_terms:ir.ui.view,arch_db:vmk_event_series.vmk_event_series_view_search
-msgid "Event Series"
-msgstr "Sèries d'esdeveniments"
-
-#. module: base
-#: model:ir.module.module,shortdesc:base.module_vmk_event_series
 msgid "Event Series"
 msgstr "Sèries d'esdeveniments"
 
