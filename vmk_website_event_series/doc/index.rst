@@ -1,9 +1,11 @@
-One page on your website for an event you run again and again, always at the same address.
+One page on your website for an event you run multiple times, always at the same address.
 
-In standard Odoo, every date of a monthly workshop has a page of its own, which goes out of date
-when the event is over. This module gives each series of `Event Series
-<https://apps.odoo.com/apps/modules/20.0/vmk_event_series>`_ one page: what it is about, and its
-current and upcoming dates, each linking to its own page to register.
+In standard Odoo, every date of a monthly workshop would have its own page, which goes out of date
+once the event is over. This module gives each series of `Event Series
+<https://apps.odoo.com/apps/modules/20.0/vmk_event_series>`_ a single landing page that can show a
+description, as well as its current and upcoming dates, with each date linking to its own event page
+for registration. Share the series link once, in a newsletter or on social media, and it stays
+working forever.
 
 **Installation**
 
@@ -14,8 +16,8 @@ includes, and Odoo's **Events** app. Once both are installed, it installs itself
 
 #. Open a series in **Events › Series**, and switch on **Published**, as for an event. To publish it
    later, set **Publish on** instead. A series can also be limited to one website.
-#. Click **Go to Website**. The page, at ``/event/series/<series>``, shows the series' cover, name,
-   and subtitle, its description, and its current and upcoming dates.
+#. Click **Go to Website**. The landing page, at ``/event/series/<series>``, shows the series'
+   cover, name, and subtitle, its description, and its current and upcoming dates.
 #. Edit the cover, name, subtitle, and description on the page itself, in the website editor, as for
    an event. A new series starts with a sample description, as a new event does, saying that the
    event is repeated and that each date has its own tickets.
@@ -25,12 +27,12 @@ apply to them too. With no dates scheduled, the page says so.
 
 **Elsewhere on the website**
 
-- **The events listing** has a **Series** filter beside its date filter, once a series is
-  published.
-- **An event's page** has a **Series** block in its sidebar, beside **Location** and **Organizer**,
-  linking to its series once the series is published.
-- **The index page**, ``/events/series``, lists every published series on the website, each with
-  its next date.
+- **The events listing page** gets a **Series** filter, to limit events to a series, once a series
+  is published.
+- **Each event's page** links to its series page, so users can see other dates easily: a **Series**
+  block in its sidebar, beside **Location** and **Organizer**, once the series is published.
+- **The series listing page**, ``/events/series``, shows every published series on the website,
+  along with its next date.
 
 **To serve the pages at another address**, such as ``/workshops``, add two redirects of type **308
 Redirect / Rewrite** in **Website › Configuration › Redirects**, one for each page: from
