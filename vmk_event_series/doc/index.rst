@@ -1,4 +1,4 @@
-Group events you run multiple times, such as a monthly workshop, into one series.
+Group events that are offered multiple times, such as a monthly workshop, into one series.
 
 In standard Odoo, a workshop you run every month is a dozen unrelated events. This module groups
 them into one series. Each date stays an ordinary event, with its own tickets, seats, and

@@ -128,8 +128,8 @@ msgstr "Eventos"
 
 #. module: vmk_event_series
 #: model:ir.module.module,summary:base.module_vmk_event_series
-msgid "Group events you run multiple times into one series"
-msgstr "Agrupar en una serie los eventos que se repiten"
+msgid "Group events that are offered multiple times into one series"
+msgstr "Agrupar en una serie los eventos que se ofrecen varias veces"
 
 #. module: vmk_event_series
 #: model:ir.model.fields,field_description:vmk_event_series.field_event_event__id

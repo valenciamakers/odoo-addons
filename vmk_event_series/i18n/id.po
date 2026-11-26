@@ -127,7 +127,7 @@ msgstr "Acara"
 
 #. module: vmk_event_series
 #: model:ir.module.module,summary:base.module_vmk_event_series
-msgid "Group events you run multiple times into one series"
+msgid "Group events that are offered multiple times into one series"
 msgstr ""
 
 #. module: vmk_event_series

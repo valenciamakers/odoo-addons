@@ -3,7 +3,7 @@
 
 {
     "name": "Event Series",
-    "summary": "Group events you run multiple times into one series",
+    "summary": "Group events that are offered multiple times into one series",
     "version": "20.0.1.0.0",
     "author": "Valencia Makers",
     "license": "LGPL-3",
