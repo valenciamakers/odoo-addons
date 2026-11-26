@@ -29,6 +29,8 @@ was verified against the series of the branch you are reading.
   and a log of every consent change.
 - **`vmk_partner_email_multiple`** — several email addresses per contact, matched by Odoo's own
   machinery, and kept rather than dropped when contacts are merged.
+- **`vmk_colorlist_colors`** — change the eleven colors Odoo draws for tags, kanban cards, and
+  calendars, and rename them; Odoo's own SCSS draws a custom color, shades and dark mode included.
 - **`tools/`** — not a module. `make_icon.py` renders each module's store icon from the glyphs in
   `tools/icons/`; see _Store icons_ under the authoring conventions.
 
@@ -40,10 +42,6 @@ publishing here. On 20 a series has `publish_on` and `action_unschedule`, which 
 website mixins together with a cron; 18's mixins have none and an event cannot be scheduled either,
 so a series has the Published toggle only, as an event does, and we do not reimplement what core
 lacks (decided 26 November 2026).
-
-**Not ported from 20.0, on purpose** (26 November 2026): `vmk_colorlist_colors` sets the lists
-`$o-colors-border`, `$o-colors-bg-subtle`, and `$o-colors-text-emphasis`, which only 20's SCSS
-reads, so on 18 it would have nothing to feed. Its port to this branch is still to come, as to 19.0.
 
 ## Branches — one per Odoo series
 
@@ -660,6 +658,21 @@ checked there yet.
 - **Core's Spanish disagrees with itself on a model's name**: `mail` translates _Mail Blacklist_ as
   "Lista negra de correos", `mass_mailing` as "Lista negra de correo " with a trailing space. We
   take the module that owns the model, `mail`.
+- **18 has one color list, like 19, and draws a picker swatch differently** (verified 26 November
+  2026, porting `vmk_colorlist_colors`). `$o-colors` is in
+  `web/static/src/scss/secondary_variables.scss`, and a tag's and a swatch's shades are
+  `adjust-color` of it (`core/tags_list/tags_list.scss`, `core/colorlist/colorlist.scss`);
+  Enterprise's dark mode darkens `$o-colors-original` as 19's does. Where 19's swatch is the color
+  itself, **18's swatch is drawn in the color's tag background**, so a tour checking a swatch's
+  computed color expects the lighter one. 18 has no `o_badge_color` (`core/badge`), no ESG, and no
+  fixed colors in Point of Sale for restaurants, so a module naming those in its manual leaves them
+  out here.
+- **`res.partner` on 18 copies its parent's address onto a child of type `contact`**
+  (`_fields_sync`), so a venue created under a company that has no city loses its own. Give it
+  another type, such as `other`, as the demo seed does for the studio.
+- **`models.Constraint` is 19's**: 18 takes `_sql_constraints`. A module's `ir.access.csv` of 20
+  becomes `ir.model.access.csv`, a settings button's `east` icon `oi-arrow-right`, and an undo arrow
+  `fa-undo`.
 
 ## Authoring conventions
 

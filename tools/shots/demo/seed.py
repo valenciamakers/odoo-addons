@@ -320,7 +320,10 @@ if "vmk.event.series" in env:
         return today + timedelta(days=(weekday - today.weekday()) % 7 or 7, weeks=weeks_ahead)
 
     studio = find_or_create_partner("Valencia Makers Studio", is_company=True)
-    studio.write({"city": "Valencia", "country_id": spain.id, "parent_id": company.partner_id.id})
+    # type "other": on Odoo 18 a child of type "contact" takes its parent's address (res.partner
+    # `_fields_sync`), which has no city, so the studio would lose the one written here.
+    studio.write({"city": "Valencia", "country_id": spain.id, "parent_id": company.partner_id.id,
+                  "type": "other"})
 
     def cover(image):
         """Cover properties with one of website_event's stock images, on the dark preset (o_cc5) so
@@ -367,6 +370,27 @@ if "vmk.event.series" in env:
         cover_properties=cover("training.jpg"),
     )
     series_dates(laser, 5, 10, 4, [1, 5])
+
+
+# ---------------------------------------------------------------------------
+# Custom Colors: three of Odoo's colors changed and renamed, as a makerspace
+# might tune them to its brand, and contact tags drawn in them. Violet (11) is
+# left alone: shots.py repaints it in our purple in every capture.
+# ---------------------------------------------------------------------------
+if "vmk.colorlist.color" in env:
+    Color = env["vmk.colorlist.color"]
+    for slot, color, name in [(4, "#5f6b7a", "Slate"), (6, "#8a5a3b", "Brown"), (7, "#502582", "Emphasis")]:
+        Color.search([("slot", "=", slot)]).write({"custom_color": color, "name": name})
+    Category = env["res.partner.category"]
+    for tag_name, color, partners in [
+        ("Member", 7, rosa | marc),
+        ("Instructor", 6, marc | edith),
+        ("Volunteer", 4, edith),
+        ("Student", 10, rosa),
+    ]:
+        tag = Category.search([("name", "=", tag_name)], limit=1) or Category.create({"name": tag_name})
+        tag.color = color
+        partners.write({"category_id": [(4, tag.id)]})
 
 
 # ---------------------------------------------------------------------------
