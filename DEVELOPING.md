@@ -20,6 +20,11 @@ was verified against the series of the branch you are reading.
 - **`vmk_event_host`** — who runs an event, as contacts; several per event.
 - **`vmk_event_registration_deadline`** — stop selling registrations when an event starts, or a set
   time before; per-event override, and the same rule applied to slots.
+- **`vmk_event_series`** — group the dates of an event run again and again into one series; a plain
+  link on each event. Its website companion, `vmk_website_event_series`, and `vmk_colorlist_colors`
+  are on 20.0 only (see _Not ported_ below).
+- **`vmk_mass_mailing_double_optin`** — confirmation by email for new mailing list subscriptions,
+  and a log of every consent change.
 - **`vmk_partner_email_multiple`** — several email addresses per contact, matched by Odoo's own
   machinery, and kept rather than dropped when contacts are merged.
 - **`tools/`** — not a module. `make_icon.py` renders each module's store icon from the glyphs in
@@ -27,6 +32,13 @@ was verified against the series of the branch you are reading.
 
 Read the existing modules' `README.md` files before writing another; between them they document most
 of the traps below in context.
+
+**Not ported from 20.0, on purpose** (26 November 2026): `vmk_website_event_series` schedules a
+series' publishing with `publish_on` and `action_unschedule`, which Odoo 20 added to the website
+mixins together with a cron; 18's mixins have none, so a port would mean reimplementing that
+feature. `vmk_colorlist_colors` sets the lists `$o-colors-border`, `$o-colors-bg-subtle`, and
+`$o-colors-text-emphasis`, which only 20's SCSS reads, so on 18 it would have nothing to feed.
+Neither is on 19.0 either, for now.
 
 ## Branches — one per Odoo series
 
@@ -610,6 +622,31 @@ checked there yet.
   and a later install builds a new registry and runs them again.
   `vmk_language_sequence/models/res_lang.py` does this, which is how it stopped requiring `website`.
   Added 2026-10-03.
+
+**Carrying a module back from 19.0** (verified 26 November 2026, porting `vmk_event_series` and
+`vmk_mass_mailing_double_optin`)
+
+- **What 19's port already found holds on 18**: `mailing.contact` has no `partner_id`, its form has
+  no `button_box` (put one before the `oe_title` block), and `mailing.list` has no `color`; a stat
+  button takes a Font Awesome `icon="fa-…"`; `get_public_method` is in `odoo.service.model`.
+- **What the 19 code already used and 18 has**: `self.env._` and `request.env._`, `check_access` and
+  `has_access`, `_read_group(…, ["__count"])`, `Model.grouped`, `<list>`, a kanban `t-name="card"`,
+  `request.update_context`, `request.dispatcher.routing_type`, `send_mail_batch`, and `cr.cache`.
+  Core's newsletter route is `type="json"` there, which an `@http.route()` override inherits.
+- **An inline mail template has no `env` in its rendering context on 18.** It holds `user`, `ctx`,
+  `object`, and the formatters, so `env.company` fails with `NameError`. Core writes
+  `user.env.company` (the satisfaction survey's subject), and so does our body, for one spelling in
+  the whole template.
+- **`res.company.email_primary_color` is the _Email Header Color_ on 18**, black by default, where
+  19 calls it _Email Button Text_ and defaults it to white. A button's text is a fixed `#fff`, as in
+  `auth_signup`'s sign-up email.
+- **The exporter (`--i18n-export`) writes a template body without its outer element**: a `<div>`
+  wrapper in the XML is not part of the msgid on 18, so a translation carried from 19 loses the
+  `<div>` and `</div>` at its ends. It also leaves out the `display_name` and `id` field entries of
+  an inherited model, so a catalogue brought from 19 sheds those `#:` lines.
+- **Core's Spanish disagrees with itself on a model's name**: `mail` translates _Mail Blacklist_ as
+  "Lista negra de correos", `mass_mailing` as "Lista negra de correo " with a trailing space. We
+  take the module that owns the model, `mail`.
 
 ## Authoring conventions
 

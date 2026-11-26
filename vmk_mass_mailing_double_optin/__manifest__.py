@@ -1,0 +1,30 @@
+# Copyright 2026 Valencia Makers, SL
+# License LGPL-3 (https://www.gnu.org/licenses/lgpl-3.0.html).
+
+{
+    "name": "Double Opt-In for Email Marketing",
+    "summary": "Require confirmation on new mailing list subscriptions, and log every consent change",
+    "version": "18.0.1.0.0",
+    "author": "Valencia Makers",
+    "license": "LGPL-3",
+    "category": "Marketing/Email Marketing",
+    "depends": ["mass_mailing"],
+    "data": [
+        "security/ir.model.access.csv",
+        "data/mail_template_data.xml",
+        "data/ir_cron_data.xml",
+        "views/vmk_mailing_consent_log_views.xml",
+        "views/mailing_list_views.xml",
+        "views/mailing_contact_views.xml",
+        "views/mailing_subscription_templates.xml",
+        "wizard/vmk_mailing_request_confirmation_views.xml",
+    ],
+    "assets": {
+        "web.assets_tests": [
+            "vmk_mass_mailing_double_optin/static/tests/tours/**/*",
+        ],
+    },
+    "images": ["static/description/cover.png"],
+    "installable": True,
+    "application": False,
+}
