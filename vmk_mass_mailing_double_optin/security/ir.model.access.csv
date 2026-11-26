@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_vmk_mailing_consent_log_user,vmk.mailing.consent.log email marketing user,model_vmk_mailing_consent_log,mass_mailing.group_mass_mailing_user,1,0,0,0
+access_vmk_mailing_consent_log_system,vmk.mailing.consent.log settings administrator,model_vmk_mailing_consent_log,base.group_system,1,0,0,1
+access_vmk_mailing_request_confirmation_user,vmk.mailing.request.confirmation email marketing user,model_vmk_mailing_request_confirmation,mass_mailing.group_mass_mailing_user,1,1,1,1

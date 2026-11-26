@@ -23,6 +23,11 @@ was verified against the series of the branch you are reading.
 - **`vmk_event_slot_multiday`** — an end date on event slots, so a slot can span several days.
 - **`vmk_website_event_slot_multiday`** — both days of a multi-day slot in the website's
   registration modal; `auto_install`.
+- **`vmk_event_series`** — group the dates of an event run again and again into one series; a plain
+  link on each event. Its website companion, `vmk_website_event_series`, and `vmk_colorlist_colors`
+  are on 20.0 only (see _Not ported_ below).
+- **`vmk_mass_mailing_double_optin`** — confirmation by email for new mailing list subscriptions,
+  and a log of every consent change.
 - **`vmk_partner_email_multiple`** — several email addresses per contact, matched by Odoo's own
   machinery, and kept rather than dropped when contacts are merged.
 - **`tools/`** — not a module. `make_icon.py` renders each module's store icon from the glyphs in
@@ -30,6 +35,14 @@ was verified against the series of the branch you are reading.
 
 Read the existing modules' `README.md` files before writing another; between them they document most
 of the traps below in context.
+
+**Not ported from 20.0, on purpose** (26 November 2026): `vmk_website_event_series` schedules a
+series' publishing with `publish_on` and `action_unschedule`, which Odoo 20 added to the website
+mixins together with a cron (`website/models/mixins.py`); 19's mixins have none, so a port would
+mean reimplementing that feature. `vmk_colorlist_colors` sets the lists `$o-colors-border`,
+`$o-colors-bg-subtle`, and `$o-colors-text-emphasis`, which only 20's SCSS reads; 19 derives a tag's
+and a badge's shades from `$o-colors` alone, with `adjust-color` (`core/tags_list/tags_list.scss`,
+`core/badge/badge.scss`), so the module's shade logic would have nothing to feed.
 
 ## Branches — one per Odoo series
 
@@ -562,6 +575,22 @@ in `web/static/src/**`, not in Python. Half the surprises below live there.
   and a later install builds a new registry and runs them again.
   `vmk_language_sequence/models/res_lang.py` does this, which is how it stopped requiring `website`.
   Added 2026-10-03.
+
+**Carrying a module back from 20.0** (verified 26 November 2026, porting `vmk_event_series` and
+`vmk_mass_mailing_double_optin`)
+
+- **`mailing.contact` has no `partner_id` on 19**, no `button_box` on its form, and `mailing.list`
+  no `color`. A module reading the partner's language, putting a stat button on the form, or
+  colouring list tags with `color_field: 'color'` has to do without, or add the button box itself
+  before the form's `oe_title` block.
+- **`self.env.website` is 20's.** On 19 a controller reads `request.website`, and model code
+  `self.env["website"].get_current_website()`.
+- **Scheduled publishing is 20's as well**: `publish_on`, `action_unschedule`, and the cron are in
+  20's `website.published.mixin`, not 19's.
+- **A form's stat button takes a Font Awesome `icon="fa-…"` on 19**, a Material Symbols name on 20,
+  and a list-row button likewise (`fa-paper-plane`, not `send`).
+- **`get_public_method` is `odoo.service.model.get_public_method` on 19**, in `odoo.orm.models`
+  on 20.
 
 ## Authoring conventions
 
