@@ -4,9 +4,10 @@
 # ///
 """Event Series: a series' form, and the events list grouped by series.
 
-Writes main_screenshot.png and events_by_series.png.
+Writes main_screenshot.png and events_by_series.png, and copies main_screenshot.png to Event Series
+(Website) as series_form.png, which that module's cover shows.
 """
-import asyncio, sys
+import asyncio, shutil, sys
 from pathlib import Path
 from playwright.async_api import async_playwright
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
@@ -64,4 +65,7 @@ async def main(out):
 if __name__ == "__main__":
     out = shots.out_dir("vmk_event_series", sys.argv)
     asyncio.run(main(out))
+    if "--out" not in sys.argv:
+        shutil.copyfile(out / "main_screenshot.png",
+                        out.parent.parent.parent / "vmk_website_event_series/static/description/series_form.png")
     print("wrote", out)

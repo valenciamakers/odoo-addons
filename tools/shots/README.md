@@ -68,10 +68,11 @@ ordinary event rather than a multi-slot one. What it makes:
   purple (`demo/rosa_vidal.png`), and a lead that arrived by email from one of them. The lead goes
   through the mail gateway, so its contact is found the way real mail finds it; `seed.py` recreates
   the lead on every run, so it stays matched to Rosa even after an unrelated re-seed.
-- for Event Series, two series, **Intro to 3D Printing** (on a **Hands-on Workshop** template) and
-  **Laser Cutting Basics**, with dates at a **Valencia Makers Studio** venue in Valencia. The dates
-  are counted from the day the seed runs, on the coming Tuesdays and Saturdays, plus one past date,
-  and are recreated on every run, so they stay upcoming whenever the screenshots are retaken.
+- for Event Series and its website companion, two published series, **Intro to 3D Printing** (on a
+  **Hands-on Workshop** template) and **Laser Cutting Basics**, each with a stock cover from
+  `website_event` and dates at a **Valencia Makers Studio** venue in Valencia. The dates are counted
+  from the day the seed runs, on the coming Tuesdays and Saturdays, plus one past date, and are
+  recreated on every run, so they stay upcoming whenever the screenshots are retaken.
 - for Double Opt-In, two mailing lists, **Newsletter** and **Workshop Announcements**, and five
   subscribers: four who signed up on the website as the public user, as core's newsletter block does
   (Rosa and Ana confirmed, Ana later left one list, **Jordi Puig** and Lucía still awaiting

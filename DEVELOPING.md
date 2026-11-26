@@ -21,8 +21,10 @@ was verified against the series of the branch you are reading.
 - **`vmk_event_registration_deadline`** — stop selling registrations when an event starts, or a set
   time before; per-event override, and the same rule applied to slots.
 - **`vmk_event_series`** — group the dates of an event run again and again into one series; a plain
-  link on each event. Its website companion, `vmk_website_event_series`, and `vmk_colorlist_colors`
-  are on 20.0 only (see _Not ported_ below).
+  link on each event.
+- **`vmk_website_event_series`** — a page on the website for each event series, an index of them, a
+  link from each event's page, and a Series filter on the `/event` listing; `auto_install`. Ported
+  from 19.0 without scheduled publishing (see _Ported without a feature_ below).
 - **`vmk_mass_mailing_double_optin`** — confirmation by email for new mailing list subscriptions,
   and a log of every consent change.
 - **`vmk_partner_email_multiple`** — several email addresses per contact, matched by Odoo's own
@@ -33,12 +35,15 @@ was verified against the series of the branch you are reading.
 Read the existing modules' `README.md` files before writing another; between them they document most
 of the traps below in context.
 
-**Not ported from 20.0, on purpose** (26 November 2026): `vmk_website_event_series` schedules a
-series' publishing with `publish_on` and `action_unschedule`, which Odoo 20 added to the website
-mixins together with a cron; 18's mixins have none, so a port would mean reimplementing that
-feature. `vmk_colorlist_colors` sets the lists `$o-colors-border`, `$o-colors-bg-subtle`, and
-`$o-colors-text-emphasis`, which only 20's SCSS reads, so on 18 it would have nothing to feed.
-Neither is on 19.0 either, for now.
+**Ported without a feature** (26 November 2026): `vmk_website_event_series` has no scheduled
+publishing here. On 20 a series has `publish_on` and `action_unschedule`, which Odoo 20 added to the
+website mixins together with a cron; 18's mixins have none and an event cannot be scheduled either,
+so a series has the Published toggle only, as an event does, and we do not reimplement what core
+lacks (decided 26 November 2026).
+
+**Not ported from 20.0, on purpose** (26 November 2026): `vmk_colorlist_colors` sets the lists
+`$o-colors-border`, `$o-colors-bg-subtle`, and `$o-colors-text-emphasis`, which only 20's SCSS
+reads, so on 18 it would have nothing to feed. Its port to this branch is still to come, as to 19.0.
 
 ## Branches — one per Odoo series
 
@@ -644,6 +649,14 @@ checked there yet.
   wrapper in the XML is not part of the msgid on 18, so a translation carried from 19 loses the
   `<div>` and `</div>` at its ends. It also leaves out the `display_name` and `id` field entries of
   an inherited model, so a catalogue brought from 19 sheds those `#:` lines.
+- **What carrying `vmk_website_event_series` found** (26 November 2026): `website.record_cover`
+  takes its variables from `t-set` children on 18, as `website_event` does it; a `_record="series"`
+  attribute on the `t-call` is 19's, and fails with `KeyError: '_record'`. The `/event` listing
+  hands the template `keep`, not `keep_event_url`, and `events()` and `_get_events_search_options()`
+  take no `slug_tags`. The filter panel's Date and Country entries replace placeholder spans
+  (`o_wevent_offcanvas_date`), so an anchor on `accordion-item` repeats per category, and one on a
+  span is gone once core's views apply; add the entry inside `.accordion`. There is no
+  `website.unpublished_badge`, and `res.users` has `groups_id`, not `group_ids`.
 - **Core's Spanish disagrees with itself on a model's name**: `mail` translates _Mail Blacklist_ as
   "Lista negra de correos", `mass_mailing` as "Lista negra de correo " with a trailing space. We
   take the module that owns the model, `mail`.
