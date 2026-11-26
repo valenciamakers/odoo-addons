@@ -4,7 +4,7 @@
 {
     "name": "Custom Colors",
     "summary": "Change the colors (and their names) used for tags, kanban cards, and calendars",
-    "version": "20.0.1.0.0",
+    "version": "20.0.1.0.1",
     "author": "Valencia Makers",
     "license": "LGPL-3",
     "category": "Technical",
