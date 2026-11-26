@@ -1,0 +1,193 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* vmk_website_event_series
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0+e-20261124\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-26 17:29+0000\n"
+"PO-Revision-Date: 2026-11-26 17:29+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ca\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: vmk_website_event_series
+#: model_terms:ir.ui.view,arch_db:vmk_website_event_series.series_page
+msgid "<i class=\"fa fa-ban me-2\"/>Unpublished"
+msgstr "<i class=\"fa fa-ban me-2\"/>No publicat"
+
+#. module: vmk_website_event_series
+#: model_terms:ir.ui.view,arch_db:vmk_website_event_series.series_index
+msgid "<span class=\"text-muted\">Next event:</span>"
+msgstr "<span class=\"text-muted\">Proper esdeveniment:</span>"
+
+#. module: vmk_website_event_series
+#: model_terms:ir.ui.view,arch_db:vmk_website_event_series.event_series_filter
+msgid "All"
+msgstr "Tots"
+
+#. module: vmk_website_event_series
+#: model:ir.model.fields,field_description:vmk_website_event_series.field_vmk_event_series__can_publish
+msgid "Can Publish"
+msgstr "Pot publicar"
+
+#. module: vmk_website_event_series
+#: model:ir.model.fields,field_description:vmk_website_event_series.field_vmk_event_series__cover_properties
+msgid "Cover Properties"
+msgstr "Propietats de la coberta"
+
+#. module: vmk_website_event_series
+#: model:ir.model.fields,field_description:vmk_website_event_series.field_vmk_event_series__description
+msgid "Description"
+msgstr "Descripció"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_vmk_website_event_series
+msgid ""
+"Each event series gets a page on the website, listing its upcoming dates"
+msgstr ""
+"Cada sèrie d'esdeveniments té la seva pròpia pàgina al lloc web, amb les "
+"seves properes dates"
+
+#. module: vmk_website_event_series
+#: model:ir.model,name:vmk_website_event_series.model_event_event
+msgid "Event"
+msgstr "Esdeveniment"
+
+#. module: vmk_website_event_series
+#: model:ir.model,name:vmk_website_event_series.model_vmk_event_series
+#: model_terms:ir.ui.view,arch_db:vmk_website_event_series.series_index
+msgid "Event Series"
+msgstr "Sèries d'esdeveniments"
+
+#. module: vmk_website_event_series
+#: model:ir.module.module,shortdesc:base.module_vmk_website_event_series
+msgid "Event Series (Website)"
+msgstr "Sèries d'esdeveniments (lloc web)"
+
+#. module: vmk_website_event_series
+#: model_terms:ir.ui.view,arch_db:vmk_website_event_series.series_page
+msgid "Events"
+msgstr "Esdeveniments"
+
+#. module: vmk_website_event_series
+#: model_terms:ir.ui.view,arch_db:vmk_website_event_series.event_series_filter
+msgid "Filter by Series"
+msgstr "Filtrar per sèrie"
+
+#. module: vmk_website_event_series
+#: model_terms:ir.ui.view,arch_db:vmk_website_event_series.event_series_filter
+msgid "Filter by series"
+msgstr "Filtrar per sèrie"
+
+#. module: vmk_website_event_series
+#: model:ir.model.fields,field_description:vmk_website_event_series.field_vmk_event_series__is_published
+msgid "Is Published"
+msgstr "Està publicat"
+
+#. module: vmk_website_event_series
+#: model_terms:ir.ui.view,arch_db:vmk_website_event_series.series_page
+msgid "No dates are scheduled right now."
+msgstr "Ara mateix no hi ha dates programades."
+
+#. module: vmk_website_event_series
+#: model_terms:ir.ui.view,arch_db:vmk_website_event_series.series_index
+msgid "No series are on the website yet."
+msgstr "Encara no hi ha sèries al lloc web."
+
+#. module: vmk_website_event_series
+#: model_terms:ir.ui.view,arch_db:vmk_website_event_series.series_default_description
+msgid "One event, many dates"
+msgstr "Un esdeveniment, moltes dates"
+
+#. module: vmk_website_event_series
+#: model_terms:ir.ui.view,arch_db:vmk_website_event_series.vmk_event_series_view_form
+msgid "Published"
+msgstr "Publicat"
+
+#. module: vmk_website_event_series
+#: model:ir.model.fields,help:vmk_website_event_series.field_vmk_event_series__website_id
+msgid "Restrict to a specific website."
+msgstr "Restringir a un lloc web específic."
+
+#. module: vmk_website_event_series
+#: model:ir.model.fields,field_description:vmk_website_event_series.field_vmk_event_series__is_seo_optimized
+msgid "SEO optimized"
+msgstr "Optimització SEO"
+
+#. module: vmk_website_event_series
+#: model:ir.model.fields,field_description:vmk_website_event_series.field_vmk_event_series__seo_name
+msgid "Seo name"
+msgstr "Nom SEO"
+
+#. module: vmk_website_event_series
+#: model_terms:ir.ui.view,arch_db:vmk_website_event_series.event_series_filter
+#: model_terms:ir.ui.view,arch_db:vmk_website_event_series.event_series_link
+msgid "Series"
+msgstr "Sèrie"
+
+#. module: vmk_website_event_series
+#: model_terms:ir.ui.view,arch_db:vmk_website_event_series.series_page
+msgid "Series Subtitle"
+msgstr "Subtítol de la sèrie"
+
+#. module: vmk_website_event_series
+#: model_terms:ir.ui.view,arch_db:vmk_website_event_series.series_page
+msgid "Series Title"
+msgstr "Títol de la sèrie"
+
+#. module: vmk_website_event_series
+#: model:ir.model.fields,help:vmk_website_event_series.field_vmk_event_series__website_url
+msgid "The full URL to access the document through the website."
+msgstr "L'URL completa per accedir al document a través del lloc web."
+
+#. module: vmk_website_event_series
+#: model_terms:ir.ui.view,arch_db:vmk_website_event_series.series_default_description
+msgid ""
+"This event is repeated again and again, so you can join on the date that "
+"suits you. Each date has its own tickets and seats. Pick one from the dates "
+"below and register."
+msgstr ""
+"Aquest esdeveniment es repeteix una vegada i una altra, així que podeu unir-"
+"vos-hi en la data que us vagi millor. Cada data té els seus propis tiquets i"
+" seients. Trieu una de les dates de sota i inscriviu-vos."
+
+#. module: vmk_website_event_series
+#: model:ir.model.fields,field_description:vmk_website_event_series.field_vmk_event_series__website_published
+msgid "Visible on current website"
+msgstr "Visible al lloc web actual"
+
+#. module: vmk_website_event_series
+#: model:ir.model.fields,field_description:vmk_website_event_series.field_vmk_event_series__website_id
+msgid "Website"
+msgstr "Lloc web"
+
+#. module: vmk_website_event_series
+#: model:ir.model.fields,field_description:vmk_website_event_series.field_vmk_event_series__website_url
+msgid "Website URL"
+msgstr "L'URL del lloc web"
+
+#. module: vmk_website_event_series
+#: model:ir.model.fields,field_description:vmk_website_event_series.field_vmk_event_series__website_meta_description
+msgid "Website meta description"
+msgstr "Meta descripció del lloc web"
+
+#. module: vmk_website_event_series
+#: model:ir.model.fields,field_description:vmk_website_event_series.field_vmk_event_series__website_meta_keywords
+msgid "Website meta keywords"
+msgstr "Meta paraules del lloc web"
+
+#. module: vmk_website_event_series
+#: model:ir.model.fields,field_description:vmk_website_event_series.field_vmk_event_series__website_meta_title
+msgid "Website meta title"
+msgstr "Mata títol del lloc web"
+
+#. module: vmk_website_event_series
+#: model:ir.model.fields,field_description:vmk_website_event_series.field_vmk_event_series__website_meta_og_img
+msgid "Website opengraph image"
+msgstr "Imatge del lloc web"
