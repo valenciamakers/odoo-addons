@@ -15,8 +15,8 @@ Double opt-in is on for every mailing list once the module is installed, the lis
 included. People already subscribed are not affected, and nobody is sent anything until someone
 next subscribes.
 
-- **Switch it off for a list** with **Double Opt-In** on the mailing list's form, beside
-  **Show In Preferences**.
+- **Switch it off for a list** with **Double Opt-In Confirmation** on the mailing list's form,
+  beside **Show In Preferences**.
 - **Signing up on the website**, through the newsletter block, a newsletter form, or the
   newsletter box at checkout, sends a confirmation email. Until the person confirms, the
   subscription shows **Awaiting Confirmation** on the contact's **Subscriptions** tab, and mailings

@@ -29,8 +29,8 @@ in the list's opt-out statistics.
 ### Who has to confirm
 
 A subscription needs confirmation when it begins, or begins again after an unsubscription, on a list
-with **Double Opt-In** on (`mailing.list.vmk_double_optin`, default on), for a contact with an email
-address, **made by a user who is not internal**. That one rule, in
+with **Double Opt-In Confirmation** on (`mailing.list.vmk_double_optin`, default on), for a contact
+with an email address, **made by a user who is not internal**. That one rule, in
 `mailing.subscription._vmk_needing_confirmation`, covers every website path core has, and any a
 third-party module adds, without overriding a single controller:
 

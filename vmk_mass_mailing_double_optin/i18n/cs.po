@@ -183,7 +183,7 @@ msgstr "Zobrazovací název"
 
 #. module: vmk_mass_mailing_double_optin
 #: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_mailing_list__vmk_double_optin
-msgid "Double Opt-In"
+msgid "Double Opt-In Confirmation"
 msgstr ""
 
 #. module: vmk_mass_mailing_double_optin
@@ -465,7 +465,7 @@ msgstr ""
 #: model:ir.model.fields,help:vmk_mass_mailing_double_optin.field_mailing_list__vmk_double_optin
 msgid ""
 "Visitors who subscribe on the website will be required to confirm their "
-"subscription before they receive mailings from this list."
+"subscription before they will receive mailings from this list."
 msgstr ""
 
 #. module: vmk_mass_mailing_double_optin

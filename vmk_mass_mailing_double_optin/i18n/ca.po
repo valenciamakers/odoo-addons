@@ -196,7 +196,7 @@ msgstr "Nom mostrat"
 
 #. module: vmk_mass_mailing_double_optin
 #: model:ir.model.fields,field_description:vmk_mass_mailing_double_optin.field_mailing_list__vmk_double_optin
-msgid "Double Opt-In"
+msgid "Double Opt-In Confirmation"
 msgstr "Doble confirmació"
 
 #. module: vmk_mass_mailing_double_optin
@@ -492,7 +492,7 @@ msgstr "Agent d'usuari"
 #: model:ir.model.fields,help:vmk_mass_mailing_double_optin.field_mailing_list__vmk_double_optin
 msgid ""
 "Visitors who subscribe on the website will be required to confirm their "
-"subscription before they receive mailings from this list."
+"subscription before they will receive mailings from this list."
 msgstr ""
 "Qui es subscrigui des del lloc web haurà de confirmar la subscripció abans "
 "de rebre enviaments d'aquesta llista."
